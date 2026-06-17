@@ -1,0 +1,7 @@
+.navbar-menu .navbar-nav .nav-link {
+    padding: 3px 1rem;
+}
+
+.modal {
+    z-index: 99999;
+}
