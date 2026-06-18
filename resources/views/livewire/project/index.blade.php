@@ -4,7 +4,8 @@
             {{-- Page Header --}}
             <div class="row">
                 <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
+                    <div
+                        class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
                         <h4 class="mb-sm-0">Projects</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
@@ -34,7 +35,8 @@
                                     <label class="form-label">
                                         Keyword
                                     </label>
-                                    <input type="text" class="form-control" placeholder="Project Name / Slug" wire:model.live.debounce.500ms="keyword">
+                                    <input type="text" class="form-control" placeholder="Project Name / Slug"
+                                        wire:model.live.debounce.500ms="keyword">
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
@@ -42,8 +44,8 @@
                                     </label>
                                     <select class="form-select" wire:model.live="status">
                                         <option value=""> All Status </option>
-                                        @foreach (config('constants.project_status') as $key => $project_status )
-                                        <option value="{{ $key }}">{{ $project_status }}</option>
+                                        @foreach (config('constants.project_status') as $key => $project_status)
+                                            <option value="{{ $key }}">{{ $project_status }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -102,46 +104,53 @@
                                     </thead>
                                     <tbody>
                                         @forelse($projects as $project)
-                                        <tr style="cursor:pointer" onclick="window.location='{{ route('projects.edit', $project->id) }}'">
-                                            <td> {{ $loop->iteration }} </td>
-                                            <td>
-                                                <div class="fw-semibold"> {{ $project->name }} </div>
-                                                <small class="text-muted"> {{ $project->slug }} </small>
-                                            </td>
-                                            <td> {{ $project->projectType?->name }} </td>
-                                            <td> {{ $project->city?->name }} @if($project->state) , {{ $project->state?->name }} @endif </td>
-                                            <td>
-                                                <span class="badge bg-primary"> {{ ucfirst($project->status) }} </span>
-                                            </td>
-                                            <td onclick="event.stopPropagation();">
-                                                <div class="form-check form-switch d-flex align-items-center gap-2">
-                                                    <input class="form-check-input" type="checkbox" role="switch" wire:change="toggleStatus('{{ $project->id }}')" @checked($project->is_active === 'active')>
-                                                    <span class="badge {{ $project->is_active === 'active' ? 'bg-success' : 'bg-danger' }}">
-                                                        {{ ucfirst($project->is_active) }}
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td onclick="event.stopPropagation();">
-                                                <div class="d-flex gap-2">
-                                                    <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-soft-info">
-                                                        <i class="ri-pencil-line"></i>
-                                                    </a>
-                                                    <button type="button" class="btn btn-sm btn-soft-danger" wire:click="delete('{{ $project->id }}')" wire:confirm="Are you sure?">
-                                                        <i class="ri-delete-bin-line"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                            <tr style="cursor:pointer"
+                                                onclick="window.location='{{ route('projects.edit', $project->id) }}'">
+                                                <td> {{ $loop->iteration }} </td>
+                                                <td>
+                                                    <div class="fw-semibold"> {{ $project->name }} </div>
+                                                    <small class="text-muted"> {{ $project->slug }} </small>
+                                                </td>
+                                                <td> {{ $project->projectType?->name }} </td>
+                                                <td> {{ $project->city }} </td>
+                                                <td>
+                                                    <span class="badge bg-primary"> {{ ucfirst($project->status) }} </span>
+                                                </td>
+                                                <td onclick="event.stopPropagation();">
+                                                    <div class="form-check form-switch d-flex align-items-center gap-2">
+                                                        <input class="form-check-input" type="checkbox" role="switch"
+                                                            wire:change="toggleStatus('{{ $project->id }}')"
+                                                            @checked($project->is_active === 'active')>
+                                                        <span
+                                                            class="badge {{ $project->is_active === 'active' ? 'bg-success' : 'bg-danger' }}">
+                                                            {{ ucfirst($project->is_active) }}
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td onclick="event.stopPropagation();">
+                                                    <div class="d-flex gap-2">
+                                                        <a href="{{ route('projects.edit', $project->id) }}"
+                                                            class="btn btn-sm btn-soft-info">
+                                                            <i class="ri-pencil-line"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-sm btn-soft-danger"
+                                                            wire:click="delete('{{ $project->id }}')"
+                                                            wire:confirm="Are you sure?">
+                                                            <i class="ri-delete-bin-line"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         @empty
-                                        <tr>
-                                            <td colspan="7" class="text-center py-4"> No projects found. </td>
-                                        </tr>
+                                            <tr>
+                                                <td colspan="7" class="text-center py-4"> No projects found. </td>
+                                            </tr>
                                         @endforelse
                                     </tbody>
                                 </table>
                             </div>
                             @if(method_exists($projects, 'links'))
-                            <div class="mt-3"> {{ $projects->links() }} </div>
+                                <div class="mt-3"> {{ $projects->links() }} </div>
                             @endif
                         </div>
                     </div>

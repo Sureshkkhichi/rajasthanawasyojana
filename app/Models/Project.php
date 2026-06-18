@@ -14,9 +14,7 @@ class Project extends Model
         'project_type_id',
         'name',
         'slug',
-        'country_id',
-        'state_id',
-        'city_id',
+        'city',
         'address',
         'status',
         'is_active',
@@ -42,21 +40,6 @@ class Project extends Model
     public function projectType()
     {
         return $this->belongsTo(ProjectType::class);
-    }
-
-    public function country()
-    {
-        return $this->belongsTo(Country::class);
-    }
-
-    public function state()
-    {
-        return $this->belongsTo(State::class);
-    }
-
-    public function city()
-    {
-        return $this->belongsTo(City::class);
     }
 
     public function sliders()

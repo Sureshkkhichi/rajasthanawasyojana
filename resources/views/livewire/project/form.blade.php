@@ -97,47 +97,10 @@
                                                 </div>
                                                 @enderror
                                             </div>
-                                            {{-- Country --}}
-                                            <div class="col-xl-3 col-md-6">
-                                                <label class="form-label">Country</label>
-                                                <select class="form-select rounded-pill" wire:model.live="country_id">
-                                                    <option value="">
-                                                        Select Country
-                                                    </option>
-                                                    @foreach($countries as $country)
-                                                    <option value="{{ $country->id }}">
-                                                        {{ $country->name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            {{-- State --}}
-                                            <div class="col-xl-3 col-md-6">
-                                                <label class="form-label">State</label>
-                                                <select class="form-select rounded-pill" wire:model.live="state_id">
-                                                    <option value="">
-                                                        Select State
-                                                    </option>
-                                                    @foreach($states as $state)
-                                                    <option value="{{ $state->id }}">
-                                                        {{ $state->name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
                                             {{-- City --}}
                                             <div class="col-xl-3 col-md-6">
                                                 <label class="form-label">City</label>
-                                                <select class="form-select rounded-pill" wire:model="city_id">
-                                                    <option value="">
-                                                        Select City
-                                                    </option>
-                                                    @foreach($cities as $city)
-                                                    <option value="{{ $city->id }}">
-                                                        {{ $city->name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
+                                                <input type="text" class="form-control rounded-pill" wire:model="city" placeholder="Enter city">
                                             </div>
                                             {{-- Status --}}
                                             <div class="col-xl-3 col-md-6">

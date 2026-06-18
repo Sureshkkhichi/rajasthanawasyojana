@@ -1,8 +1,5 @@
 <?php
 namespace App\Livewire\Project;
-use App\Models\City;
-use App\Models\State;
-use App\Models\Country;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Project;
 use App\Models\ProjectType;
@@ -24,16 +21,11 @@ class Form extends Component
     public string $name = '';
     public string $slug = '';
     public string $project_type_id = '';
-    public $country_id = 101;
-    public $state_id = '';
-    public $city_id = '';
+    public $city = '';
     public string $address = '';
     public string $status = 'upcoming';
     public string $is_active = 'active';
     public $projectTypes = [];
-    public $countries = [];
-    public $states = [];
-    public $cities = [];
     public array $sliderImages = [];
     public $sliders = [];
     public string $activeTab = 'generalTab';
@@ -49,9 +41,7 @@ class Form extends Component
                 Rule::unique('projects', 'slug')->ignore($this->projectId),
             ],
             'project_type_id' => 'required|exists:project_types,id',
-            'country_id' => 'nullable|exists:countries,id',
-            'state_id' => 'nullable|exists:states,id',
-            'city_id' => 'nullable|exists:cities,id',
+            'city' => 'nullable',
             'address' => 'nullable|string|max:500',
             'status' => 'required|in:upcoming,active,completed,hold,cancelled',
             'is_active' => 'required|in:active,inactive',
@@ -66,16 +56,13 @@ class Form extends Component
         }
 
         $this->projectTypes = ProjectType::active()->orderBy('name')->get();
-        $this->countries = Country::orderBy('name')->get();
         if ($project && $project->exists) {
             $this->project = $project;
             $this->projectId = $project->id;
             $this->name = $project->name;
             $this->slug = $project->slug;
             $this->project_type_id = $project->project_type_id;
-            $this->country_id = $project->country_id;
-            $this->state_id = $project->state_id;
-            $this->city_id = $project->city_id;
+            $this->city = $project->city;
             $this->address = $project->address ?? '';
             $this->status = $project->status;
             $this->is_active = $project->is_active;
@@ -83,8 +70,6 @@ class Form extends Component
         if ($this->projectId) {
             $this->loadSliders();
         }
-        $this->loadStates();
-        $this->loadCities();
     }
     protected function loadSliders(): void
     {
@@ -96,36 +81,6 @@ class Form extends Component
     public function updatedName(): void
     {
         $this->slug = Str::slug($this->name);
-    }
-    public function updatedCountryId(): void
-    {
-        $this->state_id = '';
-        $this->city_id = '';
-        $this->loadStates();
-        $this->cities = collect();
-    }
-    public function updatedStateId(): void
-    {
-        $this->city_id = '';
-        $this->loadCities();
-    }
-    protected function loadStates(): void
-    {
-        $this->states = State::query()
-            ->when(
-                $this->country_id,
-                fn($query) => $query->where('country_id', $this->country_id)
-            )
-            ->orderBy('name')
-            ->get();
-    }
-    protected function loadCities(): void
-    {
-        $this->cities = City::query()
-            ->select('id', 'name')
-            ->where('state_id', $this->state_id)
-            ->orderBy('name')
-            ->get();
     }
     protected function sliderRules(): array
     {
@@ -264,15 +219,11 @@ class Form extends Component
             'name',
             'slug',
             'project_type_id',
-            'state_id',
-            'city_id',
+            'city',
             'address',
         ]);
-        $this->country_id = 101;
         $this->status = 'upcoming';
         $this->is_active = 'active';
-        $this->loadStates();
-        $this->cities = collect();
         $this->sliderImages = [];
         $this->sliders = [];
         $this->activeTab = 'generalTab';

@@ -19,9 +19,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('slug')->unique();
 
-            $table->unsignedBigInteger('country_id')->nullable();
-            $table->unsignedBigInteger('state_id')->nullable();
-            $table->unsignedBigInteger('city_id')->nullable();
+            $table->string('city')->nullable();
 
             $table->text('address')->nullable();
 
@@ -42,9 +40,7 @@ return new class extends Migration {
             $table->softDeletes();
 
             $table->index('project_type_id');
-            $table->index('country_id');
-            $table->index('state_id');
-            $table->index('city_id');
+            $table->index('city');
             $table->index('status');
             $table->index('is_active');
         });
