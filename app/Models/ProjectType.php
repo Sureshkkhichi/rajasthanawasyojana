@@ -12,10 +12,23 @@ class ProjectType extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'project_type',
-        'description',
-        'is_active',
-        'created_by',
-        'updated_by',
+        'name',
+        'slug',
+        'status',
     ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function projectType()
+    {
+        return $this->belongsTo(ProjectType::class);
+    }
 }

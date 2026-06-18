@@ -17,7 +17,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::prefix('project-types')->name('project-types.')->group(function () {
         Route::get('/', ProjectTypeIndex::class)->name('index');
         Route::get('/create', ProjectTypeForm::class)->name('create');
-        Route::get('/{id}/edit', ProjectTypeForm::class)->name('edit');
+        Route::get('/{projectType}/edit', ProjectTypeForm::class)->name('edit');
     });
     // Projects
     Route::prefix('projects')->name('projects.')->group(function () {
