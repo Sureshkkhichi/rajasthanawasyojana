@@ -3,7 +3,6 @@ namespace App\Livewire\Project;
 use App\Models\City;
 use App\Models\State;
 use App\Models\Country;
-
 use Illuminate\Support\Facades\Storage;
 use App\Models\Project;
 use App\Models\ProjectType;
@@ -38,7 +37,6 @@ class Form extends Component
     public array $sliderImages = [];
     public $sliders = [];
     public string $activeTab = 'generalTab';
-
     public int $uploadIteration = 0;
     public function rules(): array
     {
@@ -61,6 +59,12 @@ class Form extends Component
     }
     public function mount(?Project $project = null): void
     {
+        if ($project && $project->exists) {
+            abort_unless(auth()->user()->can('projects.edit'), 403);
+        } else {
+            abort_unless(auth()->user()->can('projects.create'), 403);
+        }
+
         $this->projectTypes = ProjectType::active()->orderBy('name')->get();
         $this->countries = Country::orderBy('name')->get();
         if ($project && $project->exists) {
@@ -131,6 +135,13 @@ class Form extends Component
     }
     public function save()
     {
+        if ($this->projectId) {
+            abort_unless(auth()->user()->can('projects.edit'), 403);
+        } else {
+            abort_unless(auth()->user()->can('projects.create'), 403);
+        }
+
+        $isUpdate = !empty($this->projectId);
         $validated = $this->validate();
         $project = Project::updateOrCreate(
             [
@@ -141,7 +152,7 @@ class Form extends Component
         $this->projectId = $project->id;
         session()->flash(
             'success',
-            $this->projectId
+            $isUpdate
             ? 'Project updated successfully.'
             : 'Project created successfully.'
         );
@@ -149,6 +160,8 @@ class Form extends Component
     }
     public function saveAndNew()
     {
+        abort_unless(auth()->user()->can('projects.create'), 403);
+
         $validated = $this->validate();
         $project = Project::create($validated);
         $this->resetForm();
@@ -191,23 +204,18 @@ class Form extends Component
     }
     public function deleteSlider(string $sliderId): void
     {
-        $slider = ProjectSlider::find($sliderId);
+        abort_unless(auth()->user()->can('projects.edit'), 403);
 
+        $slider = ProjectSlider::find($sliderId);
         if (!$slider) {
             return;
         }
-
         if ($slider->image) {
-
             Storage::disk('public')
                 ->delete($slider->image);
-
         }
-
         $slider->delete();
-
         $this->loadSliders();
-
         session()->flash(
             'success',
             'Slider deleted successfully.'
@@ -215,71 +223,39 @@ class Form extends Component
     }
     public function updatedSliderImages(): void
     {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
+
         if (!$this->projectId) {
-
-            $this->addError(
-                'sliderImages',
-                'Please save project first.'
-            );
-
+            $this->addError('sliderImages', 'Please save project first.');
             return;
         }
-
-        $this->validate(
-            $this->sliderRules()
-        );
-
-        $project = Project::findOrFail(
-            $this->projectId
-        );
-
+        $this->validate($this->sliderRules());
+        $project = Project::findOrFail($this->projectId);
         $this->uploadSliders($project);
     }
+    public function updateSortOrder(string $sliderId, int $order): void
+    {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
 
-    public function updateSortOrder(
-        string $sliderId,
-        int $order
-    ): void {
-
-        ProjectSlider::where(
-            'id',
-            $sliderId
-        )->update([
-                    'sort_order' => $order,
-                ]);
-
+        ProjectSlider::where('id', $sliderId)->update(['sort_order' => $order,]);
         $this->loadSliders();
     }
-    public function toggleHomeSlider(
-        string $sliderId
-    ): void {
+    public function toggleHomeSlider(string $sliderId): void
+    {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
 
-        $slider = ProjectSlider::find(
-            $sliderId
-        );
-
+        $slider = ProjectSlider::find($sliderId);
         if (!$slider) {
             return;
         }
-
-        $slider->update([
-            'is_home_slider' => !$slider->is_home_slider,
-        ]);
-
+        $slider->update(['is_home_slider' => !$slider->is_home_slider,]);
         $this->loadSliders();
     }
-    public function updateDisplayOn(
-        string $sliderId,
-        string $displayOn
-    ): void {
+    public function updateDisplayOn(string $sliderId, string $displayOn): void
+    {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
 
-        ProjectSlider::where(
-            'id',
-            $sliderId
-        )->update([
-                    'display_on' => $displayOn,
-                ]);
-
+        ProjectSlider::where('id', $sliderId)->update(['display_on' => $displayOn,]);
         $this->loadSliders();
     }
     protected function resetForm(): void

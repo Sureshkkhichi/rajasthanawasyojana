@@ -22,6 +22,12 @@ class Form extends Component
 
     public function mount(ProjectType $projectType = null): void
     {
+        if ($projectType) {
+            abort_unless(auth()->user()->can('project.type.edit'), 403);
+        } else {
+            abort_unless(auth()->user()->can('project.type.create'), 403);
+        }
+
         if (!$projectType) {
             return;
         }
@@ -95,8 +101,12 @@ class Form extends Component
      */
     protected function store(): ProjectType
     {
+        if ($this->isEdit) {
+            abort_unless(auth()->user()->can('project.type.edit'), 403);
+        } else {
+            abort_unless(auth()->user()->can('project.type.create'), 403);
+        }
         $this->validate();
-
         return ProjectType::updateOrCreate(
             [
                 'id' => $this->projectType?->id,
@@ -114,6 +124,8 @@ class Form extends Component
      */
     public function save()
     {
+        $isUpdate = $this->isEdit;
+
         $projectType = $this->store();
 
         $this->projectType = $projectType;
@@ -121,7 +133,7 @@ class Form extends Component
 
         session()->flash(
             'success',
-            $this->isEdit
+            $isUpdate
             ? 'Project Type updated successfully.'
             : 'Project Type created successfully.'
         );

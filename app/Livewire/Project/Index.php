@@ -22,6 +22,11 @@ class Index extends Component
 
     public string $is_active = '';
 
+    public function mount()
+    {
+        abort_unless(auth()->user()->can('projects.view'), 403);
+    }
+
     public function updatingKeyword(): void
     {
         $this->resetPage();
@@ -40,20 +45,38 @@ class Index extends Component
 
     public function delete(string $id): void
     {
+
+        abort_unless(
+
+            auth()->user()->can('projects.delete'),
+
+            403
+
+        );
+
         $project = Project::findOrFail($id);
 
         $project->delete();
 
         session()->flash(
+
             'success',
+
             'Project deleted successfully.'
+
         );
 
         $this->resetPage();
+
     }
 
     public function toggleStatus(string $id): void
     {
+        abort_unless(
+            auth()->user()->can('projects.edit'),
+            403
+        );
+
         $project = Project::findOrFail($id);
 
         $project->is_active =

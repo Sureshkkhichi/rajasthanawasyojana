@@ -14,7 +14,14 @@ class Index extends Component
 {
     use WithPagination;
 
+    protected $paginationTheme = 'bootstrap';
+
     public string $search = '';
+
+    public function mount()
+    {
+        abort_unless(auth()->user()->can('project.type.view'), 403);
+    }
 
     public function updatingSearch(): void
     {
@@ -23,6 +30,11 @@ class Index extends Component
 
     public function delete(string $id): void
     {
+        abort_unless(
+            auth()->user()->can('project.type.delete'),
+            403
+        );
+
         ProjectType::findOrFail($id)->delete();
 
         session()->flash(

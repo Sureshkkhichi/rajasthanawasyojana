@@ -3,6 +3,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 class DefaultUserSeeder extends Seeder
 {
     public function run(): void
@@ -46,13 +47,20 @@ class DefaultUserSeeder extends Seeder
             ],
         ];
         foreach ($users as $userData) {
-            $role = $userData['role'];
+            $roleName = $userData['role'];
             unset($userData['role']);
             $user = User::updateOrCreate(
-                ['email' => $userData['email']],
+                [
+                    'email' => $userData['email'],
+                ],
                 $userData
             );
-            $user->syncRoles([$role]);
+            $role = Role::where('name', $roleName)
+                ->where('guard_name', 'web')
+                ->first();
+            if ($role) {
+                $user->syncRoles([$role->name]);
+            }
         }
     }
 }

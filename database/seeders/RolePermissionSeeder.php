@@ -85,7 +85,6 @@ class RolePermissionSeeder extends Seeder
         // Staff Permissions
         $staffPermissions = [
             'dashboard.view',
-            'projects.view',
             'leads.view',
             'leads.create',
             'leads.edit',
@@ -101,7 +100,6 @@ class RolePermissionSeeder extends Seeder
         // Agent Permissions
         $agentPermissions = [
             'dashboard.view',
-            'projects.view',
             'leads.view',
             'leads.create',
             'leads.edit',
@@ -112,7 +110,6 @@ class RolePermissionSeeder extends Seeder
         // User Permissions
         $userPermissions = [
             'dashboard.view',
-            'projects.view',
             'leads.view',
         ];
         // Sync permissions
