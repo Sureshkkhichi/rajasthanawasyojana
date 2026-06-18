@@ -10,6 +10,8 @@ use App\Livewire\Deal\Index as DealIndex;
 use App\Livewire\Deal\Form as DealForm;
 use App\Livewire\Invoice\Index as InvoiceIndex;
 use App\Livewire\Refund\Index as RefundIndex;
+use App\Livewire\HomeSlider\Index as HomeSliderIndex;
+use App\Livewire\HomeSlider\Form as HomeSliderForm;
 
 
 Route::view('/', 'welcome')->name('front');
@@ -18,6 +20,15 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::get('/', ProjectTypeIndex::class)->name('index');
         Route::get('/create', ProjectTypeForm::class)->name('create');
         Route::get('/{projectType}/edit', ProjectTypeForm::class)->name('edit');
+    });
+    // Home Slider
+    Route::prefix('home-sliders')->name('home-sliders.')->group(function () {
+        // HomeSlider Listing
+        Route::get('/', HomeSliderIndex::class)->name('index');
+        // Create HomeSlider
+        Route::get('/create', HomeSliderForm::class)->name('create');
+        // Edit HomeSlider
+        Route::get('/{homeSlider:id}/edit', HomeSliderForm::class)->name('edit');
     });
     // Projects
     Route::prefix('projects')->name('projects.')->group(function () {

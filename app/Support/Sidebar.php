@@ -16,6 +16,15 @@ class Sidebar
                         'permission' => 'dashboard.view',
                     ],
                 ],
+                'home_slider' => [
+                    [
+                        'title' => 'Home Slider',
+                        'route' => 'home-sliders.index',
+                        'is_route' => true,
+                        'icon' => 'ri-dashboard-line',
+                        'permission' => 'home.slider.view',
+                    ],
+                ],
             ],
             'project_management' => [
                 // PROJECTS

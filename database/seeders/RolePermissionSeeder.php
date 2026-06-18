@@ -14,6 +14,11 @@ class RolePermissionSeeder extends Seeder
         $permissions = [
             // Dashboard
             'dashboard.view',
+            // Home Slider
+            'home.slider.view',
+            'home.slider.create',
+            'home.slider.edit',
+            'home.slider.delete',
             // Project Types
             'project.type.view',
             'project.type.create',
