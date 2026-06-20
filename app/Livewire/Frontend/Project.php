@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Livewire\Frontend;
+
+use Livewire\Component;
+use App\Models\Project as ProjectModel;
+use Livewire\Attributes\Layout;
+
+#[Layout('layouts.front')]
+class Project extends Component
+{
+    public ProjectModel $project;
+
+    public function mount(string $slug): void
+    {
+        $this->project = ProjectModel::query()
+            ->with([
+                'sliders' => fn($query) => $query
+                    ->where('is_active', 'active')
+                    ->orderBy('sort_order')
+            ])
+            ->where('slug', $slug)
+            ->where('is_active', 'active')
+            ->firstOrFail();
+    }
+
+    public function render()
+    {
+        return view('livewire.frontend.project');
+    }
+}

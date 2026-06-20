@@ -1,0 +1,220 @@
+<?php
+namespace App\Livewire\Frontend;
+use App\Models\Lead;
+use App\Models\Project;
+use App\Models\State;
+use Livewire\Component;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\LeadSubmittedMail;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+
+
+#[Layout('layouts.front')]
+#[Title('Registration Form')]
+class Booking extends Component
+{
+    public Project $project;
+    public ?Lead $lead = null;
+    public $states = [];
+    /*
+    |--------------------------------------------------------------------------
+    | Personal Information
+    |--------------------------------------------------------------------------
+    */
+    public string $first_name = '';
+    public string $last_name = '';
+    public string $father_husband_name = '';
+    public string $pan_number = '';
+    public string $gender = '';
+    public string $email = '';
+    public string $phone = '';
+    public ?string $date_of_birth = null;
+    public string $occupation = '';
+    /*
+    |--------------------------------------------------------------------------
+    | Address Information
+    |--------------------------------------------------------------------------
+    */
+    public string $address = '';
+    public ?int $state_id = null;
+    public string $city = '';
+    /*
+    |--------------------------------------------------------------------------
+    | Flat Information
+    |--------------------------------------------------------------------------
+    */
+    public string $co_applicant_name = '';
+    public string $flat_size = '';
+    public string $waiver_code = '';
+    /*
+    |--------------------------------------------------------------------------
+    | Terms
+    |--------------------------------------------------------------------------
+    */
+    public bool $terms = false;
+    public function mount(Project $project): void
+    {
+        $this->project = $project;
+        $this->states = State::query()
+            ->where('country_id', 101)
+            ->orderBy('name')
+            ->get();
+        $rajasthan = State::query()
+            ->where('name', 'Rajasthan')
+            ->first();
+        if ($rajasthan) {
+            $this->state_id = $rajasthan->id;
+        }
+    }
+    public function updated($property): void
+    {
+        if (
+            !in_array($property, [
+                'first_name',
+                'last_name',
+                'father_husband_name',
+                'pan_number',
+                'gender',
+                'email',
+                'phone',
+                'date_of_birth',
+                'occupation',
+                'address',
+                'state_id',
+                'city',
+                'co_applicant_name',
+                'flat_size',
+                'waiver_code',
+            ])
+        ) {
+            return;
+        }
+        if ($this->lead === null) {
+            $this->lead = Lead::create([
+                'project_id' => $this->project->id,
+                'state_id' => $this->state_id,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        }
+        $value = $this->{$property};
+        if ($value === '') {
+            $value = null;
+        }
+        if (is_string($value)) {
+            if (
+                in_array($property, [
+                    'first_name',
+                    'last_name',
+                    'father_husband_name',
+                    'address',
+                    'city',
+                    'co_applicant_name',
+                ])
+            ) {
+                $value = ucwords(strtolower(trim($value)));
+                $this->{$property} = $value;
+            }
+            if ($property === 'pan_number') {
+                $value = strtoupper(trim($value));
+                $this->{$property} = $value;
+            }
+        }
+        $this->lead->update([
+            $property => $value,
+        ]);
+    }
+    protected function rules(): array
+    {
+        return [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'pan_number' => ['required', 'string', 'max:10', 'regex:/^[A-Z]{5}[0-9]{4}[A-Z]$/'],
+            'gender' => ['required'],
+            'email' => ['required', 'email'],
+            'phone' => ['required', 'string', 'max:20'],
+            'date_of_birth' => ['required'],
+            'occupation' => ['required'],
+            'address' => ['required'],
+            'state_id' => ['required'],
+            'city' => ['required'],
+            'flat_size' => ['required'],
+            'terms' => ['accepted'],
+        ];
+    }
+    public function submit()
+    {
+        $validated = $this->validate();
+        if ($this->lead === null) {
+            $this->lead = Lead::create([
+                'project_id' => $this->project->id,
+                'state_id' => $this->state_id,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        }
+        $validated['first_name'] = ucwords(strtolower($validated['first_name']));
+        $validated['last_name'] = ucwords(strtolower($validated['last_name']));
+        $validated['address'] = ucwords(strtolower($validated['address']));
+        $validated['city'] = ucwords(strtolower($validated['city']));
+        $validated['pan_number'] = strtoupper($validated['pan_number']);
+        if (!empty($validated['father_husband_name'])) {
+            $validated['father_husband_name'] =
+                ucwords(strtolower($validated['father_husband_name']));
+        }
+        if (!empty($validated['co_applicant_name'])) {
+            $validated['co_applicant_name'] =
+                ucwords(strtolower($validated['co_applicant_name']));
+        }
+        $this->lead->update([
+            ...$validated,
+            'project_id' => $this->project->id,
+            'is_submitted' => true,
+        ]);
+
+        Mail::to($this->lead->email)->cc('suresh5313@gmail.com')->send(new LeadSubmittedMail($this->lead));
+
+        session()->flash(
+            'success',
+            'Your registration form has been submitted successfully.'
+        );
+
+
+        $this->reset([
+            'first_name',
+            'last_name',
+            'father_husband_name',
+            'pan_number',
+            'gender',
+            'email',
+            'phone',
+            'date_of_birth',
+            'occupation',
+            'address',
+            'city',
+            'co_applicant_name',
+            'flat_size',
+            'waiver_code',
+            'terms',
+        ]);
+
+        $this->lead = null;
+
+        $rajasthan = State::query()
+            ->where('name', 'Rajasthan')
+            ->first();
+
+        return redirect()->route(
+            'booking',
+            ['project' => $this->project->id]
+        );
+
+        return;
+        // Payment Gateway Logic
+    }
+    public function render()
+    {
+        return view('livewire.frontend.booking');
+    }
+}

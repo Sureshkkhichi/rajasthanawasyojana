@@ -5,3 +5,468 @@
 .modal {
     z-index: 99999;
 }
+
+.logo-img {
+    width: 280px;
+    padding: 2%;
+    height: 300px;
+}
+
+img.img-fluid.avend-img {
+    width: 30%;
+    position: relative;
+}
+
+.navbar-landing {
+    background: #fff;
+}
+
+.nft-hero {
+    background-image: unset;
+    padding: 150px 0 60px 0;
+}
+
+.navbar-landing .navbar-nav .nav-item .nav-link,
+.navbar-landing .navbar-nav .nav-item .nav-link:hover {
+    color: #fff !important;
+    display: none;
+}
+
+#navbar {
+    z-index: 997;
+    transition: all 0.5s;
+    padding: 22px 0;
+    background-image: url("/assets/1.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: #fff;
+}
+
+marquee {
+    margin-top: 0;
+    background-color: transparent;
+    background-color: #ff0000;
+    height: 55px;
+    color: #fff;
+    padding-top: 10px;
+    font-size: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Another */
+
+#back-to-top,
+#back-to-top.landing-back-top {
+    bottom: 20px;
+    border-radius: 25px;
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+}
+
+.sticky-whatsapp-button {
+    bottom: 40px;
+    background: #25D366;
+    color: #fff;
+    padding: 5px 20px;
+    width: auto;
+    border-radius: 50px;
+    font-size: 1.15rem;
+}
+
+.sticky-whatsapp-button i {
+    margin-right: 8px;
+}
+
+.call-me-button {
+    bottom: 105px;
+    color: #fff;
+    padding: 5px 20px;
+    width: auto;
+    border-radius: 50px;
+    font-size: 1.15rem;
+}
+
+.call-me-button i {
+    margin-right: 8px;
+}
+
+/* Container for WhatsApp button */
+.whatsapp-button {
+    display: flex;
+    align-items: center;
+    background-color: #25d366;
+    color: white;
+    padding: 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    position: fixed;
+    bottom: 82px;
+    right: 29px;
+    overflow: hidden;
+    width: 50px;
+    /* Initially set the width to only fit the icon */
+    height: 50px;
+    padding-left: 12px;
+    border: transparent;
+    z-index: 999999;
+}
+
+/* WhatsApp icon styling */
+.whatsapp-button i {
+    font-size: 24px;
+    margin: auto;
+    /* Center icon initially */
+}
+
+/* Hidden text initially */
+.whatsapp-text {
+    margin-left: 0px;
+    white-space: nowrap;
+    opacity: 0;
+    /* Initially hidden */
+    transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
+    transform: translateX(20px);
+    /* Initially push text out to the right */
+}
+
+/* On hover, expand width and show text */
+.whatsapp-button:hover {
+    width: 200px;
+    /* Expand the width to fit the text */
+}
+
+.whatsapp-button:hover .whatsapp-text {
+    opacity: 1;
+    /* Make text visible */
+    transform: translateX(0);
+    /* Slide text in from the right */
+}
+
+/* Container for Call me button */
+.callme-button {
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    position: fixed;
+    bottom: 144px;
+    right: 29px;
+    overflow: hidden;
+    width: 50px;
+    /* Initially set the width to only fit the icon */
+    height: 50px;
+    padding-left: 14px;
+    background: #720002;
+    border: transparent;
+    z-index: 999999;
+}
+
+/* callme icon styling */
+.callme-button i {
+    font-size: 24px;
+    margin: auto;
+
+    /* Center icon initially */
+}
+
+/* Hidden text initially */
+.callme-text {
+    margin-left: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    /* Initially hidden */
+    transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
+    transform: translateX(20px);
+    /* Initially push text out to the right */
+}
+
+/* On hover, expand width and show text */
+.callme-button:hover {
+    width: 120px;
+    /* Expand the width to fit the text */
+}
+
+.callme-button:hover .callme-text {
+    opacity: 1;
+    /* Make text visible */
+    transform: translateX(0);
+    /* Slide text in from the right */
+}
+
+.highlight-button button:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+/* Base animation element */
+.animation-element {
+    opacity: 0;
+    position: relative;
+    transition: all 500ms linear;
+}
+
+/* Animation element sliding left */
+.animation-element.slide-left {
+    transform: translateX(-100px);
+}
+
+.animation-element.slide-left.in-view {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Animation element sliding right */
+.animation-element.slide-right {
+    transform: translateX(100px);
+}
+
+.animation-element.slide-right.in-view {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+
+
+
+@media (max-width: 768px) {
+    .animation-element.slide-right {
+        transform: translateX(100px);
+        /* Reduce translation on mobile */
+    }
+
+    .mobile-icon {
+        display: none;
+    }
+
+    .desktop-hide {
+        display: none;
+    }
+
+    .mobile-header .logo-area {
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+
+    .mobile-header .logo-area img.logo-width {
+        width: 95px;
+    }
+
+    .m-pt-300px {
+        padding-top: 0.75rem;
+    }
+
+    .m-pb-100px {
+        padding-bottom: 0.75rem;
+    }
+
+    .m-pt-1 {
+        padding-top: 1rem;
+    }
+
+    .m-pt-15 {
+        padding-top: 1.5rem;
+    }
+
+
+    .m-pb-0 {
+        padding-bottom: 0px;
+    }
+
+    .m-pb-1 {
+        padding-bottom: 1rem;
+    }
+
+    .m-pb-2 {
+        padding-bottom: 2rem;
+    }
+
+    .m-pb-3 {
+        padding-bottom: 3rem;
+    }
+
+    .m-pb-4 {
+        padding-bottom: 4rem;
+    }
+
+    .m-pb-5 {
+        padding-bottom: 5rem;
+    }
+
+    .m-py-0 {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .m-font-5 {
+        font-size: 5rem;
+    }
+
+    .m-font-4 {
+        font-size: 4rem;
+    }
+
+    .m-font-3 {
+        font-size: 3rem;
+    }
+
+    .m-font-2 {
+        font-size: 2rem;
+    }
+
+    .m-font-1 {
+        font-size: 1rem;
+    }
+
+    .counter-box {
+        display: inline-block;
+    }
+
+    .counter-box .box {
+        width: 45%;
+        display: inline-block;
+    }
+
+    .m-mb-0px {
+        margin-bottom: 0px;
+    }
+
+    .button-plan .box {
+        width: 47%;
+        display: inline-block;
+        font-size: 12px;
+    }
+
+    .m-pt-10px {
+        padding-bottom: 1.625rem;
+    }
+
+    .m-mb-1 {
+        margin-bottom: 1rem;
+    }
+
+    .m-mx {
+        margin: 1rem 2.2rem 1rem 2.2rem
+    }
+
+
+
+}
+
+.plyr__video-embed,
+.plyr__video-wrapper--fixed-ratio {
+    aspect-ratio: 16 / 16 !important;
+}
+
+video,
+.gslide-media.gslide-video {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0;
+}
+
+
+
+/* Animation End*/
+
+.more-text {
+    display: none;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.toggle-more {
+    color: #4779ab;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+span.invalid-feedback {
+    color: #f00;
+    font-weight: 100;
+    font-size: 13px;
+}
+
+.is-invalid {
+    border-color: #f00;
+}
+
+.relative.is-invalid span.icon-is-invalid {
+    top: 25%;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+.loader {
+    border: 2px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 2px solid #3498db;
+    width: 20px;
+    height: 20px;
+    -webkit-animation: spin 2s linear infinite;
+    /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

@@ -13,8 +13,14 @@ use App\Livewire\Refund\Index as RefundIndex;
 use App\Livewire\HomeSlider\Index as HomeSliderIndex;
 use App\Livewire\HomeSlider\Form as HomeSliderForm;
 
+// Frontend
+use App\Livewire\Frontend\Home as Home;
+use App\Livewire\Frontend\Project as FrontProject;
+use App\Livewire\Frontend\Booking;
+use Illuminate\Support\Facades\Mail;
 
-Route::view('/', 'welcome')->name('front');
+// Route::view('/', 'welcome')->name('front');
+
 Route::middleware(['web', 'auth'])->group(function () {
     Route::prefix('project-types')->name('project-types.')->group(function () {
         Route::get('/', ProjectTypeIndex::class)->name('index');
@@ -67,7 +73,11 @@ Route::middleware(['web', 'auth'])->group(function () {
         // Refund Listing
         Route::get('/', RefundIndex::class)->name('index');
     });
+    Route::view('dashboard', 'dashboard')->middleware(['auth', 'verified'])->name('dashboard');
+    Route::view('profile', 'profile')->middleware(['auth'])->name('profile');
 });
-Route::view('dashboard', 'dashboard')->middleware(['auth', 'verified'])->name('dashboard');
-Route::view('profile', 'profile')->middleware(['auth'])->name('profile');
+
+Route::get('/', Home::class)->name('front');
+Route::get('/projects/{slug}', FrontProject::class)->name('project.show');
+Route::get('/projects/{project}/registration', Booking::class)->name('booking');
 require __DIR__ . '/auth.php';
