@@ -1,6 +1,34 @@
 <div>
     <!-- Start footer -->
-    <footer class="custom-footer bg-dark py-5 position-relative">
+    <footer class="text-center text-lg-start bg-light text-muted">
+        <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+            <div class="me-5 d-none d-lg-block">
+                <span>Rajasthan Awas Realty Group | Apka Sath Sabka Vikas </span>
+            </div>
+            <div>
+                <a href="#" class="me-4 text-reset">
+                    Term and Condition
+                </a>
+                <a href="#" class="me-4 text-reset">
+                    Privacy policy
+                </a>
+                <a href="#" class="me-4 text-reset">
+                    Cancellation Refund policy
+                </a>
+                <a href="#" class="me-4 text-reset">
+                    Contact Us
+                </a>
+            </div>
+        </section>
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+            <script>
+                document.write(new Date().getFullYear())
+
+            </script> © {{ config('constants.site_name') }} - <a href="https://sureshkhichi.com"
+                class="text-dark">{{ config('constants.site_author') }}</a>
+        </div>
+    </footer>
+    {{-- <footer class="custom-footer bg-dark py-5 position-relative">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 mt-4">
@@ -33,9 +61,9 @@
                             <div class="text-muted mt-3">
                                 <ul class="list-unstyled ff-secondary footer-list">
                                     @foreach ($projects as $project)
-                                        <li>
-                                            <a href="{{ route('project.show', $project->slug) }}">{{ $project->name }}</a>
-                                        </li>
+                                    <li>
+                                        <a href="{{ route('project.show', $project->slug) }}">{{ $project->name }}</a>
+                                    </li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -45,9 +73,9 @@
                             <div class="text-muted mt-3">
                                 <ul class="list-unstyled ff-secondary footer-list">
                                     @foreach ($upcoming_projects as $project)
-                                        <li>
-                                            <a href="{{ route('project.show', $project->slug) }}">{{ $project->name }}</a>
-                                        </li>
+                                    <li>
+                                        <a href="{{ route('project.show', $project->slug) }}">{{ $project->name }}</a>
+                                    </li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -61,6 +89,7 @@
                         <p class="copy-rights mb-0">
                             <script>
                                 document.write(new Date().getFullYear())
+
                             </script> © {{ config('constants.site_name') }} - <a href="https://sureshkhichi.com"
                                 class="text-light">{{ config('constants.site_author') }}</a>
                         </p>
@@ -109,9 +138,8 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer> --}}
     <!-- end footer -->
-
     <!-- Call Us -->
     {{-- <a href="tel:+9186193035" style="display: unset;">
         <button class="callme-button">
@@ -119,7 +147,6 @@
             <span class="callme-text">Call Us</span>
         </button>
     </a> --}}
-
     <!-- Whatsapp No. -->
     {{-- <a href="https://wa.me/918619303509?text=&quot;Send%20me%20Your%20Project%20Details.&quot;"
         style="display: unset;" target="_blank">
@@ -128,7 +155,6 @@
             <span class="whatsapp-text">How Can I help You</span>
         </button>
     </a> --}}
-
     <!--start back-to-top-->
     <button onclick="topFunction()" class="btn btn-danger btn-icon landing-back-top" id="back-to-top">
         <i class="ri-arrow-up-line"></i>

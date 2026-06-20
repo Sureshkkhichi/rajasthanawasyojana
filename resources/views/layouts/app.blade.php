@@ -11,6 +11,7 @@
     <meta content="{{ config('constants.site_description') }}" name="description" />
     <meta content="{{ config('constants.site_author') }}" name="author" />
     <link rel="shortcut icon" href="assets/images/favicon.ico">
+    @yield('styles')
     <script src="{{ asset('assets/js/layout.js') }}"></script>
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
@@ -128,6 +129,8 @@
     <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
     <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
+    @yield('scripts')
+    @livewireScripts
     <script src="{{ asset('assets/js/app.js') }}"></script>
 </body>
 

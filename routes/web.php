@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Livewire\ProjectType\Index as ProjectTypeIndex;
 use App\Livewire\ProjectType\Form as ProjectTypeForm;
@@ -24,6 +25,12 @@ use App\Livewire\Frontend\Project as FrontProject;
 use App\Livewire\Frontend\Booking;
 // Route::view('/', 'welcome')->name('front');
 Route::middleware(['web', 'auth'])->group(function () {
+
+    Route::get('/dashboard', \App\Livewire\Dashboard\Index::class)
+        ->middleware(['auth'])
+        ->name('dashboard');
+
+
     Route::prefix('project-types')->name('project-types.')->group(function () {
         Route::get('/', ProjectTypeIndex::class)->name('index');
         Route::get('/create', ProjectTypeForm::class)->name('create');
@@ -95,7 +102,7 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::get('/profit', ProfitReport::class)
             ->name('profit');
     });
-    Route::view('dashboard', 'dashboard')->middleware(['auth', 'verified'])->name('dashboard');
+
     Route::view('profile', 'profile')->middleware(['auth'])->name('profile');
 });
 Route::get('/', Home::class)->name('front');
