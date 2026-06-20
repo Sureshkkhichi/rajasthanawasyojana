@@ -90,6 +90,39 @@ class Sidebar
                     ],
                 ],
             ],
+            // Reports
+            'reports_managerment' => [
+                'reports' => [
+                    [
+                        'title' => 'Purchase Report',
+                        'route' => 'reports.purchase',
+                        'is_route' => true,
+                        'icon' => 'ri-file-chart-line',
+                        'permission' => 'reports.purchase',
+                    ],
+                    [
+                        'title' => 'Sales Report',
+                        'route' => 'reports.sales',
+                        'is_route' => true,
+                        'icon' => 'ri-line-chart-line',
+                        'permission' => 'reports.sales',
+                    ],
+                    [
+                        'title' => 'Expense Report',
+                        'route' => 'reports.expense',
+                        'is_route' => true,
+                        'icon' => 'ri-money-dollar-circle-line',
+                        'permission' => 'reports.expense',
+                    ],
+                    [
+                        'title' => 'Profit Report',
+                        'route' => 'reports.profit',
+                        'is_route' => true,
+                        'icon' => 'ri-funds-line',
+                        'permission' => 'reports.profit',
+                    ],
+                ],
+            ],
         ];
     }
 }

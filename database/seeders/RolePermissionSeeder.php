@@ -58,8 +58,10 @@ class RolePermissionSeeder extends Seeder
             'users.delete',
             'users.assign_role',
             // Reports
-            'reports.view',
-            'reports.export',
+            'reports.purchase',
+            'reports.sales',
+            'reports.expense',
+            'reports.profit',
         ];
         // Create permissions
         foreach ($permissions as $permission) {
@@ -90,32 +92,14 @@ class RolePermissionSeeder extends Seeder
         // Staff Permissions
         $staffPermissions = [
             'dashboard.view',
-            'leads.view',
-            'leads.create',
-            'leads.edit',
-            'leads.assign',
-            'leads.change_status',
-            'deals.view',
-            'deals.create',
-            'deals.edit',
-            'invoices.view',
-            'refunds.view',
-            'reports.view',
         ];
         // Agent Permissions
         $agentPermissions = [
             'dashboard.view',
-            'leads.view',
-            'leads.create',
-            'leads.edit',
-            'deals.view',
-            'invoices.view',
-            'reports.view',
         ];
         // User Permissions
         $userPermissions = [
             'dashboard.view',
-            'leads.view',
         ];
         // Sync permissions
         $admin->syncPermissions($adminPermissions);

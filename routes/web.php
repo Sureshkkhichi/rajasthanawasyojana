@@ -6,21 +6,23 @@ use App\Livewire\Project\Index as ProjectIndex;
 use App\Livewire\Project\Form as ProjectForm;
 use App\Livewire\Lead\Index as LeadIndex;
 use App\Livewire\Lead\Form as LeadForm;
+use App\Livewire\Lead\Show as LeadShow;
 use App\Livewire\Deal\Index as DealIndex;
 use App\Livewire\Deal\Form as DealForm;
 use App\Livewire\Invoice\Index as InvoiceIndex;
 use App\Livewire\Refund\Index as RefundIndex;
 use App\Livewire\HomeSlider\Index as HomeSliderIndex;
 use App\Livewire\HomeSlider\Form as HomeSliderForm;
+use App\Livewire\Report\Purchase as PurchaseReport;
+use App\Livewire\Report\Sales as SalesReport;
+use App\Livewire\Report\Expense as ExpenseReport;
+use App\Livewire\Report\Profit as ProfitReport;
 
 // Frontend
 use App\Livewire\Frontend\Home as Home;
 use App\Livewire\Frontend\Project as FrontProject;
 use App\Livewire\Frontend\Booking;
-use Illuminate\Support\Facades\Mail;
-
 // Route::view('/', 'welcome')->name('front');
-
 Route::middleware(['web', 'auth'])->group(function () {
     Route::prefix('project-types')->name('project-types.')->group(function () {
         Route::get('/', ProjectTypeIndex::class)->name('index');
@@ -48,11 +50,16 @@ Route::middleware(['web', 'auth'])->group(function () {
     // Leads
     Route::prefix('leads')->name('leads.')->group(function () {
         // Lead Listing
-        Route::get('/', LeadIndex::class)->name('index');
+        Route::get('/', LeadIndex::class)
+            ->name('index');
         // Create Lead
-        Route::get('/create', LeadForm::class)->name('create');
+        Route::get('/create', LeadForm::class)
+            ->name('create');
+        // View Lead
+        Route::get('/{lead:id}', LeadShow::class)->name('show');
         // Edit Lead
-        Route::get('/{lead:id}/edit', LeadForm::class)->name('edit');
+        Route::get('/{lead:id}/edit', LeadForm::class)
+            ->name('edit');
     });
     // Deals
     Route::prefix('deals')->name('deals.')->group(function () {
@@ -73,10 +80,24 @@ Route::middleware(['web', 'auth'])->group(function () {
         // Refund Listing
         Route::get('/', RefundIndex::class)->name('index');
     });
+    // Reports
+    Route::prefix('reports')->name('reports.')->group(function () {
+
+        Route::get('/purchase', PurchaseReport::class)
+            ->name('purchase');
+
+        Route::get('/sales', SalesReport::class)
+            ->name('sales');
+
+        Route::get('/expense', ExpenseReport::class)
+            ->name('expense');
+
+        Route::get('/profit', ProfitReport::class)
+            ->name('profit');
+    });
     Route::view('dashboard', 'dashboard')->middleware(['auth', 'verified'])->name('dashboard');
     Route::view('profile', 'profile')->middleware(['auth'])->name('profile');
 });
-
 Route::get('/', Home::class)->name('front');
 Route::get('/projects/{slug}', FrontProject::class)->name('project.show');
 Route::get('/projects/{project}/registration', Booking::class)->name('booking');

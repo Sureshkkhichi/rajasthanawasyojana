@@ -4,8 +4,6 @@ use App\Models\Lead;
 use App\Support\Sidebar;
 use Livewire\Component;
 use App\Livewire\Actions\Logout;
-
-
 class Menu extends Component
 {
     public function refreshSidebar(): void
@@ -15,7 +13,7 @@ class Menu extends Component
     public function badgeCounts(): array
     {
         return [
-            'fresh' => 0,
+            'fresh' => Lead::where('status', str_replace(' ', '_', str_replace('/', '_', config('constants.lead_statuses.in_process'))))->count(),
         ];
     }
     public function logout(Logout $logout): void

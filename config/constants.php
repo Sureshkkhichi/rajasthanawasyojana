@@ -18,7 +18,7 @@ return [
         'site_visited' => 'Site Visited',
         'document_collected' => 'Document Collected',
     ],
-    'status_colors' => [
+    'lead_status_colors' => [
         'awaiting_closed' => 'secondary',
         'in_process' => 'primary',
         'cancelled' => 'danger',
