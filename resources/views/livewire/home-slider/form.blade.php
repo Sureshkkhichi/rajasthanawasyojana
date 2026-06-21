@@ -129,12 +129,12 @@
                                         @enderror
                                         @if ($desktop_image_file)
                                             <div class="mt-2">
-                                                <img src="{{ $desktop_image_file->temporaryUrl() }}" class="img-thumbnail"
+                                                <img src="{{ $desktopPreview }}" class="img-thumbnail"
                                                     style="max-height:120px;">
                                             </div>
                                         @elseif($desktop_image)
                                             <div class="mt-2">
-                                                <img src="{{ asset('storage/' . $desktop_image) }}" class="img-thumbnail"
+                                                <img src="{{ asset($desktop_image) }}" class="img-thumbnail"
                                                     style="max-height:120px;">
                                             </div>
                                         @endif
@@ -154,12 +154,12 @@
                                         @enderror
                                         @if ($mobile_image_file)
                                             <div class="mt-2">
-                                                <img src="{{ $mobile_image_file->temporaryUrl() }}" class="img-thumbnail"
+                                                <img src="{{ $mobilePreview }}" class="img-thumbnail"
                                                     style="max-height:120px;">
                                             </div>
                                         @elseif($mobile_image)
                                             <div class="mt-2">
-                                                <img src="{{ asset('storage/' . $mobile_image) }}" class="img-thumbnail"
+                                                <img src="{{ asset($mobile_image) }}" class="img-thumbnail"
                                                     style="max-height:120px;">
                                             </div>
                                         @endif

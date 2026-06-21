@@ -106,7 +106,8 @@
                                             <div class="col-xl-3 col-md-6">
                                                 <label class="form-label">Project Status</label>
                                                 <select class="form-select rounded-pill @error('status') is-invalid @enderror" wire:model="status">
-                                                    @foreach (config('constants.project_status') as $key => $project_status)
+                                                    @foreach (config('constants.project_status') as $key =>
+                                                    $project_status)
                                                     <option value="{{ $key }}">{{ $project_status }}</option>
                                                     @endforeach
                                                 </select>
@@ -146,7 +147,7 @@
                                     @if($projectId)
                                     <div class="tab-pane fade {{ $activeTab === 'sliderTab' ? 'show active' : '' }}">
                                         <div class="alert alert-info">
-                                            Upload project slider images. You can manage sort order, status and homepage visibility.
+                                            Upload project slider images. You can manage sort order and status.
                                         </div>
                                         {{-- Upload Section --}}
                                         <div class="card border shadow-none">
@@ -167,11 +168,11 @@
                                                         @enderror
                                                     </div>
                                                     <div class="col-lg-4">
-                                                        <div wire:loading wire:target="sliderImages">
-                                                            <div class="text-primary">
-                                                                <span class="spinner-border spinner-border-sm me-1"></span>
-                                                                Uploading images...
-                                                            </div>
+                                                        <div wire:loading.flex wire:target="updatedSliderImages" class="text-primary" style="display:none;">
+                                                            <span class="spinner-border spinner-border-sm me-1"></span>
+                                                            Uploading images...
+                                                        </div>
+                                                        <div wire:loading.remove wire:target="sliderImages">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -192,22 +193,10 @@
                                                                 <th width="80">
                                                                     Image
                                                                 </th>
-                                                                <th>
-                                                                    Title
-                                                                </th>
-                                                                <th width="120">
+                                                                <th width="10">
                                                                     Sort Order
                                                                 </th>
-                                                                <th width="180">
-                                                                    Display On
-                                                                </th>
-                                                                <th width="120">
-                                                                    Status
-                                                                </th>
-                                                                <th width="120">
-                                                                    Home Slider
-                                                                </th>
-                                                                <th width="120">
+                                                                <th width="10">
                                                                     Action
                                                                 </th>
                                                             </tr>
@@ -217,54 +206,16 @@
                                                             <tr wire:key="slider-{{ $slider->id }}">
                                                                 {{-- Image --}}
                                                                 <td>
-                                                                    <img src="{{ asset('storage/'.$slider->image) }}" class="rounded border" style="width:70px;height:50px;object-fit:cover;">
-                                                                </td>
-                                                                {{-- Title --}}
-                                                                <td>
-                                                                    <strong>
-                                                                        {{ $slider->title }}
-                                                                    </strong>
+                                                                    <img src="{{ asset($slider->image) }}" class="rounded border" style="width:70px;height:50px;object-fit:cover;">
                                                                 </td>
                                                                 {{-- Sort Order --}}
                                                                 <td>
                                                                     <input type="number" class="form-control form-control-sm" value="{{ $slider->sort_order }}" wire:change="updateSortOrder('{{ $slider->id }}',$event.target.value)">
                                                                 </td>
-                                                                {{-- Display On --}}
-                                                                <td>
-                                                                    @switch($slider->display_on)
-                                                                    @case('both')
-                                                                    <span class="badge bg-success">
-                                                                        Homepage + Project
-                                                                    </span>
-                                                                    @break
-                                                                    @case('homepage')
-                                                                    <span class="badge bg-primary">
-                                                                        Homepage
-                                                                    </span>
-                                                                    @break
-                                                                    @default
-                                                                    <span class="badge bg-info">
-                                                                        Project
-                                                                    </span>
-                                                                    @endswitch
-                                                                </td>
-                                                                {{-- Status --}}
-                                                                <td>
-                                                                    @if($slider->is_active == 'active')
-                                                                    <span class="badge bg-success">Active</span>
-                                                                    @else
-                                                                    <span class="badge bg-danger">Inactive</span>
-                                                                    @endif
-                                                                </td>
-                                                                {{-- Home Slider --}}
-                                                                <td>
-                                                                    <div class="form-check form-switch">
-                                                                        <input class="form-check-input" type="checkbox" {{ $slider->is_home_slider ? 'checked' : '' }} wire:change="toggleHomeSlider('{{ $slider->id }}')">
-                                                                    </div>
-                                                                </td>
                                                                 {{-- Actions --}}
                                                                 <td>
-                                                                    <button type="button" class="btn btn-sm btn-danger" wire:click="deleteSlider('{{ $slider->id }}')" wire:confirm="Are you sure you want to delete this slider?">
+                                                                    <button type="button" class="btn btn-sm btn-danger" wire:click="deleteSlider('{{ $slider->id }}')" wire:loading.attr="disabled" wire:target="deleteSlider">
+
                                                                         <i class="ri-delete-bin-line"></i>
                                                                     </button>
                                                                 </td>

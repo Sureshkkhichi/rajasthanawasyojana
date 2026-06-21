@@ -23,7 +23,11 @@ use App\Livewire\Report\Profit as ProfitReport;
 use App\Livewire\Frontend\Home as Home;
 use App\Livewire\Frontend\Project as FrontProject;
 use App\Livewire\Frontend\Booking;
-// Route::view('/', 'welcome')->name('front');
+Route::get('/clear-cache', function () {
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+    return 'Cache cleared successfully!';
+});
+
 Route::middleware(['web', 'auth'])->group(function () {
 
     Route::get('/dashboard', \App\Livewire\Dashboard\Index::class)

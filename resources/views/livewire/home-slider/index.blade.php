@@ -94,7 +94,7 @@
 
                                                 <td>
                                                     @if($slider->desktop_image)
-                                                        <img src="{{ asset('storage/' . $slider->desktop_image) }}"
+                                                        <img src="{{ asset($slider->desktop_image) }}"
                                                             alt="{{ $slider->title }}" class="img-thumbnail"
                                                             style="height:60px;width:100px;object-fit:cover;">
                                                     @else

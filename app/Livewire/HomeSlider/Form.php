@@ -37,6 +37,8 @@ class Form extends Component
     public ?string $desktop_image = null;
     public ?string $mobile_image = null;
     public bool $isEdit = false;
+    public ?string $desktopPreview = null;
+    public ?string $mobilePreview = null;
     public function mount(HomeSlider $homeSlider = null): void
     {
         if ($homeSlider?->exists) {
@@ -119,6 +121,82 @@ class Form extends Component
         | Resolve Button Link
         |--------------------------------------------------------------------------
         */
+        $buttonLink = $this->link_type === 'project'
+            ? 'project:' . $this->project_id
+            : $this->button_link;
+        /*
+        |--------------------------------------------------------------------------
+        | Upload Images
+        |--------------------------------------------------------------------------
+        */
+        $desktopImage = $this->desktop_image;
+        $mobileImage = $this->mobile_image;
+        $uploadPath = public_path('uploads/home-sliders');
+        if (!File::exists($uploadPath)) {
+            File::makeDirectory($uploadPath, 0755, true);
+        }
+        if (!is_writable($uploadPath)) {
+            throw new \Exception("Upload directory is not writable: {$uploadPath}");
+        }
+        if ($this->desktop_image_file) {
+            if (
+                $this->desktop_image &&
+                File::exists(public_path($this->desktop_image))
+            ) {
+                File::delete(public_path($this->desktop_image));
+            }
+            $desktopFileName = Str::uuid() . '.' .
+                $this->desktop_image_file->getClientOriginalExtension();
+            File::copy(
+                $this->desktop_image_file->getRealPath(),
+                $uploadPath . '/' . $desktopFileName
+            );
+            $desktopImage = 'uploads/home-sliders/' . $desktopFileName;
+        }
+        if ($this->mobile_image_file) {
+            if (
+                $this->mobile_image &&
+                File::exists(public_path($this->mobile_image))
+            ) {
+                File::delete(public_path($this->mobile_image));
+            }
+            $mobileFileName = Str::uuid() . '.' .
+                $this->mobile_image_file->getClientOriginalExtension();
+            File::copy(
+                $this->mobile_image_file->getRealPath(),
+                $uploadPath . '/' . $mobileFileName
+            );
+            $mobileImage = 'uploads/home-sliders/' . $mobileFileName;
+        }
+        return HomeSlider::updateOrCreate(
+            [
+                'id' => $this->homeSlider?->id,
+            ],
+            [
+                'title' => $this->title,
+                'subtitle' => $this->subtitle,
+                'desktop_image' => $desktopImage,
+                'mobile_image' => $mobileImage,
+                'button_text' => $this->button_text,
+                'button_link' => $buttonLink,
+                'sort_order' => $this->sort_order,
+                'status' => $this->status,
+            ]
+        );
+    }
+    protected function old_store(): HomeSlider
+    {
+        if ($this->isEdit) {
+            abort_unless(auth()->user()->can('home.slider.edit'), 403);
+        } else {
+            abort_unless(auth()->user()->can('home.slider.create'), 403);
+        }
+        $this->validate();
+        /*
+        |--------------------------------------------------------------------------
+        | Resolve Button Link
+        |--------------------------------------------------------------------------
+        */
         $buttonLink = null;
         if ($this->link_type === 'project') {
             $buttonLink = 'project:' . $this->project_id;
@@ -146,9 +224,9 @@ class Form extends Component
             $desktopFileName =
                 Str::uuid() . '.' .
                 $this->desktop_image_file->getClientOriginalExtension();
-            $this->desktop_image_file->move(
-                $uploadPath,
-                $desktopFileName
+            move_uploaded_file(
+                $this->desktop_image_file->getRealPath(),
+                $uploadPath . '/' . $desktopFileName
             );
             $desktopImage = 'uploads/home-sliders/' . $desktopFileName;
         }
@@ -162,9 +240,9 @@ class Form extends Component
             $mobileFileName =
                 Str::uuid() . '.' .
                 $this->mobile_image_file->getClientOriginalExtension();
-            $this->mobile_image_file->move(
-                $uploadPath,
-                $mobileFileName
+            move_uploaded_file(
+                $this->mobile_image_file->getRealPath(),
+                $uploadPath . '/' . $mobileFileName
             );
             $mobileImage = 'uploads/home-sliders/' . $mobileFileName;
         }
@@ -183,6 +261,38 @@ class Form extends Component
                 'status' => $this->status,
             ]
         );
+    }
+    public function updatedDesktopImageFile()
+    {
+        if (!$this->desktop_image_file) {
+            return;
+        }
+        $fileName = Str::uuid() . '.' . $this->desktop_image_file->getClientOriginalExtension();
+        $tempPath = public_path('temp');
+        if (!File::exists($tempPath)) {
+            File::makeDirectory($tempPath, 0755, true);
+        }
+        File::copy(
+            $this->desktop_image_file->getRealPath(),
+            $tempPath . '/' . $fileName
+        );
+        $this->desktopPreview = asset('temp/' . $fileName);
+    }
+    public function updatedMobileImageFile()
+    {
+        if (!$this->mobile_image_file) {
+            return;
+        }
+        $fileName = Str::uuid() . '.' . $this->mobile_image_file->getClientOriginalExtension();
+        $tempPath = public_path('temp');
+        if (!File::exists($tempPath)) {
+            File::makeDirectory($tempPath, 0755, true);
+        }
+        File::copy(
+            $this->mobile_image_file->getRealPath(),
+            $tempPath . '/' . $fileName
+        );
+        $this->mobilePreview = asset('temp/' . $fileName);
     }
     public function save()
     {

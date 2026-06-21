@@ -1,6 +1,9 @@
 <?php
 namespace App\Livewire\Project;
+
+
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use App\Models\Project;
 use App\Models\ProjectType;
 use Illuminate\Support\Str;
@@ -26,7 +29,7 @@ class Form extends Component
     public string $status = 'upcoming';
     public string $is_active = 'active';
     public $projectTypes = [];
-    public array $sliderImages = [];
+    public $sliderImages = [];
     public $sliders = [];
     public string $activeTab = 'generalTab';
     public int $uploadIteration = 0;
@@ -130,15 +133,22 @@ class Form extends Component
         if (empty($this->sliderImages)) {
             return;
         }
+
         $lastOrder = ProjectSlider::where('project_id', $project->id)
             ->max('sort_order') ?? 0;
+        $uploadPath = public_path('uploads/projects/sliders');
+        if (!file_exists($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
         foreach ($this->sliderImages as $image) {
             if (!$image instanceof TemporaryUploadedFile) {
                 continue;
             }
-            $path = $image->store(
-                'projects/sliders',
-                'public'
+            $fileName = Str::uuid() . '.' .
+                $image->getClientOriginalExtension();
+            File::copy(
+                $image->getRealPath(),
+                $uploadPath . '/' . $fileName
             );
             ProjectSlider::create([
                 'project_id' => $project->id,
@@ -146,36 +156,44 @@ class Form extends Component
                     $image->getClientOriginalName(),
                     PATHINFO_FILENAME
                 ),
-                'image' => $path,
+                'image' => 'uploads/projects/sliders/' . $fileName,
                 'display_on' => 'project',
                 'sort_order' => ++$lastOrder,
                 'is_home_slider' => false,
                 'is_active' => 'active',
             ]);
         }
-        $this->sliderImages = [];
+        $this->reset('sliderImages');
         $this->uploadIteration++;
         $this->loadSliders();
+
     }
+
     public function deleteSlider(string $sliderId): void
     {
         abort_unless(auth()->user()->can('projects.edit'), 403);
 
         $slider = ProjectSlider::find($sliderId);
+
         if (!$slider) {
             return;
         }
-        if ($slider->image) {
-            Storage::disk('public')
-                ->delete($slider->image);
+
+        if ($slider->image && File::exists(public_path($slider->image))) {
+            File::delete(public_path($slider->image));
         }
+
         $slider->delete();
+
+
         $this->loadSliders();
+
         session()->flash(
             'success',
             'Slider deleted successfully.'
         );
     }
+
     public function updatedSliderImages(): void
     {
         abort_unless(auth()->user()->can('projects.edit'), 403);
@@ -184,9 +202,14 @@ class Form extends Component
             $this->addError('sliderImages', 'Please save project first.');
             return;
         }
+
         $this->validate($this->sliderRules());
+
         $project = Project::findOrFail($this->projectId);
+
         $this->uploadSliders($project);
+
+        $this->reset('sliderImages');
     }
     public function updateSortOrder(string $sliderId, int $order): void
     {
@@ -221,10 +244,10 @@ class Form extends Component
             'project_type_id',
             'city',
             'address',
+            'sliderImages',
         ]);
         $this->status = 'upcoming';
         $this->is_active = 'active';
-        $this->sliderImages = [];
         $this->sliders = [];
         $this->activeTab = 'generalTab';
     }
