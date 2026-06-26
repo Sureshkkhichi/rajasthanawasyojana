@@ -18,22 +18,120 @@
     <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
     @livewireStyles
     @stack('styles')
+    <style>
+        .custom-header {
+            background: #fffdf6;
+            background-image: url('{{ asset("assets/images/header.jpg") }}');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
+            z-index: 999;
+            height: auto;
+        }
+
+        .custom-header .container {
+            max-width: 1400px;
+        }
+
+        .header-logo img {
+            height: 72px;
+            width: auto;
+        }
+
+        .digital-logo {
+            height: 58px;
+            width: auto;
+        }
+
+        .header-contact {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .header-contact a {
+            color: #4a2100;
+            font-size: 46px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .3s;
+            line-height: 1;
+        }
+
+        .header-contact a:hover {
+            color: #d62939;
+        }
+
+        @media(max-width:991px) {
+            .custom-header {
+                height: 88px;
+            }
+
+            .header-logo img {
+                height: 54px;
+            }
+
+            .header-contact {
+                gap: 15px;
+                justify-content: flex-end;
+            }
+
+            .header-contact a {
+                font-size: 18px;
+            }
+        }
+
+        @media(max-width:576px) {
+            .custom-header {
+                height: 88px;
+            }
+
+            .header-logo img {
+                height: 46px;
+            }
+
+            .header-contact {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 2px;
+            }
+
+            .header-contact a {
+                font-size: 15px;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div class="layout-wrapper landing">
-        <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
+        <nav class="navbar navbar-expand-lg fixed-top custom-header">
             <div class="container">
-                <a class="navbar-brand" href="{{ route('front') }}">
-                    {{ config('constants.site_name') }}
-                </a>
-                <button class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="mdi mdi-menu"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <livewire:frontend.components.menu />
+                <div class="row w-100 align-items-center">
+                    {{-- Left Logo --}}
+                    <div class="col-lg-4 col-6">
+                        <a href="{{ route('front') }}" class="header-logo">
+                            <img src="https://rajasthanawasyojana.com/assets/img/logo.png" class="img-fluid"
+                                alt="{{ config('constants.site_name') }}">
+                        </a>
+                    </div>
+                    {{-- Center Logo --}}
+                    <div class="col-lg-4 d-none d-lg-flex justify-content-center">
+                    </div>
+                    {{-- Right Contact --}}
+                    <div class="col-lg-4 col-6">
+                        <div class="header-contact">
+                            <a href="tel:+919876543210" class="fs-2">
+                                9876543210
+                            </a>
+                            <a href="tel:+919876543210" class="fs-2">
+                                9876543210
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -49,6 +147,7 @@
     <script src="{{ asset('assets/libs/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/landing.init.js') }}"></script>
     @stack('scripts')
+    @livewireScripts
 </body>
 
 </html>

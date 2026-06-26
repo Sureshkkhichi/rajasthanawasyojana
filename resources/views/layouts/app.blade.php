@@ -17,6 +17,8 @@
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
+    @livewireStyles
+    @stack('styles')
 </head>
 
 <body>
@@ -120,6 +122,7 @@
     <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
     @yield('scripts')
+    @stack('scripts')
     @livewireScripts
     <script src="{{ asset('assets/js/app.js') }}"></script>
 </body>

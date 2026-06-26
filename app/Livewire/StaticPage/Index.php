@@ -42,6 +42,8 @@ class Index extends Component
         $this->title = $page->title;
         $this->content = $page->content ?? '';
         $this->status = $page->status;
+
+        $this->dispatch('editor-set-content', content: $this->content);
     }
 
     public function save(): void

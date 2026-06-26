@@ -50,7 +50,6 @@ class Form extends Component
                 Rule::unique('projects', 'slug')->ignore($this->projectId),
             ],
             'project_type_id' => 'required|exists:project_types,id',
-            'flat_id' => 'required|exists:flats,id',
             'city' => 'nullable',
             'address' => 'nullable|string|max:500',
             'status' => 'required|in:upcoming,active,completed,hold,cancelled',
@@ -75,7 +74,6 @@ class Form extends Component
             $this->name = $project->name;
             $this->slug = $project->slug;
             $this->project_type_id = $project->project_type_id;
-            $this->flat_id = $project->flat_id ?? '';
             $this->city = $project->city;
             $this->address = $project->address ?? '';
             $this->status = $project->status;

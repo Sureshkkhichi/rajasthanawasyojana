@@ -97,27 +97,6 @@
                                                 </div>
                                                 @enderror
                                             </div>
-                                            {{-- Flat --}}
-                                            <div class="col-xl-3 col-md-6">
-                                                <label class="form-label">
-                                                    Flat <span class="text-danger">*</span>
-                                                </label>
-                                                <select class="form-select rounded-pill @error('flat_id') is-invalid @enderror" wire:model="flat_id">
-                                                    <option value="">
-                                                        Select Flat
-                                                    </option>
-                                                    @foreach($flats as $flat)
-                                                    <option value="{{ $flat->id }}">
-                                                        {{ $flat->name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('flat_id')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
                                             {{-- City --}}
                                             <div class="col-xl-3 col-md-6">
                                                 <label class="form-label">City</label>
