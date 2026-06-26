@@ -61,7 +61,8 @@ class Index extends Component
     {
         $projects = Project::query()
             ->with([
-                'projectType:id,name'
+                'projectType:id,name',
+                'flat:id,name',
             ])
             ->when(
                 $this->keyword,

@@ -34,7 +34,7 @@
                                     <li class="nav-item" role="presentation">
                                         <a href="javascript:void(0);" class="nav-link {{ $activeTab === 'generalTab' ? 'active' : '' }}" wire:click="$set('activeTab', 'generalTab')">
                                             <i class="ri-building-line me-1"></i>
-                                            General & Property Details
+                                            General & Project Detail
                                         </a>
                                     </li>
                                     @if($projectId)
@@ -97,10 +97,41 @@
                                                 </div>
                                                 @enderror
                                             </div>
+                                            {{-- Flat --}}
+                                            <div class="col-xl-3 col-md-6">
+                                                <label class="form-label">
+                                                    Flat <span class="text-danger">*</span>
+                                                </label>
+                                                <select class="form-select rounded-pill @error('flat_id') is-invalid @enderror" wire:model="flat_id">
+                                                    <option value="">
+                                                        Select Flat
+                                                    </option>
+                                                    @foreach($flats as $flat)
+                                                    <option value="{{ $flat->id }}">
+                                                        {{ $flat->name }}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('flat_id')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                                @enderror
+                                            </div>
                                             {{-- City --}}
                                             <div class="col-xl-3 col-md-6">
                                                 <label class="form-label">City</label>
                                                 <input type="text" class="form-control rounded-pill" wire:model="city" placeholder="Enter city">
+                                            </div>
+                                            {{-- Price --}}
+                                            <div class="col-xl-3 col-md-6">
+                                                <label class="form-label">Price <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control rounded-pill @error('price') is-invalid @enderror" wire:model="price" placeholder="e.g. ₹ 15 Lakh - ₹ 35 Lakh">
+                                                @error('price')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                                @enderror
                                             </div>
                                             {{-- Status --}}
                                             <div class="col-xl-3 col-md-6">
@@ -138,6 +169,40 @@
                                             <div class="col-12">
                                                 <label class="form-label">Address</label>
                                                 <textarea class="form-control" rows="3" wire:model="address" placeholder="Enter project address"></textarea>
+                                            </div>
+                                            {{-- Featured Image --}}
+                                            <div class="col-12 mt-3">
+                                                <label class="form-label">Featured Image</label>
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-6">
+                                                        <input type="file" class="form-control @error('featured_image_file') is-invalid @enderror" wire:model="featured_image_file" accept="image/*">
+                                                        <small class="text-muted">Recommended size: 800x600. Max size: 2MB.</small>
+                                                        @error('featured_image_file')
+                                                        <div class="invalid-feedback">
+                                                            {{ $message }}
+                                                        </div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        @if ($featured_image_file)
+                                                            <div class="mt-2">
+                                                                <span class="text-success d-block mb-1">Temporary Preview:</span>
+                                                                <img src="{{ $featured_image_file->temporaryUrl() }}" class="img-thumbnail" style="max-height: 150px; object-fit: cover;">
+                                                            </div>
+                                                        @elseif ($featured_image)
+                                                            <div class="mt-2 position-relative d-inline-block">
+                                                                <span class="text-muted d-block mb-1">Current Image:</span>
+                                                                <img src="{{ asset($featured_image) }}" class="img-thumbnail" style="max-height: 150px; object-fit: cover;">
+                                                                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 mt-4 me-1" 
+                                                                        wire:click="deleteFeaturedImage" 
+                                                                        onclick="if (!confirm('Are you sure you want to delete the featured image?')) { event.stopImmediatePropagation(); return false; }" 
+                                                                        title="Delete Featured Image">
+                                                                    <i class="ri-delete-bin-line"></i>
+                                                                </button>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

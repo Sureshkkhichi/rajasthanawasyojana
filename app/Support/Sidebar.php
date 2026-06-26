@@ -16,13 +16,22 @@ class Sidebar
                         'permission' => 'dashboard.view',
                     ],
                 ],
-                'home_slider' => [
+            ],
+            // Frontend Configuration
+            'frontend_configuration' => [
+                'frontend' => [
                     [
-                        'title' => 'Home Slider',
-                        'route' => 'home-sliders.index',
+                        'title' => 'Frontend',
+                        'route' => 'frontend.index',
                         'is_route' => true,
-                        'icon' => 'ri-dashboard-line',
-                        'permission' => 'home.slider.view',
+                        'icon' => 'ri-layout-line',
+                    ],
+                    [
+                        'title' => 'Pages',
+                        'route' => 'pages.index',
+                        'is_route' => true,
+                        'icon' => 'ri-file-edit-line',
+                        'permission' => 'pages.view',
                     ],
                 ],
             ],
@@ -35,6 +44,15 @@ class Sidebar
                         'is_route' => true,
                         'icon' => 'ri-folder-2-line',
                         'permission' => 'project.type.view',
+                    ],
+                ],
+                'flats' => [
+                    [
+                        'title' => 'Flats',
+                        'route' => 'flats.index',
+                        'is_route' => true,
+                        'icon' => 'ri-building-2-line',
+                        'permission' => 'flats.view',
                     ],
                 ],
                 // PROJECTS

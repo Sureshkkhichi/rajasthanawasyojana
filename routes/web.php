@@ -12,8 +12,10 @@ use App\Livewire\Deal\Index as DealIndex;
 use App\Livewire\Deal\Form as DealForm;
 use App\Livewire\Invoice\Index as InvoiceIndex;
 use App\Livewire\Refund\Index as RefundIndex;
-use App\Livewire\HomeSlider\Index as HomeSliderIndex;
-use App\Livewire\HomeSlider\Form as HomeSliderForm;
+use App\Livewire\Flat\Index as FlatIndex;
+use App\Livewire\Flat\Form as FlatForm;
+use App\Livewire\StaticPage\Index as StaticPageIndex;
+
 use App\Livewire\Report\Purchase as PurchaseReport;
 use App\Livewire\Report\Sales as SalesReport;
 use App\Livewire\Report\Expense as ExpenseReport;
@@ -23,6 +25,7 @@ use App\Livewire\Report\Profit as ProfitReport;
 use App\Livewire\Frontend\Home as Home;
 use App\Livewire\Frontend\Project as FrontProject;
 use App\Livewire\Frontend\Booking;
+use App\Livewire\Frontend\StaticPage as FrontStaticPage;
 Route::get('/clear-cache', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     return 'Cache cleared successfully!';
@@ -40,15 +43,13 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::get('/create', ProjectTypeForm::class)->name('create');
         Route::get('/{projectType}/edit', ProjectTypeForm::class)->name('edit');
     });
-    // Home Slider
-    Route::prefix('home-sliders')->name('home-sliders.')->group(function () {
-        // HomeSlider Listing
-        Route::get('/', HomeSliderIndex::class)->name('index');
-        // Create HomeSlider
-        Route::get('/create', HomeSliderForm::class)->name('create');
-        // Edit HomeSlider
-        Route::get('/{homeSlider:id}/edit', HomeSliderForm::class)->name('edit');
+
+    Route::prefix('flats')->name('flats.')->group(function () {
+        Route::get('/', FlatIndex::class)->name('index');
+        Route::get('/create', FlatForm::class)->name('create');
+        Route::get('/{flat:id}/edit', FlatForm::class)->name('edit');
     });
+
     // Projects
     Route::prefix('projects')->name('projects.')->group(function () {
         // Project Listing
@@ -107,9 +108,24 @@ Route::middleware(['web', 'auth'])->group(function () {
             ->name('profit');
     });
 
+    Route::get('/frontend-configuration', \App\Livewire\FrontendConfiguration\Index::class)
+        ->name('frontend.index');
+
+    Route::get('/pages', StaticPageIndex::class)
+        ->name('pages.index');
+
     Route::view('profile', 'profile')->middleware(['auth'])->name('profile');
 });
 Route::get('/', Home::class)->name('front');
+Route::get('/terms-and-conditions', FrontStaticPage::class)
+    ->defaults('slug', 'terms-and-conditions')
+    ->name('pages.terms');
+Route::get('/privacy-policy', FrontStaticPage::class)
+    ->defaults('slug', 'privacy-policy')
+    ->name('pages.privacy');
+Route::get('/cancellation-refund-policy', FrontStaticPage::class)
+    ->defaults('slug', 'cancellation-refund-policy')
+    ->name('pages.refund-policy');
 Route::get('/projects/{slug}', FrontProject::class)->name('project.show');
 Route::get('/projects/{project}/registration', Booking::class)->name('booking');
 require __DIR__ . '/auth.php';

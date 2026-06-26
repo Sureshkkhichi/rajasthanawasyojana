@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use App\Models\Project;
 use App\Models\ProjectType;
+use App\Models\Flat;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
@@ -24,15 +25,20 @@ class Form extends Component
     public string $name = '';
     public string $slug = '';
     public string $project_type_id = '';
+    public string $flat_id = '';
     public $city = '';
     public string $address = '';
     public string $status = 'upcoming';
     public string $is_active = 'active';
     public $projectTypes = [];
+    public $flats = [];
     public $sliderImages = [];
     public $sliders = [];
     public string $activeTab = 'generalTab';
     public int $uploadIteration = 0;
+    public $featured_image_file;
+    public ?string $featured_image = null;
+    public ?string $price = null;
     public function rules(): array
     {
         return [
@@ -44,10 +50,13 @@ class Form extends Component
                 Rule::unique('projects', 'slug')->ignore($this->projectId),
             ],
             'project_type_id' => 'required|exists:project_types,id',
+            'flat_id' => 'required|exists:flats,id',
             'city' => 'nullable',
             'address' => 'nullable|string|max:500',
             'status' => 'required|in:upcoming,active,completed,hold,cancelled',
             'is_active' => 'required|in:active,inactive',
+            'featured_image_file' => 'nullable|image|max:2048',
+            'price' => 'required|string|max:255',
         ];
     }
     public function mount(?Project $project = null): void
@@ -59,16 +68,20 @@ class Form extends Component
         }
 
         $this->projectTypes = ProjectType::active()->orderBy('name')->get();
+        $this->flats = Flat::active()->orderBy('name')->get();
         if ($project && $project->exists) {
             $this->project = $project;
             $this->projectId = $project->id;
             $this->name = $project->name;
             $this->slug = $project->slug;
             $this->project_type_id = $project->project_type_id;
+            $this->flat_id = $project->flat_id ?? '';
             $this->city = $project->city;
             $this->address = $project->address ?? '';
             $this->status = $project->status;
             $this->is_active = $project->is_active;
+            $this->featured_image = $project->featured_image;
+            $this->price = $project->price;
         }
         if ($this->projectId) {
             $this->loadSliders();
@@ -91,6 +104,24 @@ class Form extends Component
             'sliderImages.*' => 'image|max:5120',
         ];
     }
+    protected function uploadFeaturedImage(): void
+    {
+        if ($this->featured_image_file) {
+            if ($this->featured_image && File::exists(public_path($this->featured_image))) {
+                File::delete(public_path($this->featured_image));
+            }
+            $uploadPath = public_path('uploads/projects');
+            if (!File::exists($uploadPath)) {
+                File::makeDirectory($uploadPath, 0755, true);
+            }
+            $fileName = Str::uuid() . '.' . $this->featured_image_file->getClientOriginalExtension();
+            File::copy(
+                $this->featured_image_file->getRealPath(),
+                $uploadPath . '/' . $fileName
+            );
+            $this->featured_image = 'uploads/projects/' . $fileName;
+        }
+    }
     public function save()
     {
         if ($this->projectId) {
@@ -101,11 +132,17 @@ class Form extends Component
 
         $isUpdate = !empty($this->projectId);
         $validated = $this->validate();
+        $this->uploadFeaturedImage();
+
+        $data = $validated;
+        unset($data['featured_image_file']);
+        $data['featured_image'] = $this->featured_image;
+
         $project = Project::updateOrCreate(
             [
                 'id' => $this->projectId,
             ],
-            $validated
+            $data
         );
         $this->projectId = $project->id;
         session()->flash(
@@ -121,7 +158,13 @@ class Form extends Component
         abort_unless(auth()->user()->can('projects.create'), 403);
 
         $validated = $this->validate();
-        $project = Project::create($validated);
+        $this->uploadFeaturedImage();
+
+        $data = $validated;
+        unset($data['featured_image_file']);
+        $data['featured_image'] = $this->featured_image;
+
+        $project = Project::create($data);
         $this->resetForm();
         session()->flash(
             'success',
@@ -211,6 +254,26 @@ class Form extends Component
 
         $this->reset('sliderImages');
     }
+
+    public function deleteFeaturedImage(): void
+    {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
+
+        if ($this->featured_image) {
+            $filePath = public_path(ltrim($this->featured_image, '/'));
+            if (File::exists($filePath)) {
+                File::delete($filePath);
+            }
+
+            $this->featured_image = null;
+
+            if ($this->project) {
+                $this->project->update(['featured_image' => null]);
+            }
+
+            session()->flash('success', 'Featured image deleted successfully.');
+        }
+    }
     public function updateSortOrder(string $sliderId, int $order): void
     {
         abort_unless(auth()->user()->can('projects.edit'), 403);
@@ -242,9 +305,13 @@ class Form extends Component
             'name',
             'slug',
             'project_type_id',
+            'flat_id',
             'city',
             'address',
             'sliderImages',
+            'featured_image_file',
+            'featured_image',
+            'price',
         ]);
         $this->status = 'upcoming';
         $this->is_active = 'active';

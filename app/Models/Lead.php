@@ -29,6 +29,8 @@ class Lead extends Model
 
         'address',
         'state_id',
+        'state_name',
+        'city_id',
         'city',
 
         'co_applicant_name',

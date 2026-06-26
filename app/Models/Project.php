@@ -12,12 +12,15 @@ class Project extends Model
 
     protected $fillable = [
         'project_type_id',
+        'flat_id',
         'name',
         'slug',
         'city',
         'address',
         'status',
         'is_active',
+        'featured_image',
+        'price',
     ];
 
     /*
@@ -42,9 +45,15 @@ class Project extends Model
         return $this->belongsTo(ProjectType::class);
     }
 
+    public function flat()
+    {
+        return $this->belongsTo(Flat::class);
+    }
+
     public function sliders()
     {
         return $this->hasMany(ProjectSlider::class)
             ->orderBy('sort_order');
     }
+
 }

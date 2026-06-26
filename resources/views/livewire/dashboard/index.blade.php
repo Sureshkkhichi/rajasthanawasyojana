@@ -1280,6 +1280,51 @@
                 </div>
             </div>
 
+            <!-- Peak Registration Hours Row -->
+            <div class="row mb-4">
+                <div class="col-xl-8">
+                    <div class="card card-height-100">
+                        <div class="card-header border-0 align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Peak Registration Times (Hourly Trend)</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="hourlyRegistrationChart" class="apex-charts" dir="ltr" style="height: 300px; min-height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="card card-height-100">
+                        <div class="card-header border-0 align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Time Analysis Insights</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-column justify-content-between h-100">
+                                <div>
+                                    <div class="d-flex align-items-center gap-3 mb-4">
+                                        <div class="avatar-sm rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; flex-shrink: 0;">
+                                            <i class="ri-time-line fs-20"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="fs-14 fw-semibold mb-1 text-dark">Peak Traffic Period</h5>
+                                            <p class="text-muted mb-0 fs-12" id="peak-period-text">Analyzing peak hours...</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-muted fs-13 mb-4">
+                                        This chart displays the hourly distribution of lead registrations. Use this data to optimize sales team shifts, ad campaign schedules, and automated follow-ups.
+                                    </p>
+                                </div>
+                                <div class="bg-light p-3 rounded" style="border: 1px solid #eef0f7;">
+                                    <h6 class="fs-13 fw-semibold text-dark mb-2">Campaign Tip:</h6>
+                                    <p class="text-muted fs-12 mb-0">
+                                        Schedule bulk promotional notifications and SMS blasts 1 hour before the peak traffic period to maximize open rates and engagement.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- New Row: Business Summary -->
             <div class="row">
                 <div class="col-xl-12">
@@ -1749,6 +1794,109 @@
             , salesTrendOptions
         );
         salesTrendChart.render();
+
+        // Hourly Registration Chart
+        var hourlyData = @json($hourlyData);
+        var hourlyLabels = @json($hourlyLabels);
+
+        var hourlyRegistrationOptions = {
+            series: [{
+                name: 'Registrations'
+                , data: hourlyData
+            }]
+            , chart: {
+                type: 'area'
+                , height: 300
+                , toolbar: {
+                    show: false
+                }
+                , zoom: {
+                    enabled: false
+                }
+            }
+            , stroke: {
+                curve: 'smooth'
+                , width: 3
+            }
+            , fill: {
+                type: 'gradient'
+                , gradient: {
+                    shadeIntensity: 1
+                    , opacityFrom: 0.4
+                    , opacityTo: 0.05
+                    , stops: [0, 90, 100]
+                }
+            }
+            , colors: ['#6366f1']
+            , xaxis: {
+                categories: hourlyLabels
+                , labels: {
+                    rotate: -45
+                    , rotateAlways: false
+                    , style: {
+                        colors: '#878a99'
+                        , fontSize: '11px'
+                        , fontFamily: 'Inter, sans-serif'
+                    }
+                }
+                , axisBorder: {
+                    show: false
+                }
+                , axisTicks: {
+                    show: false
+                }
+            }
+            , yaxis: {
+                labels: {
+                    formatter: function(val) {
+                        return Math.round(val);
+                    }
+                    , style: {
+                        colors: '#878a99'
+                        , fontSize: '11px'
+                        , fontFamily: 'Inter, sans-serif'
+                    }
+                }
+            }
+            , dataLabels: {
+                enabled: false
+            }
+            , grid: {
+                borderColor: "#eef1f7"
+                , strokeDashArray: 4
+            }
+            , tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + " leads";
+                    }
+                }
+            }
+        };
+
+        var hourlyRegistrationChart = new ApexCharts(
+            document.querySelector("#hourlyRegistrationChart")
+            , hourlyRegistrationOptions
+        );
+        hourlyRegistrationChart.render();
+
+        // Calculate and display peak hour text
+        let maxVal = -1;
+        let maxIndex = -1;
+        for (let i = 0; i < hourlyData.length; i++) {
+            if (hourlyData[i] > maxVal) {
+                maxVal = hourlyData[i];
+                maxIndex = i;
+            }
+        }
+
+        let peakPeriodText = "No registrations recorded yet.";
+        if (maxVal > 0) {
+            let peakHour = hourlyLabels[maxIndex];
+            let nextHour = hourlyLabels[(maxIndex + 1) % 24];
+            peakPeriodText = `Most registrations occur between <strong>${peakHour}</strong> and <strong>${nextHour}</strong> (${maxVal} leads total).`;
+        }
+        document.getElementById('peak-period-text').innerHTML = peakPeriodText;
 
     </script>
     @endsection

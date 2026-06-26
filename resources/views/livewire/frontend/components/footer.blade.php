@@ -6,13 +6,13 @@
                 <span>Rajasthan Awas Realty Group | Apka Sath Sabka Vikas </span>
             </div>
             <div>
-                <a href="#" class="me-4 text-reset">
+                <a href="{{ route('pages.terms') }}" class="me-4 text-reset">
                     Term and Condition
                 </a>
-                <a href="#" class="me-4 text-reset">
+                <a href="{{ route('pages.privacy') }}" class="me-4 text-reset">
                     Privacy policy
                 </a>
-                <a href="#" class="me-4 text-reset">
+                <a href="{{ route('pages.refund-policy') }}" class="me-4 text-reset">
                     Cancellation Refund policy
                 </a>
                 <a href="#" class="me-4 text-reset">
@@ -24,8 +24,7 @@
             <script>
                 document.write(new Date().getFullYear())
 
-            </script> © {{ config('constants.site_name') }} - <a href="https://sureshkhichi.com"
-                class="text-dark">{{ config('constants.site_author') }}</a>
+            </script> © {{ config('constants.site_name') }}. All rights reserved.
         </div>
     </footer>
     {{-- <footer class="custom-footer bg-dark py-5 position-relative">

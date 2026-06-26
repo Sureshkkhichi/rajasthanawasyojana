@@ -19,11 +19,19 @@ class RolePermissionSeeder extends Seeder
             'home.slider.create',
             'home.slider.edit',
             'home.slider.delete',
+            // Static Pages
+            'pages.view',
+            'pages.edit',
             // Project Types
             'project.type.view',
             'project.type.create',
             'project.type.edit',
             'project.type.delete',
+            // Flats
+            'flats.view',
+            'flats.create',
+            'flats.edit',
+            'flats.delete',
             // Projects
             'projects.view',
             'projects.create',

@@ -3,6 +3,7 @@ namespace App\Livewire\Frontend;
 use App\Models\Lead;
 use App\Models\Project;
 use App\Models\State;
+use App\Models\City;
 use Livewire\Component;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\LeadSubmittedMail;
@@ -17,6 +18,7 @@ class Booking extends Component
     public Project $project;
     public ?Lead $lead = null;
     public $states = [];
+    public $cities = [];
     /*
     |--------------------------------------------------------------------------
     | Personal Information
@@ -37,7 +39,9 @@ class Booking extends Component
     |--------------------------------------------------------------------------
     */
     public string $address = '';
-    public ?int $state_id = null;
+    public ?string $state_id = null;
+    public ?string $state_name = null;
+    public ?string $city_id = null;
     public string $city = '';
     /*
     |--------------------------------------------------------------------------
@@ -65,6 +69,11 @@ class Booking extends Component
             ->first();
         if ($rajasthan) {
             $this->state_id = $rajasthan->id;
+            $this->state_name = $rajasthan->name;
+            $this->cities = City::query()
+                ->where('state_id', $this->state_id)
+                ->orderBy('name')
+                ->get();
         }
     }
     public function updated($property): void
@@ -82,6 +91,7 @@ class Booking extends Component
                 'occupation',
                 'address',
                 'state_id',
+                'city_id',
                 'city',
                 'co_applicant_name',
                 'flat_size',
@@ -90,10 +100,66 @@ class Booking extends Component
         ) {
             return;
         }
+
+        if ($property === 'state_id') {
+            $state = State::find($this->state_id);
+            $this->state_name = $state ? $state->name : null;
+            $this->cities = City::query()
+                ->where('state_id', $this->state_id)
+                ->orderBy('name')
+                ->get();
+            $this->city_id = null;
+            $this->city = '';
+
+            if ($this->lead === null) {
+                $this->lead = Lead::create([
+                    'project_id' => $this->project->id,
+                    'state_id' => $this->state_id,
+                    'state_name' => $this->state_name,
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+            } else {
+                $this->lead->update([
+                    'state_id' => $this->state_id,
+                    'state_name' => $this->state_name,
+                    'city_id' => null,
+                    'city' => null,
+                ]);
+            }
+            return;
+        }
+
+        if ($property === 'city_id') {
+            $cityModel = City::find($this->city_id);
+            $this->city = $cityModel ? $cityModel->name : '';
+
+            if ($this->lead === null) {
+                $this->lead = Lead::create([
+                    'project_id' => $this->project->id,
+                    'state_id' => $this->state_id,
+                    'state_name' => $this->state_name,
+                    'city_id' => $this->city_id,
+                    'city' => $this->city,
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+            } else {
+                $this->lead->update([
+                    'city_id' => $this->city_id,
+                    'city' => $this->city,
+                ]);
+            }
+            return;
+        }
+
         if ($this->lead === null) {
             $this->lead = Lead::create([
                 'project_id' => $this->project->id,
                 'state_id' => $this->state_id,
+                'state_name' => $this->state_name,
+                'city_id' => $this->city_id,
+                'city' => $this->city,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
             ]);
@@ -134,13 +200,19 @@ class Booking extends Component
             'gender' => ['required'],
             'email' => ['required', 'email'],
             'phone' => ['required', 'string', 'max:20'],
-            'date_of_birth' => ['required'],
+            'date_of_birth' => ['required', 'date', 'before_or_equal:' . now()->subYears(18)->format('Y-m-d')],
             'occupation' => ['required'],
             'address' => ['required'],
             'state_id' => ['required'],
-            'city' => ['required'],
+            'city_id' => ['required'],
             'flat_size' => ['required'],
             'terms' => ['accepted'],
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'date_of_birth.before_or_equal' => 'Age must be 18 years or older.',
         ];
     }
     public function submit()
@@ -150,6 +222,9 @@ class Booking extends Component
             $this->lead = Lead::create([
                 'project_id' => $this->project->id,
                 'state_id' => $this->state_id,
+                'state_name' => $this->state_name,
+                'city_id' => $this->city_id,
+                'city' => $this->city,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
             ]);
@@ -157,7 +232,6 @@ class Booking extends Component
         $validated['first_name'] = ucwords(strtolower($validated['first_name']));
         $validated['last_name'] = ucwords(strtolower($validated['last_name']));
         $validated['address'] = ucwords(strtolower($validated['address']));
-        $validated['city'] = ucwords(strtolower($validated['city']));
         $validated['pan_number'] = strtoupper($validated['pan_number']);
         if (!empty($validated['father_husband_name'])) {
             $validated['father_husband_name'] =
@@ -169,6 +243,8 @@ class Booking extends Component
         }
         $this->lead->update([
             ...$validated,
+            'state_name' => $this->state_name,
+            'city' => $this->city,
             'project_id' => $this->project->id,
             'is_submitted' => true,
         ]);
@@ -192,6 +268,7 @@ class Booking extends Component
             'date_of_birth',
             'occupation',
             'address',
+            'city_id',
             'city',
             'co_applicant_name',
             'flat_size',
@@ -204,14 +281,19 @@ class Booking extends Component
         $rajasthan = State::query()
             ->where('name', 'Rajasthan')
             ->first();
+        if ($rajasthan) {
+            $this->state_id = $rajasthan->id;
+            $this->state_name = $rajasthan->name;
+            $this->cities = City::query()
+                ->where('state_id', $this->state_id)
+                ->orderBy('name')
+                ->get();
+        }
 
         return redirect()->route(
             'booking',
             ['project' => $this->project->id]
         );
-
-        return;
-        // Payment Gateway Logic
     }
     public function render()
     {

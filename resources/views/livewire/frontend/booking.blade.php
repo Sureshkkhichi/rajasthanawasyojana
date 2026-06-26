@@ -1,4 +1,11 @@
 <div>
+    @push('styles')
+        <style>
+            select.is-invalid+.select2-container .select2-selection {
+                border-color: #dc3545 !important;
+            }
+        </style>
+    @endpush
     <!-- BOOKING FORM -->
     <section class="section nft-hero bg-light" id="booking-form">
         <div class="container">
@@ -150,7 +157,8 @@
                                         </label>
                                         <input type="date"
                                             class="form-control @error('date_of_birth') is-invalid @enderror"
-                                            wire:model.blur="date_of_birth">
+                                            wire:model.blur="date_of_birth"
+                                            max="{{ now()->subYears(18)->format('Y-m-d') }}">
                                         @error('date_of_birth')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -208,19 +216,20 @@
                                         <label class="form-label">
                                             State <span class="text-danger">*</span>
                                         </label>
-                                        <select class="form-select @error('state_id') is-invalid @enderror"
-                                            wire:model.blur="state_id">
-                                            <option value="">
-                                                Select State
-                                            </option>
-                                            @foreach ($states as $state)
-                                                <option value="{{ $state->id }}">
-                                                    {{ $state->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <div wire:ignore wire:key="state-container-{{ $state_id }}">
+                                            <select id="state-select"
+                                                class="js-example-basic-single @error('state_id') is-invalid @enderror"
+                                                wire:model.blur="state_id">
+                                                <option value="">Select State</option>
+                                                @foreach ($states as $state)
+                                                    <option value="{{ $state->id }}">
+                                                        {{ $state->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                         @error('state_id')
-                                            <div class="invalid-feedback">
+                                            <div class="invalid-feedback" style="display: block;">
                                                 {{ $message }}
                                             </div>
                                         @enderror
@@ -231,11 +240,21 @@
                                         <label class="form-label">
                                             City <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text"
-                                            class="form-control text-capitalize @error('city') is-invalid @enderror"
-                                            wire:model.blur="city" placeholder="Enter City">
-                                        @error('city')
-                                            <div class="invalid-feedback">
+                                        <div wire:ignore
+                                            wire:key="city-container-{{ $state_id }}-{{ $city_id }}-{{ count($cities) }}">
+                                            <select id="city-select"
+                                                class="js-example-basic-single @error('city_id') is-invalid @enderror"
+                                                wire:model.blur="city_id">
+                                                <option value="">Select City</option>
+                                                @foreach ($cities as $cityItem)
+                                                    <option value="{{ $cityItem->id }}">
+                                                        {{ $cityItem->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('city_id')
+                                            <div class="invalid-feedback" style="display: block;">
                                                 {{ $message }}
                                             </div>
                                         @enderror
@@ -345,38 +364,112 @@
             </div>
         </div>
     </section>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const panInput = document.getElementById('pan_number');
-            if (!panInput) {
-                return;
-            }
-            panInput.addEventListener('input', function (e) {
-                let value = e.target.value.toUpperCase();
-                let result = '';
-                for (let i = 0; i < value.length; i++) {
-                    let char = value[i];
-                    // First 5 characters = A-Z
-                    if (i < 5) {
-                        if (/[A-Z]/.test(char)) {
-                            result += char;
-                        }
+
+    @push('scripts')
+        <!--jquery cdn-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <!--select2 cdn-->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <script src="{{ asset('assets/js/pages/select2.init.js') }}"></script>
+        <script>
+            function initSelect2() {
+                // Initialize State Select2
+                const stateSelect = $('#state-select');
+                if (stateSelect.length) {
+                    if (stateSelect.hasClass("select2-hidden-accessible")) {
+                        stateSelect.select2('destroy');
                     }
-                    // Next 4 characters = 0-9
-                    else if (i >= 5 && i <= 8) {
-                        if (/[0-9]/.test(char)) {
-                            result += char;
+                    stateSelect.select2({
+                        placeholder: "Select State",
+                        allowClear: false
+                    }).on('change', function (e) {
+                        let val = $(this).val();
+                        if (String(val || '') !== String(@this.state_id || '')) {
+                            @this.set('state_id', val);
                         }
-                    }
-                    // Last character = A-Z
-                    else if (i === 9) {
-                        if (/[A-Z]/.test(char)) {
-                            result += char;
-                        }
+                    });
+
+                    // Add validation styling based on error message presence
+                    if (stateSelect.closest('.mb-3').find('.invalid-feedback').length) {
+                        stateSelect.next('.select2-container').find('.select2-selection').css('border-color', '#dc3545');
+                    } else {
+                        stateSelect.next('.select2-container').find('.select2-selection').css('border-color', '');
                     }
                 }
-                e.target.value = result;
+
+                // Initialize City Select2
+                const citySelect = $('#city-select');
+                if (citySelect.length) {
+                    if (citySelect.hasClass("select2-hidden-accessible")) {
+                        citySelect.select2('destroy');
+                    }
+                    citySelect.select2({
+                        placeholder: "Select City",
+                        allowClear: false
+                    }).on('change', function (e) {
+                        let val = $(this).val();
+                        if (String(val || '') !== String(@this.city_id || '')) {
+                            @this.set('city_id', val);
+                        }
+                    });
+
+                    // Add validation styling based on error message presence
+                    if (citySelect.closest('.mb-3').find('.invalid-feedback').length) {
+                        citySelect.next('.select2-container').find('.select2-selection').css('border-color', '#dc3545');
+                    } else {
+                        citySelect.next('.select2-container').find('.select2-selection').css('border-color', '');
+                    }
+                }
+            }
+
+            $(document).ready(function () {
+                initSelect2();
             });
-        });
-    </script>
+
+            document.addEventListener('livewire:init', () => {
+                Livewire.hook('request', ({ fail, respond, succeed }) => {
+                    succeed(({ status, response }) => {
+                        setTimeout(() => {
+                            initSelect2();
+                        }, 50);
+                    });
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const panInput = document.getElementById('pan_number');
+                if (!panInput) {
+                    return;
+                }
+                panInput.addEventListener('input', function (e) {
+                    let value = e.target.value.toUpperCase();
+                    let result = '';
+                    for (let i = 0; i < value.length; i++) {
+                        let char = value[i];
+                        // First 5 characters = A-Z
+                        if (i < 5) {
+                            if (/[A-Z]/.test(char)) {
+                                result += char;
+                            }
+                        }
+                        // Next 4 characters = 0-9
+                        else if (i >= 5 && i <= 8) {
+                            if (/[0-9]/.test(char)) {
+                                result += char;
+                            }
+                        }
+                        // Last character = A-Z
+                        else if (i === 9) {
+                            if (/[A-Z]/.test(char)) {
+                                result += char;
+                            }
+                        }
+                    }
+                    e.target.value = result;
+                });
+            });
+        </script>
+    @endpush
 </div>

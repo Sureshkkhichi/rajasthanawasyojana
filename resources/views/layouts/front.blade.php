@@ -9,6 +9,7 @@
     <meta content="{{ config('constants.site_description') }}" name="description" />
     <meta content="{{ config('constants.site_author') }}" name="author" />
     <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
     <script src="{{ asset('assets/js/layout.js') }}"></script>
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -16,6 +17,7 @@
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
     @livewireStyles
+    @stack('styles')
 </head>
 
 <body>
@@ -23,10 +25,7 @@
         <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
             <div class="container">
                 <a class="navbar-brand" href="{{ route('front') }}">
-                    <img src="{{ asset('assets/images/logo-dark.png') }}" class="card-logo card-logo-dark"
-                        alt="logo dark" height="17">
-                    <img src="{{ asset('assets/images/logo-light.png') }}" class="card-logo card-logo-light"
-                        alt="logo light" height="17">
+                    {{ config('constants.site_name') }}
                 </a>
                 <button class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -49,6 +48,7 @@
     <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
     <script src="{{ asset('assets/libs/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/landing.init.js') }}"></script>
+    @stack('scripts')
 </body>
 
 </html>

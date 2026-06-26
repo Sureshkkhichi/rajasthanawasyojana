@@ -44,11 +44,9 @@ img.img-fluid.avend-img {
 
 marquee {
     margin-top: 0;
-    background-color: transparent;
-    background-color: #ff0000;
     height: 55px;
     color: #fff;
-    padding-top: 10px;
+    padding-top: 13px;
     font-size: 25px;
 }
 

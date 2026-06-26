@@ -102,8 +102,10 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th width="80"> # </th>
+                                            <th width="100"> Image </th>
                                             <th> Project Name </th>
                                             <th> Project Type </th>
+                                            <th> Flat </th>
                                             <th> Location </th>
                                             <th>Project Status</th>
                                             <th>Visibility</th>
@@ -116,10 +118,21 @@
                                                 onclick="window.location='{{ route('projects.edit', $project->id) }}'">
                                                 <td> {{ $loop->iteration }} </td>
                                                 <td>
+                                                    @if($project->featured_image)
+                                                        <img src="{{ asset($project->featured_image) }}"
+                                                            alt="{{ $project->name }}"
+                                                            class="rounded border"
+                                                            style="width:70px;height:50px;object-fit:cover;">
+                                                    @else
+                                                        <span class="badge bg-light text-muted border">No Image</span>
+                                                    @endif
+                                                </td>
+                                                <td>
                                                     <div class="fw-semibold"> {{ $project->name }} </div>
                                                     <small class="text-muted"> {{ $project->slug }} </small>
                                                 </td>
                                                 <td> {{ $project->projectType?->name }} </td>
+                                                <td> {{ $project->flat?->name ?? '-' }} </td>
                                                 <td> {{ $project->city }} </td>
                                                 <td>
                                                     <span class="badge bg-primary"> {{ ucfirst($project->status) }} </span>
@@ -151,7 +164,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="7" class="text-center py-4"> No projects found. </td>
+                                                <td colspan="9" class="text-center py-4"> No projects found. </td>
                                             </tr>
                                         @endforelse
                                     </tbody>
