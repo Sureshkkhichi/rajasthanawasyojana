@@ -1,60 +1,60 @@
 <div>
     @push('styles')
-        <style>
-            .project-card {
-                overflow: hidden;
-                transition: .35s;
-            }
+    <style>
+    .project-card {
+        overflow: hidden;
+        transition: .35s;
+    }
 
-            .project-card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 20px 50px rgba(0, 0, 0, .14);
-            }
+    /* .project-card:hover {
+                                    transform: translateY(-8px);
+                                    box-shadow: 0 20px 50px rgba(0, 0, 0, .14);
+                                } */
 
-            .project-label {
-                position: absolute;
-                top: 18px;
-                left: 18px;
-                z-index: 99;
-                background: #dc2626;
-                color: #fff;
-                padding: 8px 18px;
-                border-radius: 30px;
-                font-size: 12px;
-                font-weight: 700;
-                text-transform: uppercase;
-            }
+    .project-label {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        z-index: 99;
+        background: #dc2626;
+        color: #fff;
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
 
-            .apply-gif {
-                width: 100px;
-                margin: 0 auto;
-                display: block;
-                transform: scale(1);
-                transition: .35s;
-                padding: 0;
-            }
-        </style>
+    .apply-gif {
+        width: 90%;
+        margin: 0 auto;
+        display: block;
+        transform: scale(1);
+        transition: .35s;
+        padding: 0;
+    }
+    </style>
     @endpush
     {{-- Top Bar Section --}}
     @if ($top_bar_show && !empty($top_bar_text))
-        <section class=""
-            style="margin-top: 89px; background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center;">
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-12 text-center fs-15 fw-bold">
-                        @if ($top_bar_marquee)
-                            <marquee width="100%" direction="left" scrollamount="5">
-                                {{ $top_bar_text }}
-                            </marquee>
-                        @else
-                            <span>{{ $top_bar_text }}</span>
-                        @endif
-                    </div>
+    <section class=""
+        style="margin-top: 89px; background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center;">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center fs-15 fw-bold">
+                    @if ($top_bar_marquee)
+                    <marquee width="100%" direction="left" scrollamount="5">
+                        {{ $top_bar_text }}
+                    </marquee>
+                    @else
+                    <span>{{ $top_bar_text }}</span>
+                    @endif
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
     @else
-        <div style="padding-top: 72px;"></div>
+    <div style="padding-top: 72px;"></div>
     @endif
     {{-- Banner / Slider Section --}}
     <section>
@@ -64,12 +64,12 @@
                     <div class="swiper home-slider">
                         <div class="swiper-wrapper">
                             @foreach ($home_sliders as $slide)
-                                <div class="swiper-slide">
-                                    <a href="{{ $this->getSliderUrl($slide) }}">
-                                        <img src="{{ asset($slide->desktop_image) }}" alt="{{ $slide->title }}"
-                                            class="w-100 d-block">
-                                    </a>
-                                </div>
+                            <div class="swiper-slide">
+                                <a href="{{ $slide['url'] }}">
+                                    <img src="{{ asset($slide['image']) }}" alt="{{ $slide['title'] }}"
+                                        class="w-100 d-block">
+                                </a>
+                            </div>
                             @endforeach
                         </div>
                         <div class="swiper-pagination"></div>
@@ -80,165 +80,144 @@
     </section>
     {{-- Bottom Bar Section --}}
     @if ($bottom_bar_show && !empty($bottom_bar_text))
-        <section class=""
-            style="background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center; margin-top: 0px; margin-bottom: 0px;">
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-12 text-center fs-15 fw-bold">
-                        @if ($bottom_bar_marquee)
-                            <marquee width="100%" direction="left" scrollamount="5">
-                                {{ $bottom_bar_text }}
-                            </marquee>
-                        @else
-                            <span>{{ $bottom_bar_text }}</span>
-                        @endif
-                    </div>
+    <section class=""
+        style="background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center; margin-top: 0px; margin-bottom: 0px;">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center fs-15 fw-bold">
+                    @if ($bottom_bar_marquee)
+                    <marquee width="100%" direction="left" scrollamount="5">
+                        {{ $bottom_bar_text }}
+                    </marquee>
+                    @else
+                    <span>{{ $bottom_bar_text }}</span>
+                    @endif
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
     @endif
-    <section class="project-section py-5">
+    <section class="project-section py-2">
         <div class="container">
             {{-- Heading --}}
-            <div class="row mb-5">
+            <div class="row mb-3">
                 <div class="col-lg-12 text-center">
-                    <span class="project-heading-badge">
-                        OUR PROJECTS
-                    </span>
                     <h2 class="project-heading mt-3">
                         वर्तमान आवासीय योजनाएँ
                     </h2>
-                    <p class="project-sub-heading">
-                        अपनी पसंद की योजना चुनें एवं ऑनलाइन आवेदन करें।
-                    </p>
                 </div>
             </div>
             <div class="row g-4">
                 @foreach($projects as $project)
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="card project-card">
-                            <a href="{{ route('project.show', $project->slug) }}" class="text-decoration-none">
-                                <div class="project-image-area">
-                                    <span class="project-label">
-                                        {{ strtoupper($project->projectType->name ?? 'PROJECT') }}
-                                    </span>
-                                    @if($project->featured_image)
-                                        <img src="{{ asset($project->featured_image) }}" class="card-img-top img-fluid"
-                                            alt="{{ $project->name }}">
-                                    @else
-                                        <img src="{{ asset('no-image.png') }}" class="card-img-top img-fluid"
-                                            alt="{{ $project->name }}">
-                                    @endif
-                                </div>
-                                <div class="card-body">
-                                    <div class="d-flex"
-                                        style="flex-direction: row; justify-content: space-between; align-items: center;">
-                                        <span class="text-dark fs-13">
-                                            <i class="ri-map-pin-line"></i>
-                                            {{ $project->city }}
-                                        </span>
-                                        <span class="text-success fs-13">
-                                            <i class="ri-checkbox-circle-fill"></i>
-                                            Registration Open
-                                        </span>
-                                    </div>
-                                    <h4 class="card-title mt-2">{{ $project->name }}</h4>
-                                </div>
-                                <div class="card-footer d-flex"
+                <div class="col-sm-6 col-xl-3">
+                    <div class="card project-card">
+                        <a href="{{ route('project.show', $project->slug) }}" class="text-decoration-none">
+                            <div class="project-image-area">
+                                @if($project->featured_image)
+                                <img src="{{ asset($project->featured_image) }}" class="card-img-top img-fluid"
+                                    alt="{{ $project->name }}">
+                                @else
+                                <img src="{{ asset('no-image.png') }}" class="card-img-top img-fluid"
+                                    alt="{{ $project->name }}">
+                                @endif
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex"
                                     style="flex-direction: row; justify-content: space-between; align-items: center;">
-                                    @if($project->price)
-                                        <span class="text-dark float-start" style="display: flex; flex-direction: column; ">
-                                            <span class="text-muted">Booking Price</span>
-                                            <span>₹ {{ number_format(21100) }}</span>
-                                        </span>
-                                    @else
-                                        <span class="text-dark float-start">
-                                            Contact Us
-                                        </span>
-                                    @endif
-                                    <span class="float-end">
-                                        <img src="{{ asset('dummy/AVEDAN-KAREN-GIFF.gif') }}" class="apply-gif" alt="Apply">
+                                    <span class="text-dark fs-13">
+                                        <i class="ri-map-pin-line"></i>
+                                        {{ $project->city }}
                                     </span>
-
+                                    <span class="text-success fs-13">
+                                        <i class="ri-checkbox-circle-fill"></i>
+                                        Registration Open
+                                    </span>
                                 </div>
-                            </a>
-                        </div>
+                                <h4 class="card-title mt-2">{{ $project->name }}</h4>
+                            </div>
+                            <div class="card-footer d-flex"
+                                style="flex-direction: row;justify-content: space-between;align-items: center;padding: 0;margin: 0;">
+                                <span class="float-end">
+                                    <img src="{{ asset('dummy/AVEDAN-KAREN-GIFF.gif') }}" class="apply-gif" alt="Apply">
+                                </span>
+
+                            </div>
+                        </a>
                     </div>
-                    {{-- <div class="col-xl-3 col-lg-6">
+                </div>
+                {{-- <div class="col-xl-3 col-lg-6">
                         <div class="project-card">
                             <a href="{{ route('project.show', $project->slug) }}" class="text-decoration-none">
-                                <div class="project-image-area">
-                                    <span class="project-label">
-                                        {{ strtoupper($project->projectType->name ?? 'PROJECT') }}
-                                    </span>
-                                    <span class="project-heart">
-                                        <i class="ri-heart-3-line"></i>
-                                    </span>
-                                    @if($project->featured_image)
-                                    <img src="{{ asset($project->featured_image) }}" class="project-image"
-                                        alt="{{ $project->name }}">
-                                    @else
-                                    <div class="project-no-image">
-                                        {{ $project->name }}
-                                    </div>
-                                    @endif
-                                </div>
-                                <div class="project-body">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <div class="project-location">
-                                            <i class="ri-map-pin-line"></i>
-                                            {{ $project->city }}
-                                        </div>
-                                        <span class="project-status">
-                                            <i class="ri-checkbox-circle-fill"></i>
-                                            Registration Open
-                                        </span>
-                                    </div>
-                                    <h3 class="project-title mb-3">
-                                        {{ $project->name }}
-                                    </h3>
-                                    <div class="project-info mb-4">
-                                        <span>
-                                            <i class="ri-building-4-line"></i>
-                                            {{ $project->projectType->name ?? '-' }}
-                                        </span>
-                                    </div>
-                                    <div class="project-bottom">
-                                        <div>
-                                            <small class="project-price-label">
-                                                Starting Price
-                                            </small>
-                                            @if($project->price)
-                                            <div class="project-price">
-                                                ₹ {{ number_format($project->price) }}
-                                            </div>
-                                            @else
-                                            <div class="project-price text-dark">
-                                                Contact Us
-                                            </div>
-                                            @endif
-                                        </div>
-                                        <a href="{{ route('project.show', $project->slug) }}" class="project-apply">
-                                            <img src="{{ asset('dummy/AVEDAN-KAREN-GIFF.gif') }}" class="apply-gif"
-                                                alt="Apply">
-                                        </a>
-                                    </div>
-                                </div>
-                            </a>
+                <div class="project-image-area">
+                    <span class="project-label">
+                        {{ strtoupper($project->projectType->name ?? 'PROJECT') }}
+                    </span>
+                    <span class="project-heart">
+                        <i class="ri-heart-3-line"></i>
+                    </span>
+                    @if($project->featured_image)
+                    <img src="{{ asset($project->featured_image) }}" class="project-image" alt="{{ $project->name }}">
+                    @else
+                    <div class="project-no-image">
+                        {{ $project->name }}
+                    </div>
+                    @endif
+                </div>
+                <div class="project-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="project-location">
+                            <i class="ri-map-pin-line"></i>
+                            {{ $project->city }}
                         </div>
-                    </div> --}}
-                @endforeach
-            </div>
-        </div>
-    </section>
-    {{-- Information Section --}}
-    <div class="row">
-        @foreach ($information_images as $info_img)
-            <div class="col-lg-12">
-                <a href="#">
-                    <img src="{{ asset($info_img->image_path) }}" alt="Information Image" class="w-100 d-block">
+                        <span class="project-status">
+                            <i class="ri-checkbox-circle-fill"></i>
+                            Registration Open
+                        </span>
+                    </div>
+                    <h3 class="project-title mb-3">
+                        {{ $project->name }}
+                    </h3>
+                    <div class="project-info mb-4">
+                        <span>
+                            <i class="ri-building-4-line"></i>
+                            {{ $project->projectType->name ?? '-' }}
+                        </span>
+                    </div>
+                    <div class="project-bottom">
+                        <div>
+                            <small class="project-price-label">
+                                Starting Price
+                            </small>
+                            @if($project->price)
+                            <div class="project-price">
+                                ₹ {{ number_format($project->price) }}
+                            </div>
+                            @else
+                            <div class="project-price text-dark">
+                                Contact Us
+                            </div>
+                            @endif
+                        </div>
+                        <a href="{{ route('project.show', $project->slug) }}" class="project-apply">
+                            <img src="{{ asset('dummy/AVEDAN-KAREN-GIFF.gif') }}" class="apply-gif" alt="Apply">
+                        </a>
+                    </div>
+                </div>
                 </a>
             </div>
+        </div> --}}
         @endforeach
+</div>
+</div>
+</section>
+{{-- Information Section --}}
+<div class="row">
+    @foreach ($information_images as $info_img)
+    <div class="col-lg-12">
+        <a href="#">
+            <img src="{{ asset($info_img->image_path) }}" alt="Information Image" class="w-100 d-block">
+        </a>
     </div>
+    @endforeach
+</div>
 </div>

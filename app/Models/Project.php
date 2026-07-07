@@ -19,6 +19,7 @@ class Project extends Model
         'address',
         'status',
         'is_active',
+        'show_on_homepage',
         'featured_image',
         'price',
     ];

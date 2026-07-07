@@ -30,6 +30,7 @@ class Form extends Component
     public string $address = '';
     public string $status = 'upcoming';
     public string $is_active = 'active';
+    public string $show_on_homepage = 'inactive';
     public $projectTypes = [];
     public $flats = [];
     public $sliderImages = [];
@@ -54,6 +55,7 @@ class Form extends Component
             'address' => 'nullable|string|max:500',
             'status' => 'required|in:upcoming,active,completed,hold,cancelled',
             'is_active' => 'required|in:active,inactive',
+            'show_on_homepage' => 'required|in:active,inactive',
             'featured_image_file' => 'nullable|image|max:2048',
             'price' => 'required|string|max:255',
         ];
@@ -78,6 +80,7 @@ class Form extends Component
             $this->address = $project->address ?? '';
             $this->status = $project->status;
             $this->is_active = $project->is_active;
+            $this->show_on_homepage = $project->show_on_homepage;
             $this->featured_image = $project->featured_image;
             $this->price = $project->price;
         }
@@ -198,9 +201,8 @@ class Form extends Component
                     PATHINFO_FILENAME
                 ),
                 'image' => 'uploads/projects/sliders/' . $fileName,
-                'display_on' => 'project',
                 'sort_order' => ++$lastOrder,
-                'is_home_slider' => false,
+                'show_on_homepage' => 'no',
                 'is_active' => 'active',
             ]);
         }
@@ -287,14 +289,9 @@ class Form extends Component
         if (!$slider) {
             return;
         }
-        $slider->update(['is_home_slider' => !$slider->is_home_slider,]);
-        $this->loadSliders();
-    }
-    public function updateDisplayOn(string $sliderId, string $displayOn): void
-    {
-        abort_unless(auth()->user()->can('projects.edit'), 403);
-
-        ProjectSlider::where('id', $sliderId)->update(['display_on' => $displayOn,]);
+        $slider->update([
+            'show_on_homepage' => $slider->show_on_homepage === 'yes' ? 'no' : 'yes',
+        ]);
         $this->loadSliders();
     }
     protected function resetForm(): void
@@ -313,6 +310,7 @@ class Form extends Component
         ]);
         $this->status = 'upcoming';
         $this->is_active = 'active';
+        $this->show_on_homepage = 'inactive';
         $this->sliders = [];
         $this->activeTab = 'generalTab';
     }

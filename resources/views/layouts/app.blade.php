@@ -29,7 +29,14 @@
                     <div class="d-flex">
                         <div class="navbar-brand-box horizontal-logo">
                             <a href="{{ route('dashboard') }}" class="logo logo-light">
-                                {{ config('constants.site_name') }}
+                                @php
+                                    $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
+                                @endphp
+                                @if($siteLogo)
+                                    <img src="{{ asset($siteLogo) }}" alt="{{ config('constants.site_name') }}" style="max-height: 40px; max-width: 100%; object-fit: contain;">
+                                @else
+                                    {{ config('constants.site_name') }}
+                                @endif
                             </a>
                         </div>
                         <button type="button"
@@ -73,7 +80,14 @@
         <div class="app-menu navbar-menu">
             <div class="navbar-brand-box">
                 <a href="{{ route('dashboard') }}" class="logo logo-dark">
-                    {{ config('constants.site_name') }}
+                    @php
+                        $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
+                    @endphp
+                    @if($siteLogo)
+                        <img src="{{ asset($siteLogo) }}" alt="{{ config('constants.site_name') }}" style="max-height: 40px; max-width: 100%; object-fit: contain;">
+                    @else
+                        {{ config('constants.site_name') }}
+                    @endif
                 </a>
                 <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
                     id="vertical-hover">

@@ -109,6 +109,7 @@
                                             <th> Location </th>
                                             <th>Project Status</th>
                                             <th>Visibility</th>
+                                            <th>Show on Homepage</th>
                                             <th width="130"> Action </th>
                                         </tr>
                                     </thead>
@@ -149,6 +150,17 @@
                                                     </div>
                                                 </td>
                                                 <td onclick="event.stopPropagation();">
+                                                    <div class="form-check form-switch d-flex align-items-center gap-2">
+                                                        <input class="form-check-input" type="checkbox" role="switch"
+                                                            wire:change="toggleShowOnHomepage('{{ $project->id }}')"
+                                                            @checked($project->show_on_homepage === 'active')>
+                                                        <span
+                                                            class="badge {{ $project->show_on_homepage === 'active' ? 'bg-success' : 'bg-danger' }}">
+                                                            {{ $project->show_on_homepage === 'active' ? 'Active' : 'Inactive' }}
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td onclick="event.stopPropagation();">
                                                     <div class="d-flex gap-2">
                                                         <a href="{{ route('projects.edit', $project->id) }}"
                                                             class="btn btn-sm btn-soft-info">
@@ -164,7 +176,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="9" class="text-center py-4"> No projects found. </td>
+                                                <td colspan="10" class="text-center py-4"> No projects found. </td>
                                             </tr>
                                         @endforelse
                                     </tbody>
