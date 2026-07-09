@@ -304,6 +304,9 @@
                                                                 <th width="150">
                                                                     Show on Homepage
                                                                 </th>
+                                                                <th width="150">
+                                                                    Show on Detail Page
+                                                                </th>
                                                                 <th width="10">
                                                                     Action
                                                                 </th>
@@ -335,7 +338,21 @@
                                                                             wire:click="toggleHomeSlider('{{ $slider->id }}')">
                                                                         <label class="form-check-label text-capitalize"
                                                                             for="slider-home-{{ $slider->id }}">
-                                                                            {{ $slider->show_on_homepage }}
+                                                                            {{ $slider->show_on_homepage === 'yes' ? 'Yes' : 'No' }}
+                                                                        </label>
+                                                                    </div>
+                                                                </td>
+                                                                {{-- Show on Detail Page --}}
+                                                                <td>
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            role="switch"
+                                                                            id="slider-detail-{{ $slider->id }}"
+                                                                            {{ $slider->show_on_detail_page === 'yes' ? 'checked' : '' }}
+                                                                            wire:click="toggleDetailSlider('{{ $slider->id }}')">
+                                                                        <label class="form-check-label text-capitalize"
+                                                                            for="slider-detail-{{ $slider->id }}">
+                                                                            {{ $slider->show_on_detail_page === 'yes' ? 'Yes' : 'No' }}
                                                                         </label>
                                                                     </div>
                                                                 </td>
@@ -352,7 +369,7 @@
                                                             </tr>
                                                             @empty
                                                             <tr>
-                                                                <td colspan="4" class="text-center py-5">
+                                                                <td colspan="5" class="text-center py-5">
                                                                     <div class="text-muted">
                                                                         <i class="ri-image-line fs-1 d-block mb-2"></i>
                                                                         No slider images uploaded yet.

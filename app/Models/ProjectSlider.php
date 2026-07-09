@@ -17,6 +17,7 @@ class ProjectSlider extends Model
         'image',
         'sort_order',
         'show_on_homepage',
+        'show_on_detail_page',
         'is_active',
     ];
 

@@ -311,6 +311,19 @@ class Form extends Component
         ]);
         $this->loadSliders();
     }
+    public function toggleDetailSlider(string $sliderId): void
+    {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
+
+        $slider = ProjectSlider::find($sliderId);
+        if (!$slider) {
+            return;
+        }
+        $slider->update([
+            'show_on_detail_page' => $slider->show_on_detail_page === 'yes' ? 'no' : 'yes',
+        ]);
+        $this->loadSliders();
+    }
     public function updatedInfoImageFiles(): void
     {
         abort_unless(auth()->user()->can('projects.edit'), 403);

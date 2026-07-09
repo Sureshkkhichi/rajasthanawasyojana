@@ -6,11 +6,6 @@
         transition: .35s;
     }
 
-    /* .project-card:hover {
-                                    transform: translateY(-8px);
-                                    box-shadow: 0 20px 50px rgba(0, 0, 0, .14);
-                                } */
-
     .project-label {
         position: absolute;
         top: 18px;
@@ -145,79 +140,18 @@
                         </a>
                     </div>
                 </div>
-                {{-- <div class="col-xl-3 col-lg-6">
-                        <div class="project-card">
-                            <a href="{{ route('project.show', $project->slug) }}" class="text-decoration-none">
-                <div class="project-image-area">
-                    <span class="project-label">
-                        {{ strtoupper($project->projectType->name ?? 'PROJECT') }}
-                    </span>
-                    <span class="project-heart">
-                        <i class="ri-heart-3-line"></i>
-                    </span>
-                    @if($project->featured_image)
-                    <img src="{{ asset($project->featured_image) }}" class="project-image" alt="{{ $project->name }}">
-                    @else
-                    <div class="project-no-image">
-                        {{ $project->name }}
-                    </div>
-                    @endif
-                </div>
-                <div class="project-body">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="project-location">
-                            <i class="ri-map-pin-line"></i>
-                            {{ $project->city }}
-                        </div>
-                        <span class="project-status">
-                            <i class="ri-checkbox-circle-fill"></i>
-                            Registration Open
-                        </span>
-                    </div>
-                    <h3 class="project-title mb-3">
-                        {{ $project->name }}
-                    </h3>
-                    <div class="project-info mb-4">
-                        <span>
-                            <i class="ri-building-4-line"></i>
-                            {{ $project->projectType->name ?? '-' }}
-                        </span>
-                    </div>
-                    <div class="project-bottom">
-                        <div>
-                            <small class="project-price-label">
-                                Starting Price
-                            </small>
-                            @if($project->price)
-                            <div class="project-price">
-                                ₹ {{ number_format($project->price) }}
-                            </div>
-                            @else
-                            <div class="project-price text-dark">
-                                Contact Us
-                            </div>
-                            @endif
-                        </div>
-                        <a href="{{ route('project.show', $project->slug) }}" class="project-apply">
-                            <img src="{{ asset('dummy/AVEDAN-KAREN-GIFF.gif') }}" class="apply-gif" alt="Apply">
-                        </a>
-                    </div>
-                </div>
-                </a>
+                @endforeach
             </div>
-        </div> --}}
+        </div>
+    </section>
+    {{-- Information Section --}}
+    <div class="row">
+        @foreach ($information_images as $info_img)
+        <div class="col-lg-12">
+            <a href="#">
+                <img src="{{ asset($info_img->image_path) }}" alt="Information Image" class="w-100 d-block">
+            </a>
+        </div>
         @endforeach
-</div>
-</div>
-</section>
-{{-- Information Section --}}
-<div class="row">
-    @foreach ($information_images as $info_img)
-    <div class="col-lg-12">
-        <a href="#">
-            <img src="{{ asset($info_img->image_path) }}" alt="Information Image" class="w-100 d-block">
-        </a>
     </div>
-    @endforeach
-</div>
 </div>
