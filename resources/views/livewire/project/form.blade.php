@@ -313,6 +313,8 @@
                                                     </table>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
                                     @endif
 
                                     @if($projectId)
