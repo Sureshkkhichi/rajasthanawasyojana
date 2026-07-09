@@ -62,6 +62,12 @@ class Index extends Component
             });
         }
 
+        if ($this->status) {
+            $mockDeals = array_filter($mockDeals, function ($deal) {
+                return strcasecmp($deal['status'], $this->status) === 0;
+            });
+        }
+
         return view('livewire.deal.index', [
             'deals' => $mockDeals
         ]);
