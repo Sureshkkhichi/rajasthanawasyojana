@@ -40,6 +40,11 @@ class Form extends Component
     public $featured_image_file;
     public ?string $featured_image = null;
     public ?string $price = null;
+    
+    // Information Section properties
+    public $infoImageFiles = [];
+    public $infoImages = [];
+    public int $infoUploadIteration = 0;
     public function rules(): array
     {
         return [
@@ -86,6 +91,7 @@ class Form extends Component
         }
         if ($this->projectId) {
             $this->loadSliders();
+            $this->loadInfoImages();
         }
     }
     protected function loadSliders(): void
@@ -94,6 +100,17 @@ class Form extends Component
             ->where('project_id', $this->projectId)
             ->orderBy('sort_order')
             ->get();
+    }
+    public function loadInfoImages(): void
+    {
+        if ($this->projectId) {
+            $this->infoImages = \App\Models\ProjectInformationImage::query()
+                ->where('project_id', $this->projectId)
+                ->orderBy('sort_order')
+                ->get();
+        } else {
+            $this->infoImages = [];
+        }
     }
     public function updatedName(): void
     {
@@ -294,6 +311,70 @@ class Form extends Component
         ]);
         $this->loadSliders();
     }
+    public function updatedInfoImageFiles(): void
+    {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
+
+        if (!$this->projectId) {
+            $this->addError('infoImageFiles', 'Please save project first.');
+            return;
+        }
+
+        $this->validate([
+            'infoImageFiles.*' => 'image|max:2048'
+        ]);
+
+        $uploadPath = public_path('uploads/projects/information');
+        if (!File::exists($uploadPath)) {
+            File::makeDirectory($uploadPath, 0755, true);
+        }
+
+        $lastOrder = \App\Models\ProjectInformationImage::where('project_id', $this->projectId)
+            ->max('sort_order') ?? 0;
+
+        foreach ($this->infoImageFiles as $file) {
+            if (!$file instanceof TemporaryUploadedFile) {
+                continue;
+            }
+
+            $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            File::copy($file->getRealPath(), $uploadPath . '/' . $fileName);
+
+            \App\Models\ProjectInformationImage::create([
+                'project_id' => $this->projectId,
+                'image_path' => 'uploads/projects/information/' . $fileName,
+                'sort_order' => ++$lastOrder,
+            ]);
+        }
+
+        $this->reset('infoImageFiles');
+        $this->infoUploadIteration++;
+        $this->loadInfoImages();
+        session()->flash('success', 'Information images uploaded successfully.');
+    }
+
+    public function deleteInfoImage(string $id): void
+    {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
+
+        $image = \App\Models\ProjectInformationImage::findOrFail($id);
+        if ($image->image_path && File::exists(public_path($image->image_path))) {
+            File::delete(public_path($image->image_path));
+        }
+        $image->delete();
+        $this->loadInfoImages();
+        session()->flash('success', 'Image deleted successfully.');
+    }
+
+    public function updateInfoImageSortOrder(string $id, int $order): void
+    {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
+
+        \App\Models\ProjectInformationImage::where('id', $id)->update(['sort_order' => $order]);
+        $this->loadInfoImages();
+        session()->flash('success', 'Sort order updated successfully.');
+    }
+
     protected function resetForm(): void
     {
         $this->reset([
@@ -307,11 +388,14 @@ class Form extends Component
             'featured_image_file',
             'featured_image',
             'price',
+            'infoImageFiles',
+            'infoImages',
         ]);
         $this->status = 'upcoming';
         $this->is_active = 'active';
         $this->show_on_homepage = 'inactive';
         $this->sliders = [];
+        $this->infoUploadIteration = 0;
         $this->activeTab = 'generalTab';
     }
     public function render()

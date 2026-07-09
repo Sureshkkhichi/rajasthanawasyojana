@@ -44,6 +44,12 @@
                                             Project Sliders
                                         </a>
                                     </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a href="javascript:void(0);" class="nav-link {{ $activeTab === 'infoTab' ? 'active' : '' }}" wire:click="$set('activeTab', 'infoTab')">
+                                            <i class="ri-information-line me-1"></i>
+                                            Information Section
+                                        </a>
+                                    </li>
                                     @endif
                                 </ul>
                                 <div class="tab-content text-muted">
@@ -307,6 +313,74 @@
                                                     </table>
                                                 </div>
                                             </div>
+                                    @endif
+
+                                    @if($projectId)
+                                    <div class="tab-pane fade {{ $activeTab === 'infoTab' ? 'show active' : '' }}">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="flex-grow-1">
+                                                <h5 class="fs-16 fw-semibold text-dark">Information Section Images</h5>
+                                                <p class="text-muted mb-0">Manage images displayed in the informational grid at the bottom of the project details page.</p>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        {{-- Image Upload block --}}
+                                        <div class="card border shadow-none mt-3">
+                                            <div class="card-body">
+                                                <div class="row align-items-end">
+                                                    <div class="col-lg-8">
+                                                        <label class="form-label fw-semibold">Upload Information Images</label>
+                                                        <input type="file" class="form-control" wire:model="infoImageFiles" wire:key="info-upload-{{ $infoUploadIteration }}" multiple accept="image/*">
+                                                        <small class="text-muted">You can select multiple images. Supported formats: JPG, PNG, WEBP. Max 2MB each.</small>
+                                                        @error('infoImageFiles.*')
+                                                            <div class="text-danger mt-1">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="col-lg-4 text-start">
+                                                        <div wire:loading wire:target="infoImageFiles" class="text-primary mt-2">
+                                                            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                                            Uploading and saving images...
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- Image List --}}
+                                        <div class="table-responsive mt-3">
+                                            <table class="table table-bordered table-hover align-middle mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th width="120">Image Preview</th>
+                                                        <th>File Path</th>
+                                                        <th width="120">Sort Order</th>
+                                                        <th width="80">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse($infoImages as $img)
+                                                        <tr wire:key="info-img-row-{{ $img->id }}">
+                                                            <td>
+                                                                <img src="{{ asset($img->image_path) }}" class="rounded img-thumbnail" style="width: 100px; height: 60px; object-fit: cover;">
+                                                            </td>
+                                                            <td class="text-muted fs-13">{{ $img->image_path }}</td>
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm text-center" value="{{ $img->sort_order }}" wire:change="updateInfoImageSortOrder('{{ $img->id }}', $event.target.value)" style="width: 70px;">
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-sm btn-danger" wire:click="deleteInfoImage('{{ $img->id }}')" onclick="return confirm('Are you sure you want to delete this image?')">
+                                                                    <i class="ri-delete-bin-line"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="4" class="text-center py-4 text-muted">No information images uploaded. Use the upload field above to add images.</td>
+                                                        </tr>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                     @endif

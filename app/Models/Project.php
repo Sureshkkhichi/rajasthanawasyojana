@@ -57,4 +57,9 @@ class Project extends Model
             ->orderBy('sort_order');
     }
 
+    public function informationImages()
+    {
+        return $this->hasMany(ProjectInformationImage::class)
+            ->orderBy('sort_order');
+    }
 }

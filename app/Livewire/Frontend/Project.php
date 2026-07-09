@@ -17,6 +17,8 @@ class Project extends Component
             ->with([
                 'sliders' => fn($query) => $query
                     ->where('is_active', 'active')
+                    ->orderBy('sort_order'),
+                'informationImages' => fn($query) => $query
                     ->orderBy('sort_order')
             ])
             ->where('slug', $slug)
