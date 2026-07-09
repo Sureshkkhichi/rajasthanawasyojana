@@ -101,6 +101,24 @@ class Booking extends Component
             return;
         }
 
+        if (empty(trim($this->phone))) {
+            if ($property === 'state_id') {
+                $state = State::find($this->state_id);
+                $this->state_name = $state ? $state->name : null;
+                $this->cities = City::query()
+                    ->where('state_id', $this->state_id)
+                    ->orderBy('name')
+                    ->get();
+                $this->city_id = null;
+                $this->city = '';
+            }
+            if ($property === 'city_id') {
+                $cityModel = City::find($this->city_id);
+                $this->city = $cityModel ? $cityModel->name : '';
+            }
+            return;
+        }
+
         if ($property === 'state_id') {
             $state = State::find($this->state_id);
             $this->state_name = $state ? $state->name : null;

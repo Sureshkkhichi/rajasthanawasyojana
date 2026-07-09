@@ -39,12 +39,6 @@ img.img-fluid.avend-img {
     padding: 150px 0 60px 0;
 }
 
-.navbar-landing .navbar-nav .nav-item .nav-link,
-.navbar-landing .navbar-nav .nav-item .nav-link:hover {
-    /* color: #fff !important;
-    display: none; */
-}
-
 #navbar {
     z-index: 997;
     transition: all 0.5s;

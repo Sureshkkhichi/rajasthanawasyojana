@@ -262,7 +262,7 @@
                                                             accept="image/*">
                                                         <small class="text-muted">
                                                             Supported formats: JPG, PNG, and WEBP. Recommended image
-                                                            width: 1600 px. Height can vary depending on your
+                                                            width: 1600px. Height can vary depending on your
                                                             requirements. Maximum file size: 2 MB per image.
                                                         </small>
                                                         @error('sliderImages.*')
@@ -409,7 +409,7 @@
                                                             accept="image/*">
                                                         <small class="text-muted">You can select multiple images.
                                                             Supported formats: JPG, PNG, and WEBP. Recommended image
-                                                            width: 1600 px. Height can vary depending on your
+                                                            width: 1600px. Height can vary depending on your
                                                             requirements. Maximum file size: 2 MB per image.</small>
                                                         @error('infoImageFiles.*')
                                                         <div class="text-danger mt-1">{{ $message }}</div>
