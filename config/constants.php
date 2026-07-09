@@ -26,8 +26,10 @@ return [
         'document_collected' => 'success',
     ],
     'payment_statuses' => [
-        'pending' => 'Pending',
         'paid' => 'Paid',
+        'unpaid' => 'Unpaid',
         'failed' => 'Failed',
+        'refunded' => 'Refund',
+        'partial' => 'Partial',
     ],
 ];

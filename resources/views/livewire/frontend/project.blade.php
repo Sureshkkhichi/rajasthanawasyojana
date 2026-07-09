@@ -24,7 +24,7 @@
     <div class="row">
         @forelse ($project->informationImages as $infoImage)
             <div class="col-lg-12 mb-2">
-                <img src="{{ asset($infoImage->image_path) }}" class="img-fluid w-100" alt="Project Info">
+                <a href="#"><img src="{{ asset($infoImage->image_path) }}" class="img-fluid w-100" alt="Project Info"></a>
             </div>
         @empty
             <div class="col-lg-12">

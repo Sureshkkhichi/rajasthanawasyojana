@@ -261,7 +261,9 @@
                                                             wire:key="slider-upload-{{ $uploadIteration }}" multiple
                                                             accept="image/*">
                                                         <small class="text-muted">
-                                                            Supported formats: JPG, PNG, WEBP
+                                                            Supported formats: JPG, PNG, and WEBP. Recommended image
+                                                            width: 1600 px. Height can vary depending on your
+                                                            requirements. Maximum file size: 2 MB per image.
                                                         </small>
                                                         @error('sliderImages.*')
                                                         <div class="text-danger mt-1">
@@ -389,7 +391,9 @@
                                                             wire:key="info-upload-{{ $infoUploadIteration }}" multiple
                                                             accept="image/*">
                                                         <small class="text-muted">You can select multiple images.
-                                                            Supported formats: JPG, PNG, WEBP. Max 2MB each.</small>
+                                                            Supported formats: JPG, PNG, and WEBP. Recommended image
+                                                            width: 1600 px. Height can vary depending on your
+                                                            requirements. Maximum file size: 2 MB per image.</small>
                                                         @error('infoImageFiles.*')
                                                         <div class="text-danger mt-1">{{ $message }}</div>
                                                         @enderror

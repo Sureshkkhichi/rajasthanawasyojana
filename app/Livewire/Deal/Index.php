@@ -38,147 +38,27 @@ class Index extends Component
         $mockDeals = [
             [
                 'id' => '1',
-                'name' => 'SUNIL GAHLOT',
-                'property' => 'Nav Nilay',
+                'name' => 'Mohit Verma',
+                'property' => 'Avya',
                 'invoice_no' => '',
                 'allotment_date' => '',
-                'booking_date' => '2025-12-04 23:11:00',
-                'booking_amount' => null,
+                'booking_date' => '2026-07-04 23:11:00',
+                'booking_amount' => 21000,
                 'area' => '',
-                'total_amount' => null,
-                'balance_due' => 0,
-                'status' => 'Refund',
+                'total_amount' => 350000,
+                'balance_due' => 328900,
+                'status' => 'Paid',
                 'agent' => '',
-                'remarks' => 'Flat: 1651000 Waver code->'
-            ],
-            [
-                'id' => '2',
-                'name' => 'SUNIL GAHLOT',
-                'property' => 'Nav Nilay',
-                'invoice_no' => '',
-                'allotment_date' => '',
-                'booking_date' => '2025-12-04 23:11:00',
-                'booking_amount' => null,
-                'area' => '',
-                'total_amount' => null,
-                'balance_due' => 0,
-                'status' => 'Unpaid',
-                'agent' => '',
-                'remarks' => 'Flat: 1651000 Waver code->'
-            ],
-            [
-                'id' => '3',
-                'name' => 'SUNIL GAHLOT',
-                'property' => 'Nav Nilay',
-                'invoice_no' => '',
-                'allotment_date' => '',
-                'booking_date' => '2025-12-04 23:11:00',
-                'booking_amount' => null,
-                'area' => '',
-                'total_amount' => null,
-                'balance_due' => 0,
-                'status' => 'Unpaid',
-                'agent' => '',
-                'remarks' => 'Flat: 1651000 Waver code->'
-            ],
-            [
-                'id' => '4',
-                'name' => 'BUDDHI PRAKASH',
-                'property' => 'Nav Nilay',
-                'invoice_no' => 'RAJAWS-2025-15236',
-                'allotment_date' => '01-12-2025',
-                'booking_date' => '2025-12-01 08:43:00',
-                'booking_amount' => 21100.00,
-                'area' => '635.00 Sq. Ft.',
-                'total_amount' => 1651000.00,
-                'balance_due' => 1651000.00,
-                'status' => 'Partial',
-                'agent' => '',
-                'remarks' => 'Flat: 1651000 Waver code->'
-            ],
-            [
-                'id' => '5',
-                'name' => 'Satyanarayan Puri',
-                'property' => 'Nav Nilay',
-                'invoice_no' => '',
-                'allotment_date' => '',
-                'booking_date' => '2025-11-30 17:28:00',
-                'booking_amount' => null,
-                'area' => '',
-                'total_amount' => null,
-                'balance_due' => 0,
-                'status' => 'Unpaid',
-                'agent' => '',
-                'remarks' => 'Flat: 1651000 Waver code->'
-            ],
-            [
-                'id' => '6',
-                'name' => 'Vijay Laxmi Gautam',
-                'property' => 'Samriddhi',
-                'invoice_no' => 'RAJAWS-2025-15234',
-                'allotment_date' => '30-11-2025',
-                'booking_date' => '2025-11-30 17:19:00',
-                'booking_amount' => 21100.00,
-                'area' => '563.81 Sq. Ft.',
-                'total_amount' => 1550000.00,
-                'balance_due' => 1550000.00,
-                'status' => 'Partial',
-                'agent' => '',
-                'remarks' => 'Flat: 1550000 Waver code->'
-            ],
-            [
-                'id' => '7',
-                'name' => 'Gajendra Rawat',
-                'property' => 'Nav Nilay',
-                'invoice_no' => 'RAJAWS-2025-15233',
-                'allotment_date' => '28-11-2025',
-                'booking_date' => '2025-11-28 17:43:00',
-                'booking_amount' => 21100.00,
-                'area' => '651.00 Sq. Ft.',
-                'total_amount' => 1651000.00,
-                'balance_due' => 1651000.00,
-                'status' => 'Partial',
-                'agent' => '',
-                'remarks' => 'Flat: 1651000 Waver code->4211'
-            ],
-            [
-                'id' => '8',
-                'name' => 'dharmendra sain',
-                'property' => 'Samriddhi',
-                'invoice_no' => 'RAJAWS-2025-15232',
-                'allotment_date' => '28-11-2025',
-                'booking_date' => '2025-11-28 15:04:00',
-                'booking_amount' => 21000.00,
-                'area' => '563.81 Sq. Ft.',
-                'total_amount' => 1550000.00,
-                'balance_due' => 1550000.00,
-                'status' => 'Partial',
-                'agent' => 'Deepti',
-                'remarks' => 'Flat: 1550000 Waver code->4008'
-            ],
-            [
-                'id' => '9',
-                'name' => 'Opisar Meena',
-                'property' => 'Rukmani Nagar',
-                'invoice_no' => '',
-                'allotment_date' => '',
-                'booking_date' => '2025-11-27 12:33:00',
-                'booking_amount' => null,
-                'area' => '',
-                'total_amount' => null,
-                'balance_due' => 0,
-                'status' => 'Unpaid',
-                'agent' => '',
-                'remarks' => 'Flat: 166.66 Waver code->'
-            ],
+                'remarks' => ''
+            ]
         ];
 
         if ($this->keyword) {
-            $mockDeals = array_filter($mockDeals, function($deal) {
+            $mockDeals = array_filter($mockDeals, function ($deal) {
                 return stripos($deal['name'], $this->keyword) !== false ||
-                       stripos($deal['property'], $this->keyword) !== false ||
-                       stripos($deal['invoice_no'], $this->keyword) !== false ||
-                       stripos($deal['status'], $this->keyword) !== false;
+                    stripos($deal['property'], $this->keyword) !== false ||
+                    stripos($deal['invoice_no'], $this->keyword) !== false ||
+                    stripos($deal['status'], $this->keyword) !== false;
             });
         }
 
