@@ -274,6 +274,10 @@ class Index extends Component
                 File::copy($realPath, $destinationFilePath);
             }
 
+            if (File::exists($destinationFilePath)) {
+                @chmod($destinationFilePath, 0644);
+            }
+
             $desktopImage = 'uploads/home-sliders/' . $desktopFileName;
         }
 
@@ -362,7 +366,11 @@ class Index extends Component
             }
 
             $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
-            File::copy($file->getRealPath(), $uploadPath . '/' . $fileName);
+            $destinationPath = $uploadPath . '/' . $fileName;
+            File::copy($file->getRealPath(), $destinationPath);
+            if (File::exists($destinationPath)) {
+                @chmod($destinationPath, 0644);
+            }
 
             InformationImage::create([
                 'image_path' => 'uploads/information/' . $fileName,

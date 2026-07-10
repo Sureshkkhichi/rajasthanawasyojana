@@ -358,7 +358,7 @@
                                                         <tr wire:key="banner-row-{{ $banner->id }}" class="text-center">
                                                             <td>
                                                                 @if($banner->desktop_image)
-                                                                    <img src="{{ asset($banner->desktop_image) }}" class="rounded" style="width:120px;height:45px;object-fit:cover;">
+                                                                    <img src="{{ asset($banner->desktop_image) }}?v={{ $banner->updated_at?->timestamp }}" class="rounded" style="width:120px;height:45px;object-fit:cover;">
                                                                 @else
                                                                     <span class="text-muted">No image</span>
                                                                 @endif
@@ -368,9 +368,14 @@
                                                                 <input type="number" class="form-control form-control-sm text-center mx-auto" value="{{ $banner->sort_order }}" wire:change="updateBannerSortOrder('{{ $banner->id }}', $event.target.value)" style="width: 70px;">
                                                             </td>
                                                             <td>
-                                                                <button type="button" class="btn btn-sm {{ $banner->status === 'active' ? 'btn-success' : 'btn-danger' }}" wire:click="toggleBannerStatus('{{ $banner->id }}')">
-                                                                    {{ ucfirst($banner->status) }}
-                                                                </button>
+                                                                <div class="form-check form-switch d-flex align-items-center justify-content-center gap-2">
+                                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                                        wire:click="toggleBannerStatus('{{ $banner->id }}')"
+                                                                        @checked($banner->status === 'active')>
+                                                                    <span class="badge {{ $banner->status === 'active' ? 'bg-success' : 'bg-danger' }}">
+                                                                        {{ ucfirst($banner->status) }}
+                                                                    </span>
+                                                                </div>
                                                             </td>
                                                             <td>
                                                                 <div class="dropdown">
