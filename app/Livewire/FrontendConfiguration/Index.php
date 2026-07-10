@@ -172,7 +172,7 @@ class Index extends Component
             ],
             'banner_sort_order' => ['required', 'integer', 'min:0'],
             'banner_status' => ['required', 'in:active,inactive'],
-            'banner_desktop_file' => [$isEdit ? 'nullable' : 'required', 'image', 'max:2048'],
+            'banner_desktop_file' => [$isEdit ? 'nullable' : 'required', 'image', 'max:10240'],
         ];
 
         $this->validate($rules);
@@ -189,7 +189,91 @@ class Index extends Component
                 File::delete(public_path($this->banner_desktop_image));
             }
             $desktopFileName = Str::uuid() . '.' . $this->banner_desktop_file->getClientOriginalExtension();
-            File::copy($this->banner_desktop_file->getRealPath(), $uploadPath . '/' . $desktopFileName);
+            $destinationFilePath = $uploadPath . '/' . $desktopFileName;
+            $realPath = $this->banner_desktop_file->getRealPath();
+
+            list($origWidth, $origHeight, $imageType) = getimagesize($realPath);
+
+            if ($origWidth > 1920 || $origHeight > 600) {
+                // Resize and crop to exactly 1920x600 using GD
+                $targetWidth = 1920;
+                $targetHeight = 600;
+                $srcImage = null;
+
+                switch ($imageType) {
+                    case IMAGETYPE_JPEG:
+                        $srcImage = @imagecreatefromjpeg($realPath);
+                        break;
+                    case IMAGETYPE_PNG:
+                        $srcImage = @imagecreatefrompng($realPath);
+                        break;
+                    case IMAGETYPE_WEBP:
+                        $srcImage = @imagecreatefromwebp($realPath);
+                        break;
+                }
+
+                if ($srcImage) {
+                    $srcRatio = $origWidth / $origHeight;
+                    $targetRatio = $targetWidth / $targetHeight;
+
+                    if ($srcRatio > $targetRatio) {
+                        // Wider: crop sides
+                        $cropHeight = $origHeight;
+                        $cropWidth = (int)($origHeight * $targetRatio);
+                        $srcX = (int)(($origWidth - $cropWidth) / 2);
+                        $srcY = 0;
+                    } else {
+                        // Taller: crop top/bottom
+                        $cropWidth = $origWidth;
+                        $cropHeight = (int)($origWidth / $targetRatio);
+                        $srcX = 0;
+                        $srcY = (int)(($origHeight - $cropHeight) / 2);
+                    }
+
+                    $dstImage = imagecreatetruecolor($targetWidth, $targetHeight);
+
+                    if ($imageType === IMAGETYPE_PNG) {
+                        imagealphablending($dstImage, false);
+                        imagesavealpha($dstImage, true);
+                        $transparent = imagecolorallocatealpha($dstImage, 255, 255, 255, 127);
+                        imagefilledrectangle($dstImage, 0, 0, $targetWidth, $targetHeight, $transparent);
+                    } else if ($imageType === IMAGETYPE_WEBP) {
+                        imagealphablending($dstImage, false);
+                        imagesavealpha($dstImage, true);
+                    }
+
+                    imagecopyresampled(
+                        $dstImage,
+                        $srcImage,
+                        0, 0,
+                        $srcX, $srcY,
+                        $targetWidth, $targetHeight,
+                        $cropWidth, $cropHeight
+                    );
+
+                    switch ($imageType) {
+                        case IMAGETYPE_JPEG:
+                            imagejpeg($dstImage, $destinationFilePath, 90);
+                            break;
+                        case IMAGETYPE_PNG:
+                            imagepng($dstImage, $destinationFilePath, 9);
+                            break;
+                        case IMAGETYPE_WEBP:
+                            imagewebp($dstImage, $destinationFilePath, 90);
+                            break;
+                        default:
+                            File::copy($realPath, $destinationFilePath);
+                    }
+
+                    imagedestroy($srcImage);
+                    imagedestroy($dstImage);
+                } else {
+                    File::copy($realPath, $destinationFilePath);
+                }
+            } else {
+                File::copy($realPath, $destinationFilePath);
+            }
+
             $desktopImage = 'uploads/home-sliders/' . $desktopFileName;
         }
 
