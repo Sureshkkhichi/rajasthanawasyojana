@@ -40,18 +40,11 @@ class Index extends Component
     // Banner (Slider) properties
     public bool $showBannerForm = false;
     public ?string $bannerId = null;
-    public string $banner_title = '';
-    public string $banner_subtitle = '';
-    public ?string $banner_button_text = null;
-    public ?string $banner_button_link = null;
-    public string $banner_link_type = 'custom';
     public ?string $banner_project_id = null;
     public int $banner_sort_order = 0;
     public string $banner_status = 'active';
     public $banner_desktop_file;
-    public $banner_mobile_file;
     public ?string $banner_desktop_image = null;
-    public ?string $banner_mobile_image = null;
     public int $bannerUploadIteration = 0;
 
     // Information Section properties
@@ -155,23 +148,10 @@ class Index extends Component
         abort_unless(auth()->user()->can('home.slider.edit'), 403);
         $banner = HomeSlider::findOrFail($id);
         $this->bannerId = $banner->id;
-        $this->banner_title = $banner->title;
-        $this->banner_subtitle = $banner->subtitle ?? '';
-        $this->banner_button_text = $banner->button_text;
-        $this->banner_button_link = $banner->button_link;
+        $this->banner_project_id = $banner->project_id;
         $this->banner_sort_order = $banner->sort_order;
         $this->banner_status = $banner->status;
         $this->banner_desktop_image = $banner->desktop_image;
-        $this->banner_mobile_image = $banner->mobile_image;
-
-        if ($banner->button_link && str_starts_with($banner->button_link, 'project:')) {
-            $this->banner_link_type = 'project';
-            $this->banner_project_id = str_replace('project:', '', $banner->button_link);
-            $this->banner_button_link = null;
-        } else {
-            $this->banner_link_type = 'custom';
-            $this->banner_project_id = null;
-        }
 
         $this->showBannerForm = true;
     }
@@ -186,34 +166,18 @@ class Index extends Component
         }
 
         $rules = [
-            'banner_title' => ['required', 'string', 'max:255'],
-            'banner_subtitle' => ['nullable', 'string', 'max:255'],
-            'banner_button_text' => ['nullable', 'string', 'max:255'],
-            'banner_button_link' => [
-                'nullable',
-                'required_if:banner_link_type,custom',
-                'url',
-                'max:500',
-            ],
             'banner_project_id' => [
-                'nullable',
-                'required_if:banner_link_type,project',
+                'required',
                 'exists:projects,id',
             ],
             'banner_sort_order' => ['required', 'integer', 'min:0'],
             'banner_status' => ['required', 'in:active,inactive'],
             'banner_desktop_file' => [$isEdit ? 'nullable' : 'required', 'image', 'max:2048'],
-            'banner_mobile_file' => ['nullable', 'image', 'max:2048'],
         ];
 
         $this->validate($rules);
 
-        $buttonLink = $this->banner_link_type === 'project'
-            ? 'project:' . $this->banner_project_id
-            : $this->banner_button_link;
-
         $desktopImage = $this->banner_desktop_image;
-        $mobileImage = $this->banner_mobile_image;
         $uploadPath = public_path('uploads/home-sliders');
 
         if (!File::exists($uploadPath)) {
@@ -229,30 +193,17 @@ class Index extends Component
             $desktopImage = 'uploads/home-sliders/' . $desktopFileName;
         }
 
-        if ($this->banner_mobile_file) {
-            if ($this->banner_mobile_image && File::exists(public_path($this->banner_mobile_image))) {
-                File::delete(public_path($this->banner_mobile_image));
-            }
-            $mobileFileName = Str::uuid() . '.' . $this->banner_mobile_file->getClientOriginalExtension();
-            File::copy($this->banner_mobile_file->getRealPath(), $uploadPath . '/' . $mobileFileName);
-            $mobileImage = 'uploads/home-sliders/' . $mobileFileName;
-        }
-
         HomeSlider::updateOrCreate(
             ['id' => $this->bannerId],
             [
-                'title' => $this->banner_title,
-                'subtitle' => $this->banner_subtitle,
+                'project_id' => $this->banner_project_id,
                 'desktop_image' => $desktopImage,
-                'mobile_image' => $mobileImage,
-                'button_text' => $this->banner_button_text,
-                'button_link' => $buttonLink,
                 'sort_order' => $this->banner_sort_order,
                 'status' => $this->banner_status,
             ]
         );
 
-        session()->flash('success_banner', $isEdit ? 'Banner updated successfully.' : 'Banner created successfully.');
+        session()->flash('success_banner', $isEdit ? 'Slider updated successfully.' : 'Slider created successfully.');
         $this->resetBannerForm();
         $this->showBannerForm = false;
     }
@@ -292,20 +243,12 @@ class Index extends Component
     {
         $this->reset([
             'bannerId',
-            'banner_title',
-            'banner_subtitle',
-            'banner_button_text',
-            'banner_button_link',
-            'banner_link_type',
             'banner_project_id',
             'banner_sort_order',
             'banner_status',
             'banner_desktop_file',
-            'banner_mobile_file',
             'banner_desktop_image',
-            'banner_mobile_image',
         ]);
-        $this->banner_link_type = 'custom';
         $this->banner_status = 'active';
         $this->bannerUploadIteration++;
     }

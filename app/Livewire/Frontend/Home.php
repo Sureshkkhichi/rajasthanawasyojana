@@ -28,6 +28,7 @@ class Home extends Component
     public function mount(): void
     {
         $this->home_sliders = \App\Models\HomeSlider::query()
+            ->with('project')
             ->where('status', 'active')
             ->orderBy('sort_order')
             ->get();
@@ -52,17 +53,7 @@ class Home extends Component
 
     public function getSliderUrl(\App\Models\HomeSlider $slider): string
     {
-        if (empty($slider->button_link)) {
-            return '#';
-        }
-
-        if (str_starts_with($slider->button_link, 'project:')) {
-            $projectId = str_replace('project:', '', $slider->button_link);
-            $project = \App\Models\Project::find($projectId);
-            return $project ? route('project.show', $project->slug) : '#';
-        }
-
-        return $slider->button_link;
+        return $slider->project ? route('project.show', $slider->project->slug) : '#';
     }
 
     public function render()

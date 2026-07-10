@@ -61,7 +61,7 @@
                              @foreach ($home_sliders as $slide)
                              <div class="swiper-slide">
                                  <a href="{{ $this->getSliderUrl($slide) }}">
-                                     <img src="{{ asset($slide->desktop_image) }}" alt="{{ $slide->title }}"
+                                     <img src="{{ asset($slide->desktop_image) }}" alt="{{ $slide->project ? $slide->project->name : '' }}"
                                          class="w-100 d-block">
                                  </a>
                              </div>

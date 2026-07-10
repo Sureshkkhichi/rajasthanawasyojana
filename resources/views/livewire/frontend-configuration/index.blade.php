@@ -285,57 +285,23 @@
                                                 <form wire:submit.prevent="saveBanner">
                                                     <div class="row g-3">
                                                         <div class="col-md-6">
-                                                            <label class="form-label fw-semibold">Title <span class="text-danger">*</span></label>
-                                                            <input type="text" class="form-control rounded-pill @error('banner_title') is-invalid @enderror" wire:model="banner_title" placeholder="Enter slide title">
-                                                            @error('banner_title') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <label class="form-label fw-semibold">Subtitle</label>
-                                                            <input type="text" class="form-control rounded-pill @error('banner_subtitle') is-invalid @enderror" wire:model="banner_subtitle" placeholder="Enter slide subtitle">
-                                                            @error('banner_subtitle') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                            <label class="form-label fw-semibold">Link Type</label>
-                                                            <select class="form-select rounded-pill" wire:model.live="banner_link_type">
-                                                                <option value="custom">Custom URL</option>
-                                                                <option value="project">Link to Project</option>
+                                                            <label class="form-label fw-semibold">Select Project <span class="text-danger">*</span></label>
+                                                            <select class="form-select rounded-pill @error('banner_project_id') is-invalid @enderror" wire:model="banner_project_id">
+                                                                <option value="">Select Project</option>
+                                                                @foreach($projects as $p)
+                                                                    <option value="{{ $p->id }}">{{ $p->name }}</option>
+                                                                @endforeach
                                                             </select>
+                                                            @error('banner_project_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                         </div>
 
-                                                        @if($banner_link_type === 'custom')
-                                                            <div class="col-md-8">
-                                                                <label class="form-label fw-semibold">Custom Link URL</label>
-                                                                <input type="url" class="form-control rounded-pill @error('banner_button_link') is-invalid @enderror" wire:model="banner_button_link" placeholder="https://example.com">
-                                                                @error('banner_button_link') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                                            </div>
-                                                        @else
-                                                            <div class="col-md-8">
-                                                                <label class="form-label fw-semibold">Select Project</label>
-                                                                <select class="form-select rounded-pill @error('banner_project_id') is-invalid @enderror" wire:model="banner_project_id">
-                                                                    <option value="">Select Project</option>
-                                                                    @foreach($projects as $p)
-                                                                        <option value="{{ $p->id }}">{{ $p->name }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                                @error('banner_project_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                                            </div>
-                                                        @endif
-
-                                                        <div class="col-md-4">
-                                                            <label class="form-label fw-semibold">Button Text</label>
-                                                            <input type="text" class="form-control rounded-pill @error('banner_button_text') is-invalid @enderror" wire:model="banner_button_text" placeholder="e.g. Register Now">
-                                                            @error('banner_button_text') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                            <label class="form-label fw-semibold">Sort Order</label>
+                                                        <div class="col-md-3">
+                                                            <label class="form-label fw-semibold">Slide Ordering</label>
                                                             <input type="number" class="form-control rounded-pill @error('banner_sort_order') is-invalid @enderror" wire:model="banner_sort_order" min="0">
                                                             @error('banner_sort_order') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                         </div>
 
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-3">
                                                             <label class="form-label fw-semibold">Status</label>
                                                             <select class="form-select rounded-pill @error('banner_status') is-invalid @enderror" wire:model="banner_status">
                                                                 <option value="active">Active</option>
@@ -344,8 +310,8 @@
                                                             @error('banner_status') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                                         </div>
 
-                                                        <div class="col-md-6">
-                                                            <label class="form-label fw-semibold">Desktop Image <span class="text-danger">*</span></label>
+                                                        <div class="col-md-12">
+                                                            <label class="form-label fw-semibold">Slide <span class="text-danger">*</span></label>
                                                             <input type="file" class="form-control @error('banner_desktop_file') is-invalid @enderror" wire:model="banner_desktop_file" wire:key="desktop-{{ $bannerUploadIteration }}" accept="image/*">
                                                             <small class="text-muted">Recommended size: 1920x600. Max 2MB.</small>
                                                             @error('banner_desktop_file') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -359,25 +325,6 @@
                                                                 <div class="mt-2">
                                                                     <span class="text-muted d-block mb-1">Current Image:</span>
                                                                     <img src="{{ asset($banner_desktop_image) }}" class="img-thumbnail" style="max-height: 120px;">
-                                                                </div>
-                                                            @endif
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <label class="form-label fw-semibold">Mobile Image</label>
-                                                            <input type="file" class="form-control @error('banner_mobile_file') is-invalid @enderror" wire:model="banner_mobile_file" wire:key="mobile-{{ $bannerUploadIteration }}" accept="image/*">
-                                                            <small class="text-muted">Recommended size: 600x400. Max 2MB.</small>
-                                                            @error('banner_mobile_file') <div class="invalid-feedback">{{ $message }}</div> @enderror
-
-                                                            @if($banner_mobile_file)
-                                                                <div class="mt-2">
-                                                                    <span class="text-success d-block mb-1">Temporary Preview:</span>
-                                                                    <img src="{{ $banner_mobile_file->temporaryUrl() }}" class="img-thumbnail" style="max-height: 120px;">
-                                                                </div>
-                                                            @elseif($banner_mobile_image)
-                                                                <div class="mt-2">
-                                                                    <span class="text-muted d-block mb-1">Current Image:</span>
-                                                                    <img src="{{ asset($banner_mobile_image) }}" class="img-thumbnail" style="max-height: 120px;">
                                                                 </div>
                                                             @endif
                                                         </div>
@@ -397,38 +344,28 @@
                                         {{-- Banner Listing Table --}}
                                         <div class="table-responsive mt-3">
                                             <table class="table table-bordered table-hover align-middle mb-0">
-                                                <thead class="table-light">
+                                                <thead class="table-light text-center">
                                                     <tr>
-                                                        <th width="80">Image</th>
-                                                        <th>Title</th>
-                                                        <th>Subtitle</th>
-                                                        <th>Link</th>
-                                                        <th width="100">Sort Order</th>
+                                                        <th width="150">Slide</th>
+                                                        <th>Project</th>
+                                                        <th width="150">Slide Ordering</th>
                                                         <th width="100">Status</th>
                                                         <th width="120">Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @forelse($banners as $banner)
-                                                        <tr wire:key="banner-row-{{ $banner->id }}">
+                                                        <tr wire:key="banner-row-{{ $banner->id }}" class="text-center">
                                                             <td>
                                                                 @if($banner->desktop_image)
-                                                                    <img src="{{ asset($banner->desktop_image) }}" class="rounded" style="width:70px;height:45px;object-fit:cover;">
+                                                                    <img src="{{ asset($banner->desktop_image) }}" class="rounded" style="width:120px;height:45px;object-fit:cover;">
                                                                 @else
                                                                     <span class="text-muted">No image</span>
                                                                 @endif
                                                             </td>
-                                                            <td class="fw-medium text-dark">{{ $banner->title }}</td>
-                                                            <td>{{ $banner->subtitle }}</td>
+                                                            <td class="fw-medium text-dark text-start">{{ $banner->project ? $banner->project->name : '-' }}</td>
                                                             <td>
-                                                                @if($banner->button_link)
-                                                                    <span class="badge bg-info-subtle text-info">{{ $banner->button_link }}</span>
-                                                                @else
-                                                                    <span class="text-muted">-</span>
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                <input type="number" class="form-control form-control-sm text-center" value="{{ $banner->sort_order }}" wire:change="updateBannerSortOrder('{{ $banner->id }}', $event.target.value)" style="width: 70px;">
+                                                                <input type="number" class="form-control form-control-sm text-center mx-auto" value="{{ $banner->sort_order }}" wire:change="updateBannerSortOrder('{{ $banner->id }}', $event.target.value)" style="width: 70px;">
                                                             </td>
                                                             <td>
                                                                 <button type="button" class="btn btn-sm {{ $banner->status === 'active' ? 'btn-success' : 'btn-danger' }}" wire:click="toggleBannerStatus('{{ $banner->id }}')">
@@ -448,7 +385,7 @@
                                                         </tr>
                                                     @empty
                                                         <tr>
-                                                            <td colspan="7" class="text-center py-4 text-muted">No banner slides found. Click "Add Slide Banner" to create one.</td>
+                                                            <td colspan="5" class="text-center py-4 text-muted">No banner slides found. Click "Add Slide Banner" to create one.</td>
                                                         </tr>
                                                     @endforelse
                                                 </tbody>

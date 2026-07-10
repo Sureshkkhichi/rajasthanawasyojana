@@ -11,15 +11,16 @@ class HomeSlider extends Model
     use HasUuids;
 
     protected $fillable = [
-        'title',
-        'subtitle',
+        'project_id',
         'desktop_image',
-        'mobile_image',
-        'button_text',
-        'button_link',
         'sort_order',
         'status',
     ];
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -54,14 +55,6 @@ class HomeSlider extends Model
                 File::exists(public_path($slider->desktop_image))
             ) {
                 File::delete(public_path($slider->desktop_image));
-            }
-
-            // Delete Mobile Image
-            if (
-                !empty($slider->mobile_image) &&
-                File::exists(public_path($slider->mobile_image))
-            ) {
-                File::delete(public_path($slider->mobile_image));
             }
         });
     }
