@@ -194,10 +194,10 @@ class Index extends Component
 
             list($origWidth, $origHeight, $imageType) = getimagesize($realPath);
 
-            if ($origWidth > 1920 || $origHeight > 600) {
-                // Resize and crop to exactly 1920x600 using GD
-                $targetWidth = 1920;
-                $targetHeight = 600;
+            if ($origWidth > 1058 || $origHeight > 401) {
+                // Resize and crop to exactly 1058x401 using GD
+                $targetWidth = 1058;
+                $targetHeight = 401;
                 $srcImage = null;
 
                 switch ($imageType) {

@@ -313,7 +313,7 @@
                                                         <div class="col-md-12">
                                                             <label class="form-label fw-semibold">Slide <span class="text-danger">*</span></label>
                                                             <input type="file" class="form-control @error('banner_desktop_file') is-invalid @enderror" wire:model="banner_desktop_file" wire:key="desktop-{{ $bannerUploadIteration }}" accept="image/*">
-                                                            <small class="text-muted">Recommended size: 1920x600. Max 2MB.</small>
+                                                            <small class="text-muted">Recommended size: 1058x401. Max 2MB.</small>
                                                             @error('banner_desktop_file') <div class="invalid-feedback">{{ $message }}</div> @enderror
 
                                                             @if($banner_desktop_file)
