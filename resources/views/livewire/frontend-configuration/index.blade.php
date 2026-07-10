@@ -373,13 +373,22 @@
                                                                 </button>
                                                             </td>
                                                             <td>
-                                                                <div class="btn-group">
-                                                                    <button type="button" class="btn btn-sm btn-light" wire:click="editBanner('{{ $banner->id }}')">
-                                                                        <i class="ri-edit-line text-primary"></i>
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+                                                                        Action
                                                                     </button>
-                                                                    <button type="button" class="btn btn-sm btn-light" wire:click="deleteBanner('{{ $banner->id }}')" onclick="return confirm('Are you sure you want to delete this slide?')">
-                                                                        <i class="ri-delete-bin-line text-danger"></i>
-                                                                    </button>
+                                                                    <ul class="dropdown-menu shadow">
+                                                                        <li>
+                                                                            <button class="dropdown-item py-2" type="button" wire:click="editBanner('{{ $banner->id }}')">
+                                                                                <i class="ri-edit-line align-bottom me-2 text-muted"></i> Edit
+                                                                            </button>
+                                                                        </li>
+                                                                        <li>
+                                                                            <button class="dropdown-item py-2 text-danger" type="button" wire:click="deleteBanner('{{ $banner->id }}')" onclick="return confirm('Are you sure you want to delete this slide?')">
+                                                                                <i class="ri-delete-bin-line align-bottom me-2"></i> Delete
+                                                                            </button>
+                                                                        </li>
+                                                                    </ul>
                                                                 </div>
                                                             </td>
                                                         </tr>
