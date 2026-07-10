@@ -21,7 +21,7 @@ class Sidebar
             'frontend_configuration' => [
                 'frontend' => [
                     [
-                        'title' => 'Frontend',
+                        'title' => 'Home Page',
                         'route' => 'frontend.index',
                         'is_route' => true,
                         'icon' => 'ri-layout-line',
@@ -80,11 +80,6 @@ class Sidebar
                             'key' => 'fresh',
                         ],
                     ],
-                ],
-            ],
-            // FINANCE
-            'finance_managerment' => [
-                'finance' => [
                     [
                         'title' => 'Deals',
                         'route' => 'deals.index',
@@ -92,6 +87,12 @@ class Sidebar
                         'icon' => 'ri-hand-coin-line',
                         'permission' => 'deals.view',
                     ],
+                ],
+            ],
+            // FINANCE
+            'finance_managerment' => [
+                'finance' => [
+
                     [
                         'title' => 'Invoices',
                         'route' => 'invoices.index',

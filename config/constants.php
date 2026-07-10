@@ -13,7 +13,7 @@ return [
     ],
     'lead_statuses' => [
         'awaiting_closed' => 'Awaiting/Closed',
-        'in_process' => 'In Process',
+        'in_process' => 'In Complete',
         'cancelled' => 'Cancelled',
         'site_visited' => 'Site Visited',
         'document_collected' => 'Document Collected',

@@ -25,10 +25,18 @@
                 <div class="col-lg-12">
                     <form wire:submit.prevent="save">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <h4 class="card-title mb-0">
-                                    {{ $projectId ? 'Edit Project' : 'Add New Project' }}
+                                    {{ $projectId ? 'Edit '. $name .' Project' : 'Add New Project' }}
+                                    <br>
+                                    <small class="fs-12 text-muted">Edit the project available on website amongs the one
+                                        you have selected.</small>
                                 </h4>
+
+                                <a href="{{ route('projects.index') }}" class="btn btn-success">
+                                    <i class="ri-arrow-left-double-fill me-1"></i>
+                                    Back
+                                </a>
                             </div>
                             <div class="card-body">
                                 <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3" role="tablist">
@@ -37,7 +45,7 @@
                                             class="nav-link {{ $activeTab === 'generalTab' ? 'active' : '' }}"
                                             wire:click="$set('activeTab', 'generalTab')">
                                             <i class="ri-building-line me-1"></i>
-                                            General & Project Detail
+                                            General Settings
                                         </a>
                                     </li>
                                     @if($projectId)
@@ -46,7 +54,7 @@
                                             class="nav-link {{ $activeTab === 'sliderTab' ? 'active' : '' }}"
                                             wire:click="$set('activeTab', 'sliderTab')">
                                             <i class="ri-image-line me-1"></i>
-                                            Project Sliders
+                                            Detail Page Slider
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
@@ -246,7 +254,7 @@
                                     @if($projectId)
                                     <div class="tab-pane fade {{ $activeTab === 'sliderTab' ? 'show active' : '' }}">
                                         <div class="alert alert-info">
-                                            Upload project slider images. You can manage sort order and status.
+                                            Upload the desired slider image to to shown on the detail page.
                                         </div>
                                         {{-- Upload Section --}}
                                         <div class="card border shadow-none">

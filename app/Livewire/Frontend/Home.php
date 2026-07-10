@@ -27,26 +27,10 @@ class Home extends Component
 
     public function mount(): void
     {
-        $this->home_sliders = \App\Models\ProjectSlider::query()
-            ->where('show_on_homepage', 'yes')
-            ->where('is_active', 'active')
-            ->whereHas('project', function ($query) {
-                $query->where('show_on_homepage', 'active')
-                    ->where('is_active', 'active');
-            })
-            ->with('project')
-            ->get()
-            ->map(function ($slide) {
-                return [
-                    'image' => $slide->image,
-                    'title' => $slide->title,
-                    'url' => $slide->project ? route('project.show', $slide->project->slug) : '#',
-                    'sort_order' => $slide->sort_order,
-                ];
-            })
-            ->sortBy('sort_order')
-            ->values()
-            ->all();
+        $this->home_sliders = \App\Models\HomeSlider::query()
+            ->where('status', 'active')
+            ->orderBy('sort_order')
+            ->get();
 
         $this->projects = \App\Models\Project::query()
             ->active()
@@ -64,6 +48,21 @@ class Home extends Component
         $this->bottom_bar_show = (bool) \App\Models\FrontendSetting::getVal('bottom_bar_show', true);
         $this->bottom_bar_text = \App\Models\FrontendSetting::getVal('bottom_bar_text', '');
         $this->bottom_bar_marquee = (bool) \App\Models\FrontendSetting::getVal('bottom_bar_marquee', true);
+    }
+
+    public function getSliderUrl(\App\Models\HomeSlider $slider): string
+    {
+        if (empty($slider->button_link)) {
+            return '#';
+        }
+
+        if (str_starts_with($slider->button_link, 'project:')) {
+            $projectId = str_replace('project:', '', $slider->button_link);
+            $project = \App\Models\Project::find($projectId);
+            return $project ? route('project.show', $project->slug) : '#';
+        }
+
+        return $slider->button_link;
     }
 
     public function render()

@@ -58,14 +58,14 @@
                 <div class="text-center">
                     <div class="swiper home-slider">
                         <div class="swiper-wrapper">
-                            @foreach ($home_sliders as $slide)
-                            <div class="swiper-slide">
-                                <a href="{{ $slide['url'] }}">
-                                    <img src="{{ asset($slide['image']) }}" alt="{{ $slide['title'] }}"
-                                        class="w-100 d-block">
-                                </a>
-                            </div>
-                            @endforeach
+                             @foreach ($home_sliders as $slide)
+                             <div class="swiper-slide">
+                                 <a href="{{ $this->getSliderUrl($slide) }}">
+                                     <img src="{{ asset($slide->desktop_image) }}" alt="{{ $slide->title }}"
+                                         class="w-100 d-block">
+                                 </a>
+                             </div>
+                             @endforeach
                         </div>
                         <div class="swiper-pagination"></div>
                     </div>
