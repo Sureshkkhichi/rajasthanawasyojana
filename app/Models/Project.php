@@ -62,4 +62,9 @@ class Project extends Model
         return $this->hasMany(ProjectInformationImage::class)
             ->orderBy('sort_order');
     }
+
+    public function leads()
+    {
+        return $this->hasMany(Lead::class);
+    }
 }

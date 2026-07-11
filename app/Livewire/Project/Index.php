@@ -37,10 +37,19 @@ class Index extends Component
             403
         );
         $project = Project::findOrFail($id);
-        $project->delete();
+
+        if ($project->leads()->exists()) {
+            session()->flash(
+                'error',
+                'Cannot delete project because it has associated leads.'
+            );
+            return;
+        }
+
+        $project->forceDelete();
         session()->flash(
             'success',
-            'Project deleted successfully.'
+            'Project force deleted successfully.'
         );
         $this->resetPage();
     }
