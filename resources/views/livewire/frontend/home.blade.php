@@ -116,20 +116,26 @@
                                     alt="{{ $project->name }}">
                                 @endif
                             </div>
-                            <div class="card-body">
-                                <div class="d-flex"
-                                    style="flex-direction: row; justify-content: space-between; align-items: center;">
-                                    <span class="text-dark fs-13">
-                                        <i class="ri-map-pin-line"></i>
-                                        {{ $project->city }}
-                                    </span>
-                                    <span class="text-success fs-13">
-                                        <i class="ri-checkbox-circle-fill"></i>
-                                        Registration Open
-                                    </span>
-                                </div>
-                                <h4 class="card-title mt-2">{{ $project->name }}</h4>
-                            </div>
+                             <div class="card-body">
+                                 <div class="d-flex"
+                                     style="flex-direction: row; justify-content: space-between; align-items: center;">
+                                     <span class="text-dark fs-13 fw-semibold">
+                                         <i class="ri-map-pin-line text-primary"></i>
+                                         {{ $project->city }}
+                                     </span>
+                                     <span class="text-success fs-13 fw-semibold">
+                                         <i class="ri-checkbox-circle-fill"></i>
+                                         Registration Open
+                                     </span>
+                                 </div>
+                                 <h4 class="card-title mt-2 mb-1" style="font-size: 16px; font-weight: 700; color: #212529;">{{ $project->name }}</h4>
+                                 <p class="text-muted fs-12 mb-2" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 36px;">
+                                     <i class="ri-navigation-line me-1"></i>{{ $project->address }}
+                                 </p>
+                                 <div class="mt-2" style="font-size: 22px; color: #dc2626; font-weight: 800;">
+                                     ₹ {{ $project->price }}
+                                 </div>
+                             </div>
                             <div class="card-footer d-flex"
                                 style="flex-direction: row;justify-content: space-between;align-items: center;padding: 0;margin: 0;">
                                 <span class="float-end">

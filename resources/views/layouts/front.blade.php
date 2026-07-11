@@ -46,13 +46,13 @@
         }
 
         .header-rera {
-            font-size: 30px;
+            font-size: 18px;
             font-weight: 700;
-            color: #212529;
-            background-color: #f8f9fa;
+            color: #4a2100;
+            /* background-color: #f8f9fa; */
             padding: 4px 14px;
-            border-radius: 6px;
-            border: 1px solid #dee2e6;
+            /* border-radius: 6px; */
+            /* border: 1px solid #dee2e6; */
             margin-left: 20px;
             white-space: nowrap;
             display: inline-block;
@@ -130,7 +130,8 @@
         <nav class="navbar navbar-expand-lg fixed-top custom-header">
             <div class="container">
                 <div class="row w-100 align-items-center">
-                    <div class="col-lg-8 col-12 d-flex flex-wrap align-items-center gap-2 order-1 justify-content-center justify-content-lg-start">
+                    <div
+                        class="col-lg-8 col-12 d-flex flex-wrap align-items-center gap-2 order-1 justify-content-center justify-content-lg-start">
                         <a href="{{ route('front') }}" class="header-logo">
                             @php
                                 $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
@@ -142,7 +143,7 @@
                             $reraNumber = \App\Models\FrontendSetting::getVal('rera_number');
                         @endphp
                         @if(!empty($reraNumber))
-                            <span class="header-rera">RERA No: {{ $reraNumber }}</span>
+                            <span class="header-rera fs-2">RERA No: {{ $reraNumber }}</span>
                         @endif
                     </div>
                     {{-- Right Contact --}}
