@@ -45,6 +45,19 @@
             width: auto;
         }
 
+        .header-rera {
+            font-size: 30px;
+            font-weight: 700;
+            color: #212529;
+            background-color: #f8f9fa;
+            padding: 4px 14px;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+            margin-left: 20px;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
         .header-contact {
             display: flex;
             justify-content: flex-end;
@@ -82,6 +95,12 @@
             .header-contact a {
                 font-size: 18px;
             }
+
+            .header-rera {
+                font-size: 16px;
+                margin-left: 10px;
+                padding: 2px 8px;
+            }
         }
 
         @media(max-width:576px) {
@@ -111,7 +130,7 @@
         <nav class="navbar navbar-expand-lg fixed-top custom-header">
             <div class="container">
                 <div class="row w-100 align-items-center">
-                    <div class="col-lg-4 col-6 order-1">
+                    <div class="col-lg-8 col-12 d-flex flex-wrap align-items-center gap-2 order-1 justify-content-center justify-content-lg-start">
                         <a href="{{ route('front') }}" class="header-logo">
                             @php
                                 $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
@@ -119,19 +138,16 @@
                             <img src="{{ $siteLogo ? asset($siteLogo) : asset('jda-logo.png') }}" class="img-fluid"
                                 alt="{{ config('constants.site_name') }}">
                         </a>
-                    </div>
-                    {{-- Center RERA Number --}}
-                    <div class="col-lg-4 col-12 order-lg-2 order-3 d-flex justify-content-center align-items-center mt-2 mt-lg-0">
                         @php
                             $reraNumber = \App\Models\FrontendSetting::getVal('rera_number');
                         @endphp
                         @if(!empty($reraNumber))
-                            <span class="fs-15 fw-bold text-dark bg-light px-3 py-1 rounded border">RERA No: {{ $reraNumber }}</span>
+                            <span class="header-rera">RERA No: {{ $reraNumber }}</span>
                         @endif
                     </div>
                     {{-- Right Contact --}}
-                    <div class="col-lg-4 col-6 order-lg-3 order-2">
-                        <div class="header-contact">
+                    <div class="col-lg-4 col-12 order-2 mt-2 mt-lg-0">
+                        <div class="header-contact justify-content-center justify-content-lg-end">
                             @php
                                 $mobile1 = \App\Models\FrontendSetting::getVal('mobile_number_1', '9876543210');
                                 $mobile2 = \App\Models\FrontendSetting::getVal('mobile_number_2', '9876543210');
