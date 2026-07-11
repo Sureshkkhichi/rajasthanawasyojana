@@ -62,7 +62,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            First Name
+                                            First Name <span class="text-danger">*</span>
                                         </label>
                                         <input type="text"
                                             class="form-control text-capitalize @error('first_name') is-invalid @enderror"
@@ -77,7 +77,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Last Name
+                                            Last Name <span class="text-danger">*</span>
                                         </label>
                                         <input type="text"
                                             class="form-control text-capitalize @error('last_name') is-invalid @enderror"
@@ -107,7 +107,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            PAN Number
+                                            PAN Number <span class="text-danger">*</span>
                                         </label>
                                         <input type="text"
                                             class="form-control text-uppercase @error('pan_number') is-invalid @enderror"
@@ -122,7 +122,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Gender
+                                            Gender <span class="text-danger">*</span>
                                         </label>
                                         <select class="form-select @error('gender') is-invalid @enderror"
                                             wire:model.blur="gender">
@@ -141,7 +141,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Email Address
+                                            Email Address <span class="text-danger">*</span>
                                         </label>
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                             wire:model.blur="email">
@@ -169,7 +169,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Date Of Birth
+                                            Date Of Birth <span class="text-danger">*</span>
                                         </label>
                                         <input type="date"
                                             class="form-control @error('date_of_birth') is-invalid @enderror"
@@ -185,7 +185,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Occupation
+                                            Occupation <span class="text-danger">*</span>
                                         </label>
                                         <select class="form-control @error('occupation') is-invalid @enderror"
                                             wire:model.blur="occupation">
@@ -207,7 +207,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Address
+                                            Address <span class="text-danger">*</span>
                                         </label>
                                         <input type="text"
                                             class="form-control text-capitalize @error('address') is-invalid @enderror"
@@ -286,7 +286,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Flat Size
+                                            Flat Size <span class="text-danger">*</span>
                                         </label>
                                         <select class="form-select @error('flat_size') is-invalid @enderror"
                                             wire:model.blur="flat_size">

@@ -212,18 +212,18 @@ class Booking extends Component
     protected function rules(): array
     {
         return [
-            'first_name' => ['nullable', 'string', 'max:255'],
-            'last_name' => ['nullable', 'string', 'max:255'],
-            'pan_number' => ['nullable', 'string', 'max:10', 'regex:/^[A-Z]{5}[0-9]{4}[A-Z]$/'],
-            'gender' => ['nullable'],
-            'email' => ['nullable', 'email'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'pan_number' => ['required', 'string', 'max:10', 'regex:/^[A-Z]{5}[0-9]{4}[A-Z]$/'],
+            'gender' => ['required'],
+            'email' => ['required', 'email'],
             'phone' => ['required', 'string', 'max:20'],
-            'date_of_birth' => ['nullable', 'date', 'before_or_equal:' . now()->subYears(18)->format('Y-m-d')],
-            'occupation' => ['nullable'],
-            'address' => ['nullable'],
+            'date_of_birth' => ['required', 'date', 'before_or_equal:' . now()->subYears(18)->format('Y-m-d')],
+            'occupation' => ['required'],
+            'address' => ['required'],
             'state_id' => ['required'],
             'city_id' => ['required'],
-            'flat_size' => ['nullable'],
+            'flat_size' => ['required'],
             'terms' => ['accepted'],
         ];
     }
