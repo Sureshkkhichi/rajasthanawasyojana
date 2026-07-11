@@ -7,7 +7,7 @@
                     <div
                         class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
                         <h4 class="mb-sm-0">
-                            Edit Lead
+                            {{ $lead && $lead->exists ? 'Edit Lead' : 'Add New Lead' }}
                         </h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
@@ -17,7 +17,7 @@
                                     </a>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    Edit
+                                    {{ $lead && $lead->exists ? 'Edit' : 'Create' }}
                                 </li>
                             </ol>
                         </div>
@@ -44,42 +44,46 @@
                             </div>
                             <div class="card-body">
                                 <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            First Name
-                                        </label>
-                                        <input type="text" class="form-control" wire:model="first_name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            Last Name
-                                        </label>
-                                        <input type="text" class="form-control" wire:model="last_name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            Father / Husband Name
-                                        </label>
-                                        <input type="text" class="form-control" wire:model="father_husband_name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            PAN Number
-                                        </label>
-                                        <input type="text" class="form-control" wire:model="pan_number">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            Email
-                                        </label>
-                                        <input type="email" class="form-control" wire:model="email">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            Mobile
-                                        </label>
-                                        <input type="text" class="form-control" wire:model="phone">
-                                    </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             First Name <span class="text-danger">*</span>
+                                         </label>
+                                         <input type="text" class="form-control @error('first_name') is-invalid @enderror" wire:model="first_name">
+                                         @error('first_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             Last Name <span class="text-danger">*</span>
+                                         </label>
+                                         <input type="text" class="form-control @error('last_name') is-invalid @enderror" wire:model="last_name">
+                                         @error('last_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             Father / Husband Name
+                                         </label>
+                                         <input type="text" class="form-control" wire:model="father_husband_name">
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             PAN Number
+                                         </label>
+                                         <input type="text" class="form-control" wire:model="pan_number">
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             Email <span class="text-danger">*</span>
+                                         </label>
+                                         <input type="email" class="form-control @error('email') is-invalid @enderror" wire:model="email">
+                                         @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             Mobile <span class="text-danger">*</span>
+                                         </label>
+                                         <input type="text" class="form-control @error('phone') is-invalid @enderror" wire:model="phone">
+                                         @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">
                                             Gender
@@ -182,16 +186,23 @@
                                     </select>
                                 </div>
                                 <hr>
-                                <div class="mb-3">
-                                    <strong>Project:</strong>
-                                    <br>
-                                    {{ $lead->project?->name }}
-                                </div>
-                                <div class="mb-3">
-                                    <strong>Created:</strong>
-                                    <br>
-                                    {{ $lead->created_at?->format('d M Y h:i A') }}
-                                </div>
+                                 <div class="mb-3">
+                                     <label class="form-label">Project <span class="text-danger">*</span></label>
+                                     <select class="form-select @error('project_id') is-invalid @enderror" wire:model="project_id">
+                                         <option value="">Select Project</option>
+                                         @foreach($projects as $p)
+                                             <option value="{{ $p->id }}">{{ $p->name }}</option>
+                                         @endforeach
+                                     </select>
+                                     @error('project_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                 </div>
+                                 @if($lead && $lead->exists)
+                                 <div class="mb-3">
+                                     <strong>Created:</strong>
+                                     <br>
+                                     {{ $lead->created_at?->format('d M Y h:i A') }}
+                                 </div>
+                                 @endif
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-success">
                                         <i class="ri-save-line me-1"></i>

@@ -35,14 +35,28 @@
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="form-label">
-                                        Keyword
+                                        Name
                                     </label>
-                                    <input type="text" class="form-control" placeholder="Name / Mobile / Email / PAN"
-                                        wire:model.live.debounce.500ms="keyword">
+                                    <input type="text" class="form-control" placeholder="Search by Name"
+                                        wire:model.live.debounce.500ms="search_name">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
+                                    <label class="form-label">
+                                        Mobile Number
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="Search by Mobile"
+                                        wire:model.live.debounce.500ms="search_mobile">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">
+                                        Email
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="Search by Email"
+                                        wire:model.live.debounce.500ms="search_email">
+                                </div>
+                                <div class="col-md-2">
                                     <label class="form-label">
                                         Project
                                     </label>
@@ -57,7 +71,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <label class="form-label">
                                         Lead Status
                                     </label>
@@ -87,10 +101,15 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header d-flex justify-content-between align-items-center">
                             <h4 class="card-title mb-0">
                                 Lead List
                             </h4>
+                            @can('leads.edit')
+                            <a href="{{ route('leads.create') }}" class="btn btn-primary btn-sm">
+                                <i class="ri-add-line align-bottom me-1"></i> Add New Lead
+                            </a>
+                            @endcan
                         </div>
                         <div class="card-body">
                             <div wire:loading>
@@ -108,6 +127,7 @@
                                             <th> Project </th>
                                             <th> City </th>
                                             <th> Flat Size </th>
+                                            <th> Source / Added By </th>
                                             <th> Lead Status </th>
                                             <th> Enquiry Date </th>
                                             <th> Enquiry Time </th>
@@ -140,6 +160,17 @@
                                             <td> {{ $lead->city }} </td>
                                             <td> {{ $lead->flat_size }} </td>
                                             <td>
+                                                @if(is_null($lead->created_by))
+                                                    <span class="badge bg-soft-success text-success">
+                                                        Website
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-soft-primary text-primary" title="Added by {{ $lead->creator?->name }}">
+                                                        <i class="ri-user-line me-1"></i> {{ $lead->creator?->name }}
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td>
                                                 <span
                                                     class="badge bg-{{ config('constants.lead_status_colors.' . $lead->status) }}">
                                                     {{ config('constants.lead_statuses.' . $lead->status) }}
@@ -163,13 +194,20 @@
                                                                 <i class="ri-eye-line align-bottom me-2 text-muted"></i> View
                                                             </a>
                                                         </li>
+                                                        @if(auth()->user()->can('leads.delete') && $lead->created_by === auth()->id())
+                                                        <li>
+                                                            <button class="dropdown-item py-2 text-danger" type="button" wire:click="delete('{{ $lead->id }}')" wire:confirm="Are you sure?">
+                                                                <i class="ri-delete-bin-line align-bottom me-2"></i> Delete
+                                                            </button>
+                                                        </li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             </td>
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="9" class="text-center py-4">
+                                            <td colspan="11" class="text-center py-4">
                                                 No leads found.
                                             </td>
                                         </tr>

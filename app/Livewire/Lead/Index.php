@@ -12,9 +12,12 @@ class Index extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    public string $keyword = '';
+    public string $search_name = '';
+    public string $search_mobile = '';
+    public string $search_email = '';
     public string $project_id = '';
     public string $status = '';
+
     public function mount(): void
     {
         abort_unless(
@@ -22,18 +25,32 @@ class Index extends Component
             403
         );
     }
-    public function updatingKeyword(): void
+
+    public function updatingSearchName(): void
     {
         $this->resetPage();
     }
+
+    public function updatingSearchMobile(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingSearchEmail(): void
+    {
+        $this->resetPage();
+    }
+
     public function updatingProjectId(): void
     {
         $this->resetPage();
     }
+
     public function updatingStatus(): void
     {
         $this->resetPage();
     }
+
     public function delete(string $id): void
     {
         abort_unless(
@@ -41,6 +58,12 @@ class Index extends Component
             403
         );
         $lead = Lead::findOrFail($id);
+        
+        if ($lead->created_by !== auth()->id()) {
+            session()->flash('error', 'You can only delete leads created by yourself.');
+            return;
+        }
+
         $lead->delete();
         session()->flash(
             'success',
@@ -48,6 +71,7 @@ class Index extends Component
         );
         $this->resetPage();
     }
+
     public function render()
     {
         $projects = Project::query()
@@ -58,22 +82,27 @@ class Index extends Component
                 'id',
                 'name',
             ]);
+
         $leads = Lead::query()
             ->with([
                 'project:id,name',
                 'state:id,name',
+                'creator:id,name',
             ])
             ->when(
-                $this->keyword,
-                function ($query) {
-                    $query->where(function ($q) {
-                        $q->where('first_name', 'like', "%{$this->keyword}%")
-                            ->orWhere('last_name', 'like', "%{$this->keyword}%")
-                            ->orWhere('phone', 'like', "%{$this->keyword}%")
-                            ->orWhere('email', 'like', "%{$this->keyword}%")
-                            ->orWhere('pan_number', 'like', "%{$this->keyword}%");
-                    });
-                }
+                $this->search_name,
+                fn($query) => $query->where(function ($q) {
+                    $q->where('first_name', 'like', "%{$this->search_name}%")
+                      ->orWhere('last_name', 'like', "%{$this->search_name}%");
+                })
+            )
+            ->when(
+                $this->search_mobile,
+                fn($query) => $query->where('phone', 'like', "%{$this->search_mobile}%")
+            )
+            ->when(
+                $this->search_email,
+                fn($query) => $query->where('email', 'like', "%{$this->search_email}%")
             )
             ->when(
                 $this->project_id,
@@ -90,6 +119,7 @@ class Index extends Component
             )
             ->latest()
             ->paginate(20);
+
         return view('livewire.lead.index', [
             'leads' => $leads,
             'projects' => $projects,

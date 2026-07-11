@@ -13,6 +13,7 @@ class Form extends Component
     public ?Lead $lead = null;
     public $states = [];
     public $projects = [];
+    public ?string $project_id = null;
     public string $first_name = '';
     public string $last_name = '';
     public ?string $father_husband_name = null;
@@ -29,17 +30,20 @@ class Form extends Component
     public ?string $flat_size = null;
     public ?string $waiver_code = null;
     public string $status = 'in_process';
+
     public function mount(?Lead $lead = null): void
     {
         abort_unless(
             auth()->user()->can('leads.edit'),
             403
         );
-        $this->lead = $lead;
+        $this->lead = $lead ?? new Lead();
         $this->states = State::orderBy('name')->get();
         $this->projects = Project::orderBy('name')->get();
-        if ($this->lead) {
+
+        if ($this->lead->exists) {
             $this->fill([
+                'project_id' => $lead->project_id,
                 'first_name' => $lead->first_name ?? '',
                 'last_name' => $lead->last_name ?? '',
                 'father_husband_name' => $lead->father_husband_name,
@@ -47,7 +51,7 @@ class Form extends Component
                 'gender' => $lead->gender,
                 'email' => $lead->email ?? '',
                 'phone' => $lead->phone ?? '',
-                'date_of_birth' => $lead->date_of_birth,
+                'date_of_birth' => $lead->date_of_birth ? $lead->date_of_birth->format('Y-m-d') : null,
                 'occupation' => $lead->occupation,
                 'address' => $lead->address,
                 'state_id' => $lead->state_id,
@@ -59,25 +63,33 @@ class Form extends Component
             ]);
         }
     }
+
     protected function rules(): array
     {
         return [
-            'first_name' => ['required'],
-            'last_name' => ['required'],
-            'email' => ['required', 'email'],
-            'phone' => ['required'],
+            'project_id' => ['required', 'exists:projects,id'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'max:20'],
             'status' => ['required'],
         ];
     }
-    public function save(): void
+
+    public function save()
     {
         $validated = $this->validate();
-        $this->lead->update([
-            ...$validated,
+
+        $data = [
+            'project_id' => $this->project_id,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
             'father_husband_name' => $this->father_husband_name,
             'pan_number' => $this->pan_number,
             'gender' => $this->gender,
-            'date_of_birth' => $this->date_of_birth,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'date_of_birth' => $this->date_of_birth ?: null,
             'occupation' => $this->occupation,
             'address' => $this->address,
             'state_id' => $this->state_id,
@@ -85,11 +97,19 @@ class Form extends Component
             'co_applicant_name' => $this->co_applicant_name,
             'flat_size' => $this->flat_size,
             'waiver_code' => $this->waiver_code,
-        ]);
-        session()->flash(
-            'success',
-            'Lead updated successfully.'
-        );
+            'status' => $this->status,
+        ];
+
+        if ($this->lead->exists) {
+            $this->lead->update($data);
+            session()->flash('success', 'Lead updated successfully.');
+        } else {
+            $data['created_by'] = auth()->id();
+            $data['is_submitted'] = true;
+            $this->lead = Lead::create($data);
+            session()->flash('success', 'Lead created successfully.');
+            return redirect()->route('leads.index');
+        }
     }
     public function render()
     {
