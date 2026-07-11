@@ -6,14 +6,19 @@
                 <div class="col-12">
                     <div
                         class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                        <h4 class="mb-sm-0">Projects</h4>
+                        <h4 class="mb-sm-0 d-flex align-items-center">
+                            <a href="{{ route('projects.index') }}" class="btn btn-soft-secondary btn-sm me-3">
+                                <i class="ri-arrow-left-line align-bottom"></i> Back
+                            </a>
+                            {{ $projectId ? 'Edit Project' : 'Add New Project' }}
+                        </h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item">
-                                    <a href="javascript:void(0);">Projects</a>
+                                    <a href="{{ route('projects.index') }}">Projects</a>
                                 </li>
                                 <li class="breadcrumb-item active">
-                                    {{ $projectId ? 'Edit Project' : 'Add New Project' }}
+                                    {{ $projectId ? 'Edit' : 'Create' }}
                                 </li>
                             </ol>
                         </div>
@@ -25,18 +30,13 @@
                 <div class="col-lg-12">
                     <form wire:submit.prevent="save">
                         <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="card-header">
                                 <h4 class="card-title mb-0">
                                     {{ $projectId ? 'Edit '. $name .' Project' : 'Add New Project' }}
                                     <br>
                                     <small class="fs-12 text-muted">Edit the project available on website amongs the one
                                         you have selected.</small>
                                 </h4>
-
-                                <a href="{{ route('projects.index') }}" class="btn btn-success">
-                                    <i class="ri-arrow-left-double-fill me-1"></i>
-                                    Back
-                                </a>
                             </div>
                             <div class="card-body">
                                 <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3" role="tablist">
