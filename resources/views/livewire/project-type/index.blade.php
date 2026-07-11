@@ -101,16 +101,22 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <div class="d-flex gap-2">
-                                                        <a href="{{ route('project-types.edit', $projectType->id) }}"
-                                                            class="btn btn-sm btn-primary">
-                                                            <i class="ri-pencil-line"></i>
-                                                        </a>
-                                                        <button type="button" class="btn btn-sm btn-danger"
-                                                            wire:click="delete('{{ $projectType->id }}')"
-                                                            wire:confirm="Are you sure?">
-                                                            <i class="ri-delete-bin-line"></i>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+                                                            Action
                                                         </button>
+                                                        <ul class="dropdown-menu shadow">
+                                                            <li>
+                                                                <a class="dropdown-item py-2" href="{{ route('project-types.edit', $projectType->id) }}">
+                                                                    <i class="ri-edit-line align-bottom me-2 text-muted"></i> Edit
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <button class="dropdown-item py-2 text-danger" type="button" wire:click="delete('{{ $projectType->id }}')" wire:confirm="Are you sure?">
+                                                                    <i class="ri-delete-bin-line align-bottom me-2"></i> Delete
+                                                                </button>
+                                                            </li>
+                                                        </ul>
                                                     </div>
                                                 </td>
                                             </tr>

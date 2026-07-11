@@ -71,18 +71,31 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <div class="d-flex gap-2">
-                                                        @can('flats.edit')
-                                                            <a href="{{ route('flats.edit', $flat->id) }}" class="btn btn-sm btn-primary">
-                                                                <i class="ri-pencil-line"></i>
-                                                            </a>
-                                                        @endcan
-                                                        @can('flats.delete')
-                                                            <button type="button" class="btn btn-sm btn-danger" wire:click="delete('{{ $flat->id }}')" wire:confirm="Are you sure?">
-                                                                <i class="ri-delete-bin-line"></i>
-                                                            </button>
-                                                        @endcan
+                                                    @if(auth()->user()->can('flats.edit') || auth()->user()->can('flats.delete'))
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+                                                            Action
+                                                        </button>
+                                                        <ul class="dropdown-menu shadow">
+                                                            @can('flats.edit')
+                                                            <li>
+                                                                <a class="dropdown-item py-2" href="{{ route('flats.edit', $flat->id) }}">
+                                                                    <i class="ri-edit-line align-bottom me-2 text-muted"></i> Edit
+                                                                </a>
+                                                            </li>
+                                                            @endcan
+                                                            @can('flats.delete')
+                                                            <li>
+                                                                <button class="dropdown-item py-2 text-danger" type="button" wire:click="delete('{{ $flat->id }}')" wire:confirm="Are you sure?">
+                                                                    <i class="ri-delete-bin-line align-bottom me-2"></i> Delete
+                                                                </button>
+                                                            </li>
+                                                            @endcan
+                                                        </ul>
                                                     </div>
+                                                    @else
+                                                    -
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @empty
