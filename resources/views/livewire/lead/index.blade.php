@@ -148,22 +148,22 @@
                                             <td> {{ $lead->created_at?->format('d M Y') }} </td>
                                             <td> {{ $lead->created_at?->format('h:i A') }} </td>
                                             <td onclick="event.stopPropagation();">
-                                                <div class="d-flex gap-2">
-                                                    <a href="{{ route('leads.edit', $lead->id) }}"
-                                                        class="btn btn-sm btn-soft-success" data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" data-bs-original-title="Edit Lead"><i
-                                                            class="ri-pencil-line"></i></a>
-                                                    <a href="{{ route('leads.show', $lead->id) }}"
-                                                        class="btn btn-sm btn-soft-info" data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" data-bs-original-title="View Lead">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                    {{-- <button type="button" class="btn btn-sm btn-soft-danger"
-                                                            wire:click="delete('{{ $lead->id }}')"
-                                                    wire:confirm="Are you sure?" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" data-bs-original-title="Delete Lead">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                    </button> --}}
+                                                <div class="dropdown">
+                                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+                                                        Action
+                                                    </button>
+                                                    <ul class="dropdown-menu shadow">
+                                                        <li>
+                                                            <a class="dropdown-item py-2" href="{{ route('leads.edit', $lead->id) }}">
+                                                                <i class="ri-edit-line align-bottom me-2 text-muted"></i> Edit
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item py-2" href="{{ route('leads.show', $lead->id) }}">
+                                                                <i class="ri-eye-line align-bottom me-2 text-muted"></i> View
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </td>
                                         </tr>
