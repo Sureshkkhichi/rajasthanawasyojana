@@ -105,11 +105,16 @@
                             <h4 class="card-title mb-0">
                                 Lead List
                             </h4>
-                            @can('leads.edit')
-                            <a href="{{ route('leads.create') }}" class="btn btn-primary btn-sm">
-                                <i class="ri-add-line align-bottom me-1"></i> Add New Lead
-                            </a>
-                            @endcan
+                            <div class="d-flex gap-2">
+                                <button type="button" wire:click="export" class="btn btn-success btn-sm">
+                                    <i class="ri-file-download-line align-bottom me-1"></i> Download Excel
+                                </button>
+                                @can('leads.edit')
+                                <a href="{{ route('leads.create') }}" class="btn btn-primary btn-sm">
+                                    <i class="ri-add-line align-bottom me-1"></i> Add New Lead
+                                </a>
+                                @endcan
+                            </div>
                         </div>
                         <div class="card-body">
                             <div wire:loading>

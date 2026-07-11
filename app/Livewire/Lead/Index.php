@@ -51,6 +51,109 @@ class Index extends Component
         $this->resetPage();
     }
 
+    public function export()
+    {
+        $headers = [
+            'Content-type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename=leads_' . now()->format('Y-m-d_H-i-s') . '.csv',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        $callback = function() {
+            $file = fopen('php://output', 'w');
+            
+            // Add UTF-8 BOM for proper excel formatting of special chars
+            fputs($file, "\xEF\xBB\xBF");
+
+            // Headers
+            fputcsv($file, [
+                'First Name',
+                'Last Name',
+                'Mobile',
+                'Email',
+                'Father/Husband Name',
+                'PAN Number',
+                'Gender',
+                'DOB',
+                'Occupation',
+                'Address',
+                'State',
+                'City',
+                'Co Applicant',
+                'Flat Size',
+                'Waiver Code',
+                'Project',
+                'Lead Status',
+                'Source / Added By',
+                'Enquiry Date',
+                'Enquiry Time'
+            ]);
+
+            // Query with same filters as listing
+            $leadsQuery = Lead::query()
+                ->with([
+                    'project:id,name',
+                    'state:id,name',
+                    'creator:id,name',
+                ])
+                ->when(
+                    $this->search_name,
+                    fn($query) => $query->where(function ($q) {
+                        $q->where('first_name', 'like', "%{$this->search_name}%")
+                          ->orWhere('last_name', 'like', "%{$this->search_name}%");
+                    })
+                )
+                ->when(
+                    $this->search_mobile,
+                    fn($query) => $query->where('phone', 'like', "%{$this->search_mobile}%")
+                )
+                ->when(
+                    $this->search_email,
+                    fn($query) => $query->where('email', 'like', "%{$this->search_email}%")
+                )
+                ->when(
+                    $this->project_id,
+                    fn($query) => $query->where('project_id', $this->project_id)
+                )
+                ->when(
+                    $this->status !== '',
+                    fn($query) => $query->where('status', $this->status)
+                )
+                ->latest();
+
+            foreach ($leadsQuery->get() as $lead) {
+                fputcsv($file, [
+                    $lead->first_name,
+                    $lead->last_name,
+                    $lead->phone,
+                    $lead->email,
+                    $lead->father_husband_name,
+                    $lead->pan_number,
+                    ucfirst($lead->gender ?? ''),
+                    $lead->date_of_birth ? $lead->date_of_birth->format('Y-m-d') : '',
+                    $lead->occupation,
+                    $lead->address,
+                    $lead->state?->name ?? '',
+                    $lead->city,
+                    $lead->co_applicant_name,
+                    $lead->flat_size,
+                    $lead->waiver_code,
+                    $lead->project?->name ?? '',
+                    config('constants.lead_statuses.' . $lead->status, $lead->status),
+                    is_null($lead->created_by) ? 'Website' : ($lead->creator?->name ?? ''),
+                    $lead->created_at?->format('d M Y') ?? '',
+                    $lead->created_at?->format('h:i A') ?? ''
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->streamDownload($callback, 'leads_' . now()->format('Y-m-d_H-i') . '.csv', $headers);
+    }
+
     public function delete(string $id): void
     {
         abort_unless(

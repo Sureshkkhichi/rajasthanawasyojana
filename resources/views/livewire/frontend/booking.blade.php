@@ -1,15 +1,24 @@
 <div>
     @push('styles')
-    <style>
-    select.is-invalid+.select2-container .select2-selection {
-        border-color: #dc3545 !important;
-    }
+        <style>
+            select.is-invalid+.select2-container .select2-selection {
+                border-color: #dc3545 !important;
+            }
 
-    .nft-hero {
-        background-image: unset;
-        padding: 110px 0 60px 0;
-    }
-    </style>
+            .nft-hero {
+                background-image: unset;
+                padding: 110px 0 60px 0;
+            }
+
+            label {
+                font-weight: normal !important;
+                font-size: 1rem !important;
+            }
+
+            .form-label {
+                margin-bottom: 0px !important;
+            }
+        </style>
     @endpush
     <!-- BOOKING FORM -->
     <section class="section nft-hero bg-light" id="booking-form">
@@ -34,11 +43,11 @@
             <div class="card border-0 p-0">
                 <div class="card-body p-0 p-lg-0">
                     @if(session()->has('success'))
-                    <div class="alert alert-success alert-dismissible fade show mb-4">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert">
-                        </button>
-                    </div>
+                        <div class="alert alert-success alert-dismissible fade show mb-4">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                            </button>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -59,9 +68,9 @@
                                             class="form-control text-capitalize @error('first_name') is-invalid @enderror"
                                             wire:model.blur="first_name">
                                         @error('first_name')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -74,9 +83,9 @@
                                             class="form-control text-capitalize @error('last_name') is-invalid @enderror"
                                             wire:model.blur="last_name">
                                         @error('last_name')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -89,9 +98,9 @@
                                             class="form-control text-capitalize @error('father_husband_name') is-invalid @enderror"
                                             wire:model.blur="father_husband_name">
                                         @error('father_husband_name')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -104,9 +113,9 @@
                                             class="form-control text-uppercase @error('pan_number') is-invalid @enderror"
                                             wire:model.blur="pan_number" maxlength="10">
                                         @error('pan_number')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -123,9 +132,9 @@
                                             <option value="other">Other</option>
                                         </select>
                                         @error('gender')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -137,9 +146,9 @@
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                             wire:model.blur="email">
                                         @error('email')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -151,9 +160,9 @@
                                         <input type="text" class="form-control @error('phone') is-invalid @enderror"
                                             wire:model.blur="phone" maxlength="10">
                                         @error('phone')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -167,9 +176,9 @@
                                             wire:model.blur="date_of_birth"
                                             max="{{ now()->subYears(18)->format('Y-m-d') }}">
                                         @error('date_of_birth')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -189,9 +198,9 @@
                                             <option value="Other">Other</option>
                                         </select>
                                         @error('occupation')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -204,9 +213,9 @@
                                             class="form-control text-capitalize @error('address') is-invalid @enderror"
                                             wire:model.blur="address">
                                         @error('address')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -221,16 +230,16 @@
                                                 wire:model.blur="state_id">
                                                 <option value="">Select State</option>
                                                 @foreach ($states as $state)
-                                                <option value="{{ $state->id }}">
-                                                    {{ $state->name }}
-                                                </option>
+                                                    <option value="{{ $state->id }}">
+                                                        {{ $state->name }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         @error('state_id')
-                                        <div class="invalid-feedback" style="display: block;">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback" style="display: block;">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -246,16 +255,16 @@
                                                 wire:model.blur="city_id">
                                                 <option value="">Select City</option>
                                                 @foreach ($cities as $cityItem)
-                                                <option value="{{ $cityItem->id }}">
-                                                    {{ $cityItem->name }}
-                                                </option>
+                                                    <option value="{{ $cityItem->id }}">
+                                                        {{ $cityItem->name }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         @error('city_id')
-                                        <div class="invalid-feedback" style="display: block;">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback" style="display: block;">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -268,9 +277,9 @@
                                             class="form-control text-capitalize @error('co_applicant_name') is-invalid @enderror"
                                             wire:model.blur="co_applicant_name">
                                         @error('co_applicant_name')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -289,9 +298,9 @@
                                             <option value="3 BHK">3 BHK</option>
                                         </select>
                                         @error('flat_size')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -304,9 +313,9 @@
                                             class="form-control @error('waiver_code') is-invalid @enderror"
                                             wire:model.blur="waiver_code">
                                         @error('waiver_code')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
                                         @enderror
                                     </div>
                                 </div>
@@ -352,117 +361,117 @@
     </section>
 
     @push('scripts')
-    <!--jquery cdn-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <!--select2 cdn-->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <!--jquery cdn-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <!--select2 cdn-->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script src="{{ asset('assets/js/pages/select2.init.js') }}"></script>
-    <script>
-    function initSelect2() {
-        // Initialize State Select2
-        const stateSelect = $('#state-select');
-        if (stateSelect.length) {
-            if (stateSelect.hasClass("select2-hidden-accessible")) {
-                stateSelect.select2('destroy');
-            }
-            stateSelect.select2({
-                placeholder: "Select State",
-                allowClear: false
-            }).on('change', function(e) {
-                let val = $(this).val();
-                if (String(val || '') !== String(@this.state_id || '')) {
-                    @this.set('state_id', val);
-                }
-            });
+        <script src="{{ asset('assets/js/pages/select2.init.js') }}"></script>
+        <script>
+            function initSelect2() {
+                // Initialize State Select2
+                const stateSelect = $('#state-select');
+                if (stateSelect.length) {
+                    if (stateSelect.hasClass("select2-hidden-accessible")) {
+                        stateSelect.select2('destroy');
+                    }
+                    stateSelect.select2({
+                        placeholder: "Select State",
+                        allowClear: false
+                    }).on('change', function (e) {
+                        let val = $(this).val();
+                        if (String(val || '') !== String(@this.state_id || '')) {
+                            @this.set('state_id', val);
+                        }
+                    });
 
-            // Add validation styling based on error message presence
-            if (stateSelect.closest('.mb-3').find('.invalid-feedback').length) {
-                stateSelect.next('.select2-container').find('.select2-selection').css('border-color', '#dc3545');
-            } else {
-                stateSelect.next('.select2-container').find('.select2-selection').css('border-color', '');
-            }
-        }
-
-        // Initialize City Select2
-        const citySelect = $('#city-select');
-        if (citySelect.length) {
-            if (citySelect.hasClass("select2-hidden-accessible")) {
-                citySelect.select2('destroy');
-            }
-            citySelect.select2({
-                placeholder: "Select City",
-                allowClear: false
-            }).on('change', function(e) {
-                let val = $(this).val();
-                if (String(val || '') !== String(@this.city_id || '')) {
-                    @this.set('city_id', val);
-                }
-            });
-
-            // Add validation styling based on error message presence
-            if (citySelect.closest('.mb-3').find('.invalid-feedback').length) {
-                citySelect.next('.select2-container').find('.select2-selection').css('border-color', '#dc3545');
-            } else {
-                citySelect.next('.select2-container').find('.select2-selection').css('border-color', '');
-            }
-        }
-    }
-
-    $(document).ready(function() {
-        initSelect2();
-    });
-
-    document.addEventListener('livewire:init', () => {
-        Livewire.hook('request', ({
-            fail,
-            respond,
-            succeed
-        }) => {
-            succeed(({
-                status,
-                response
-            }) => {
-                setTimeout(() => {
-                    initSelect2();
-                }, 50);
-            });
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const panInput = document.getElementById('pan_number');
-        if (!panInput) {
-            return;
-        }
-        panInput.addEventListener('input', function(e) {
-            let value = e.target.value.toUpperCase();
-            let result = '';
-            for (let i = 0; i < value.length; i++) {
-                let char = value[i];
-                // First 5 characters = A-Z
-                if (i < 5) {
-                    if (/[A-Z]/.test(char)) {
-                        result += char;
+                    // Add validation styling based on error message presence
+                    if (stateSelect.closest('.mb-3').find('.invalid-feedback').length) {
+                        stateSelect.next('.select2-container').find('.select2-selection').css('border-color', '#dc3545');
+                    } else {
+                        stateSelect.next('.select2-container').find('.select2-selection').css('border-color', '');
                     }
                 }
-                // Next 4 characters = 0-9
-                else if (i >= 5 && i <= 8) {
-                    if (/[0-9]/.test(char)) {
-                        result += char;
+
+                // Initialize City Select2
+                const citySelect = $('#city-select');
+                if (citySelect.length) {
+                    if (citySelect.hasClass("select2-hidden-accessible")) {
+                        citySelect.select2('destroy');
                     }
-                }
-                // Last character = A-Z
-                else if (i === 9) {
-                    if (/[A-Z]/.test(char)) {
-                        result += char;
+                    citySelect.select2({
+                        placeholder: "Select City",
+                        allowClear: false
+                    }).on('change', function (e) {
+                        let val = $(this).val();
+                        if (String(val || '') !== String(@this.city_id || '')) {
+                            @this.set('city_id', val);
+                        }
+                    });
+
+                    // Add validation styling based on error message presence
+                    if (citySelect.closest('.mb-3').find('.invalid-feedback').length) {
+                        citySelect.next('.select2-container').find('.select2-selection').css('border-color', '#dc3545');
+                    } else {
+                        citySelect.next('.select2-container').find('.select2-selection').css('border-color', '');
                     }
                 }
             }
-            e.target.value = result;
-        });
-    });
-    </script>
+
+            $(document).ready(function () {
+                initSelect2();
+            });
+
+            document.addEventListener('livewire:init', () => {
+                Livewire.hook('request', ({
+                    fail,
+                    respond,
+                    succeed
+                }) => {
+                    succeed(({
+                        status,
+                        response
+                    }) => {
+                        setTimeout(() => {
+                            initSelect2();
+                        }, 50);
+                    });
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const panInput = document.getElementById('pan_number');
+                if (!panInput) {
+                    return;
+                }
+                panInput.addEventListener('input', function (e) {
+                    let value = e.target.value.toUpperCase();
+                    let result = '';
+                    for (let i = 0; i < value.length; i++) {
+                        let char = value[i];
+                        // First 5 characters = A-Z
+                        if (i < 5) {
+                            if (/[A-Z]/.test(char)) {
+                                result += char;
+                            }
+                        }
+                        // Next 4 characters = 0-9
+                        else if (i >= 5 && i <= 8) {
+                            if (/[0-9]/.test(char)) {
+                                result += char;
+                            }
+                        }
+                        // Last character = A-Z
+                        else if (i === 9) {
+                            if (/[A-Z]/.test(char)) {
+                                result += char;
+                            }
+                        }
+                    }
+                    e.target.value = result;
+                });
+            });
+        </script>
     @endpush
 </div>
