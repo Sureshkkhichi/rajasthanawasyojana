@@ -133,9 +133,9 @@
                                             <div class="col-xl-3 col-md-6">
                                                 <label class="form-label">Price <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text"
+                                                <input type="number"
                                                     class="form-control rounded-pill @error('price') is-invalid @enderror"
-                                                    wire:model="price" placeholder="e.g. ₹ 15 Lakh - ₹ 35 Lakh">
+                                                    wire:model="price" placeholder="Enter price (numeric only)">
                                                 @error('price')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}

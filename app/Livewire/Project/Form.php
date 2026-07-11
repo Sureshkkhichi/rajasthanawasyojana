@@ -62,7 +62,7 @@ class Form extends Component
             'is_active' => 'required|in:active,inactive',
             'show_on_homepage' => 'required|in:active,inactive',
             'featured_image_file' => 'nullable|image|max:2048',
-            'price' => 'required|string|max:255',
+            'price' => 'required|numeric',
         ];
     }
     public function mount(?Project $project = null): void

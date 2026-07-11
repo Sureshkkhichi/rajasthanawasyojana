@@ -133,7 +133,7 @@
                                      <i class="ri-navigation-line me-1"></i>{{ $project->address }}
                                  </p>
                                  <div class="mt-2" style="font-size: 22px; color: #dc2626; font-weight: 800;">
-                                     ₹ {{ $project->price }}
+                                     ₹ {{ number_format((float) $project->price) }}
                                  </div>
                              </div>
                             <div class="card-footer d-flex"
