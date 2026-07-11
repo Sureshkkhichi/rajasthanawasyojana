@@ -309,12 +309,6 @@
                                                                 <th width="10">
                                                                     Sort Order
                                                                 </th>
-                                                                <th width="150">
-                                                                    Show on Homepage
-                                                                </th>
-                                                                <th width="150">
-                                                                    Show on Detail Page
-                                                                </th>
                                                                 <th width="10">
                                                                     Action
                                                                 </th>
@@ -336,34 +330,6 @@
                                                                         value="{{ $slider->sort_order }}"
                                                                         wire:change="updateSortOrder('{{ $slider->id }}',$event.target.value)">
                                                                 </td>
-                                                                {{-- Show on Homepage --}}
-                                                                <td>
-                                                                    <div class="form-check form-switch">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            role="switch"
-                                                                            id="slider-home-{{ $slider->id }}"
-                                                                            {{ $slider->show_on_homepage === 'yes' ? 'checked' : '' }}
-                                                                            wire:click="toggleHomeSlider('{{ $slider->id }}')">
-                                                                        <label class="form-check-label text-capitalize"
-                                                                            for="slider-home-{{ $slider->id }}">
-                                                                            {{ $slider->show_on_homepage === 'yes' ? 'Yes' : 'No' }}
-                                                                        </label>
-                                                                    </div>
-                                                                </td>
-                                                                {{-- Show on Detail Page --}}
-                                                                <td>
-                                                                    <div class="form-check form-switch">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                            role="switch"
-                                                                            id="slider-detail-{{ $slider->id }}"
-                                                                            {{ $slider->show_on_detail_page === 'yes' ? 'checked' : '' }}
-                                                                            wire:click="toggleDetailSlider('{{ $slider->id }}')">
-                                                                        <label class="form-check-label text-capitalize"
-                                                                            for="slider-detail-{{ $slider->id }}">
-                                                                            {{ $slider->show_on_detail_page === 'yes' ? 'Yes' : 'No' }}
-                                                                        </label>
-                                                                    </div>
-                                                                </td>
                                                                 {{-- Actions --}}
                                                                 <td>
                                                                     <button type="button" class="btn btn-sm btn-danger"
@@ -377,7 +343,7 @@
                                                             </tr>
                                                             @empty
                                                             <tr>
-                                                                <td colspan="5" class="text-center py-5">
+                                                                <td colspan="3" class="text-center py-5">
                                                                     <div class="text-muted">
                                                                         <i class="ri-image-line fs-1 d-block mb-2"></i>
                                                                         No slider images uploaded yet.

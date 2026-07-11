@@ -219,7 +219,6 @@ class Form extends Component
                 ),
                 'image' => 'uploads/projects/sliders/' . $fileName,
                 'sort_order' => ++$lastOrder,
-                'show_on_homepage' => 'no',
                 'is_active' => 'active',
             ]);
         }
@@ -298,32 +297,7 @@ class Form extends Component
         ProjectSlider::where('id', $sliderId)->update(['sort_order' => $order,]);
         $this->loadSliders();
     }
-    public function toggleHomeSlider(string $sliderId): void
-    {
-        abort_unless(auth()->user()->can('projects.edit'), 403);
 
-        $slider = ProjectSlider::find($sliderId);
-        if (!$slider) {
-            return;
-        }
-        $slider->update([
-            'show_on_homepage' => $slider->show_on_homepage === 'yes' ? 'no' : 'yes',
-        ]);
-        $this->loadSliders();
-    }
-    public function toggleDetailSlider(string $sliderId): void
-    {
-        abort_unless(auth()->user()->can('projects.edit'), 403);
-
-        $slider = ProjectSlider::find($sliderId);
-        if (!$slider) {
-            return;
-        }
-        $slider->update([
-            'show_on_detail_page' => $slider->show_on_detail_page === 'yes' ? 'no' : 'yes',
-        ]);
-        $this->loadSliders();
-    }
     public function updatedInfoImageFiles(): void
     {
         abort_unless(auth()->user()->can('projects.edit'), 403);
