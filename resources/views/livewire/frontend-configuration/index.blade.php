@@ -24,7 +24,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ $activeTab === 'general' ? 'active' : '' }}"
                                         href="javascript:void(0)" wire:click="selectTab('general')" role="tab">
-                                        <i class="ri-settings-4-line me-1 align-bottom"></i> Logo
+                                        <i class="ri-settings-4-line me-1 align-bottom"></i> General
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -105,6 +105,36 @@
                                                     No Logo Uploaded
                                                 </div>
                                                 @endif
+                                            </div>
+
+                                            <!-- Mobile Number 1 -->
+                                            <div class="col-md-4">
+                                                <label for="mobile_number_1" class="form-label fw-medium">Mobile Number 1</label>
+                                                <input type="text" id="mobile_number_1" class="form-control"
+                                                    wire:model="mobile_number_1" placeholder="e.g. 9876543210">
+                                                @error('mobile_number_1')
+                                                <div class="text-danger mt-1">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Mobile Number 2 -->
+                                            <div class="col-md-4">
+                                                <label for="mobile_number_2" class="form-label fw-medium">Mobile Number 2</label>
+                                                <input type="text" id="mobile_number_2" class="form-control"
+                                                    wire:model="mobile_number_2" placeholder="e.g. 9876543210">
+                                                @error('mobile_number_2')
+                                                <div class="text-danger mt-1">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                            <!-- RERA Number -->
+                                            <div class="col-md-4">
+                                                <label for="rera_number" class="form-label fw-medium">RERA Number</label>
+                                                <input type="text" id="rera_number" class="form-control"
+                                                    wire:model="rera_number" placeholder="e.g. RAJ/P/2026/1234">
+                                                @error('rera_number')
+                                                <div class="text-danger mt-1">{{ $message }}</div>
+                                                @enderror
                                             </div>
 
                                             <div class="col-12 text-end">

@@ -19,90 +19,90 @@
     @livewireStyles
     @stack('styles')
     <style>
-    .custom-header {
-        background: #fffdf6;
-        background-image: url('{{ asset("assets/images/header.jpg") }}');
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-        display: flex;
-        align-items: center;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
-        z-index: 999;
-        height: auto;
-    }
-
-    .custom-header .container {
-        max-width: 1400px;
-    }
-
-    .header-logo img {
-        height: 72px;
-        width: auto;
-    }
-
-    .digital-logo {
-        height: 58px;
-        width: auto;
-    }
-
-    .header-contact {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 50px;
-    }
-
-    .header-contact a {
-        color: #4a2100;
-        font-size: 46px;
-        font-weight: 700;
-        text-decoration: none;
-        transition: .3s;
-        line-height: 1;
-    }
-
-    .header-contact a:hover {
-        color: #d62939;
-    }
-
-    @media(max-width:991px) {
         .custom-header {
-            height: 88px;
+            background: #fffdf6;
+            /* background-image: url('{{ asset("assets/images/header.jpg") }}'); */
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
+            z-index: 999;
+            height: auto;
+        }
+
+        .custom-header .container {
+            max-width: 1400px;
         }
 
         .header-logo img {
-            height: 54px;
+            height: 72px;
+            width: auto;
+        }
+
+        .digital-logo {
+            height: 58px;
+            width: auto;
         }
 
         .header-contact {
-            gap: 15px;
+            display: flex;
             justify-content: flex-end;
+            align-items: center;
+            gap: 50px;
         }
 
         .header-contact a {
-            font-size: 18px;
-        }
-    }
-
-    @media(max-width:576px) {
-        .custom-header {
-            height: 88px;
-        }
-
-        .header-logo img {
-            height: 46px;
+            color: #4a2100;
+            font-size: 46px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .3s;
+            line-height: 1;
         }
 
-        .header-contact {
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 2px;
+        .header-contact a:hover {
+            color: #d62939;
         }
 
-        .header-contact a {
-            font-size: 15px;
+        @media(max-width:991px) {
+            .custom-header {
+                height: 88px;
+            }
+
+            .header-logo img {
+                height: 54px;
+            }
+
+            .header-contact {
+                gap: 15px;
+                justify-content: flex-end;
+            }
+
+            .header-contact a {
+                font-size: 18px;
+            }
         }
-    }
+
+        @media(max-width:576px) {
+            .custom-header {
+                height: 88px;
+            }
+
+            .header-logo img {
+                height: 46px;
+            }
+
+            .header-contact {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 2px;
+            }
+
+            .header-contact a {
+                font-size: 15px;
+            }
+        }
     </style>
 </head>
 
@@ -111,7 +111,7 @@
         <nav class="navbar navbar-expand-lg fixed-top custom-header">
             <div class="container">
                 <div class="row w-100 align-items-center">
-                    <div class="col-lg-4 col-6">
+                    <div class="col-lg-4 col-6 order-1">
                         <a href="{{ route('front') }}" class="header-logo">
                             @php
                                 $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
@@ -120,18 +120,32 @@
                                 alt="{{ config('constants.site_name') }}">
                         </a>
                     </div>
-                    {{-- Center Logo --}}
-                    <div class="col-lg-4 d-none d-lg-flex justify-content-center">
+                    {{-- Center RERA Number --}}
+                    <div class="col-lg-4 col-12 order-lg-2 order-3 d-flex justify-content-center align-items-center mt-2 mt-lg-0">
+                        @php
+                            $reraNumber = \App\Models\FrontendSetting::getVal('rera_number');
+                        @endphp
+                        @if(!empty($reraNumber))
+                            <span class="fs-15 fw-bold text-dark bg-light px-3 py-1 rounded border">RERA No: {{ $reraNumber }}</span>
+                        @endif
                     </div>
                     {{-- Right Contact --}}
-                    <div class="col-lg-4 col-6">
+                    <div class="col-lg-4 col-6 order-lg-3 order-2">
                         <div class="header-contact">
-                            <a href="tel:+919876543210" class="fs-2">
-                                9876543210
-                            </a>
-                            <a href="tel:+919876543210" class="fs-2">
-                                9876543210
-                            </a>
+                            @php
+                                $mobile1 = \App\Models\FrontendSetting::getVal('mobile_number_1', '9876543210');
+                                $mobile2 = \App\Models\FrontendSetting::getVal('mobile_number_2', '9876543210');
+                            @endphp
+                            @if(!empty($mobile1))
+                                <a href="tel:+91{{ $mobile1 }}" class="fs-2">
+                                    {{ $mobile1 }}
+                                </a>
+                            @endif
+                            @if(!empty($mobile2))
+                                <a href="tel:+91{{ $mobile2 }}" class="fs-2">
+                                    {{ $mobile2 }}
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>

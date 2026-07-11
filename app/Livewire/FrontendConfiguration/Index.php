@@ -26,6 +26,9 @@ class Index extends Component
     public $logo_file;
     public ?string $site_logo = null;
     public int $logoUploadIteration = 0;
+    public string $mobile_number_1 = '';
+    public string $mobile_number_2 = '';
+    public string $rera_number = '';
 
     // Top Bar properties
     public string $top_bar_text = '';
@@ -62,6 +65,9 @@ class Index extends Component
 
         // Load General Settings
         $this->site_logo = FrontendSetting::getVal('site_logo', null);
+        $this->mobile_number_1 = FrontendSetting::getVal('mobile_number_1', '');
+        $this->mobile_number_2 = FrontendSetting::getVal('mobile_number_2', '');
+        $this->rera_number = FrontendSetting::getVal('rera_number', '');
 
         // Load Top Bar Settings
         $this->top_bar_text = FrontendSetting::getVal('top_bar_text', '');
@@ -74,13 +80,15 @@ class Index extends Component
         $this->bottom_bar_show = (bool) FrontendSetting::getVal('bottom_bar_show', true);
     }
 
-    // Save General Settings (Logo)
     public function saveGeneral(): void
     {
         abort_unless(auth()->user()->can('home.slider.edit'), 403);
 
         $rules = [
             'logo_file' => ['nullable', 'image', 'max:2048'],
+            'mobile_number_1' => ['nullable', 'string', 'max:20'],
+            'mobile_number_2' => ['nullable', 'string', 'max:20'],
+            'rera_number' => ['nullable', 'string', 'max:100'],
         ];
         $this->validate($rules);
 
@@ -104,6 +112,10 @@ class Index extends Component
             $this->logo_file = null;
             $this->logoUploadIteration++;
         }
+
+        FrontendSetting::setVal('mobile_number_1', $this->mobile_number_1);
+        FrontendSetting::setVal('mobile_number_2', $this->mobile_number_2);
+        FrontendSetting::setVal('rera_number', $this->rera_number);
 
         session()->flash('success_general', 'General settings saved successfully.');
     }
