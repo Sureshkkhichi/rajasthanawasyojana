@@ -6,7 +6,10 @@
                 <div class="col-12">
                     <div
                         class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                        <h4 class="mb-sm-0">
+                        <h4 class="mb-sm-0 d-flex align-items-center">
+                            <a href="{{ route('leads.index') }}" class="btn btn-soft-secondary btn-sm me-3">
+                                <i class="ri-arrow-left-line align-bottom"></i> Back
+                            </a>
                             {{ $lead && $lead->exists ? 'Edit Lead' : 'Add New Lead' }}
                         </h4>
                         <div class="page-title-right">
