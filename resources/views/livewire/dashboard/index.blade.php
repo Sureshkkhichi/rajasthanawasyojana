@@ -1325,6 +1325,32 @@
                 </div>
             </div>
 
+            <!-- Age Wise & City Wise Row -->
+            <div class="row mb-4">
+                {{-- Age-wise Distribution --}}
+                <div class="col-xl-6">
+                    <div class="card card-height-100">
+                        <div class="card-header border-0 align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Age Wise Distribution</h4>
+                        </div>
+                        <div class="card-body d-flex flex-column justify-content-center">
+                            <div id="ageWiseChart" class="apex-charts" dir="ltr" style="height: 320px; min-height: 320px;"></div>
+                        </div>
+                    </div>
+                </div>
+                {{-- City-wise Distribution --}}
+                <div class="col-xl-6">
+                    <div class="card card-height-100">
+                        <div class="card-header border-0 align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">City Wise Distribution (Top 10)</h4>
+                        </div>
+                        <div class="card-body d-flex flex-column justify-content-center">
+                            <div id="cityWiseChart" class="apex-charts" dir="ltr" style="height: 320px; min-height: 320px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- New Row: Business Summary -->
             <div class="row">
                 <div class="col-xl-12">
@@ -1897,6 +1923,117 @@
             peakPeriodText = `Most registrations occur between <strong>${peakHour}</strong> and <strong>${nextHour}</strong> (${maxVal} leads total).`;
         }
         document.getElementById('peak-period-text').innerHTML = peakPeriodText;
+
+        // Age Wise Chart (Donut)
+        var ageData = @json($ageData);
+        var ageLabels = @json($ageLabels);
+        var ageWiseOptions = {
+            series: ageData,
+            labels: ageLabels,
+            chart: {
+                type: 'donut',
+                height: 320,
+            },
+            legend: {
+                position: 'bottom',
+                horizontalAlign: 'center',
+                fontFamily: 'Inter, sans-serif',
+                labels: {
+                    colors: '#878a99'
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                dropShadow: {
+                    enabled: false
+                }
+            },
+            colors: ['#0ab39c', '#405189', '#3577f1', '#f7b84b', '#f06548', '#299cdb'],
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '70%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total Leads',
+                                formatter: function (w) {
+                                    return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        var ageWiseChart = new ApexCharts(document.querySelector("#ageWiseChart"), ageWiseOptions);
+        ageWiseChart.render();
+
+        // City Wise Chart (Bar)
+        var cityData = @json($cityData);
+        var cityLabels = @json($cityLabels);
+        var cityWiseOptions = {
+            series: [{
+                name: 'Leads',
+                data: cityData
+            }],
+            chart: {
+                type: 'bar',
+                height: 320,
+                toolbar: {
+                    show: false
+                }
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                    distributed: true,
+                    barHeight: '60%'
+                }
+            },
+            colors: ['#3577f1', '#0ab39c', '#f7b84b', '#f06548', '#299cdb', '#a855f7', '#6366f1', '#ec4899', '#14b8a6', '#f43f5e'],
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                    return val;
+                },
+                offsetX: 10,
+                style: {
+                    fontSize: '12px',
+                    colors: ["#304758"]
+                }
+            },
+            grid: {
+                borderColor: "#eef1f7",
+                strokeDashArray: 4
+            },
+            xaxis: {
+                categories: cityLabels,
+                labels: {
+                    style: {
+                        colors: '#878a99',
+                        fontSize: '11px',
+                        fontFamily: 'Inter, sans-serif'
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: '#878a99',
+                        fontSize: '11px',
+                        fontFamily: 'Inter, sans-serif'
+                    }
+                }
+            },
+            legend: {
+                show: false
+            }
+        };
+        var cityWiseChart = new ApexCharts(document.querySelector("#cityWiseChart"), cityWiseOptions);
+        cityWiseChart.render();
 
     </script>
     @endsection

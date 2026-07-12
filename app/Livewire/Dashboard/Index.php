@@ -25,6 +25,11 @@ class Index extends Component
     public array $hourlyLabels = [];
     public array $hourlyData = [];
 
+    public array $ageLabels = [];
+    public array $ageData = [];
+    public array $cityLabels = [];
+    public array $cityData = [];
+
     public function mount(): void
     {
         $this->loadDashboard();
@@ -70,6 +75,52 @@ class Index extends Component
 
         $this->hourlyLabels = $labels;
         $this->hourlyData = $data;
+
+        // 1. Age Wise Distribution
+        $leads = Lead::select('date_of_birth')->whereNotNull('date_of_birth')->get();
+        $ageGroups = [
+            '18-25' => 0,
+            '26-35' => 0,
+            '36-45' => 0,
+            '46-55' => 0,
+            '56-65' => 0,
+            '66+' => 0,
+        ];
+        foreach ($leads as $lead) {
+            $dob = $lead->date_of_birth;
+            if ($dob) {
+                $age = $dob->age;
+                if ($age >= 18 && $age <= 25) {
+                    $ageGroups['18-25']++;
+                } elseif ($age >= 26 && $age <= 35) {
+                    $ageGroups['26-35']++;
+                } elseif ($age >= 36 && $age <= 45) {
+                    $ageGroups['36-45']++;
+                } elseif ($age >= 46 && $age <= 55) {
+                    $ageGroups['46-55']++;
+                } elseif ($age >= 56 && $age <= 65) {
+                    $ageGroups['56-65']++;
+                } elseif ($age >= 66) {
+                    $ageGroups['66+']++;
+                }
+            }
+        }
+        $this->ageLabels = array_keys($ageGroups);
+        $this->ageData = array_values($ageGroups);
+
+        // 2. City Wise Distribution (Top 10)
+        $cityStats = Lead::query()
+            ->select('city', DB::raw('count(*) as count'))
+            ->whereNotNull('city')
+            ->where('city', '!=', '')
+            ->groupBy('city')
+            ->orderBy('count', 'desc')
+            ->limit(10)
+            ->pluck('count', 'city')
+            ->toArray();
+
+        $this->cityLabels = array_keys($cityStats);
+        $this->cityData = array_values($cityStats);
     }
 
     public function render()

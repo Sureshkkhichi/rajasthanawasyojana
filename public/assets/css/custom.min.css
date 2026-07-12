@@ -51,7 +51,14 @@ marquee {
     font-weight: 100;
 }
 
-
+.apply-gif {
+        width: 90%;
+        margin: 0 auto;
+        display: block;
+        transform: scale(1);
+        transition: .35s;
+        padding: 0;
+    }
 
 
 
