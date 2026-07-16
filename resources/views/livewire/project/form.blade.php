@@ -178,6 +178,21 @@
                                                 </div>
                                                 @enderror
                                             </div>
+                                            {{-- Registration Status --}}
+                                            <div class="col-xl-3 col-md-6">
+                                                <label class="form-label">Registration Status</label>
+                                                <select
+                                                    class="form-select rounded-pill @error('registration_status') is-invalid @enderror"
+                                                    wire:model="registration_status">
+                                                    <option value="open">Open</option>
+                                                    <option value="closed">Closed</option>
+                                                </select>
+                                                @error('registration_status')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                                @enderror
+                                            </div>
                                             {{-- Show on Homepage --}}
                                             <div class="col-xl-3 col-md-6">
                                                 <label class="form-label">Show on Homepage</label>

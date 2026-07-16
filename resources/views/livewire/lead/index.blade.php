@@ -134,6 +134,7 @@
                                             <th> Flat Size </th>
                                             <th> Source / Added By </th>
                                             <th> Lead Status </th>
+                                            <th> Payment Status </th>
                                             <th> Enquiry Date </th>
                                             <th> Enquiry Time </th>
                                             <th width="120"> Action </th>
@@ -179,6 +180,22 @@
                                                 <span
                                                     class="badge bg-{{ config('constants.lead_status_colors.' . $lead->status) }}">
                                                     {{ config('constants.lead_statuses.' . $lead->status) }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $payColors = [
+                                                        'paid' => 'success',
+                                                        'unpaid' => 'danger',
+                                                        'failed' => 'warning',
+                                                        'refunded' => 'info',
+                                                        'partial' => 'warning',
+                                                        'pending' => 'secondary',
+                                                    ];
+                                                    $col = $payColors[$lead->payment_status] ?? 'secondary';
+                                                @endphp
+                                                <span class="badge bg-{{ $col }}">
+                                                    {{ config('constants.payment_statuses.' . $lead->payment_status, ucfirst($lead->payment_status)) }}
                                                 </span>
                                             </td>
                                             <td> {{ $lead->created_at?->format('d M Y') }} </td>

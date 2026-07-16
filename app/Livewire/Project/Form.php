@@ -40,6 +40,7 @@ class Form extends Component
     public $featured_image_file;
     public ?string $featured_image = null;
     public ?string $price = null;
+    public string $registration_status = 'open';
     
     // Information Section properties
     public $infoImageFiles = [];
@@ -63,6 +64,7 @@ class Form extends Component
             'show_on_homepage' => 'required|in:active,inactive',
             'featured_image_file' => 'nullable|image|max:2048',
             'price' => 'required|numeric',
+            'registration_status' => 'required|in:open,closed',
         ];
     }
     public function mount(?Project $project = null): void
@@ -88,6 +90,7 @@ class Form extends Component
             $this->show_on_homepage = $project->show_on_homepage;
             $this->featured_image = $project->featured_image;
             $this->price = $project->price;
+            $this->registration_status = $project->registration_status ?? 'open';
         }
         if ($this->projectId) {
             $this->loadSliders();

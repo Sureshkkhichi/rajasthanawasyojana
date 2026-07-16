@@ -22,6 +22,7 @@ class Project extends Model
         'show_on_homepage',
         'featured_image',
         'price',
+        'registration_status',
     ];
 
     /*

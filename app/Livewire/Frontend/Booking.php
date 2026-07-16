@@ -235,6 +235,12 @@ class Booking extends Component
     }
     public function submit()
     {
+        $this->project->refresh();
+        if ($this->project->registration_status === 'closed') {
+            $this->dispatch('registrationClosed');
+            return;
+        }
+
         $validated = $this->validate();
         if ($this->lead === null) {
             $this->lead = Lead::create([
@@ -265,6 +271,7 @@ class Booking extends Component
             'city' => $this->city,
             'project_id' => $this->project->id,
             'is_submitted' => true,
+            'payment_status' => 'unpaid',
         ]);
 
         Mail::to($this->lead->email)->cc('suresh5313@gmail.com')->send(new LeadSubmittedMail($this->lead));

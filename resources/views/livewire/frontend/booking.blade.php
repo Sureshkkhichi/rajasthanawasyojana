@@ -361,6 +361,7 @@
     </section>
 
     @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!--jquery cdn-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -470,6 +471,20 @@
                         }
                     }
                     e.target.value = result;
+                });
+            });
+
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('registrationClosed', () => {
+                    Swal.fire({
+                        title: 'Registration Closed!',
+                        text: 'We are sorry, but registrations for this project have been closed.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#dc3545'
+                    }).then(() => {
+                        window.location.href = "{{ route('front') }}";
+                    });
                 });
             });
         </script>

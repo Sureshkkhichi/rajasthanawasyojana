@@ -30,6 +30,7 @@ class Form extends Component
     public ?string $flat_size = null;
     public ?string $waiver_code = null;
     public string $status = 'in_process';
+    public string $payment_status = 'pending';
 
     public function mount(?Lead $lead = null): void
     {
@@ -60,6 +61,7 @@ class Form extends Component
                 'flat_size' => $lead->flat_size,
                 'waiver_code' => $lead->waiver_code,
                 'status' => $lead->status ?? 'in_process',
+                'payment_status' => $lead->payment_status ?? 'pending',
             ]);
         }
     }
@@ -73,6 +75,7 @@ class Form extends Component
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['required', 'string', 'max:20'],
             'status' => ['required'],
+            'payment_status' => ['required'],
         ];
     }
 
@@ -98,6 +101,7 @@ class Form extends Component
             'flat_size' => $this->flat_size,
             'waiver_code' => $this->waiver_code,
             'status' => $this->status,
+            'payment_status' => $this->payment_status,
         ];
 
         if ($this->lead->exists) {

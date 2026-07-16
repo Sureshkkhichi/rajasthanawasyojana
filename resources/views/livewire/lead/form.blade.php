@@ -188,6 +188,19 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Payment Status
+                                    </label>
+                                    <select class="form-select @error('payment_status') is-invalid @enderror" wire:model="payment_status">
+                                        @foreach(config('constants.payment_statuses') as $key => $lbl)
+                                            <option value="{{ $key }}">
+                                                {{ $lbl }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('payment_status') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
                                 <hr>
                                  <div class="mb-3">
                                      <label class="form-label">Project <span class="text-danger">*</span></label>
