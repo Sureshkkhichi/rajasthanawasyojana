@@ -214,7 +214,7 @@ class Booking extends Component
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'pan_number' => ['required', 'string', 'max:10', 'regex:/^[A-Z]{5}[0-9]{4}[A-Z]$/'],
+            'pan_number' => ['required', 'string', 'max:10'],
             'gender' => ['required'],
             'email' => ['required', 'email'],
             'phone' => ['required', 'string', 'max:20'],

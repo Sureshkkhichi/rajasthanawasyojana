@@ -30,6 +30,33 @@ class Index extends Component
     public array $cityLabels = [];
     public array $cityData = [];
 
+    public int $activeProjects = 0;
+    public int $upcomingProjects = 0;
+
+    public float $totalAmount = 0;
+    public float $totalRefund = 0;
+
+    public float $totalCollection = 0;
+    public float $pendingAmount = 0;
+    public float $bookingAmount = 0;
+
+    public int $draftLeads = 0;
+    public int $submittedLeads = 0;
+    public int $paidLeads = 0;
+    public int $pendingLeads = 0;
+    public float $conversionRate = 0;
+
+    // Project Status Chart
+    public array $projectStatusLabels = [];
+    public array $projectStatusData = [];
+
+    // Sales Trend (Overview)
+    public array $salesTrendDays = [];
+    public array $salesTrendCollection = [];
+    public array $salesTrendPending = [];
+    public array $salesTrendBooking = [];
+    public array $salesTrendRefund = [];
+
     public function mount(): void
     {
         $this->loadDashboard();
@@ -38,14 +65,95 @@ class Index extends Component
     protected function loadDashboard(): void
     {
         $this->totalLeads = Lead::count();
-
         $this->totalProjects = Project::count();
 
-        $this->totalDeals = 0;
+        $this->activeProjects = Project::where('status', 'active')->count();
+        $this->upcomingProjects = Project::where('status', 'upcoming')->count();
 
-        $this->invoiceAmount = 0;
+        $this->draftLeads = Lead::draft()->count();
+        $this->submittedLeads = Lead::submitted()->count();
+        $this->paidLeads = Lead::paid()->count();
+        $this->pendingLeads = Lead::pendingPayment()->count();
 
-        $this->refundAmount = 0;
+        $this->totalDeals = $this->submittedLeads;
+
+        $this->totalAmount = Lead::submitted()
+            ->join('projects', 'leads.project_id', '=', 'projects.id')
+            ->sum('projects.price');
+
+        $this->totalRefund = Lead::where('leads.status', 'cancelled')
+            ->join('projects', 'leads.project_id', '=', 'projects.id')
+            ->sum('projects.price');
+
+        $this->totalCollection = Lead::paid()
+            ->join('projects', 'leads.project_id', '=', 'projects.id')
+            ->sum('projects.price');
+
+        $this->pendingAmount = Lead::pendingPayment()
+            ->join('projects', 'leads.project_id', '=', 'projects.id')
+            ->sum('projects.price');
+
+        $this->bookingAmount = $this->totalAmount;
+
+        $this->conversionRate = $this->totalLeads > 0 
+            ? round(($this->paidLeads / $this->totalLeads) * 100, 2) 
+            : 0;
+
+        // Project Status Donut Series
+        $completedProjects = Project::where('status', 'completed')->count();
+        $holdProjects = Project::where('status', 'hold')->count();
+        $cancelledProjects = Project::where('status', 'cancelled')->count();
+        $this->projectStatusLabels = ["Completed", "Active", "Upcoming", "On Hold", "Cancelled"];
+        $this->projectStatusData = [
+            $completedProjects,
+            $this->activeProjects,
+            $this->upcomingProjects,
+            $holdProjects,
+            $cancelledProjects
+        ];
+
+        // Sales Trend (Last 30 Days)
+        $days = [];
+        $trendCollection = [];
+        $trendPending = [];
+        $trendBooking = [];
+        $trendRefund = [];
+
+        for ($i = 29; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $dateLabel = now()->subDays($i)->format('d M');
+            $days[] = $dateLabel;
+
+            // Collection (Paid)
+            $trendCollection[] = round(Lead::paid()
+                ->whereDate('leads.created_at', $date)
+                ->join('projects', 'leads.project_id', '=', 'projects.id')
+                ->sum('projects.price') / 100000, 2);
+
+            // Pending
+            $trendPending[] = round(Lead::pendingPayment()
+                ->whereDate('leads.created_at', $date)
+                ->join('projects', 'leads.project_id', '=', 'projects.id')
+                ->sum('projects.price') / 100000, 2);
+
+            // Booking (Submitted)
+            $trendBooking[] = round(Lead::submitted()
+                ->whereDate('leads.created_at', $date)
+                ->join('projects', 'leads.project_id', '=', 'projects.id')
+                ->sum('projects.price') / 100000, 2);
+
+            // Refund (Cancelled)
+            $trendRefund[] = round(Lead::where('leads.status', 'cancelled')
+                ->whereDate('leads.created_at', $date)
+                ->join('projects', 'leads.project_id', '=', 'projects.id')
+                ->sum('projects.price') / 100000, 2);
+        }
+
+        $this->salesTrendDays = $days;
+        $this->salesTrendCollection = $trendCollection;
+        $this->salesTrendPending = $trendPending;
+        $this->salesTrendBooking = $trendBooking;
+        $this->salesTrendRefund = $trendRefund;
 
         // Group leads by registration hour
         $driver = DB::connection()->getDriverName();

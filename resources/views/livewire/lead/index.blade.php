@@ -126,7 +126,7 @@
                                 <table class="table table-bordered table-hover align-middle">
                                     <thead class="table-light">
                                         <tr>
-                                            <th width="70"> # </th>
+                                            <th width="70"> SR. No. </th>
                                             <th> Name </th>
                                             <th> Mobile </th>
                                             <th> Project </th>

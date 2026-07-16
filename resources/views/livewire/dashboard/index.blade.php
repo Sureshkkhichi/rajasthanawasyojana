@@ -553,7 +553,7 @@
             <div class="row">
                 <!-- Total Leads -->
                 <div class="col-xl-3 col-md-6">
-                    <a href="#" class="dashboard-link">
+                    <a href="{{ route('leads.index') }}" class="dashboard-link">
                         <div class="card dashboard-card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-start">
@@ -562,7 +562,7 @@
                                             Total Leads
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="100">0</span>
+                                            <span class="counter-value" data-target="{{ $totalLeads }}">0</span>
                                         </h2>
                                         <span class="fs-13 text-primary">
                                             View Leads
@@ -578,7 +578,7 @@
                 </div>
                 <!-- Active Projects -->
                 <div class="col-xl-3 col-md-6">
-                    <a href="#" class="dashboard-link">
+                    <a href="{{ route('projects.index') }}" class="dashboard-link">
                         <div class="card dashboard-card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-start">
@@ -587,7 +587,7 @@
                                             Active Projects
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="5">0</span>
+                                            <span class="counter-value" data-target="{{ $activeProjects }}">0</span>
                                         </h2>
                                         <span class="fs-13 text-success">
                                             View Projects
@@ -603,7 +603,7 @@
                 </div>
                 <!-- Upcoming Projects -->
                 <div class="col-xl-3 col-md-6">
-                    <a href="#" class="dashboard-link">
+                    <a href="{{ route('projects.index') }}" class="dashboard-link">
                         <div class="card dashboard-card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-start">
@@ -612,7 +612,7 @@
                                             Upcoming Projects
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="5">0</span>
+                                            <span class="counter-value" data-target="{{ $upcomingProjects }}">0</span>
                                         </h2>
                                         <span class="fs-13 text-warning">
                                             View Projects
@@ -628,7 +628,7 @@
                 </div>
                 <!-- Total Deals -->
                 <div class="col-xl-3 col-md-6">
-                    <a href="#" class="dashboard-link">
+                    <a href="{{ route('deals.index') }}" class="dashboard-link">
                         <div class="card dashboard-card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-start">
@@ -637,7 +637,7 @@
                                             Total Deals
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="150">0</span>
+                                            <span class="counter-value" data-target="{{ $totalDeals }}">0</span>
                                         </h2>
                                         <span class="fs-13 text-secondary">
                                             View Deals
@@ -662,7 +662,7 @@
                                             Total Amount
                                         </p>
                                         <h2 class="mb-2">
-                                            ₹ <span class="counter-value" data-target="150000">0</span>
+                                            ₹ <span class="counter-value" data-target="{{ (int)$totalAmount }}">0</span>
                                         </h2>
                                         <span class="fs-13 text-info">
                                             View All
@@ -678,7 +678,7 @@
                 </div>
                 <!-- Total Refund -->
                 <div class="col-xl-3 col-md-6">
-                    <a href="#" class="dashboard-link">
+                    <a href="{{ route('refunds.index') }}" class="dashboard-link">
                         <div class="card dashboard-card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-start">
@@ -687,7 +687,7 @@
                                             Total Refund
                                         </p>
                                         <h2 class="mb-2">
-                                            ₹ <span class="counter-value" data-target="23000">0</span>
+                                            ₹ <span class="counter-value" data-target="{{ (int)$totalRefund }}">0</span>
                                         </h2>
                                         <span class="fs-13 text-danger">
                                             View All
@@ -723,8 +723,14 @@
                             <!-- Stats -->
                             <div class="row mb-4 sales-overview-stats">
                                 <div class="col-md-3 border-end">
-                                    <h3 class="mb-1 fw-semibold">
-                                        ₹ 8.64 Cr
+                                    <h3 class="mb-1 fw-semibold" title="₹ {{ number_format($totalCollection) }}">
+                                        @if($totalCollection >= 10000000)
+                                            ₹ {{ number_format($totalCollection / 10000000, 2) }} Cr
+                                        @elseif($totalCollection >= 100000)
+                                            ₹ {{ number_format($totalCollection / 100000, 2) }} L
+                                        @else
+                                            ₹ {{ number_format($totalCollection) }}
+                                        @endif
                                     </h3>
                                     <p class="text-muted mb-0">
                                         <i class="ri-checkbox-blank-circle-fill text-primary me-1"></i>
@@ -732,8 +738,14 @@
                                     </p>
                                 </div>
                                 <div class="col-md-3 border-end">
-                                    <h3 class="mb-1 fw-semibold">
-                                        ₹ 2.18 Cr
+                                    <h3 class="mb-1 fw-semibold" title="₹ {{ number_format($pendingAmount) }}">
+                                        @if($pendingAmount >= 10000000)
+                                            ₹ {{ number_format($pendingAmount / 10000000, 2) }} Cr
+                                        @elseif($pendingAmount >= 100000)
+                                            ₹ {{ number_format($pendingAmount / 100000, 2) }} L
+                                        @else
+                                            ₹ {{ number_format($pendingAmount) }}
+                                        @endif
                                     </h3>
                                     <p class="text-muted mb-0">
                                         <i class="ri-checkbox-blank-circle-fill text-warning me-1"></i>
@@ -741,8 +753,14 @@
                                     </p>
                                 </div>
                                 <div class="col-md-3 border-end">
-                                    <h3 class="mb-1 fw-semibold">
-                                        ₹ 6.46 Cr
+                                    <h3 class="mb-1 fw-semibold" title="₹ {{ number_format($bookingAmount) }}">
+                                        @if($bookingAmount >= 10000000)
+                                            ₹ {{ number_format($bookingAmount / 10000000, 2) }} Cr
+                                        @elseif($bookingAmount >= 100000)
+                                            ₹ {{ number_format($bookingAmount / 100000, 2) }} L
+                                        @else
+                                            ₹ {{ number_format($bookingAmount) }}
+                                        @endif
                                     </h3>
                                     <p class="text-muted mb-0">
                                         <i class="ri-checkbox-blank-circle-fill text-success me-1"></i>
@@ -750,8 +768,14 @@
                                     </p>
                                 </div>
                                 <div class="col-md-3">
-                                    <h3 class="mb-1 fw-semibold">
-                                        ₹ 0.68 Cr
+                                    <h3 class="mb-1 fw-semibold" title="₹ {{ number_format($totalRefund) }}">
+                                        @if($totalRefund >= 10000000)
+                                            ₹ {{ number_format($totalRefund / 10000000, 2) }} Cr
+                                        @elseif($totalRefund >= 100000)
+                                            ₹ {{ number_format($totalRefund / 100000, 2) }} L
+                                        @else
+                                            ₹ {{ number_format($totalRefund) }}
+                                        @endif
                                     </h3>
                                     <p class="text-muted mb-0">
                                         <i class="ri-checkbox-blank-circle-fill text-danger me-1"></i>
@@ -803,7 +827,7 @@
                                                 Total Leads
                                             </div>
                                             <h3 class="mb-0 text-primary">
-                                                1,248
+                                                {{ number_format($totalLeads) }}
                                             </h3>
                                         </div>
                                     </div>
@@ -811,10 +835,10 @@
                                         <span class="funnel-line funnel-line-info"></span>
                                         <div>
                                             <div class="text-muted">
-                                                Qualified
+                                                Submitted
                                             </div>
                                             <h3 class="mb-0 text-info">
-                                                862
+                                                {{ number_format($submittedLeads) }}
                                             </h3>
                                         </div>
                                     </div>
@@ -822,10 +846,10 @@
                                         <span class="funnel-line funnel-line-success"></span>
                                         <div>
                                             <div class="text-muted">
-                                                Proposal Sent
+                                                Paid Bookings
                                             </div>
                                             <h3 class="mb-0 text-success">
-                                                532
+                                                {{ number_format($paidLeads) }}
                                             </h3>
                                         </div>
                                     </div>
@@ -833,10 +857,10 @@
                                         <span class="funnel-line funnel-line-warning"></span>
                                         <div>
                                             <div class="text-muted">
-                                                Negotiation
+                                                Pending Payment
                                             </div>
                                             <h3 class="mb-0 text-warning">
-                                                286
+                                                {{ number_format($pendingLeads) }}
                                             </h3>
                                         </div>
                                     </div>
@@ -844,10 +868,10 @@
                                         <span class="funnel-line funnel-line-danger"></span>
                                         <div>
                                             <div class="text-muted">
-                                                Closed Won
+                                                Drafts
                                             </div>
                                             <h3 class="mb-0 text-danger">
-                                                158
+                                                {{ number_format($draftLeads) }}
                                             </h3>
                                         </div>
                                     </div>
@@ -862,13 +886,10 @@
                                     </p>
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <h2 class="mb-0 fw-bold fs-22">
-                                            12.66%
+                                            {{ $conversionRate }}%
                                         </h2>
                                         <span class="badge bg-success-subtle text-success fs-12 py-1 px-2 rounded">
-                                            ▲ 3.2%
-                                        </span>
-                                        <span class="text-muted fs-12">
-                                            vs last 30 days
+                                            Live
                                         </span>
                                     </div>
                                 </div>
@@ -1369,8 +1390,8 @@
                                         <div>
                                             <p class="text-muted mb-1 fs-12 text-uppercase fw-semibold">Total Customers</p>
                                             <div class="d-flex align-items-center gap-2">
-                                                <h3 class="mb-0 fw-bold fs-20 text-dark">1,024</h3>
-                                                <span class="text-success fs-12 fw-medium"><i class="ri-arrow-up-s-fill align-middle"></i> 14.5%</span>
+                                                <h3 class="mb-0 fw-bold fs-20 text-dark">{{ number_format($totalLeads) }}</h3>
+                                                <span class="text-success fs-12 fw-medium">Live</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1385,8 +1406,8 @@
                                         <div>
                                             <p class="text-muted mb-1 fs-12 text-uppercase fw-semibold">Total Invoices</p>
                                             <div class="d-flex align-items-center gap-2">
-                                                <h3 class="mb-0 fw-bold fs-20 text-dark">562</h3>
-                                                <span class="text-success fs-12 fw-medium"><i class="ri-arrow-up-s-fill align-middle"></i> 10.2%</span>
+                                                <h3 class="mb-0 fw-bold fs-20 text-dark">{{ number_format($submittedLeads) }}</h3>
+                                                <span class="text-success fs-12 fw-medium">Live</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1401,8 +1422,8 @@
                                         <div>
                                             <p class="text-muted mb-1 fs-12 text-uppercase fw-semibold">Paid Invoices</p>
                                             <div class="d-flex align-items-center gap-2">
-                                                <h3 class="mb-0 fw-bold fs-20 text-dark">408</h3>
-                                                <span class="text-success fs-12 fw-medium"><i class="ri-arrow-up-s-fill align-middle"></i> 18.3%</span>
+                                                <h3 class="mb-0 fw-bold fs-20 text-dark">{{ number_format($paidLeads) }}</h3>
+                                                <span class="text-success fs-12 fw-medium">Live</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1417,8 +1438,8 @@
                                         <div>
                                             <p class="text-muted mb-1 fs-12 text-uppercase fw-semibold">Unpaid Invoices</p>
                                             <div class="d-flex align-items-center gap-2">
-                                                <h3 class="mb-0 fw-bold fs-20 text-dark">154</h3>
-                                                <span class="text-success fs-12 fw-medium"><i class="ri-arrow-up-s-fill align-middle"></i> 7.6%</span>
+                                                <h3 class="mb-0 fw-bold fs-20 text-dark">{{ number_format($pendingLeads) }}</h3>
+                                                <span class="text-success fs-12 fw-medium">Live</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1433,8 +1454,16 @@
                                         <div>
                                             <p class="text-muted mb-1 fs-12 text-uppercase fw-semibold">Refunds</p>
                                             <div class="d-flex align-items-center gap-2">
-                                                <h3 class="mb-0 fw-bold fs-20 text-dark">₹ 0.68 Cr</h3>
-                                                <span class="text-success fs-12 fw-medium"><i class="ri-arrow-up-s-fill align-middle"></i> 5.1%</span>
+                                                <h3 class="mb-0 fw-bold fs-20 text-dark">
+                                                    @if($totalRefund >= 10000000)
+                                                        ₹ {{ number_format($totalRefund / 10000000, 2) }} Cr
+                                                    @elseif($totalRefund >= 100000)
+                                                        ₹ {{ number_format($totalRefund / 100000, 2) }} L
+                                                    @else
+                                                        ₹ {{ number_format($totalRefund) }}
+                                                    @endif
+                                                </h3>
+                                                <span class="text-success fs-12 fw-medium">Live</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1469,19 +1498,19 @@
             var options = {
                 series: [{
                         name: "Collection"
-                        , data: [48, 50, 50, 57, 58, 63, 70, 63, 63, 70, 77, 69, 72, 71, 78, 86, 78, 73, 70, 81, 82, 89]
+                        , data: @json($salesTrendCollection)
                     }
                     , {
                         name: "Pending Amount"
-                        , data: [14, 15, 15, 20, 20, 21, 29, 23, 19, 29, 28, 19, 29, 32, 38, 32, 29, 28, 28, 40, 34, 40]
+                        , data: @json($salesTrendPending)
                     }
                     , {
                         name: "Booking Amount"
-                        , data: [29, 30, 30, 37, 36, 39, 45, 39, 39, 50, 43, 40, 46, 52, 58, 51, 45, 44, 54, 51, 59, 59]
+                        , data: @json($salesTrendBooking)
                     }
                     , {
                         name: "Refund Amount"
-                        , data: [5, 7, 11, 11, 7, 8, 8, 8, 8, 8, 8, 8, 9, 8, 11, 11, 10, 10, 12, 17, 15, 16]
+                        , data: @json($salesTrendRefund)
                     }
                 ]
                 , chart: {
@@ -1533,30 +1562,7 @@
                     enabled: false
                 }
                 , xaxis: {
-                    categories: [
-                        "01 Jun"
-                        , "02 Jun"
-                        , "03 Jun"
-                        , "04 Jun"
-                        , "05 Jun"
-                        , "06 Jun"
-                        , "07 Jun"
-                        , "08 Jun"
-                        , "09 Jun"
-                        , "10 Jun"
-                        , "11 Jun"
-                        , "12 Jun"
-                        , "13 Jun"
-                        , "14 Jun"
-                        , "15 Jun"
-                        , "16 Jun"
-                        , "17 Jun"
-                        , "18 Jun"
-                        , "19 Jun"
-                        , "20 Jun"
-                        , "21 Jun"
-                        , "22 Jun"
-                    ]
+                    categories: @json($salesTrendDays)
                     , axisBorder: {
                         show: false
                     }
@@ -1575,7 +1581,6 @@
                 }
                 , yaxis: {
                     min: 0
-                    , max: 100
                     , tickAmount: 5
                     , labels: {
                         formatter: function(value) {
@@ -1615,8 +1620,8 @@
         var chartDeals = getChartColorsArray("deal-stage-source");
         if (chartDeals) {
             var options = {
-                series: [100, 25, 35, 40]
-                , labels: ["Total Deals", "Complete", "Pending", "Cancle"]
+                series: [@json($paidLeads), @json($pendingLeads), @json($draftLeads)]
+                , labels: ["Paid", "Pending Payment", "Draft"]
                 , chart: {
                     height: 333
                     , type: "donut"
@@ -1646,8 +1651,8 @@
         var chartProjectStatus = getChartColorsArray("project-status-source");
         if (chartProjectStatus) {
             var options = {
-                series: [44, 55, 41, 17]
-                , labels: ["Completed", "In Progress", "On Hold", "Cancelled"]
+                series: @json($projectStatusData)
+                , labels: @json($projectStatusLabels)
                 , chart: {
                     height: 333
                     , type: "donut"

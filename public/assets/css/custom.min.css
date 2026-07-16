@@ -1,11 +1,22 @@
-body{
-    font-family: 'Inter', sans-serif !important;
+body {
+    font-family: "Inter", sans-serif !important;
     color: #000 !important;
 }
 .navbar-menu .navbar-nav .nav-link {
     padding: 3px 1rem;
 }
-.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6{
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     color: #000 !important;
 }
 .modal {
@@ -52,22 +63,12 @@ marquee {
 }
 
 .apply-gif {
-        width: 90%;
-        margin: 0 auto;
-        display: block;
-        transform: scale(1);
-        transition: .35s;
-        padding: 0;
-    }
-
-
-
-
-
-
-
-
-
+    margin: 0 auto;
+    display: block;
+    transform: scale(1);
+    transition: 0.35s;
+    padding: 0;
+}
 
 /* Another */
 
@@ -82,7 +83,7 @@ marquee {
 
 .sticky-whatsapp-button {
     bottom: 40px;
-    background: #25D366;
+    background: #25d366;
     color: #fff;
     padding: 5px 20px;
     width: auto;
@@ -142,7 +143,9 @@ marquee {
     white-space: nowrap;
     opacity: 0;
     /* Initially hidden */
-    transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
+    transition:
+        opacity 0.3s ease-in-out,
+        transform 0.5s ease-in-out;
     transform: translateX(20px);
     /* Initially push text out to the right */
 }
@@ -196,7 +199,9 @@ marquee {
     white-space: nowrap;
     opacity: 0;
     /* Initially hidden */
-    transition: opacity 0.3s ease-in-out, transform 0.5s ease-in-out;
+    transition:
+        opacity 0.3s ease-in-out,
+        transform 0.5s ease-in-out;
     transform: translateX(20px);
     /* Initially push text out to the right */
 }
@@ -246,10 +251,6 @@ marquee {
     transform: translateX(0);
 }
 
-
-
-
-
 @media (max-width: 768px) {
     .animation-element.slide-right {
         transform: translateX(100px);
@@ -288,7 +289,6 @@ marquee {
     .m-pt-15 {
         padding-top: 1.5rem;
     }
-
 
     .m-pb-0 {
         padding-bottom: 0px;
@@ -367,11 +367,8 @@ marquee {
     }
 
     .m-mx {
-        margin: 1rem 2.2rem 1rem 2.2rem
+        margin: 1rem 2.2rem 1rem 2.2rem;
     }
-
-
-
 }
 
 .plyr__video-embed,
@@ -385,8 +382,6 @@ video,
     max-width: 100% !important;
     margin: 0;
 }
-
-
 
 /* Animation End*/
 
@@ -437,8 +432,8 @@ span.invalid-feedback {
     border-color: #ebccd1;
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
