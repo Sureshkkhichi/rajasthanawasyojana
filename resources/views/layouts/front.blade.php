@@ -8,7 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="{{ config('constants.site_description') }}" name="description" />
     <meta content="{{ config('constants.site_author') }}" name="author" />
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="shortcut icon" href="assets/images/favicon.ico" />
+    <!-- Sweet Alert css-->
+    <link href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
     <script src="{{ asset('assets/js/layout.js') }}"></script>
@@ -19,109 +22,107 @@
     @livewireStyles
     @stack('styles')
     <style>
-    .custom-header {
-        background: #fffdf6;
-        /* background-image: url('{{ asset("assets/images/header.jpg") }}'); */
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-        display: flex;
-        align-items: center;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
-        z-index: 999;
-        height: auto;
-    }
-
-    .custom-header .container {
-        max-width: 1400px;
-    }
-
-    .header-logo img {
-        height: 72px;
-        width: auto;
-    }
-
-    .digital-logo {
-        height: 58px;
-        width: auto;
-    }
-
-    .header-rera {
-        font-size: 18px;
-        font-weight: 400;
-        color: #4a2100;
-        /* background-color: #f8f9fa; */
-        padding: 4px 14px;
-        /* border-radius: 6px; */
-        /* border: 1px solid #dee2e6; */
-        margin-left: 20px;
-        white-space: nowrap;
-        display: inline-block;
-    }
-
-    .header-contact {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 50px;
-    }
-
-    .header-contact a {
-        color: #4a2100;
-        font-size: 46px;
-        font-weight: 700;
-        text-decoration: none;
-        transition: .3s;
-        line-height: 1;
-    }
-
-    .header-contact a:hover {
-        color: #d62939;
-    }
-
-    @media(max-width:991px) {
         .custom-header {
-            height: 88px;
+            background: #fffdf6;
+            /* background-image: url('{{ asset("assets/images/header.jpg") }}'); */
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
+            z-index: 999;
+            height: auto;
+        }
+
+        .custom-header .container {
+            max-width: 1400px;
         }
 
         .header-logo img {
-            height: 54px;
+            height: 72px;
+            width: auto;
         }
 
-        .header-contact {
-            gap: 15px;
-            justify-content: flex-end;
-        }
-
-        .header-contact a {
-            font-size: 18px;
+        .digital-logo {
+            height: 58px;
+            width: auto;
         }
 
         .header-rera {
-            font-size: 16px;
-            margin-left: 10px;
-            padding: 2px 8px;
-        }
-    }
-
-    @media(max-width:576px) {
-        .custom-header {
-            height: 88px;
-        }
-
-        .header-logo img {
-            height: 46px;
+            padding: 4px 14px;
+            white-space: nowrap;
+            display: inline-block;
+            color: #4a2100;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .3s;
+            line-height: 1;
         }
 
         .header-contact {
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 2px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 50px;
         }
 
         .header-contact a {
-            font-size: 15px;
+            color: #4a2100;
+            font-size: 46px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .3s;
+            line-height: 1;
         }
-    }
+
+        .header-contact a:hover {
+            color: #d62939;
+        }
+
+        @media(max-width:991px) {
+            .custom-header {
+                height: 88px;
+            }
+
+            .header-logo img {
+                height: 54px;
+            }
+
+            .header-contact {
+                gap: 15px;
+                justify-content: flex-end;
+            }
+
+            .header-contact a {
+                font-size: 18px;
+            }
+
+            .header-rera {
+                font-size: 16px;
+                margin-left: 10px;
+                padding: 2px 8px;
+            }
+        }
+
+        @media(max-width:576px) {
+            .custom-header {
+                height: 88px;
+            }
+
+            .header-logo img {
+                height: 46px;
+            }
+
+            .header-contact {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 2px;
+            }
+
+            .header-contact a {
+                font-size: 15px;
+            }
+        }
     </style>
 </head>
 
@@ -177,8 +178,14 @@
     <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
     <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
+
+    <!-- Sweet Alerts js -->
+    <script src="{{ asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+    
     <script src="{{ asset('assets/libs/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/landing.init.js') }}"></script>
+
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
     @stack('scripts')
     @livewireScripts
 </body>

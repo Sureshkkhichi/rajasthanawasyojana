@@ -43,11 +43,10 @@
             <div class="card border-0 p-0">
                 <div class="card-body p-0 p-lg-0">
                     @if(session()->has('success'))
-                        <div class="alert alert-success alert-dismissible fade show mb-4">
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert">
-                            </button>
-                        </div>
+                        <div id="swal-success-message" data-message="{{ session('success') }}" style="display:none;"></div>
+                    @endif
+                    @if(session()->has('error'))
+                        <div id="swal-error-message" data-message="{{ session('error') }}" style="display:none;"></div>
                     @endif
                 </div>
             </div>
@@ -55,7 +54,16 @@
 
             <div class="card shadow-lg border-0" style="background-color: #f8f9fa;">
                 <div class="card-body p-3 p-lg-3">
-                    <form wire:submit.prevent="submit">
+                    <form wire:submit.prevent="submit" class="position-relative">
+                        {{-- Loader Overlay --}}
+                        <div wire:loading wire:target="submit" class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center rounded shadow" style="background: rgba(255,255,255,0.7); z-index: 1050; min-height: 400px;">
+                            <div class="text-center" style="position: sticky; top: 50%;">
+                                <div class="spinner-grow text-success" role="status" style="width: 3rem; height: 3rem;">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <h5 class="text-success mt-3 fw-semibold">Processing booking form, please wait...</h5>
+                            </div>
+                        </div>
                         <!-- PERSONAL DETAILS -->
                         <div class="mb-4">
                             <div class="row">
@@ -350,9 +358,18 @@
                         </div>
                         <!-- BUTTON -->
                         <div class="text-center">
-                            <input type="submit" class="btn btn-success" name="Procceds" value="Proceed for Payment"
-                                style="background: #198754;border: #198754;" />
-
+                            <button type="submit" class="btn btn-success rounded-pill px-5 py-3 fs-16 fw-semibold shadow-lg"
+                                style="background: #198754; border-color: #198754;"
+                                wire:loading.attr="disabled"
+                                wire:target="submit">
+                                <span wire:loading.remove wire:target="submit">
+                                    Proceed for Payment <i class="ri-arrow-right-line ms-1 align-middle"></i>
+                                </span>
+                                <span wire:loading wire:target="submit">
+                                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                    Processing Payment...
+                                </span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -361,7 +378,6 @@
     </section>
 
     @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!--jquery cdn-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -471,20 +487,6 @@
                         }
                     }
                     e.target.value = result;
-                });
-            });
-
-            document.addEventListener('livewire:init', () => {
-                Livewire.on('registrationClosed', () => {
-                    Swal.fire({
-                        title: 'Registration Closed!',
-                        text: 'We are sorry, but registrations for this project have been closed.',
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#dc3545'
-                    }).then(() => {
-                        window.location.href = "{{ route('front') }}";
-                    });
                 });
             });
         </script>

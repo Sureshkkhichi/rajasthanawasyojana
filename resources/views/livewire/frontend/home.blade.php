@@ -136,6 +136,8 @@
                                     ₹ {{ indianCurrency($project->price) }}
                                 </div>
                             </div>
+                        </a>
+                        <a href="{{ route('booking', $project->id) }}" class="text-decoration-none">
                             <div class="card-footer d-flex"
                                 style="flex-direction: row;justify-content: space-between;align-items: center;padding: 0;margin: 0;">
                                 <span class="float-end">

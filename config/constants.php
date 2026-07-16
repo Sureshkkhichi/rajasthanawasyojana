@@ -12,18 +12,14 @@ return [
         'cancelled' => 'Cancelled'
     ],
     'lead_statuses' => [
-        'awaiting_closed' => 'Awaiting/Closed',
-        'in_process' => 'In Complete',
-        'cancelled' => 'Cancelled',
-        'site_visited' => 'Site Visited',
-        'document_collected' => 'Document Collected',
+        'in_process' => 'In Process',
+        'unpaid' => 'Unpaid',
+        'paid' => 'Paid',
     ],
     'lead_status_colors' => [
-        'awaiting_closed' => 'secondary',
         'in_process' => 'primary',
-        'cancelled' => 'danger',
-        'site_visited' => 'warning',
-        'document_collected' => 'success',
+        'unpaid' => 'warning',
+        'paid' => 'success',
     ],
     'payment_statuses' => [
         'paid' => 'Paid',
