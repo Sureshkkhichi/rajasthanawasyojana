@@ -113,7 +113,7 @@
                                          <label class="form-label">
                                              Date Of Birth <span class="text-danger">*</span>
                                          </label>
-                                         <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror" wire:model="date_of_birth">
+                                         <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror" wire:model="date_of_birth" max="{{ now()->subYears(18)->format('Y-m-d') }}">
                                          @error('date_of_birth') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                      </div>
                                      <div class="col-md-6">
