@@ -28,4 +28,12 @@ return [
         'refunded' => 'Refund',
         'partial' => 'Partial',
     ],
+    'occupations' => [
+        'State Govt. Employee' => 'State Govt. Employee',
+        'Center Govt. Employee' => 'Center Govt. Employee',
+        'Army/Force' => 'Army/Force',
+        'Private Salary Employee' => 'Private Salary Employee',
+        'self Employee' => 'Self Employeed',
+        'Other' => 'Other',
+    ],
 ];

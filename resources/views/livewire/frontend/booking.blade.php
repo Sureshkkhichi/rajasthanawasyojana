@@ -200,12 +200,9 @@
                                         <select class="form-control @error('occupation') is-invalid @enderror"
                                             wire:model.blur="occupation">
                                             <option value="">Select Occupation</option>
-                                            <option value="State Govt. Employee">State Govt. Employee</option>
-                                            <option value="Center Govt. Employee">Center Govt. Employee</option>
-                                            <option value="Army/Force">Army/Force</option>
-                                            <option value="Private Salary Employee">Private Salary Employee</option>
-                                            <option value="self Employee">Self Employeed</option>
-                                            <option value="Other">Other</option>
+                                            @foreach(config('constants.occupations') as $key => $lbl)
+                                                <option value="{{ $key }}">{{ $lbl }}</option>
+                                            @endforeach
                                         </select>
                                         @error('occupation')
                                             <div class="invalid-feedback">
