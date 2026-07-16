@@ -1,22 +1,29 @@
 <?php
 namespace App\Livewire\Lead;
+
 use App\Models\Lead;
 use App\Models\Project;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+
 #[Layout('layouts.app')]
 #[Title('Leads')]
 class Index extends Component
 {
     use WithPagination;
+
     protected $paginationTheme = 'bootstrap';
+
     public string $search_name = '';
     public string $search_mobile = '';
     public string $search_email = '';
     public string $project_id = '';
     public string $status = '';
+    public string $search_city = '';
+    public string $search_flat_size = '';
+    public string $search_date = '';
 
     public function mount(): void
     {
@@ -49,6 +56,56 @@ class Index extends Component
     public function updatingStatus(): void
     {
         $this->resetPage();
+    }
+
+    public function updatingSearchCity(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingSearchFlatSize(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingSearchDate(): void
+    {
+        $this->resetPage();
+    }
+
+    public function resetFilters(): void
+    {
+        $this->reset([
+            'search_name',
+            'search_mobile',
+            'search_email',
+            'project_id',
+            'status',
+            'search_city',
+            'search_flat_size',
+            'search_date',
+        ]);
+        $this->resetPage();
+    }
+
+    public function sendMail(string $id): void
+    {
+        $lead = Lead::findOrFail($id);
+        $this->dispatch('swal:alert', [
+            'title' => 'Mail Sent!',
+            'text' => 'Mail successfully sent to ' . $lead->email,
+            'icon' => 'success'
+        ]);
+    }
+
+    public function sendSMS(string $id): void
+    {
+        $lead = Lead::findOrFail($id);
+        $this->dispatch('swal:alert', [
+            'title' => 'SMS Sent!',
+            'text' => 'SMS successfully sent to ' . $lead->phone,
+            'icon' => 'success'
+        ]);
     }
 
     public function export()
@@ -119,6 +176,18 @@ class Index extends Component
                     $this->status !== '',
                     fn($query) => $query->where('status', $this->status)
                 )
+                ->when(
+                    $this->search_city !== '',
+                    fn($query) => $query->where('city', $this->search_city)
+                )
+                ->when(
+                    $this->search_flat_size !== '',
+                    fn($query) => $query->where('flat_size', $this->search_flat_size)
+                )
+                ->when(
+                    $this->search_date !== '',
+                    fn($query) => $query->whereDate('created_at', $this->search_date)
+                )
                 ->latest();
 
             foreach ($leadsQuery->get() as $lead) {
@@ -177,6 +246,12 @@ class Index extends Component
                 'name',
             ]);
 
+        $cities = Lead::whereNotNull('city')
+            ->where('city', '!=', '')
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city');
+
         $leads = Lead::query()
             ->with([
                 'project:id,name',
@@ -199,16 +274,23 @@ class Index extends Component
             )
             ->when(
                 $this->project_id,
-                fn($query) =>
-                $query->where('project_id', $this->project_id)
+                fn($query) => $query->where('project_id', $this->project_id)
             )
             ->when(
                 $this->status !== '',
-                fn($query) =>
-                $query->where(
-                    'status',
-                    $this->status
-                )
+                fn($query) => $query->where('status', $this->status)
+            )
+            ->when(
+                $this->search_city !== '',
+                fn($query) => $query->where('city', $this->search_city)
+            )
+            ->when(
+                $this->search_flat_size !== '',
+                fn($query) => $query->where('flat_size', $this->search_flat_size)
+            )
+            ->when(
+                $this->search_date !== '',
+                fn($query) => $query->whereDate('created_at', $this->search_date)
             )
             ->latest()
             ->paginate(20);
@@ -216,6 +298,7 @@ class Index extends Component
         return view('livewire.lead.index', [
             'leads' => $leads,
             'projects' => $projects,
+            'cities' => $cities,
         ]);
     }
 }

@@ -85,6 +85,47 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-3">
+                                    <label class="form-label">
+                                        City
+                                    </label>
+                                    <select class="form-select" wire:model.live="search_city">
+                                        <option value="">
+                                            All Cities
+                                        </option>
+                                        @foreach($cities as $cityItem)
+                                            @if(!empty(trim($cityItem)))
+                                                <option value="{{ $cityItem }}">{{ $cityItem }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">
+                                        Flat Size
+                                    </label>
+                                    <select class="form-select" wire:model.live="search_flat_size">
+                                        <option value="">
+                                            All Flat Sizes
+                                        </option>
+                                        <option value="1 BHK">1 BHK</option>
+                                        <option value="2 BHK">2 BHK</option>
+                                        <option value="3 BHK">3 BHK</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">
+                                        Enquiry Date
+                                    </label>
+                                    <input type="date" class="form-control" wire:model.live="search_date">
+                                </div>
+                                <div class="col-md-3 d-flex align-items-end">
+                                    <button type="button" class="btn btn-soft-danger w-100" wire:click="resetFilters">
+                                        <i class="ri-refresh-line align-bottom me-1"></i> Reset Filters
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -212,13 +253,26 @@
                                                             </button>
                                                         </li>
                                                         @endif
+                                                        <li>
+                                                            <hr class="dropdown-divider">
+                                                        </li>
+                                                        <li>
+                                                            <button class="dropdown-item py-2" type="button" wire:click="sendMail('{{ $lead->id }}')">
+                                                                <i class="ri-mail-send-line align-bottom me-2 text-muted"></i> Send Mail
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button class="dropdown-item py-2" type="button" wire:click="sendSMS('{{ $lead->id }}')">
+                                                                <i class="ri-message-3-line align-bottom me-2 text-muted"></i> Send SMS
+                                                            </button>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </td>
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="10" class="text-center py-4">
+                                            <td colspan="11" class="text-center py-4">
                                                 No leads found.
                                             </td>
                                         </tr>
@@ -237,4 +291,26 @@
             </div>
         </div>
     </div>
+
+    @push('styles')
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    @endpush
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('swal:alert', (event) => {
+                    const data = event[0];
+                    Swal.fire({
+                        title: data.title,
+                        text: data.text,
+                        icon: data.icon,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#405189'
+                    });
+                });
+            });
+        </script>
+    @endpush
 </div>
