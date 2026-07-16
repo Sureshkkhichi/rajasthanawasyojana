@@ -20,6 +20,24 @@ class Show extends Component
             'state',
         ]);
     }
+    public function sendMail(): void
+    {
+        $this->dispatch('swal:alert', [
+            'title' => 'Mail Sent!',
+            'text' => 'Mail successfully sent to ' . $this->lead->email,
+            'icon' => 'success'
+        ]);
+    }
+
+    public function sendSMS(): void
+    {
+        $this->dispatch('swal:alert', [
+            'title' => 'SMS Sent!',
+            'text' => 'SMS successfully sent to ' . $this->lead->phone,
+            'icon' => 'success'
+        ]);
+    }
+
     public function render()
     {
         return view('livewire.lead.show');

@@ -195,6 +195,14 @@
                                 Edit Lead
                             </a>
                             @endif
+                            <button type="button" class="btn btn-info" wire:click="sendMail">
+                                <i class="ri-mail-send-line me-1"></i>
+                                Send Mail
+                            </button>
+                            <button type="button" class="btn btn-success" wire:click="sendSMS">
+                                <i class="ri-message-3-line me-1"></i>
+                                Send SMS
+                            </button>
                             <a href="{{ route('leads.index') }}" class="btn btn-light">
                                 Back To List
                             </a>
@@ -204,4 +212,26 @@
             </div>
         </div>
     </div>
+
+    @push('styles')
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    @endpush
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('swal:alert', (event) => {
+                    const data = event[0];
+                    Swal.fire({
+                        title: data.title,
+                        text: data.text,
+                        icon: data.icon,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#405189'
+                    });
+                });
+            });
+        </script>
+    @endpush
 </div>
