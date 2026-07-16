@@ -81,6 +81,12 @@ class Form extends Component
                     }
                 }
             }
+        } else {
+            $rajasthan = State::where('name', 'Rajasthan')->first();
+            if ($rajasthan) {
+                $this->state_id = $rajasthan->id;
+                $this->cities = City::where('state_id', $this->state_id)->orderBy('name')->get();
+            }
         }
     }
 
