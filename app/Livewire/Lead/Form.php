@@ -1,17 +1,21 @@
 <?php
 namespace App\Livewire\Lead;
+
 use App\Models\Lead;
 use App\Models\Project;
 use App\Models\State;
+use App\Models\City;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+
 #[Layout('layouts.app')]
 #[Title('Lead Form')]
 class Form extends Component
 {
     public ?Lead $lead = null;
     public $states = [];
+    public $cities = [];
     public $projects = [];
     public ?string $project_id = null;
     public string $first_name = '';
@@ -25,6 +29,7 @@ class Form extends Component
     public ?string $occupation = null;
     public ?string $address = null;
     public ?int $state_id = null;
+    public ?int $city_id = null;
     public ?string $city = null;
     public ?string $co_applicant_name = null;
     public ?string $flat_size = null;
@@ -66,6 +71,37 @@ class Form extends Component
                 'status' => $lead->status ?? 'in_process',
                 'payment_status' => $lead->payment_status ?? 'pending',
             ]);
+
+            if ($this->state_id) {
+                $this->cities = City::where('state_id', $this->state_id)->orderBy('name')->get();
+                if ($this->city) {
+                    $cityModel = City::where('state_id', $this->state_id)->where('name', $this->city)->first();
+                    if ($cityModel) {
+                        $this->city_id = $cityModel->id;
+                    }
+                }
+            }
+        }
+    }
+
+    public function updatedStateId($value): void
+    {
+        if ($value) {
+            $this->cities = City::where('state_id', $value)->orderBy('name')->get();
+        } else {
+            $this->cities = [];
+        }
+        $this->city_id = null;
+        $this->city = null;
+    }
+
+    public function updatedCityId($value): void
+    {
+        if ($value) {
+            $cityModel = City::find($value);
+            $this->city = $cityModel ? $cityModel->name : null;
+        } else {
+            $this->city = null;
         }
     }
 
@@ -75,16 +111,38 @@ class Form extends Component
             'project_id' => ['required', 'exists:projects,id'],
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
+            'father_husband_name' => ['nullable', 'string', 'max:255'],
+            'pan_number' => ['required', 'string', 'max:10'],
+            'gender' => ['required'],
             'email' => ['required', 'email', 'max:255'],
-            'phone' => ['required', 'string', 'max:20'],
+            'phone' => ['required', 'string', 'regex:/^[6-9][0-9]{9}$/'],
+            'date_of_birth' => ['required', 'date', 'before_or_equal:' . now()->subYears(18)->format('Y-m-d')],
+            'occupation' => ['required', 'in:' . implode(',', array_keys(config('constants.occupations')))],
+            'address' => ['required', 'string'],
+            'state_id' => ['required', 'exists:states,id'],
+            'city_id' => ['required', 'exists:cities,id'],
+            'flat_size' => ['required', 'in:1 BHK,2 BHK,3 BHK'],
+            'co_applicant_name' => ['nullable', 'string', 'max:255'],
+            'waiver_code' => ['nullable', 'string', 'max:50'],
             'status' => ['required'],
             'payment_status' => ['required'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'date_of_birth.before_or_equal' => 'Age must be 18 years or older.',
+            'phone.regex' => 'Phone must be a valid 10-digit mobile number.',
         ];
     }
 
     public function save()
     {
         $validated = $this->validate();
+
+        $stateModel = State::find($this->state_id);
+        $stateName = $stateModel ? $stateModel->name : null;
 
         $data = [
             'project_id' => $this->project_id,
@@ -99,6 +157,7 @@ class Form extends Component
             'occupation' => $this->occupation,
             'address' => $this->address,
             'state_id' => $this->state_id,
+            'state_name' => $stateName,
             'city' => $this->city,
             'co_applicant_name' => $this->co_applicant_name,
             'flat_size' => $this->flat_size,
@@ -122,6 +181,7 @@ class Form extends Component
             return redirect()->route('leads.index');
         }
     }
+
     public function render()
     {
         return view('livewire.lead.form');

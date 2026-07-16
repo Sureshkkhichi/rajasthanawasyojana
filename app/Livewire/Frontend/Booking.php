@@ -217,7 +217,7 @@ class Booking extends Component
             'pan_number' => ['required', 'string', 'max:10'],
             'gender' => ['required'],
             'email' => ['required', 'email'],
-            'phone' => ['required', 'string', 'max:20'],
+            'phone' => ['required', 'string', 'regex:/^[6-9][0-9]{9}$/'],
             'date_of_birth' => ['required', 'date', 'before_or_equal:' . now()->subYears(18)->format('Y-m-d')],
             'occupation' => ['required'],
             'address' => ['required'],
@@ -231,6 +231,7 @@ class Booking extends Component
     {
         return [
             'date_of_birth.before_or_equal' => 'Age must be 18 years or older.',
+            'phone.regex' => 'Phone must be a valid 10-digit mobile number.',
         ];
     }
     public function submit()

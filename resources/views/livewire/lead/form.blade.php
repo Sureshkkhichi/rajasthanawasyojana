@@ -65,13 +65,15 @@
                                          <label class="form-label">
                                              Father / Husband Name
                                          </label>
-                                         <input type="text" class="form-control" wire:model="father_husband_name">
+                                         <input type="text" class="form-control @error('father_husband_name') is-invalid @enderror" wire:model="father_husband_name">
+                                         @error('father_husband_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                      </div>
                                      <div class="col-md-6">
                                          <label class="form-label">
-                                             PAN Number
+                                             PAN Number <span class="text-danger">*</span>
                                          </label>
-                                         <input type="text" class="form-control" wire:model="pan_number">
+                                         <input type="text" class="form-control text-uppercase @error('pan_number') is-invalid @enderror" wire:model="pan_number" maxlength="10">
+                                         @error('pan_number') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                      </div>
                                      <div class="col-md-6">
                                          <label class="form-label">
@@ -84,85 +86,109 @@
                                          <label class="form-label">
                                              Mobile <span class="text-danger">*</span>
                                          </label>
-                                         <input type="text" class="form-control @error('phone') is-invalid @enderror" wire:model="phone">
+                                         <input type="text" class="form-control @error('phone') is-invalid @enderror" wire:model="phone" maxlength="10">
                                          @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                      </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            Gender
-                                        </label>
-                                        <select class="form-select" wire:model="gender">
-                                            <option value="">
-                                                Select Gender
-                                            </option>
-                                            <option value="male">
-                                                Male
-                                            </option>
-                                            <option value="female">
-                                                Female
-                                            </option>
-                                            <option value="other">
-                                                Other
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            Date Of Birth
-                                        </label>
-                                        <input type="date" class="form-control" wire:model="date_of_birth">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            Occupation
-                                        </label>
-                                        <input type="text" class="form-control" wire:model="occupation">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            Flat Size
-                                        </label>
-                                        <input type="text" class="form-control" wire:model="flat_size">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label class="form-label">
-                                            Address
-                                        </label>
-                                        <textarea class="form-control" rows="3" wire:model="address"></textarea>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            State
-                                        </label>
-                                        <select class="form-select" wire:model="state_id">
-                                            <option value="">
-                                                Select State
-                                            </option>
-                                            @foreach($states as $state)
-                                                <option value="{{ $state->id }}">
-                                                    {{ $state->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            City
-                                        </label>
-                                        <input type="text" class="form-control" wire:model="city">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            Co Applicant
-                                        </label>
-                                        <input type="text" class="form-control" wire:model="co_applicant_name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">
-                                            Waiver Code
-                                        </label>
-                                        <input type="text" class="form-control" wire:model="waiver_code">
-                                    </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             Gender <span class="text-danger">*</span>
+                                         </label>
+                                         <select class="form-select @error('gender') is-invalid @enderror" wire:model="gender">
+                                             <option value="">
+                                                 Select Gender
+                                             </option>
+                                             <option value="male">
+                                                 Male
+                                             </option>
+                                             <option value="female">
+                                                 Female
+                                             </option>
+                                             <option value="other">
+                                                 Other
+                                             </option>
+                                         </select>
+                                         @error('gender') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             Date Of Birth <span class="text-danger">*</span>
+                                         </label>
+                                         <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror" wire:model="date_of_birth">
+                                         @error('date_of_birth') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             Occupation <span class="text-danger">*</span>
+                                         </label>
+                                         <select class="form-select @error('occupation') is-invalid @enderror" wire:model="occupation">
+                                             <option value="">Select Occupation</option>
+                                             @foreach(config('constants.occupations') as $key => $lbl)
+                                                 <option value="{{ $key }}">{{ $lbl }}</option>
+                                             @endforeach
+                                         </select>
+                                         @error('occupation') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             Flat Size <span class="text-danger">*</span>
+                                         </label>
+                                         <select class="form-select @error('flat_size') is-invalid @enderror" wire:model="flat_size">
+                                             <option value="">Select Flat Size</option>
+                                             <option value="1 BHK">1 BHK</option>
+                                             <option value="2 BHK">2 BHK</option>
+                                             <option value="3 BHK">3 BHK</option>
+                                         </select>
+                                         @error('flat_size') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
+                                     <div class="col-md-12">
+                                         <label class="form-label">
+                                             Address <span class="text-danger">*</span>
+                                         </label>
+                                         <textarea class="form-control @error('address') is-invalid @enderror" rows="3" wire:model="address"></textarea>
+                                         @error('address') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             State <span class="text-danger">*</span>
+                                         </label>
+                                         <select class="form-select @error('state_id') is-invalid @enderror" wire:model="state_id">
+                                             <option value="">
+                                                 Select State
+                                             </option>
+                                             @foreach($states as $state)
+                                                 <option value="{{ $state->id }}">
+                                                     {{ $state->name }}
+                                                 </option>
+                                             @endforeach
+                                         </select>
+                                         @error('state_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             City <span class="text-danger">*</span>
+                                         </label>
+                                         <select class="form-select @error('city_id') is-invalid @enderror" wire:model="city_id">
+                                             <option value="">Select City</option>
+                                             @foreach($cities as $c)
+                                                 <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                             @endforeach
+                                         </select>
+                                         @error('city_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             Co Applicant
+                                         </label>
+                                         <input type="text" class="form-control @error('co_applicant_name') is-invalid @enderror" wire:model="co_applicant_name">
+                                         @error('co_applicant_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
+                                     <div class="col-md-6">
+                                         <label class="form-label">
+                                             Waiver Code
+                                         </label>
+                                         <input type="text" class="form-control @error('waiver_code') is-invalid @enderror" wire:model="waiver_code">
+                                         @error('waiver_code') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                     </div>
                                 </div>
                             </div>
                         </div>
