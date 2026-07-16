@@ -73,6 +73,12 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::get('/{lead:id}/edit', LeadForm::class)
             ->name('edit');
     });
+    // Agents
+    Route::prefix('agents')->name('agents.')->group(function () {
+        Route::get('/', \App\Livewire\Agent\Index::class)->name('index');
+        Route::get('/create', \App\Livewire\Agent\Form::class)->name('create');
+        Route::get('/{agent}/edit', \App\Livewire\Agent\Form::class)->name('edit');
+    });
     // Deals
     Route::prefix('deals')->name('deals.')->group(function () {
         // Deal Listing

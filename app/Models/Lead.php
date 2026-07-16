@@ -70,6 +70,11 @@ class Lead extends Model
         return $this->belongsTo(Project::class);
     }
 
+    public function agent()
+    {
+        return $this->belongsTo(Agent::class, 'waiver_code', 'code');
+    }
+
     public function state()
     {
         return $this->belongsTo(State::class);

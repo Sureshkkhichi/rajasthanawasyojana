@@ -123,7 +123,23 @@
                                 </tr>
                                 <tr>
                                     <th>Waiver Code</th>
-                                    <td>{{ $lead->waiver_code ?: '-' }}</td>
+                                    <td>
+                                        @if($lead->agent)
+                                            <span class="badge bg-light text-primary border border-primary fs-12">
+                                                {{ $lead->waiver_code }}
+                                            </span>
+                                            <span class="ms-2 fw-semibold text-secondary">
+                                                (Agent: {{ $lead->agent->name }} - 
+                                                @if($lead->agent->commission_type === 'percentage')
+                                                    {{ number_format($lead->agent->commission_value, 2) }}% Comm.
+                                                @else
+                                                    ₹{{ number_format($lead->agent->commission_value, 2) }} Comm.
+                                                @endif)
+                                            </span>
+                                        @else
+                                            {{ $lead->waiver_code ?: '-' }}
+                                        @endif
+                                    </td>
                                 </tr>
                             </table>
                         </div>

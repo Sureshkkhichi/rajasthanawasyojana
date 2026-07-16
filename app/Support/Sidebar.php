@@ -84,6 +84,13 @@ class Sidebar
                         'icon' => 'ri-hand-coin-line',
                         'permission' => 'deals.view',
                     ],
+                    [
+                        'title' => 'Agents',
+                        'route' => 'agents.index',
+                        'is_route' => true,
+                        'icon' => 'ri-user-star-line',
+                        'permission' => 'leads.view',
+                    ],
                 ],
             ],
             // FINANCE

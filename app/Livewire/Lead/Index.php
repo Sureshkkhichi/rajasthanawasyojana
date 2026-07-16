@@ -152,6 +152,7 @@ class Index extends Component
                 ->with([
                     'project:id,name',
                     'state:id,name',
+                    'agent:id,name,code,commission_type,commission_value',
                 ])
                 ->when(
                     $this->search_name,
@@ -256,6 +257,7 @@ class Index extends Component
             ->with([
                 'project:id,name',
                 'state:id,name',
+                'agent:id,name,code,commission_type,commission_value',
             ])
             ->when(
                 $this->search_name,

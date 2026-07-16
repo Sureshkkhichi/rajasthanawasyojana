@@ -189,9 +189,16 @@
                                                     {{ $lead->first_name }}
                                                     {{ $lead->last_name }}
                                                 </div>
-                                                <small class="text-muted">
-                                                    {{ $lead->pan_number }}
-                                                </small>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <small class="text-muted">
+                                                        {{ $lead->pan_number }}
+                                                    </small>
+                                                    @if($lead->agent)
+                                                        <span class="badge bg-light text-primary border border-primary fs-11" title="Agent: {{ $lead->agent->name }} ({{ $lead->agent->commission_type === 'percentage' ? $lead->agent->commission_value.'%' : '₹'.$lead->agent->commission_value }} Comm.)">
+                                                            {{ $lead->waiver_code }}
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             </td>
                                             <td>
                                                 <div>
