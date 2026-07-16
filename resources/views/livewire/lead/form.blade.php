@@ -151,29 +151,33 @@
                                          <label class="form-label">
                                              State <span class="text-danger">*</span>
                                          </label>
-                                         <select class="form-select @error('state_id') is-invalid @enderror" wire:model="state_id">
-                                             <option value="">
-                                                 Select State
-                                             </option>
-                                             @foreach($states as $state)
-                                                 <option value="{{ $state->id }}">
-                                                     {{ $state->name }}
+                                         <div wire:ignore wire:key="state-container-{{ $state_id }}">
+                                             <select id="state-select" class="form-select @error('state_id') is-invalid @enderror" wire:model.blur="state_id">
+                                                 <option value="">
+                                                     Select State
                                                  </option>
-                                             @endforeach
-                                         </select>
-                                         @error('state_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                                 @foreach($states as $state)
+                                                     <option value="{{ $state->id }}">
+                                                         {{ $state->name }}
+                                                     </option>
+                                                 @endforeach
+                                             </select>
+                                         </div>
+                                         @error('state_id') <div class="text-danger mt-1 fs-12">{{ $message }}</div> @enderror
                                      </div>
                                      <div class="col-md-6">
                                          <label class="form-label">
                                              City <span class="text-danger">*</span>
                                          </label>
-                                         <select class="form-select @error('city_id') is-invalid @enderror" wire:model="city_id">
-                                             <option value="">Select City</option>
-                                             @foreach($cities as $c)
-                                                 <option value="{{ $c->id }}">{{ $c->name }}</option>
-                                             @endforeach
-                                         </select>
-                                         @error('city_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                         <div wire:ignore wire:key="city-container-{{ $state_id }}-{{ $city_id }}-{{ count($cities) }}">
+                                             <select id="city-select" class="form-select @error('city_id') is-invalid @enderror" wire:model.blur="city_id">
+                                                 <option value="">Select City</option>
+                                                 @foreach($cities as $c)
+                                                     <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                                 @endforeach
+                                             </select>
+                                         </div>
+                                         @error('city_id') <div class="text-danger mt-1 fs-12">{{ $message }}</div> @enderror
                                      </div>
                                      <div class="col-md-6">
                                          <label class="form-label">
@@ -258,4 +262,99 @@
             </form>
         </div>
     </div>
+
+    @push('styles')
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <style>
+            /* Fix Select2 height & styling to match bootstrap 5 in Velzon theme */
+            .select2-container--default .select2-selection--single {
+                height: 38px !important;
+                border: 1px solid #ced4da !important;
+                border-radius: 0.25rem !important;
+                padding: 6px 12px !important;
+                display: flex;
+                align-items: center;
+            }
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 36px !important;
+            }
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                padding-left: 0 !important;
+                color: #212529 !important;
+            }
+            .select2-container {
+                width: 100% !important;
+            }
+        </style>
+    @endpush
+
+    @push('scripts')
+        <!--jquery cdn-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <!--select2 cdn-->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <script>
+            function initSelect2() {
+                // State Select2
+                const stateSelect = $('#state-select');
+                if (stateSelect.length) {
+                    if (stateSelect.hasClass("select2-hidden-accessible")) {
+                        stateSelect.select2('destroy');
+                    }
+                    stateSelect.select2({
+                        placeholder: "Select State",
+                        allowClear: false
+                    }).on('change', function (e) {
+                        let val = $(this).val();
+                        if (String(val || '') !== String(@this.state_id || '')) {
+                            @this.set('state_id', val);
+                        }
+                    });
+                }
+
+                // City Select2
+                const citySelect = $('#city-select');
+                if (citySelect.length) {
+                    if (citySelect.hasClass("select2-hidden-accessible")) {
+                        citySelect.select2('destroy');
+                    }
+                    citySelect.select2({
+                        placeholder: "Select City",
+                        allowClear: false
+                    }).on('change', function (e) {
+                        let val = $(this).val();
+                        if (String(val || '') !== String(@this.city_id || '')) {
+                            @this.set('city_id', val);
+                        }
+                    });
+                }
+            }
+
+            $(document).ready(function () {
+                initSelect2();
+
+                // Auto-focus search text box on open
+                $(document).on('select2:open', () => {
+                    setTimeout(() => {
+                        const searchField = document.querySelector('.select2-search__field');
+                        if (searchField) {
+                            searchField.focus();
+                        }
+                    }, 50);
+                });
+            });
+
+            document.addEventListener('livewire:init', () => {
+                Livewire.hook('request', ({ fail, respond, succeed }) => {
+                    succeed(({ status, response }) => {
+                        setTimeout(() => {
+                            initSelect2();
+                        }, 50);
+                    });
+                });
+            });
+        </script>
+    @endpush
 </div>
