@@ -39,6 +39,9 @@ class Form extends Component
             403
         );
         $this->lead = $lead ?? new Lead();
+        if ($this->lead->exists && is_null($this->lead->created_by)) {
+            abort(403, 'Website leads cannot be edited.');
+        }
         $this->states = State::orderBy('name')->get();
         $this->projects = Project::orderBy('name')->get();
 
@@ -104,10 +107,15 @@ class Form extends Component
             'payment_status' => $this->payment_status,
         ];
 
+        if ($this->lead->exists && is_null($this->lead->created_by)) {
+            abort(403, 'Website leads cannot be edited.');
+        }
+
         if ($this->lead->exists) {
             $this->lead->update($data);
             session()->flash('success', 'Lead updated successfully.');
         } else {
+            $data['created_by'] = auth()->id();
             $data['is_submitted'] = true;
             $this->lead = Lead::create($data);
             session()->flash('success', 'Lead created successfully.');

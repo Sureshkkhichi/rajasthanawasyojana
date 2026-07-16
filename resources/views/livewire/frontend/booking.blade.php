@@ -360,7 +360,7 @@
                         </div>
                         <!-- BUTTON -->
                         <div class="text-center">
-                            <button type="submit" class="btn btn-success rounded-pill px-5 py-3 fs-16 fw-semibold shadow-lg"
+                            <button type="submit" class="btn btn-success rounded-pill fw-semibold shadow-lg"
                                 style="background: #198754; border-color: #198754;"
                                 wire:loading.attr="disabled"
                                 wire:target="submit">

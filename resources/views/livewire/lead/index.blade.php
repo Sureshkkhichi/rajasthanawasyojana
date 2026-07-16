@@ -141,8 +141,7 @@
                                     </thead>
                                     <tbody>
                                         @forelse($leads as $lead)
-                                        <tr style="cursor:pointer"
-                                            onclick="window.location='{{ route('leads.edit', $lead->id) }}'">
+                                        <tr>
                                             <td> {{ $loop->iteration }} </td>
                                             <td>
                                                 <div class="fw-semibold">
@@ -194,11 +193,13 @@
                                                         Action
                                                     </button>
                                                     <ul class="dropdown-menu shadow">
+                                                        @if(!is_null($lead->created_by))
                                                         <li>
                                                             <a class="dropdown-item py-2" href="{{ route('leads.edit', $lead->id) }}">
                                                                 <i class="ri-edit-line align-bottom me-2 text-muted"></i> Edit
                                                             </a>
                                                         </li>
+                                                        @endif
                                                         <li>
                                                             <a class="dropdown-item py-2" href="{{ route('leads.show', $lead->id) }}">
                                                                 <i class="ri-eye-line align-bottom me-2 text-muted"></i> View

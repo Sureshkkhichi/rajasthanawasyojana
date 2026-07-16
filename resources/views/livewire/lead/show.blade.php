@@ -189,10 +189,12 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body d-flex gap-2">
+                            @if(!is_null($lead->created_by))
                             <a href="{{ route('leads.edit', $lead->id) }}" class="btn btn-primary">
                                 <i class="ri-pencil-line me-1"></i>
                                 Edit Lead
                             </a>
+                            @endif
                             <a href="{{ route('leads.index') }}" class="btn btn-light">
                                 Back To List
                             </a>
