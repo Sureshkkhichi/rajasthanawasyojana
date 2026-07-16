@@ -30,7 +30,6 @@ class Form extends Component
     public string $address = '';
     public string $status = 'upcoming';
     public string $is_active = 'active';
-    public string $show_on_homepage = 'inactive';
     public $projectTypes = [];
     public $flats = [];
     public $sliderImages = [];
@@ -61,7 +60,6 @@ class Form extends Component
             'address' => 'nullable|string|max:500',
             'status' => 'required|in:upcoming,active,completed,hold,cancelled',
             'is_active' => 'required|in:active,inactive',
-            'show_on_homepage' => 'required|in:active,inactive',
             'featured_image_file' => 'nullable|image|max:2048',
             'price' => 'required|numeric',
             'registration_status' => 'required|in:open,closed',
@@ -87,7 +85,6 @@ class Form extends Component
             $this->address = $project->address ?? '';
             $this->status = $project->status;
             $this->is_active = $project->is_active;
-            $this->show_on_homepage = $project->show_on_homepage;
             $this->featured_image = $project->featured_image;
             $this->price = $project->price;
             $this->registration_status = $project->registration_status ?? 'open';
@@ -383,7 +380,6 @@ class Form extends Component
         ]);
         $this->status = 'upcoming';
         $this->is_active = 'active';
-        $this->show_on_homepage = 'inactive';
         $this->sliders = [];
         $this->infoUploadIteration = 0;
         $this->activeTab = 'generalTab';

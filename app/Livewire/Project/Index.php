@@ -66,19 +66,6 @@ class Index extends Component
             : 'active';
         $project->save();
     }
-    public function toggleShowOnHomepage(string $id): void
-    {
-        abort_unless(
-            auth()->user()->can('projects.edit'),
-            403
-        );
-        $project = Project::findOrFail($id);
-        $project->show_on_homepage =
-            $project->show_on_homepage === 'active'
-            ? 'inactive'
-            : 'active';
-        $project->save();
-    }
     public function render()
     {
         $projects = Project::query()

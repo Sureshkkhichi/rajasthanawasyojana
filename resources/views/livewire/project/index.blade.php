@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label class="form-label">
-                                        Project Status
+                                        Project Stage
                                     </label>
                                     <select class="form-select" wire:model.live="status">
                                         <option value=""> All Status </option>
@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">
-                                        Visibility
+                                        Status
                                     </label>
                                     <select class="form-select" wire:model.live="is_active">
                                         <option value="">
@@ -114,9 +114,8 @@
                                             <th> Project Type </th>
                                             <th> Flat </th>
                                             <th> Location </th>
-                                            <th>Project Status</th>
-                                            <th>Visibility</th>
-                                            <th>Show on Homepage</th>
+                                            <th>Project Stage</th>
+                                            <th>Status</th>
                                             <th width="130"> Action </th>
                                         </tr>
                                     </thead>
@@ -153,17 +152,6 @@
                                                         <span
                                                             class="badge {{ $project->is_active === 'active' ? 'bg-success' : 'bg-danger' }}">
                                                             {{ ucfirst($project->is_active) }}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td onclick="event.stopPropagation();">
-                                                    <div class="form-check form-switch d-flex align-items-center gap-2">
-                                                        <input class="form-check-input" type="checkbox" role="switch"
-                                                            wire:change="toggleShowOnHomepage('{{ $project->id }}')"
-                                                            @checked($project->show_on_homepage === 'active')>
-                                                        <span
-                                                            class="badge {{ $project->show_on_homepage === 'active' ? 'bg-success' : 'bg-danger' }}">
-                                                            {{ $project->show_on_homepage === 'active' ? 'Active' : 'Inactive' }}
                                                         </span>
                                                     </div>
                                                 </td>

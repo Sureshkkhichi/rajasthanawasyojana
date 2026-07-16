@@ -144,7 +144,7 @@
                                             </div>
                                             {{-- Status --}}
                                             <div class="col-xl-3 col-md-6">
-                                                <label class="form-label">Project Status</label>
+                                                <label class="form-label">Project Stage</label>
                                                 <select
                                                     class="form-select rounded-pill @error('status') is-invalid @enderror"
                                                     wire:model="status">
@@ -188,25 +188,6 @@
                                                     <option value="closed">Closed</option>
                                                 </select>
                                                 @error('registration_status')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                            {{-- Show on Homepage --}}
-                                            <div class="col-xl-3 col-md-6">
-                                                <label class="form-label">Show on Homepage</label>
-                                                <select
-                                                    class="form-select rounded-pill @error('show_on_homepage') is-invalid @enderror"
-                                                    wire:model="show_on_homepage">
-                                                    <option value="active">
-                                                        Active
-                                                    </option>
-                                                    <option value="inactive">
-                                                        Inactive
-                                                    </option>
-                                                </select>
-                                                @error('show_on_homepage')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
