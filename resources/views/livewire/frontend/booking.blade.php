@@ -56,12 +56,14 @@
                 <div class="card-body p-3 p-lg-3">
                     <form wire:submit.prevent="submit" class="position-relative">
                         {{-- Loader Overlay --}}
-                        <div wire:loading wire:target="submit" class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center rounded shadow" style="background: rgba(255,255,255,0.7); z-index: 1050; min-height: 400px;">
-                            <div class="text-center" style="position: sticky; top: 50%;">
-                                <div class="spinner-grow text-success" role="status" style="width: 3rem; height: 3rem;">
-                                    <span class="visually-hidden">Loading...</span>
+                        <div wire:loading wire:target="submit" style="display: none;">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center rounded shadow" style="background: rgba(255,255,255,0.7); z-index: 1050; min-height: 400px;">
+                                <div class="text-center" style="position: sticky; top: 50%;">
+                                    <div class="spinner-grow text-success" role="status" style="width: 3rem; height: 3rem;">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <h5 class="text-success mt-3 fw-semibold">Processing booking form, please wait...</h5>
                                 </div>
-                                <h5 class="text-success mt-3 fw-semibold">Processing booking form, please wait...</h5>
                             </div>
                         </div>
                         <!-- PERSONAL DETAILS -->
