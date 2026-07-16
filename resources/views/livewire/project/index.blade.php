@@ -116,6 +116,7 @@
                                             <th> Location </th>
                                             <th>Project Stage</th>
                                             <th>Status</th>
+                                            <th>Registration</th>
                                             <th width="130"> Action </th>
                                         </tr>
                                     </thead>
@@ -156,6 +157,17 @@
                                                     </div>
                                                 </td>
                                                 <td onclick="event.stopPropagation();">
+                                                    <div class="form-check form-switch d-flex align-items-center gap-2">
+                                                        <input class="form-check-input" type="checkbox" role="switch"
+                                                            wire:change="toggleRegistrationStatus('{{ $project->id }}')"
+                                                            @checked($project->registration_status === 'open')>
+                                                        <span
+                                                            class="badge {{ $project->registration_status === 'open' ? 'bg-success' : 'bg-danger' }}">
+                                                            {{ $project->registration_status === 'open' ? 'Open' : 'Closed' }}
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td onclick="event.stopPropagation();">
                                                     <div class="dropdown">
                                                         <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
                                                             Action
@@ -177,7 +189,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="10" class="text-center py-4"> No projects found. </td>
+                                                <td colspan="11" class="text-center py-4"> No projects found. </td>
                                             </tr>
                                         @endforelse
                                     </tbody>

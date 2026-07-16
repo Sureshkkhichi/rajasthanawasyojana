@@ -66,6 +66,19 @@ class Index extends Component
             : 'active';
         $project->save();
     }
+    public function toggleRegistrationStatus(string $id): void
+    {
+        abort_unless(
+            auth()->user()->can('projects.edit'),
+            403
+        );
+        $project = Project::findOrFail($id);
+        $project->registration_status =
+            $project->registration_status === 'open'
+            ? 'closed'
+            : 'open';
+        $project->save();
+    }
     public function render()
     {
         $projects = Project::query()
