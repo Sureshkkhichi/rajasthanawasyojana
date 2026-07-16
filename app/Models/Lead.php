@@ -12,7 +12,6 @@ class Lead extends Model
 
     protected $fillable = [
         'project_id',
-        'created_by',
 
         'status',
         'payment_status',
@@ -59,10 +58,6 @@ class Lead extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function creator()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
 
     public function project()
     {

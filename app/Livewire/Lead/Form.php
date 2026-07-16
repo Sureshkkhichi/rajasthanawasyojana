@@ -108,7 +108,6 @@ class Form extends Component
             $this->lead->update($data);
             session()->flash('success', 'Lead updated successfully.');
         } else {
-            $data['created_by'] = auth()->id();
             $data['is_submitted'] = true;
             $this->lead = Lead::create($data);
             session()->flash('success', 'Lead created successfully.');

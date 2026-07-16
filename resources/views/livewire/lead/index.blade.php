@@ -132,7 +132,6 @@
                                             <th> Project </th>
                                             <th> City </th>
                                             <th> Flat Size </th>
-                                            <th> Source / Added By </th>
                                             <th> Lead Status </th>
                                             <th> Payment Status </th>
                                             <th> Enquiry Date </th>
@@ -165,17 +164,6 @@
                                             <td> {{ $lead->project?->name }} </td>
                                             <td> {{ $lead->city }} </td>
                                             <td> {{ $lead->flat_size }} </td>
-                                            <td>
-                                                @if(is_null($lead->created_by))
-                                                    <span class="badge bg-soft-success text-success">
-                                                        Website
-                                                    </span>
-                                                @else
-                                                    <span class="badge bg-soft-primary text-primary" title="Added by {{ $lead->creator?->name }}">
-                                                        <i class="ri-user-line me-1"></i> {{ $lead->creator?->name }}
-                                                    </span>
-                                                @endif
-                                            </td>
                                             <td>
                                                 <span
                                                     class="badge bg-{{ config('constants.lead_status_colors.' . $lead->status) }}">
@@ -216,7 +204,7 @@
                                                                 <i class="ri-eye-line align-bottom me-2 text-muted"></i> View
                                                             </a>
                                                         </li>
-                                                        @if(auth()->user()->can('leads.delete') && $lead->created_by === auth()->id())
+                                                        @if(auth()->user()->can('leads.delete'))
                                                         <li>
                                                             <button class="dropdown-item py-2 text-danger" type="button" wire:click="delete('{{ $lead->id }}')" wire:confirm="Are you sure?">
                                                                 <i class="ri-delete-bin-line align-bottom me-2"></i> Delete
@@ -229,7 +217,7 @@
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="11" class="text-center py-4">
+                                            <td colspan="10" class="text-center py-4">
                                                 No leads found.
                                             </td>
                                         </tr>

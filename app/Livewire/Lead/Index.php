@@ -86,7 +86,6 @@ class Index extends Component
                 'Waiver Code',
                 'Project',
                 'Lead Status',
-                'Source / Added By',
                 'Enquiry Date',
                 'Enquiry Time'
             ]);
@@ -96,7 +95,6 @@ class Index extends Component
                 ->with([
                     'project:id,name',
                     'state:id,name',
-                    'creator:id,name',
                 ])
                 ->when(
                     $this->search_name,
@@ -142,7 +140,6 @@ class Index extends Component
                     $lead->waiver_code,
                     $lead->project?->name ?? '',
                     config('constants.lead_statuses.' . $lead->status, $lead->status),
-                    is_null($lead->created_by) ? 'Website' : ($lead->creator?->name ?? ''),
                     $lead->created_at?->format('d M Y') ?? '',
                     $lead->created_at?->format('h:i A') ?? ''
                 ]);
@@ -161,12 +158,6 @@ class Index extends Component
             403
         );
         $lead = Lead::findOrFail($id);
-        
-        if ($lead->created_by !== auth()->id()) {
-            session()->flash('error', 'You can only delete leads created by yourself.');
-            return;
-        }
-
         $lead->delete();
         session()->flash(
             'success',
@@ -190,7 +181,6 @@ class Index extends Component
             ->with([
                 'project:id,name',
                 'state:id,name',
-                'creator:id,name',
             ])
             ->when(
                 $this->search_name,
