@@ -139,6 +139,19 @@
     @stack('scripts')
     @livewireScripts
     <script src="{{ asset('assets/js/app.js') }}"></script>
+    <script>
+        document.addEventListener('show.bs.dropdown', function (event) {
+            var openDropdowns = document.querySelectorAll('.dropdown-toggle.show');
+            openDropdowns.forEach(function (dropdownToggle) {
+                if (dropdownToggle !== event.target) {
+                    var dropdownInstance = bootstrap.Dropdown.getInstance(dropdownToggle);
+                    if (dropdownInstance) {
+                        dropdownInstance.hide();
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
