@@ -153,8 +153,18 @@
                                         </p>
                                     </div>
                                     <div class="flex-shrink-0 ms-3">
-                                        <button class="btn btn-danger" wire:click="cancelAllotment" wire:confirm="Are you sure you want to cancel this unit allotment? This will return the unit to Available status.">
-                                            <i class="ri-close-circle-line me-1"></i> Cancel Allotment
+                                        <button class="btn btn-danger" 
+                                                wire:click="cancelAllotment" 
+                                                wire:loading.attr="disabled"
+                                                wire:target="cancelAllotment"
+                                                wire:confirm="Are you sure you want to cancel this unit allotment? This will return the unit to Available status.">
+                                            <span wire:loading.remove wire:target="cancelAllotment">
+                                                <i class="ri-close-circle-line me-1"></i> Cancel Allotment
+                                            </span>
+                                            <span wire:loading wire:target="cancelAllotment">
+                                                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                                Cancelling Allotment...
+                                            </span>
                                         </button>
                                     </div>
                                 </div>
@@ -211,8 +221,18 @@
                                                         </td>
                                                         <td>
                                                             @if($unit->status === 'Available')
-                                                                <button class="btn btn-sm btn-success px-3" wire:click="allotInventory('{{ $unit->id }}')" wire:confirm="Are you sure you want to allot Flat {{ $unit->flat_no }} to this customer? An allotment letter will be sent automatically.">
-                                                                    Allot Unit
+                                                                <button class="btn btn-sm btn-success px-3" 
+                                                                        wire:click="allotInventory('{{ $unit->id }}')" 
+                                                                        wire:loading.attr="disabled"
+                                                                        wire:target="allotInventory"
+                                                                        wire:confirm="Are you sure you want to allot Flat {{ $unit->flat_no }} to this customer? An allotment letter will be sent automatically.">
+                                                                    <span wire:loading.remove wire:target="allotInventory('{{ $unit->id }}')">
+                                                                        Allot Unit
+                                                                    </span>
+                                                                    <span wire:loading wire:target="allotInventory('{{ $unit->id }}')">
+                                                                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                                                        Sending Letter...
+                                                                    </span>
                                                                 </button>
                                                             @else
                                                                 <button class="btn btn-sm btn-light disabled px-3" disabled>Not Available</button>
@@ -235,8 +255,18 @@
                                                         </td>
                                                         <td>
                                                             @if($unit->status === 'Available')
-                                                                <button class="btn btn-sm btn-success px-3" wire:click="allotInventory('{{ $unit->id }}')" wire:confirm="Are you sure you want to allot Plot {{ $unit->plot_no }} to this customer? An allotment letter will be sent automatically.">
-                                                                    Allot Unit
+                                                                <button class="btn btn-sm btn-success px-3" 
+                                                                        wire:click="allotInventory('{{ $unit->id }}')" 
+                                                                        wire:loading.attr="disabled"
+                                                                        wire:target="allotInventory"
+                                                                        wire:confirm="Are you sure you want to allot Plot {{ $unit->plot_no }} to this customer? An allotment letter will be sent automatically.">
+                                                                    <span wire:loading.remove wire:target="allotInventory('{{ $unit->id }}')">
+                                                                        Allot Unit
+                                                                    </span>
+                                                                    <span wire:loading wire:target="allotInventory('{{ $unit->id }}')">
+                                                                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                                                        Sending Letter...
+                                                                    </span>
                                                                 </button>
                                                             @else
                                                                 <button class="btn btn-sm btn-light disabled px-3" disabled>Not Available</button>

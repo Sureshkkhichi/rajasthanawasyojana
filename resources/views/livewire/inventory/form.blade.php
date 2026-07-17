@@ -149,10 +149,6 @@
                                             <select class="form-select @error('unit_type') is-invalid @enderror" wire:model="unit_type">
                                                 <option value="">Select Unit Type</option>
                                                 <option value="EWS">EWS</option>
-                                                <option value="LIG">LIG</option>
-                                                <option value="MIG">MIG</option>
-                                                <option value="HIG">HIG</option>
-                                                <option value="General">General</option>
                                             </select>
                                             @error('unit_type') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
