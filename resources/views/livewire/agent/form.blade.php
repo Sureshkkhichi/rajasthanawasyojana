@@ -88,7 +88,7 @@
                                     {{-- Commission Type --}}
                                     <div class="col-md-12">
                                         <label class="form-label">Commission Type <span class="text-danger">*</span></label>
-                                        <select class="form-select @error('commission_type') is-invalid @enderror" wire:model="commission_type">
+                                        <select class="form-select @error('commission_type') is-invalid @enderror" wire:model.live="commission_type">
                                             <option value="percentage">Percentage (%)</option>
                                             <option value="fixed">Fixed Amount (₹)</option>
                                         </select>

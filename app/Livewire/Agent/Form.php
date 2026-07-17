@@ -18,7 +18,7 @@ class Form extends Component
     public string $phone = '';
     public string $code = '';
     public string $commission_type = 'percentage';
-    public float $commission_value = 0;
+    public ?float $commission_value = null;
     public string $status = 'active';
 
     public function mount(?Agent $agent = null): void
@@ -35,11 +35,16 @@ class Form extends Component
             $this->phone = $agent->phone ?? '';
             $this->code = $agent->code;
             $this->commission_type = $agent->commission_type;
-            $this->commission_value = (float)$agent->commission_value;
+            $this->commission_value = $agent->commission_value !== null ? (float)$agent->commission_value : null;
             $this->status = $agent->status;
         } else {
             $this->generateCode();
         }
+    }
+
+    public function updatedCommissionType(): void
+    {
+        $this->commission_value = null;
     }
 
     public function generateCode(): void
