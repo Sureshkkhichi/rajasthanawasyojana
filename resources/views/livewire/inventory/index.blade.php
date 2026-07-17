@@ -83,132 +83,126 @@
 
             {{-- Summary Cards --}}
             <div class="row">
-                <div class="col-xl-2 col-md-4">
-                    <div class="card card-animate">
+                {{-- Card 1: Total Units --}}
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-semibold text-muted text-truncate mb-0">Total Units</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-end justify-content-between mt-4">
-                                <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">{{ $counts['total'] }}</h4>
-                                </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-primary-subtle text-primary rounded fs-20">
-                                        <i class="ri-building-line"></i>
+                                    <span class="avatar-title bg-light text-primary rounded-circle fs-3 material-shadow">
+                                        <i class="ri-building-line align-middle"></i>
                                     </span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
+                                        {{ $inventory_type === 'Flat Project' ? 'Total Flats' : 'Total Plots' }}
+                                    </p>
+                                    <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['total'] }}">{{ $counts['total'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-xl-2 col-md-4">
-                    <div class="card card-animate">
+                {{-- Card 2: Available --}}
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-semibold text-muted text-truncate mb-0">Available</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-end justify-content-between mt-4">
-                                <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">{{ $counts['available'] }}</h4>
-                                </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-success-subtle text-success rounded fs-20">
-                                        <i class="ri-checkbox-circle-line"></i>
+                                    <span class="avatar-title bg-light text-success rounded-circle fs-3 material-shadow">
+                                        <i class="ri-checkbox-circle-line align-middle"></i>
                                     </span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
+                                        {{ $inventory_type === 'Flat Project' ? 'Available Flats' : 'Available Plots' }}
+                                    </p>
+                                    <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['available'] }}">{{ $counts['available'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-xl-2 col-md-4">
-                    <div class="card card-animate">
+                {{-- Card 3: Hold --}}
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-semibold text-muted text-truncate mb-0">Hold</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-end justify-content-between mt-4">
-                                <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">{{ $counts['hold'] }}</h4>
-                                </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-warning-subtle text-warning rounded fs-20">
-                                        <i class="ri-time-line"></i>
+                                    <span class="avatar-title bg-light text-warning rounded-circle fs-3 material-shadow">
+                                        <i class="ri-time-line align-middle"></i>
                                     </span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
+                                        {{ $inventory_type === 'Flat Project' ? 'Hold Flats' : 'Hold Plots' }}
+                                    </p>
+                                    <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['hold'] }}">{{ $counts['hold'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-xl-2 col-md-4">
-                    <div class="card card-animate">
+                {{-- Card 4: Booked --}}
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-semibold text-muted text-truncate mb-0">Booked</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-end justify-content-between mt-4">
-                                <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">{{ $counts['booked'] }}</h4>
-                                </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-danger-subtle text-danger rounded fs-20">
-                                        <i class="ri-calendar-todo-line"></i>
+                                    <span class="avatar-title bg-light text-danger rounded-circle fs-3 material-shadow">
+                                        <i class="ri-calendar-todo-line align-middle"></i>
                                     </span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
+                                        {{ $inventory_type === 'Flat Project' ? 'Booked Flats' : 'Booked Plots' }}
+                                    </p>
+                                    <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['booked'] }}">{{ $counts['booked'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-xl-2 col-md-4">
-                    <div class="card card-animate">
+                {{-- Card 5: Registered --}}
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-semibold text-muted text-truncate mb-0">Registered</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-end justify-content-between mt-4">
-                                <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">{{ $counts['registered'] }}</h4>
-                                </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-info-subtle text-info rounded fs-20">
-                                        <i class="ri-award-line"></i>
+                                    <span class="avatar-title bg-light text-info rounded-circle fs-3 material-shadow">
+                                        <i class="ri-award-line align-middle"></i>
                                     </span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
+                                        {{ $inventory_type === 'Flat Project' ? 'Registered Flats' : 'Registered Plots' }}
+                                    </p>
+                                    <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['registered'] }}">{{ $counts['registered'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-xl-2 col-md-4">
-                    <div class="card card-animate">
+                {{-- Card 6: Blocked --}}
+                <div class="col-lg-4 col-md-6 mb-3">
+                    <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-semibold text-muted text-truncate mb-0">Blocked</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-end justify-content-between mt-4">
-                                <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">{{ $counts['blocked'] }}</h4>
-                                </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-dark-subtle text-dark rounded fs-20">
-                                        <i class="ri-lock-line"></i>
+                                    <span class="avatar-title bg-light text-dark rounded-circle fs-3 material-shadow">
+                                        <i class="ri-lock-line align-middle"></i>
                                     </span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
+                                        {{ $inventory_type === 'Flat Project' ? 'Blocked Flats' : 'Blocked Plots' }}
+                                    </p>
+                                    <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['blocked'] }}">{{ $counts['blocked'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
