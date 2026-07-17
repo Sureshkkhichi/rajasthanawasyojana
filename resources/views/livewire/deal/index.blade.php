@@ -25,12 +25,32 @@
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted fw-semibold">Keyword</label>
-                                    <input type="text" class="form-control" placeholder="Project Name / Slug" wire:model.live.debounce.300ms="keyword">
+                                <div class="col-md-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" placeholder="Search by Name"
+                                        wire:model.live.debounce.500ms="search_name">
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted fw-semibold">Status</label>
+                                <div class="col-md-2">
+                                    <label class="form-label">Mobile Number</label>
+                                    <input type="text" class="form-control" placeholder="Search by Mobile"
+                                        wire:model.live.debounce.500ms="search_mobile">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="text" class="form-control" placeholder="Search by Email"
+                                        wire:model.live.debounce.500ms="search_email">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">Project</label>
+                                    <select class="form-select" wire:model.live="project_id">
+                                        <option value="">All Projects</option>
+                                        @foreach($projects as $project)
+                                            <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label">Status</label>
                                     <select class="form-select" wire:model.live="status">
                                         <option value="">All Status</option>
                                         <option value="Paid">Paid</option>
@@ -38,6 +58,37 @@
                                         <option value="Partial">Partial</option>
                                         <option value="Refund">Refund</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-3">
+                                    <label class="form-label">City</label>
+                                    <select class="form-select" wire:model.live="search_city">
+                                        <option value="">All Cities</option>
+                                        @foreach($cities as $cityItem)
+                                            @if(!empty(trim($cityItem)))
+                                                <option value="{{ $cityItem }}">{{ $cityItem }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Flat Size</label>
+                                    <select class="form-select" wire:model.live="search_flat_size">
+                                        <option value="">All Flat Sizes</option>
+                                        <option value="1 BHK">1 BHK</option>
+                                        <option value="2 BHK">2 BHK</option>
+                                        <option value="3 BHK">3 BHK</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Enquiry Date</label>
+                                    <input type="date" class="form-control" wire:model.live="search_date">
+                                </div>
+                                <div class="col-md-3 d-flex align-items-end">
+                                    <button type="button" class="btn btn-soft-danger w-100" wire:click="resetFilters">
+                                        <i class="ri-refresh-line align-bottom me-1"></i> Reset Filters
+                                    </button>
                                 </div>
                             </div>
                         </div>
