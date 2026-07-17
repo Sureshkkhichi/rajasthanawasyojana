@@ -112,7 +112,7 @@
                                             <th width="100"> Image </th>
                                             <th> Project Name </th>
                                             <th> Project Type </th>
-                                            <th> Flat </th>
+                                            <th> Inventory Type </th>
                                             <th> Location </th>
                                             <th>Project Stage</th>
                                             <th>Status</th>
@@ -140,7 +140,11 @@
                                                     <small class="text-muted"> {{ $project->slug }} </small>
                                                 </td>
                                                 <td> {{ $project->projectType?->name }} </td>
-                                                <td> {{ $project->flat?->name ?? '-' }} </td>
+                                                <td>
+                                                    <span class="badge {{ $project->inventory_type === 'flat' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} text-uppercase">
+                                                        {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }}
+                                                    </span>
+                                                </td>
                                                 <td> {{ $project->city }} </td>
                                                 <td>
                                                     <span class="badge bg-primary"> {{ ucfirst($project->status) }} </span>

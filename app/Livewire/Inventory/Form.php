@@ -90,11 +90,7 @@ class Form extends Component
     {
         $project = Project::find($this->project_id);
         if (!$project) return 'Plot Project';
-        $typeName = $project->projectType ? $project->projectType->name : '';
-        if (stripos($typeName, 'plot') !== false) {
-            return 'Plot Project';
-        }
-        return 'Flat Project';
+        return $project->inventory_type === 'flat' ? 'Flat Project' : 'Plot Project';
     }
 
     public function save()

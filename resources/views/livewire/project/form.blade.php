@@ -123,6 +123,21 @@
                                                 </div>
                                                 @enderror
                                             </div>
+                                            {{-- Inventory Type --}}
+                                            <div class="col-xl-3 col-md-6">
+                                                <label class="form-label">
+                                                    Inventory Type <span class="text-danger">*</span>
+                                                </label>
+                                                <select class="form-select rounded-pill @error('inventory_type') is-invalid @enderror" wire:model="inventory_type">
+                                                    <option value="plot">Plotting (Plots)</option>
+                                                    <option value="flat">Flats (Apartments)</option>
+                                                </select>
+                                                @error('inventory_type')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                                @enderror
+                                            </div>
                                             {{-- City --}}
                                             <div class="col-xl-3 col-md-6">
                                                 <label class="form-label">City</label>

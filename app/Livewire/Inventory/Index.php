@@ -84,12 +84,7 @@ class Index extends Component
             $this->inventory_type = 'Plot Project';
             return;
         }
-        $typeName = $project->projectType ? $project->projectType->name : '';
-        if (stripos($typeName, 'plot') !== false) {
-            $this->inventory_type = 'Plot Project';
-        } else {
-            $this->inventory_type = 'Flat Project';
-        }
+        $this->inventory_type = $project->inventory_type === 'flat' ? 'Flat Project' : 'Plot Project';
     }
 
     public function updatedSelectedProjectId(): void

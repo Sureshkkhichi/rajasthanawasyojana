@@ -13,6 +13,7 @@ class Project extends Model
     protected $fillable = [
         'project_type_id',
         'flat_id',
+        'inventory_type',
         'name',
         'slug',
         'city',

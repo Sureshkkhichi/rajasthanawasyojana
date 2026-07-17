@@ -26,6 +26,7 @@ class Form extends Component
     public string $slug = '';
     public string $project_type_id = '';
     public string $flat_id = '';
+    public string $inventory_type = 'plot';
     public $city = '';
     public string $address = '';
     public string $status = 'upcoming';
@@ -56,6 +57,7 @@ class Form extends Component
                 Rule::unique('projects', 'slug')->ignore($this->projectId),
             ],
             'project_type_id' => 'required|exists:project_types,id',
+            'inventory_type' => 'required|in:plot,flat',
             'city' => 'nullable',
             'address' => 'nullable|string|max:500',
             'status' => 'required|in:upcoming,active,completed,hold,cancelled',
@@ -81,6 +83,7 @@ class Form extends Component
             $this->name = $project->name;
             $this->slug = $project->slug;
             $this->project_type_id = $project->project_type_id;
+            $this->inventory_type = $project->inventory_type ?? 'plot';
             $this->city = $project->city;
             $this->address = $project->address ?? '';
             $this->status = $project->status;
@@ -369,6 +372,7 @@ class Form extends Component
             'slug',
             'project_type_id',
             'flat_id',
+            'inventory_type',
             'city',
             'address',
             'sliderImages',
