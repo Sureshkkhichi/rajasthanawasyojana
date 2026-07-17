@@ -293,16 +293,16 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Flat Size <span class="text-danger">*</span>
+                                            {{ $project->inventory_type === 'flat' ? 'Flat Type' : 'Area (Sq. Yards)' }} <span class="text-danger">*</span>
                                         </label>
                                         <select class="form-select @error('flat_size') is-invalid @enderror"
                                             wire:model.blur="flat_size">
                                             <option value="">
-                                                Select Flat Size
+                                                {{ $project->inventory_type === 'flat' ? 'Select Flat Type' : 'Select Area' }}
                                             </option>
-                                            <option value="1 BHK">1 BHK</option>
-                                            <option value="2 BHK">2 BHK</option>
-                                            <option value="3 BHK">3 BHK</option>
+                                            @foreach($sizes as $size)
+                                                <option value="{{ $size }}">{{ $project->inventory_type === 'flat' ? $size : $size . ' Sq. Yards' }}</option>
+                                            @endforeach
                                         </select>
                                         @error('flat_size')
                                             <div class="invalid-feedback">

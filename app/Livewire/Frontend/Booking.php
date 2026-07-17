@@ -19,6 +19,7 @@ class Booking extends Component
     public ?Lead $lead = null;
     public $states = [];
     public $cities = [];
+    public array $sizes = [];
     /*
     |--------------------------------------------------------------------------
     | Personal Information
@@ -74,6 +75,32 @@ class Booking extends Component
                 ->where('state_id', $this->state_id)
                 ->orderBy('name')
                 ->get();
+        }
+
+        $this->loadSizes();
+    }
+
+    private function loadSizes(): void
+    {
+        if ($this->project->inventory_type === 'flat') {
+            $this->sizes = \App\Models\Inventory::query()
+                ->where('project_id', $this->project->id)
+                ->where('inventory_type', 'flat')
+                ->whereNotNull('flat_type')
+                ->where('flat_type', '!=', '')
+                ->distinct()
+                ->orderBy('flat_type')
+                ->pluck('flat_type')
+                ->toArray();
+        } else {
+            $this->sizes = \App\Models\Inventory::query()
+                ->where('project_id', $this->project->id)
+                ->where('inventory_type', 'plot')
+                ->whereNotNull('area_sq_yards')
+                ->distinct()
+                ->orderBy('area_sq_yards')
+                ->pluck('area_sq_yards')
+                ->toArray();
         }
     }
     public function updated($property): void

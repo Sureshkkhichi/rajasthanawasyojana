@@ -128,18 +128,20 @@
                                          </select>
                                          @error('occupation') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                      </div>
-                                     <div class="col-md-6">
-                                         <label class="form-label">
-                                             Flat Size <span class="text-danger">*</span>
-                                         </label>
-                                         <select class="form-select @error('flat_size') is-invalid @enderror" wire:model="flat_size">
-                                             <option value="">Select Flat Size</option>
-                                             <option value="1 BHK">1 BHK</option>
-                                             <option value="2 BHK">2 BHK</option>
-                                             <option value="3 BHK">3 BHK</option>
-                                         </select>
-                                         @error('flat_size') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                     </div>
+                                      <div class="col-md-6">
+                                          <label class="form-label">
+                                              {{ $project_inventory_type === 'flat' ? 'Flat Type' : 'Area (Sq. Yards)' }} <span class="text-danger">*</span>
+                                          </label>
+                                          <select class="form-select @error('flat_size') is-invalid @enderror" wire:model="flat_size">
+                                              <option value="">
+                                                  {{ $project_inventory_type === 'flat' ? 'Select Flat Type' : 'Select Area' }}
+                                              </option>
+                                              @foreach($sizes as $size)
+                                                  <option value="{{ $size }}">{{ $project_inventory_type === 'flat' ? $size : $size . ' Sq. Yards' }}</option>
+                                              @endforeach
+                                          </select>
+                                          @error('flat_size') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                      </div>
                                      <div class="col-md-12">
                                          <label class="form-label">
                                              Address <span class="text-danger">*</span>
@@ -232,16 +234,16 @@
                                     @error('payment_status') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                                 <hr>
-                                 <div class="mb-3">
-                                     <label class="form-label">Project <span class="text-danger">*</span></label>
-                                     <select class="form-select @error('project_id') is-invalid @enderror" wire:model="project_id">
-                                         <option value="">Select Project</option>
-                                         @foreach($projects as $p)
-                                             <option value="{{ $p->id }}">{{ $p->name }}</option>
-                                         @endforeach
-                                     </select>
-                                     @error('project_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                 </div>
+                                  <div class="mb-3">
+                                      <label class="form-label">Project <span class="text-danger">*</span></label>
+                                      <select class="form-select @error('project_id') is-invalid @enderror" wire:model.live="project_id">
+                                          <option value="">Select Project</option>
+                                          @foreach($projects as $p)
+                                              <option value="{{ $p->id }}">{{ $p->name }}</option>
+                                          @endforeach
+                                      </select>
+                                      @error('project_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                  </div>
                                  @if($lead && $lead->exists)
                                  <div class="mb-3">
                                      <strong>Created:</strong>

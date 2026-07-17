@@ -18,6 +18,8 @@ class Form extends Component
     public $cities = [];
     public $projects = [];
     public ?string $project_id = null;
+    public array $sizes = [];
+    public string $project_inventory_type = 'flat';
     public string $first_name = '';
     public string $last_name = '';
     public ?string $father_husband_name = null;
@@ -88,6 +90,43 @@ class Form extends Component
                 $this->cities = City::where('state_id', $this->state_id)->orderBy('name')->get();
             }
         }
+
+        $this->loadSizes();
+    }
+
+    private function loadSizes(): void
+    {
+        $this->sizes = [];
+        if (!$this->project_id) {
+            return;
+        }
+        $project = Project::find($this->project_id);
+        if (!$project) {
+            return;
+        }
+
+        $this->project_inventory_type = $project->inventory_type;
+
+        if ($project->inventory_type === 'flat') {
+            $this->sizes = \App\Models\Inventory::query()
+                ->where('project_id', $this->project_id)
+                ->where('inventory_type', 'flat')
+                ->whereNotNull('flat_type')
+                ->where('flat_type', '!=', '')
+                ->distinct()
+                ->orderBy('flat_type')
+                ->pluck('flat_type')
+                ->toArray();
+        } else {
+            $this->sizes = \App\Models\Inventory::query()
+                ->where('project_id', $this->project_id)
+                ->where('inventory_type', 'plot')
+                ->whereNotNull('area_sq_yards')
+                ->distinct()
+                ->orderBy('area_sq_yards')
+                ->pluck('area_sq_yards')
+                ->toArray();
+        }
     }
 
     public function updatedStateId($value): void
@@ -111,6 +150,13 @@ class Form extends Component
         }
     }
 
+    public function updatedProjectId($value): void
+    {
+        $this->project_id = $value;
+        $this->loadSizes();
+        $this->flat_size = null;
+    }
+
     protected function rules(): array
     {
         return [
@@ -127,7 +173,7 @@ class Form extends Component
             'address' => ['required', 'string'],
             'state_id' => ['required', 'exists:states,id'],
             'city_id' => ['required', 'exists:cities,id'],
-            'flat_size' => ['required', 'in:1 BHK,2 BHK,3 BHK'],
+            'flat_size' => ['required', 'string'],
             'co_applicant_name' => ['nullable', 'string', 'max:255'],
             'waiver_code' => ['nullable', 'string', 'max:50'],
             'status' => ['required'],
