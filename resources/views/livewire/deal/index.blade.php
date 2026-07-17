@@ -156,9 +156,9 @@
                                                                  </button>
                                                              </li>
                                                              <li>
-                                                                 <button class="dropdown-item py-2" type="button" wire:click="viewFullForm('{{ $deal->id }}')">
+                                                                 <a class="dropdown-item py-2" href="{{ route('deals.show', $deal->id) }}">
                                                                      <i class="ri-fullscreen-line align-bottom me-2 text-muted"></i> View Full Form
-                                                                 </button>
+                                                                 </a>
                                                              </li>
                                                          </ul>
                                                      </div>

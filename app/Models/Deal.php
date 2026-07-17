@@ -11,6 +11,7 @@ class Deal extends Model
 
     protected $fillable = [
         'project_id',
+        'allotted_inventory_id',
         'first_name',
         'last_name',
         'father_husband_name',
@@ -53,5 +54,10 @@ class Deal extends Model
     public function agent()
     {
         return $this->belongsTo(Agent::class, 'waiver_code', 'code');
+    }
+
+    public function allottedInventory()
+    {
+        return $this->belongsTo(Inventory::class, 'allotted_inventory_id');
     }
 }

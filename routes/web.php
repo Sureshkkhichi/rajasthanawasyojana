@@ -10,6 +10,7 @@ use App\Livewire\Lead\Form as LeadForm;
 use App\Livewire\Lead\Show as LeadShow;
 use App\Livewire\Deal\Index as DealIndex;
 use App\Livewire\Deal\Form as DealForm;
+use App\Livewire\Deal\Show as DealShow;
 use App\Livewire\Invoice\Index as InvoiceIndex;
 use App\Livewire\Refund\Index as RefundIndex;
 use App\Livewire\Flat\Index as FlatIndex;
@@ -96,6 +97,8 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::get('/create', DealForm::class)->name('create');
         // Edit Deal
         Route::get('/{deal:id}/edit', DealForm::class)->name('edit');
+        // View Deal Details
+        Route::get('/{deal:id}', DealShow::class)->name('show');
     });
     // Invoices
     Route::prefix('invoices')->name('invoices.')->group(function () {
