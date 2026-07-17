@@ -42,8 +42,6 @@ class Index extends Component
     public ?string $actionUnitId = null;
     public string $tempPrice = '';
     public string $tempStatus = '';
-    public string $tempHoldBy = '';
-    public string $tempHoldTill = '';
     public string $tempRemarks = '';
 
     protected $queryString = [
@@ -190,8 +188,6 @@ class Index extends Component
         if ($unit) {
             $this->actionUnitId = $id;
             $this->tempStatus = $unit->status;
-            $this->tempHoldBy = $unit->hold_by ?? '';
-            $this->tempHoldTill = $unit->hold_till ? $unit->hold_till->format('Y-m-d') : '';
             $this->tempRemarks = $unit->remarks ?? '';
             $this->statusModalOpen = true;
         }
@@ -201,30 +197,17 @@ class Index extends Component
     {
         $this->validate([
             'tempStatus' => 'required|string',
-            'tempHoldBy' => 'required_if:tempStatus,Hold',
-            'tempHoldTill' => 'required_if:tempStatus,Hold',
+            'tempRemarks' => 'nullable|string',
         ]);
 
         $unit = Inventory::find($this->actionUnitId);
         if ($unit) {
             $oldStatus = $unit->status;
             
-            $updateData = [
+            $unit->update([
                 'status' => $this->tempStatus,
-                'remarks' => $this->tempRemarks,
-            ];
-
-            if ($this->tempStatus === 'Hold') {
-                $updateData['hold_by'] = $this->tempHoldBy;
-                $updateData['hold_till'] = $this->tempHoldTill;
-            } elseif ($this->tempStatus === 'Available') {
-                $updateData['hold_by'] = null;
-                $updateData['hold_till'] = null;
-                $updateData['booked_by'] = null;
-                $updateData['booked_on'] = null;
-            }
-
-            $unit->update($updateData);
+                'remarks' => $this->tempRemarks ?: null,
+            ]);
 
             // Log history
             InventoryHistory::create([
@@ -332,6 +315,9 @@ class Index extends Component
             'importFile' => 'required|file|mimes:csv,txt|max:2048',
         ]);
 
+        $project = Project::findOrFail($this->selectedProjectId);
+        $inventoryType = $project->inventory_type;
+
         $filePath = $this->importFile->getRealPath();
         $file = fopen($filePath, 'r');
         
@@ -342,16 +328,51 @@ class Index extends Component
         while (($row = fgetcsv($file)) !== false) {
             if (count($row) < 5) continue;
             
-            Inventory::create([
-                'project_id' => $this->selectedProjectId,
-                'plot_no' => $row[0],
-                'area' => (float)$row[1],
-                'road_size' => $row[2],
-                'plc_percentage' => (float)($row[3] ?? 0.0),
-                'facing_type' => $row[4] ?? null,
-                'price' => (float)$row[5],
-                'status' => 'Available',
-            ]);
+            if ($inventoryType === 'flat') {
+                // Flat columns: 0: Sr. No., 1: Floor, 2: Flat No., 3: Type, 4: Unit Type, 5: Area (SBUP), 6: Carpet Area
+                $floor = $row[1] ?? '';
+                $flatNo = $row[2] ?? '';
+                $flatType = $row[3] ?? '';
+                $unitType = $row[4] ?? '';
+                $areaSbup = (float)($row[5] ?? 0.0);
+                $carpetArea = (float)($row[6] ?? 0.0);
+                
+                Inventory::create([
+                    'project_id' => $project->id,
+                    'inventory_type' => 'flat',
+                    'floor' => $floor,
+                    'flat_no' => $flatNo,
+                    'flat_type' => $flatType,
+                    'unit_type' => $unitType,
+                    'area_sbup' => $areaSbup,
+                    'carpet_area' => $carpetArea,
+                    'price' => 0.0, // Default price
+                    'status' => 'Available',
+                ]);
+            } else {
+                // Plot columns: 0: Sr. No., 1: Plot No., 2: Area (Sq. Yards), 3: Road Size, 4: PLC %, 5: PLC Status, 6: Sold
+                $plotNo = $row[1] ?? '';
+                $areaSqYards = (float)($row[2] ?? 0.0);
+                $roadSize = $row[3] ?? '';
+                $plcPercentage = (float)($row[4] ?? 0.0);
+                $plcStatus = $row[5] ?? '';
+                $soldStatus = $row[6] ?? 'Available';
+                
+                // Map 'Sold' to 'Booked' status
+                $status = (stripos($soldStatus, 'sold') !== false) ? 'Booked' : 'Available';
+
+                Inventory::create([
+                    'project_id' => $project->id,
+                    'inventory_type' => 'plot',
+                    'plot_no' => $plotNo,
+                    'area_sq_yards' => $areaSqYards,
+                    'road_size' => $roadSize,
+                    'plc_percentage' => $plcPercentage,
+                    'plc_status' => $plcStatus,
+                    'price' => 0.0, // Default price
+                    'status' => $status,
+                ]);
+            }
             $count++;
         }
         fclose($file);
@@ -366,6 +387,9 @@ class Index extends Component
 
     public function exportUnits()
     {
+        $project = Project::findOrFail($this->selectedProjectId);
+        $inventoryType = $project->inventory_type;
+
         $query = Inventory::query()
             ->where('project_id', $this->selectedProjectId);
 
@@ -373,13 +397,15 @@ class Index extends Component
             $query->where('status', $this->statusFilter);
         }
         if ($this->facingFilter) {
-            $query->where('facing_type', $this->facingFilter);
+            $filterCol = ($inventoryType === 'flat') ? 'unit_type' : 'plc_status';
+            $query->where($filterCol, $this->facingFilter);
         }
         if ($this->searchPlot) {
-            $query->where('plot_no', 'like', "%{$this->searchPlot}%");
+            $searchCol = ($inventoryType === 'flat') ? 'flat_no' : 'plot_no';
+            $query->where($searchCol, 'like', "%{$this->searchPlot}%");
         }
 
-        $units = $query->orderBy('plot_no')->get();
+        $units = $query->orderBy($inventoryType === 'flat' ? 'flat_no' : 'plot_no')->get();
 
         $headers = [
             'Content-type' => 'text/csv',
@@ -389,20 +415,36 @@ class Index extends Component
             'Expires' => '0'
         ];
 
-        $callback = function () use ($units) {
+        $callback = function () use ($units, $inventoryType) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['Plot No.', 'Area (Sq. Yards)', 'Road Size', 'PLC %', 'Facing Type', 'Price', 'Status']);
-
-            foreach ($units as $unit) {
-                fputcsv($file, [
-                    $unit->plot_no,
-                    $unit->area,
-                    $unit->road_size,
-                    $unit->plc_percentage,
-                    $unit->facing_type,
-                    $unit->price,
-                    $unit->status
-                ]);
+            
+            if ($inventoryType === 'flat') {
+                fputcsv($file, ['Floor', 'Flat No.', 'Type', 'Unit Type', 'Area (SBUP)', 'Carpet Area', 'Price', 'Status']);
+                foreach ($units as $unit) {
+                    fputcsv($file, [
+                        $unit->floor,
+                        $unit->flat_no,
+                        $unit->flat_type,
+                        $unit->unit_type,
+                        $unit->area_sbup,
+                        $unit->carpet_area,
+                        $unit->price,
+                        $unit->status
+                    ]);
+                }
+            } else {
+                fputcsv($file, ['Plot No.', 'Area (Sq. Yards)', 'Road Size', 'PLC %', 'PLC Status / Location', 'Price', 'Status']);
+                foreach ($units as $unit) {
+                    fputcsv($file, [
+                        $unit->plot_no,
+                        $unit->area_sq_yards,
+                        $unit->road_size,
+                        $unit->plc_percentage,
+                        $unit->plc_status,
+                        $unit->price,
+                        $unit->status
+                    ]);
+                }
             }
             fclose($file);
         };
@@ -440,14 +482,19 @@ class Index extends Component
             $counts['blocked'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Blocked')->count();
         }
 
-        // Facing filters distinct
-        $facingTypes = Inventory::query()
-            ->where('project_id', $this->selectedProjectId)
-            ->whereNotNull('facing_type')
-            ->where('facing_type', '!=', '')
-            ->distinct()
-            ->orderBy('facing_type')
-            ->pluck('facing_type');
+        // Facing/PLC/Unit Type filters distinct
+        $facingTypes = [];
+        if ($selectedProject) {
+            $isFlat = ($selectedProject->inventory_type === 'flat');
+            $filterCol = $isFlat ? 'unit_type' : 'plc_status';
+            $facingTypes = Inventory::query()
+                ->where('project_id', $this->selectedProjectId)
+                ->whereNotNull($filterCol)
+                ->where($filterCol, '!=', '')
+                ->distinct()
+                ->orderBy($filterCol)
+                ->pluck($filterCol);
+        }
 
         // Query units table
         $unitsQuery = Inventory::query()
@@ -457,16 +504,20 @@ class Index extends Component
             $unitsQuery->where('status', $this->statusFilter);
         }
         if ($this->facingFilter) {
-            $unitsQuery->where('facing_type', $this->facingFilter);
+            $filterCol = ($selectedProject && $selectedProject->inventory_type === 'flat') ? 'unit_type' : 'plc_status';
+            $unitsQuery->where($filterCol, $this->facingFilter);
         }
         if ($this->searchPlot) {
-            $unitsQuery->where('plot_no', 'like', "%{$this->searchPlot}%");
+            $searchCol = ($selectedProject && $selectedProject->inventory_type === 'flat') ? 'flat_no' : 'plot_no';
+            $unitsQuery->where($searchCol, 'like', "%{$this->searchPlot}%");
         }
 
-        $units = $unitsQuery->orderBy('plot_no')
+        $orderByCol = ($selectedProject && $selectedProject->inventory_type === 'flat') ? 'flat_no' : 'plot_no';
+        $units = $unitsQuery->orderBy($orderByCol)
             ->paginate($this->perPage);
 
         // Sidebar unit load
+        $selectedUnit = null;
         if ($this->selectedUnitId) {
             $selectedUnit = Inventory::find($this->selectedUnitId);
         } else {

@@ -33,6 +33,13 @@ class Sidebar
                         'icon' => 'ri-file-edit-line',
                         'permission' => 'pages.view',
                     ],
+                    [
+                        'title' => 'Projects',
+                        'route' => 'projects.index',
+                        'is_route' => true,
+                        'icon' => 'ri-folder-2-line',
+                        'permission' => 'projects.view',
+                    ],
                 ],
             ],
             'project_management' => [
@@ -43,15 +50,6 @@ class Sidebar
                         'is_route' => true,
                         'icon' => 'ri-folder-2-line',
                         'permission' => 'project.type.view',
-                    ],
-                ],
-                'projects' => [
-                    [
-                        'title' => 'Projects',
-                        'route' => 'projects.index',
-                        'is_route' => true,
-                        'icon' => 'ri-folder-2-line',
-                        'permission' => 'projects.view',
                     ],
                 ],
                 'inventory' => [

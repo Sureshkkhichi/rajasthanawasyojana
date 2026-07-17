@@ -6,44 +6,36 @@ use App\Models\Project;
 use App\Models\Inventory;
 use App\Models\InventoryHistory;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
-use Illuminate\Support\Str;
 
 #[Layout('layouts.app')]
 #[Title('Add Unit')]
 class Form extends Component
 {
-    use WithFileUploads;
-
     public ?Inventory $inventory = null;
 
-    // Fields
+    // Common Fields
     public string $project_id = '';
-    public string $plot_no = '';
-    public string $area = '';
-    public string $road_size = '';
-    public string $plc_percentage = '0';
-    public string $facing_type = '';
-    public string $length = '';
-    public string $breadth = '';
-    public string $shape = '';
-    public string $remarks = '';
+    public string $inventory_type = 'plot'; // plot, flat
     public string $price = '';
-    public string $price_in_words = '';
-    public string $cost_price = '';
-    public string $status = 'Available';
-    public string $status_effective_from = '';
-    public string $notes = '';
+    public string $status = 'Available'; // Available, Hold, Booked, Registered, Blocked, Cancelled
+    public string $remarks = '';
 
-    // File Uploads
-    public $uploaded_documents = [];
-    public $uploaded_map_layout = null;
+    // Plot Specific Fields
+    public string $plot_no = '';
+    public string $area_sq_yards = '';
+    public string $road_size = '';
+    public string $plc_percentage = '';
+    public string $plc_status = ''; // e.g. Corner
 
-    // Existing file paths
-    public array $existing_documents = [];
-    public ?string $existing_map_layout = null;
+    // Flat Specific Fields
+    public string $floor = '';
+    public string $flat_no = '';
+    public string $flat_type = ''; // 1BHK, 2BHK, 3BHK, etc.
+    public string $unit_type = ''; // EWS, LIG, MIG, HIG, etc.
+    public string $area_sbup = '';
+    public string $carpet_area = '';
 
     public function mount(?Inventory $inventory = null): void
     {
@@ -52,109 +44,117 @@ class Form extends Component
             403
         );
 
-        $this->status_effective_from = date('Y-m-d');
-
         if ($inventory && $inventory->exists) {
             $this->inventory = $inventory;
             $this->project_id = $inventory->project_id;
-            $this->plot_no = $inventory->plot_no;
-            $this->area = (string)$inventory->area;
-            $this->road_size = $inventory->road_size;
-            $this->plc_percentage = (string)$inventory->plc_percentage;
-            $this->facing_type = $inventory->facing_type ?? '';
-            $this->length = $inventory->length ? (string)$inventory->length : '';
-            $this->breadth = $inventory->breadth ? (string)$inventory->breadth : '';
-            $this->shape = $inventory->shape ?? '';
-            $this->remarks = $inventory->remarks ?? '';
+            $this->inventory_type = $inventory->inventory_type;
             $this->price = (string)$inventory->price;
-            $this->price_in_words = $inventory->price_in_words ?? '';
-            $this->cost_price = $inventory->cost_price ? (string)$inventory->cost_price : '';
             $this->status = $inventory->status;
-            $this->status_effective_from = $inventory->status_effective_from ? $inventory->status_effective_from->format('Y-m-d') : date('Y-m-d');
-            $this->notes = $inventory->notes ?? '';
-            $this->existing_documents = $inventory->documents ?? [];
-            $this->existing_map_layout = $inventory->map_layout;
+            $this->remarks = $inventory->remarks ?? '';
+
+            // Plots
+            $this->plot_no = $inventory->plot_no ?? '';
+            $this->area_sq_yards = $inventory->area_sq_yards ? (string)$inventory->area_sq_yards : '';
+            $this->road_size = $inventory->road_size ?? '';
+            $this->plc_percentage = $inventory->plc_percentage !== null ? (string)$inventory->plc_percentage : '';
+            $this->plc_status = $inventory->plc_status ?? '';
+
+            // Flats
+            $this->floor = $inventory->floor ?? '';
+            $this->flat_no = $inventory->flat_no ?? '';
+            $this->flat_type = $inventory->flat_type ?? '';
+            $this->unit_type = $inventory->unit_type ?? '';
+            $this->area_sbup = $inventory->area_sbup ? (string)$inventory->area_sbup : '';
+            $this->carpet_area = $inventory->carpet_area ? (string)$inventory->carpet_area : '';
         } else {
-            // Set default project to first active
+            // Set default project to first active project
             $firstProj = Project::query()
                 ->where('status', 'active')
                 ->where('is_active', 'active')
                 ->first();
             if ($firstProj) {
                 $this->project_id = $firstProj->id;
+                $this->inventory_type = $firstProj->inventory_type;
             }
         }
     }
 
-    public function getInventoryTypeProperty(): string
+    public function updatedProjectId($value): void
     {
-        $project = Project::find($this->project_id);
-        if (!$project) return 'Plot Project';
-        return $project->inventory_type === 'flat' ? 'Flat Project' : 'Plot Project';
+        // Keep the selected project ID, but reset all other form properties to ensure a clean switch
+        $this->resetExcept(['project_id', 'inventory']);
+
+        $project = Project::find($value);
+        if ($project) {
+            $this->inventory_type = $project->inventory_type;
+        } else {
+            $this->inventory_type = 'plot';
+        }
     }
 
     public function save()
     {
-        $this->validate([
+        $rules = [
             'project_id' => 'required|uuid|exists:projects,id',
-            'plot_no' => 'required|string|max:255',
-            'area' => 'required|numeric|min:0',
-            'road_size' => 'required|string|max:255',
-            'plc_percentage' => 'nullable|numeric|min:0|max:100',
-            'facing_type' => 'nullable|string|max:255',
-            'length' => 'nullable|numeric|min:0',
-            'breadth' => 'nullable|numeric|min:0',
-            'shape' => 'nullable|string|max:255',
-            'remarks' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'price_in_words' => 'nullable|string|max:255',
-            'cost_price' => 'nullable|numeric|min:0',
             'status' => 'required|in:Available,Hold,Booked,Registered,Blocked,Cancelled',
-            'status_effective_from' => 'nullable|date',
-            'notes' => 'nullable|string',
-            'uploaded_documents.*' => 'nullable|file|max:5120',
-            'uploaded_map_layout' => 'nullable|image|max:5120',
-        ]);
+            'remarks' => 'nullable|string',
+        ];
+
+        if ($this->inventory_type === 'plot') {
+            $rules['plot_no'] = 'required|string|max:255';
+            $rules['area_sq_yards'] = 'required|numeric|min:0';
+            $rules['road_size'] = 'required|string|max:255';
+            $rules['plc_percentage'] = 'nullable|numeric|min:0|max:100';
+            $rules['plc_status'] = 'nullable|string|max:255';
+        } else {
+            $rules['floor'] = 'required|string|max:255';
+            $rules['flat_no'] = 'required|string|max:255';
+            $rules['flat_type'] = 'required|string|max:255';
+            $rules['unit_type'] = 'required|string|max:255';
+            $rules['area_sbup'] = 'required|numeric|min:0';
+            $rules['carpet_area'] = 'required|numeric|min:0';
+        }
+
+        $validated = $this->validate($rules);
 
         $data = [
             'project_id' => $this->project_id,
-            'plot_no' => $this->plot_no,
-            'area' => $this->area,
-            'road_size' => $this->road_size,
-            'plc_percentage' => $this->plc_percentage ?: 0.0,
-            'facing_type' => $this->facing_type ?: null,
-            'length' => $this->length ?: null,
-            'breadth' => $this->breadth ?: null,
-            'shape' => $this->shape ?: null,
-            'remarks' => $this->remarks ?: null,
+            'inventory_type' => $this->inventory_type,
             'price' => $this->price,
-            'price_in_words' => $this->price_in_words ?: null,
-            'cost_price' => $this->cost_price ?: null,
             'status' => $this->status,
-            'status_effective_from' => $this->status_effective_from ?: null,
-            'notes' => $this->notes ?: null,
+            'remarks' => $this->remarks ?: null,
         ];
 
-        // Process Map Layout
-        if ($this->uploaded_map_layout) {
-            $path = $this->uploaded_map_layout->store('inventories/maps', 'public');
-            @chmod(storage_path('app/public/' . $path), 0644);
-            $data['map_layout'] = 'storage/' . $path;
-        }
+        if ($this->inventory_type === 'plot') {
+            $data['plot_no'] = $this->plot_no;
+            $data['area_sq_yards'] = $this->area_sq_yards;
+            $data['road_size'] = $this->road_size;
+            $data['plc_percentage'] = $this->plc_percentage !== '' ? $this->plc_percentage : null;
+            $data['plc_status'] = $this->plc_status ?: null;
 
-        // Process Documents
-        $docPaths = $this->existing_documents;
-        if (!empty($this->uploaded_documents)) {
-            foreach ($this->uploaded_documents as $doc) {
-                $path = $doc->store('inventories/docs', 'public');
-                @chmod(storage_path('app/public/' . $path), 0644);
-                $docPaths[] = [
-                    'name' => $doc->getClientOriginalName(),
-                    'path' => 'storage/' . $path
-                ];
-            }
+            // Clear flat fields
+            $data['floor'] = null;
+            $data['flat_no'] = null;
+            $data['flat_type'] = null;
+            $data['unit_type'] = null;
+            $data['area_sbup'] = null;
+            $data['carpet_area'] = null;
+        } else {
+            $data['floor'] = $this->floor;
+            $data['flat_no'] = $this->flat_no;
+            $data['flat_type'] = $this->flat_type;
+            $data['unit_type'] = $this->unit_type;
+            $data['area_sbup'] = $this->area_sbup;
+            $data['carpet_area'] = $this->carpet_area;
+
+            // Clear plot fields
+            $data['plot_no'] = null;
+            $data['area_sq_yards'] = null;
+            $data['road_size'] = null;
+            $data['plc_percentage'] = null;
+            $data['plc_status'] = null;
         }
-        $data['documents'] = $docPaths;
 
         if ($this->inventory && $this->inventory->exists) {
             $oldStatus = $this->inventory->status;
@@ -186,19 +186,6 @@ class Form extends Component
         }
 
         return redirect()->route('inventories.index');
-    }
-
-    public function deleteDocument(int $index): void
-    {
-        if (isset($this->existing_documents[$index])) {
-            unset($this->existing_documents[$index]);
-            $this->existing_documents = array_values($this->existing_documents);
-        }
-    }
-
-    public function deleteMapLayout(): void
-    {
-        $this->existing_map_layout = null;
     }
 
     public function render()

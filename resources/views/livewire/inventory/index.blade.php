@@ -29,8 +29,8 @@
                                         <option value="{{ $p->id }}">{{ $p->name }}</option>
                                     @endforeach
                                 </select>
-                                <span class="badge bg-success-subtle text-success d-flex align-items-center px-3 py-2 border border-success-subtle text-nowrap rounded">
-                                    {{ $this->inventory_type }}
+                                <span class="badge {{ $inventory_type === 'Flat Project' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} d-flex align-items-center px-3 py-2 border border-{{ $inventory_type === 'Flat Project' ? 'info' : 'success' }}-subtle text-nowrap rounded">
+                                    {{ $inventory_type }}
                                 </span>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                         </div>
 
                         <div class="col-md-2">
-                            <label class="form-label text-muted fw-bold">Facing / Property Type</label>
+                            <label class="form-label text-muted fw-bold">{{ $inventory_type === 'Flat Project' ? 'Unit Type' : 'PLC Status / Location' }}</label>
                             <select class="form-select" wire:model.live="facingFilter">
                                 <option value="">All</option>
                                 @foreach($facingTypes as $facing)
@@ -61,7 +61,7 @@
                         <div class="col-md-2">
                             <label class="form-label text-muted fw-bold">&nbsp;</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search Plot No..." wire:model.live.debounce.300ms="searchPlot">
+                                <input type="text" class="form-control" placeholder="{{ $inventory_type === 'Flat Project' ? 'Search Flat No...' : 'Search Plot No...' }}" wire:model.live.debounce.300ms="searchPlot">
                                 <span class="input-group-text"><i class="ri-search-line"></i></span>
                             </div>
                         </div>
@@ -268,17 +268,26 @@
                         <div class="card-body">
                             {{-- Table --}}
                             <div class="table-responsive">
-                                <table class="table table-bordered table-hover align-middle mb-0 text-center">
+                                <table class="table table-bordered table-hover align-middle mb-0 text-center text-nowrap">
                                     <thead class="table-light">
                                         <tr>
                                             <th width="40">
                                                 <input type="checkbox" class="form-check-input" wire:model.live="selectAll">
                                             </th>
-                                            <th>Plot No.</th>
-                                            <th>Area (Sq. Yards)</th>
-                                            <th>Road Size</th>
-                                            <th>PLC %</th>
-                                            <th>Facing / Property Type</th>
+                                            @if ($inventory_type === 'Flat Project')
+                                                <th>Floor</th>
+                                                <th>Flat No.</th>
+                                                <th>Type</th>
+                                                <th>Unit Type</th>
+                                                <th>Area (SBUP)</th>
+                                                <th>Carpet Area</th>
+                                            @else
+                                                <th>Plot No.</th>
+                                                <th>Area (Sq. Yards)</th>
+                                                <th>Road Size</th>
+                                                <th>PLC %</th>
+                                                <th>PLC Status / Location</th>
+                                            @endif
                                             <th>Price (₹)</th>
                                             <th>Current Status</th>
                                             <th width="120">Actions</th>
@@ -290,11 +299,20 @@
                                                 <td onclick="event.stopPropagation();">
                                                     <input type="checkbox" class="form-check-input" value="{{ $unit->id }}" wire:model.live="selectedInventories">
                                                 </td>
-                                                <td class="fw-bold">{{ $unit->plot_no }}</td>
-                                                <td>{{ number_format($unit->area, 2) }}</td>
-                                                <td>{{ $unit->road_size }}</td>
-                                                <td>{{ $unit->plc_percentage }}%</td>
-                                                <td>{{ $unit->facing_type ?: '-' }}</td>
+                                                @if ($inventory_type === 'Flat Project')
+                                                    <td>{{ $unit->floor }}</td>
+                                                    <td class="fw-bold">{{ $unit->flat_no }}</td>
+                                                    <td>{{ $unit->flat_type }}</td>
+                                                    <td>{{ $unit->unit_type }}</td>
+                                                    <td>{{ number_format($unit->area_sbup, 2) }}</td>
+                                                    <td>{{ number_format($unit->carpet_area, 2) }}</td>
+                                                @else
+                                                    <td class="fw-bold">{{ $unit->plot_no }}</td>
+                                                    <td>{{ number_format($unit->area_sq_yards, 2) }}</td>
+                                                    <td>{{ $unit->road_size }}</td>
+                                                    <td>{{ $unit->plc_percentage !== null ? $unit->plc_percentage . '%' : '-' }}</td>
+                                                    <td>{{ $unit->plc_status ?: '-' }}</td>
+                                                @endif
                                                 <td class="text-end fw-semibold">₹ {{ number_format($unit->price, 0) }}</td>
                                                 <td>
                                                     @if($unit->status === 'Available')
@@ -336,7 +354,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="9" class="text-center py-4 text-muted">No units found. Select a project or add units to begin.</td>
+                                                <td colspan="10" class="text-center py-4 text-muted">No units found. Select a project or add units to begin.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -356,7 +374,9 @@
                         <div class="card sticky-side-div">
                             <div class="card-header border-bottom d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center gap-2">
-                                    <h5 class="card-title mb-0">Plot {{ $selectedUnit->plot_no }}</h5>
+                                    <h5 class="card-title mb-0">
+                                        {{ $selectedUnit->inventory_type === 'flat' ? 'Flat ' . $selectedUnit->flat_no : 'Plot ' . $selectedUnit->plot_no }}
+                                    </h5>
                                     @if($selectedUnit->status === 'Available')
                                         <span class="badge bg-success-subtle text-success fs-10">Available</span>
                                     @elseif($selectedUnit->status === 'Hold')
@@ -379,13 +399,7 @@
                                         <a class="nav-link py-2 {{ $sidebarTab === 'general' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setSidebarTab('general')">General</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link py-2 {{ $sidebarTab === 'booking' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setSidebarTab('booking')">Booking</a>
-                                    </li>
-                                    <li class="nav-item">
                                         <a class="nav-link py-2 {{ $sidebarTab === 'history' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setSidebarTab('history')">History</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link py-2 {{ $sidebarTab === 'documents' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setSidebarTab('documents')">Docs</a>
                                     </li>
                                 </ul>
 
@@ -398,26 +412,53 @@
                                                         <td class="text-muted py-1" width="130">Project</td>
                                                         <td class="fw-bold py-1">{{ $selectedProject ? $selectedProject->name : '-' }}</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Plot No.</td>
-                                                        <td class="fw-semibold py-1">{{ $selectedUnit->plot_no }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Area (Sq. Yards)</td>
-                                                        <td class="py-1">{{ number_format($selectedUnit->area, 2) }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Road Size</td>
-                                                        <td class="py-1">{{ $selectedUnit->road_size }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">PLC %</td>
-                                                        <td class="py-1">{{ $selectedUnit->plc_percentage }}%</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Facing Type</td>
-                                                        <td class="py-1">{{ $selectedUnit->facing_type ?: '-' }}</td>
-                                                    </tr>
+                                                    @if ($selectedUnit->inventory_type === 'flat')
+                                                        <tr>
+                                                            <td class="text-muted py-1">Floor</td>
+                                                            <td class="fw-semibold py-1">{{ $selectedUnit->floor }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-muted py-1">Flat No.</td>
+                                                            <td class="fw-semibold py-1">{{ $selectedUnit->flat_no }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-muted py-1">Type</td>
+                                                            <td class="py-1">{{ $selectedUnit->flat_type }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-muted py-1">Unit Type</td>
+                                                            <td class="py-1">{{ $selectedUnit->unit_type }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-muted py-1">Area (SBUP)</td>
+                                                            <td class="py-1">{{ number_format($selectedUnit->area_sbup, 2) }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-muted py-1">Carpet Area</td>
+                                                            <td class="py-1">{{ number_format($selectedUnit->carpet_area, 2) }}</td>
+                                                        </tr>
+                                                    @else
+                                                        <tr>
+                                                            <td class="text-muted py-1">Plot No.</td>
+                                                            <td class="fw-semibold py-1">{{ $selectedUnit->plot_no }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-muted py-1">Area (Sq. Yards)</td>
+                                                            <td class="py-1">{{ number_format($selectedUnit->area_sq_yards, 2) }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-muted py-1">Road Size</td>
+                                                            <td class="py-1">{{ $selectedUnit->road_size }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-muted py-1">PLC %</td>
+                                                            <td class="py-1">{{ $selectedUnit->plc_percentage }}%</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-muted py-1">PLC Status</td>
+                                                            <td class="py-1">{{ $selectedUnit->plc_status ?: '-' }}</td>
+                                                        </tr>
+                                                    @endif
                                                     <tr>
                                                         <td class="text-muted py-1">Price</td>
                                                         <td class="fw-bold text-danger py-1">₹ {{ number_format($selectedUnit->price, 2) }}</td>
@@ -425,6 +466,10 @@
                                                     <tr>
                                                         <td class="text-muted py-1">Current Status</td>
                                                         <td class="py-1">{{ $selectedUnit->status }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-muted py-1">Remarks</td>
+                                                        <td class="py-1 text-wrap">{{ $selectedUnit->remarks ?: '-' }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="text-muted py-1">Created On</td>
@@ -437,59 +482,6 @@
                                                 </tbody>
                                             </table>
                                         </div>
-
-                                        <div class="border-top mt-3 pt-3">
-                                            <h6 class="text-uppercase fs-12 text-muted mb-2">Hold / Booking Info</h6>
-                                            <table class="table table-borderless align-middle mb-0">
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="text-muted py-1" width="130">Hold By</td>
-                                                        <td class="py-1">{{ $selectedUnit->hold_by ?: '-' }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Hold Till</td>
-                                                        <td class="py-1 text-warning">{{ $selectedUnit->hold_till ? $selectedUnit->hold_till->format('d M Y') : '-' }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Booked By</td>
-                                                        <td class="py-1">{{ $selectedUnit->booked_by ?: '-' }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Booked On</td>
-                                                        <td class="py-1">{{ $selectedUnit->booked_on ? $selectedUnit->booked_on->format('d M Y h:i A') : '-' }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Remarks</td>
-                                                        <td class="py-1 text-wrap">{{ $selectedUnit->remarks ?: '-' }}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    @elseif($sidebarTab === 'booking')
-                                        @if($selectedUnit->status === 'Booked' || $selectedUnit->status === 'Hold')
-                                            <div class="alert alert-info py-2 fs-13 mb-3">
-                                                This unit is currently under reservation.
-                                            </div>
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
-                                                    <span class="text-muted">Customer Name</span>
-                                                    <span class="fw-semibold">{{ $selectedUnit->hold_by ?: $selectedUnit->booked_by ?: 'Reserved' }}</span>
-                                                </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
-                                                    <span class="text-muted">Type</span>
-                                                    <span class="badge bg-soft-primary text-primary">{{ $selectedUnit->status }}</span>
-                                                </li>
-                                                <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
-                                                    <span class="text-muted">Date</span>
-                                                    <span>{{ $selectedUnit->hold_till ? $selectedUnit->hold_till->format('d M Y') : ($selectedUnit->booked_on ? $selectedUnit->booked_on->format('d M Y') : '-') }}</span>
-                                                </li>
-                                            </ul>
-                                        @else
-                                            <div class="text-center py-4 text-muted">
-                                                <i class="ri-information-line fs-24 mb-2"></i>
-                                                <p>No active booking or reservation for this unit.</p>
-                                            </div>
-                                        @endif
                                     @elseif($sidebarTab === 'history')
                                         @forelse($selectedUnit->histories as $history)
                                             <div class="d-flex mb-3 position-relative">
@@ -512,34 +504,6 @@
                                                 <p>No status transition logs recorded.</p>
                                             </div>
                                         @endforelse
-                                    @elseif($sidebarTab === 'documents')
-                                        @if(!empty($selectedUnit->documents))
-                                            <h6 class="fs-12 text-muted text-uppercase mb-3">Unit Documents</h6>
-                                            <div class="d-flex flex-column gap-2 mb-3">
-                                                @foreach($selectedUnit->documents as $doc)
-                                                    <a href="{{ asset($doc['path']) }}" class="btn btn-soft-secondary btn-sm text-start d-flex align-items-center justify-content-between" target="_blank">
-                                                        <span><i class="ri-file-line me-1"></i> {{ $doc['name'] }}</span>
-                                                        <i class="ri-download-2-line"></i>
-                                                    </a>
-                                                @endforeach
-                                            </div>
-                                        @endif
-
-                                        @if($selectedUnit->map_layout)
-                                            <h6 class="fs-12 text-muted text-uppercase mb-2">Map / Layout Image</h6>
-                                            <div class="border rounded p-1 text-center bg-light">
-                                                <img src="{{ asset($selectedUnit->map_layout) }}" alt="Layout" class="img-fluid rounded" style="max-height: 200px;">
-                                                <div class="mt-2">
-                                                    <a href="{{ asset($selectedUnit->map_layout) }}" target="_blank" class="btn btn-primary btn-sm w-100">
-                                                        <i class="ri-fullscreen-line me-1"></i> Open Full Image
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div class="text-center py-4 text-muted">
-                                                <p>No documents uploaded for this unit.</p>
-                                            </div>
-                                        @endif
                                     @endif
                                 </div>
                             </div>
@@ -549,7 +513,7 @@
                                 <button class="btn btn-outline-warning w-100" type="button" wire:click="openStatusModal('{{ $selectedUnit->id }}')">
                                     <i class="ri-time-line"></i> Hold
                                 </button>
-                                <button class="btn btn-outline-success w-100" type="button" onclick="window.location.href='/leads/create?project_id={{ $selectedUnit->project_id }}&plot_no={{ $selectedUnit->plot_no }}'">
+                                <button class="btn btn-outline-success w-100" type="button" onclick="window.location.href='/leads/create?project_id={{ $selectedUnit->project_id }}&plot_no={{ $selectedUnit->inventory_type === 'flat' ? $selectedUnit->flat_no : $selectedUnit->plot_no }}'">
                                     <i class="ri-book-read-line"></i> Book
                                 </button>
                                 <a href="{{ route('inventories.edit', $selectedUnit->id) }}" class="btn btn-outline-primary w-100">
@@ -559,56 +523,6 @@
                         </div>
                     </div>
                 @endif
-            </div>
-
-            {{-- Helper Description Layout Blocks --}}
-            <div class="row mt-4">
-                <div class="col-lg-3">
-                    <div class="card card-body h-100 bg-light-subtle">
-                        <h6 class="fw-semibold text-uppercase text-muted fs-11">Filter Fields Description</h6>
-                        <ul class="list-unstyled mb-0 fs-13">
-                            <li class="mb-2"><strong>Select Project:</strong> Select a project to view and search its inventory list.</li>
-                            <li class="mb-2"><strong>Inventory Type:</strong> Non-editable project classification badge loaded dynamically.</li>
-                            <li class="mb-2"><strong>Status Filter:</strong> Show all units or narrow down list by availability type.</li>
-                            <li><strong>Facing:</strong> Filter properties by corners, facing direction, or premium locations.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card card-body h-100 bg-light-subtle">
-                        <h6 class="fw-semibold text-uppercase text-muted fs-11">Status Meaning</h6>
-                        <ul class="list-unstyled mb-0 fs-13">
-                            <li class="mb-2"><span class="badge bg-success-subtle text-success">Available</span> Unit is free and ready to sell.</li>
-                            <li class="mb-2"><span class="badge bg-warning-subtle text-warning">Hold</span> Unit is temporarily held by a customer.</li>
-                            <li class="mb-2"><span class="badge bg-danger-subtle text-danger">Booked</span> Unit is booked (advance token received).</li>
-                            <li><span class="badge bg-info-subtle text-info">Registered</span> Unit registry completed.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card card-body h-100 bg-light-subtle">
-                        <h6 class="fw-semibold text-uppercase text-muted fs-11">Actions</h6>
-                        <ul class="list-unstyled mb-0 fs-13">
-                            <li class="mb-2"><strong>View:</strong> Opens side panel details layout.</li>
-                            <li class="mb-2"><strong>Edit:</strong> Open unit fields details modification form.</li>
-                            <li class="mb-2"><strong>History:</strong> Opens status log transition history tab.</li>
-                            <li><strong>More Actions:</strong> Quick price edit, status toggles, or direct deletion commands.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-3">
-                    <div class="card card-body h-100 bg-light-subtle">
-                        <h6 class="fw-semibold text-uppercase text-muted fs-11">Bulk Actions</h6>
-                        <ul class="list-unstyled mb-0 fs-13">
-                            <li class="mb-2">Select rows using checkboxes on left side of units table.</li>
-                            <li class="mb-2">Click <strong>Bulk Actions</strong> dropdown from table toolbar header.</li>
-                            <li>Perform change status or direct deletion on all selected items at once.</li>
-                        </ul>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -632,7 +546,11 @@
                         </div>
                         <div class="alert alert-info py-2 fs-12 mb-0">
                             <strong>CSV Format Headers:</strong><br>
-                            Plot No., Area (Sq. Yards), Road Size, PLC %, Facing Type, Price
+                            @if ($inventory_type === 'Flat Project')
+                                Sr. No., Floor, Flat No., Type, Unit Type, Area (SBUP), Carpet Area
+                            @else
+                                Sr. No., Plot No., Area (Sq. Yards), Road Size, PLC %, Status, Sold
+                            @endif
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -674,7 +592,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Update Status / Hold Details</h5>
+                    <h5 class="modal-title">Update Status</h5>
                     <button type="button" class="btn-close" wire:click="$set('statusModalOpen', false)"></button>
                 </div>
                 <form wire:submit="updateStatus">
@@ -690,21 +608,6 @@
                                 <option value="Cancelled">Cancelled</option>
                             </select>
                         </div>
-
-                        @if($tempStatus === 'Hold')
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="form-label">Hold By Name</label>
-                                    <input type="text" class="form-control" wire:model="tempHoldBy">
-                                    @error('tempHoldBy') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Hold Till Date</label>
-                                    <input type="date" class="form-control" wire:model="tempHoldTill">
-                                    @error('tempHoldTill') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
-                        @endif
 
                         <div class="mb-3">
                             <label class="form-label">Remarks / Change Description</label>

@@ -14,40 +14,33 @@ class Inventory extends Model
 
     protected $fillable = [
         'project_id',
+        'inventory_type',
+        'price',
+        'status',
+        'remarks',
+        
+        // Plot specific fields
         'plot_no',
-        'area',
+        'area_sq_yards',
         'road_size',
         'plc_percentage',
-        'facing_type',
-        'length',
-        'breadth',
-        'shape',
-        'remarks',
-        'price',
-        'price_in_words',
-        'cost_price',
-        'status',
-        'status_effective_from',
-        'notes',
-        'documents',
-        'map_layout',
-        'hold_by',
-        'hold_till',
-        'booked_by',
-        'booked_on',
+        'plc_status',
+
+        // Flat specific fields
+        'floor',
+        'flat_no',
+        'flat_type',
+        'unit_type',
+        'area_sbup',
+        'carpet_area',
     ];
 
     protected $casts = [
-        'area' => 'float',
-        'plc_percentage' => 'float',
-        'length' => 'float',
-        'breadth' => 'float',
         'price' => 'float',
-        'cost_price' => 'float',
-        'status_effective_from' => 'date',
-        'hold_till' => 'date',
-        'booked_on' => 'datetime',
-        'documents' => 'array',
+        'area_sq_yards' => 'float',
+        'plc_percentage' => 'float',
+        'area_sbup' => 'float',
+        'carpet_area' => 'float',
     ];
 
     /*
@@ -56,16 +49,9 @@ class Inventory extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function getInventoryTypeAttribute(): string
+    public function getInventoryTypeLabelAttribute(): string
     {
-        if (!$this->project) {
-            return 'Plot Project';
-        }
-        $typeName = $this->project->projectType ? $this->project->projectType->name : '';
-        if (stripos($typeName, 'plot') !== false) {
-            return 'Plot Project';
-        }
-        return 'Flat Project';
+        return $this->inventory_type === 'flat' ? 'Flat Project' : 'Plot Project';
     }
 
     /*
