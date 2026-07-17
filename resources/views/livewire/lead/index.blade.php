@@ -237,7 +237,7 @@
                                             <td> {{ $lead->created_at?->format('h:i A') }} </td>
                                             <td onclick="event.stopPropagation();">
                                                 <div class="dropdown">
-                                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+                                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false">
                                                         Action
                                                     </button>
                                                     <ul class="dropdown-menu shadow">

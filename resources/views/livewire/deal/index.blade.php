@@ -136,7 +136,7 @@
                                                  <td>{{ $index + 1 }}</td>
                                                  <td>
                                                      <div class="dropdown" onclick="event.stopPropagation();">
-                                                         <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+                                                         <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false">
                                                              Action
                                                          </button>
                                                          <ul class="dropdown-menu shadow">
