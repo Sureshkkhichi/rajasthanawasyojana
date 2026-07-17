@@ -92,8 +92,11 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label class="form-label">PLC Status / Location</label>
-                                            <input type="text" class="form-control @error('plc_status') is-invalid @enderror" wire:model="plc_status" placeholder="e.g., Corner or Park Facing">
+                                            <label class="form-label">PLC Status</label>
+                                            <select class="form-select @error('plc_status') is-invalid @enderror" wire:model="plc_status">
+                                                <option value="">Select PLC</option>
+                                                <option value="Corner">Corner</option>
+                                            </select>
                                             @error('plc_status') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
 
@@ -165,7 +168,7 @@
 
                                     {{-- Status --}}
                                     <div class="col-md-6">
-                                        <label class="form-label">Status <span class="text-danger">*</span></label>
+                                        <label class="form-label">{{ $inventory_type === 'flat' ? 'Flat Status' : 'Plot Status' }} <span class="text-danger">*</span></label>
                                         <select class="form-select @error('status') is-invalid @enderror" wire:model="status">
                                             <option value="Available">Available</option>
                                             <option value="Hold">Hold</option>

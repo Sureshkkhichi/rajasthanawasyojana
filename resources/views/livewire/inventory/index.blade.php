@@ -49,7 +49,7 @@
                         </div>
 
                         <div class="col-md-2">
-                            <label class="form-label text-muted fw-bold">{{ $inventory_type === 'Flat Project' ? 'Unit Type' : 'PLC Status / Location' }}</label>
+                            <label class="form-label text-muted fw-bold">{{ $inventory_type === 'Flat Project' ? 'Unit Type' : 'PLC Status' }}</label>
                             <select class="form-select" wire:model.live="facingFilter">
                                 <option value="">All</option>
                                 @foreach($facingTypes as $facing)
@@ -286,7 +286,7 @@
                                                 <th>Area (Sq. Yards)</th>
                                                 <th>Road Size</th>
                                                 <th>PLC %</th>
-                                                <th>PLC Status / Location</th>
+                                                <th>PLC Status</th>
                                             @endif
                                             <th>Price (₹)</th>
                                             <th>Current Status</th>
