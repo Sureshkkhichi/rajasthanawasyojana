@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>आवंटन पत्र</title>
     <style>
         @font-face {
             font-family: 'Hind';
             font-style: normal;
             font-weight: 400;
-            src: url('https://fonts.gstatic.com/s/hind/v11/5aU19-Q6WGMcdMLbm3wjOw.ttf') format('truetype');
+            src: url('{{ storage_path("fonts/Hind-Regular.ttf") }}') format('truetype');
+        }
+        @font-face {
+            font-family: 'Hind';
+            font-style: normal;
+            font-weight: bold;
+            src: url('{{ storage_path("fonts/Hind-Bold.ttf") }}') format('truetype');
         }
         body {
-            font-family: 'Hind', sans-serif;
+            font-family: 'Hind', Arial, sans-serif;
             margin: 0;
             padding: 0;
             color: #333;
