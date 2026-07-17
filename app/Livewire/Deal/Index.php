@@ -3,8 +3,9 @@
 namespace App\Livewire\Deal;
 
 use App\Models\Project;
-use App\Models\Lead;
+use App\Models\Deal;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
@@ -12,6 +13,10 @@ use Livewire\Attributes\Title;
 #[Title('Deals')]
 class Index extends Component
 {
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
+
     public string $search_name = '';
     public string $search_mobile = '';
     public string $search_email = '';
@@ -29,7 +34,7 @@ class Index extends Component
     public function updatedSelectAll($value): void
     {
         if ($value) {
-            $this->selectedDeals = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            $this->selectedDeals = Deal::pluck('id')->map(fn($id) => (string)$id)->toArray();
         } else {
             $this->selectedDeals = [];
         }
@@ -90,11 +95,6 @@ class Index extends Component
         $this->resetPage();
     }
 
-    private function resetPage(): void
-    {
-        // Placeholder to match WithPagination traits if added later
-    }
-
     public function generateInvoice(string $id): void
     {
         $this->dispatch('swal:alert', [
@@ -133,6 +133,7 @@ class Index extends Component
 
     public function deleteSelected(): void
     {
+        Deal::whereIn('id', $this->selectedDeals)->delete();
         $this->selectedDeals = [];
         $this->selectAll = false;
         session()->flash('success', 'Selected deals deleted successfully.');
@@ -146,55 +147,62 @@ class Index extends Component
             ->orderBy('name')
             ->get(['id', 'name']);
 
-        $cities = Lead::whereNotNull('city')
+        $cities = Deal::whereNotNull('city')
             ->where('city', '!=', '')
             ->distinct()
             ->orderBy('city')
             ->pluck('city');
 
-        $mockDeals = [
-            [
-                'id' => '1',
-                'name' => 'Mohit Verma',
-                'property' => 'Aavya Home',
-                'booking_date' => '2026-07-04 23:11:00',
-                'booking_amount' => 21000,
-                'area' => '',
-                'total_amount' => 350000,
-                'status' => 'Paid',
-                'agent_code' => 'PE7YD6F4',
-                'remarks' => ''
-            ]
-        ];
+        $flatSizes = Deal::whereNotNull('flat_size')
+            ->where('flat_size', '!=', '')
+            ->distinct()
+            ->orderBy('flat_size')
+            ->pluck('flat_size');
 
-        // Apply filters to mock data to mimic real filtering
+        $query = Deal::query()->with(['project', 'agent']);
+
         if ($this->search_name) {
-            $mockDeals = array_filter($mockDeals, function ($deal) {
-                return stripos($deal['name'], $this->search_name) !== false;
+            $query->where(function($q) {
+                $q->where('first_name', 'like', '%' . $this->search_name . '%')
+                  ->orWhere('last_name', 'like', '%' . $this->search_name . '%');
             });
         }
 
-        if ($this->status) {
-            $mockDeals = array_filter($mockDeals, function ($deal) {
-                return strcasecmp($deal['status'], $this->status) === 0;
-            });
+        if ($this->search_mobile) {
+            $query->where('phone', 'like', '%' . $this->search_mobile . '%');
+        }
+
+        if ($this->search_email) {
+            $query->where('email', 'like', '%' . $this->search_email . '%');
         }
 
         if ($this->project_id) {
-            $project = Project::find($this->project_id);
-            if ($project) {
-                $mockDeals = array_filter($mockDeals, function ($deal) use ($project) {
-                    return stripos($deal['property'], $project->name) !== false;
-                });
-            } else {
-                $mockDeals = [];
-            }
+            $query->where('project_id', $this->project_id);
         }
 
+        if ($this->status) {
+            $query->where('status', $this->status);
+        }
+
+        if ($this->search_city) {
+            $query->where('city', $this->search_city);
+        }
+
+        if ($this->search_flat_size) {
+            $query->where('flat_size', $this->search_flat_size);
+        }
+
+        if ($this->search_date) {
+            $query->whereDate('booking_date', $this->search_date);
+        }
+
+        $deals = $query->orderBy('booking_date', 'desc')->paginate($this->perPage);
+
         return view('livewire.deal.index', [
-            'deals' => $mockDeals,
+            'deals' => $deals,
             'projects' => $projects,
             'cities' => $cities,
+            'flatSizes' => $flatSizes,
         ]);
     }
 }

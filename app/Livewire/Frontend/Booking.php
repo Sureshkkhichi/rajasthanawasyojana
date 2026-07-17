@@ -299,7 +299,59 @@ class Booking extends Component
             'city' => $this->city,
             'project_id' => $this->project->id,
             'is_submitted' => true,
-            'payment_status' => 'unpaid',
+            'payment_status' => 'paid',
+        ]);
+
+        // Find unit price or project price fallback for Deal total_amount
+        $unitPrice = null;
+        if ($this->project->inventory_type === 'flat') {
+            $matchingUnit = \App\Models\Inventory::query()
+                ->where('project_id', $this->project->id)
+                ->where('inventory_type', 'flat')
+                ->where('flat_type', $this->flat_size)
+                ->first();
+            if ($matchingUnit) {
+                $unitPrice = $matchingUnit->price;
+            }
+        } else {
+            $matchingUnit = \App\Models\Inventory::query()
+                ->where('project_id', $this->project->id)
+                ->where('inventory_type', 'plot')
+                ->where('area_sq_yards', $this->flat_size)
+                ->first();
+            if ($matchingUnit) {
+                $unitPrice = $matchingUnit->price;
+            }
+        }
+
+        if (!$unitPrice) {
+            $unitPrice = $this->project->price;
+        }
+
+        \App\Models\Deal::create([
+            'project_id' => $this->project->id,
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'father_husband_name' => $validated['father_husband_name'] ?? null,
+            'pan_number' => $validated['pan_number'],
+            'gender' => $validated['gender'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'date_of_birth' => $validated['date_of_birth'],
+            'occupation' => $validated['occupation'],
+            'address' => $validated['address'],
+            'state_id' => $this->state_id,
+            'state_name' => $this->state_name,
+            'city_id' => $this->city_id,
+            'city' => $this->city,
+            'co_applicant_name' => $validated['co_applicant_name'] ?? null,
+            'flat_size' => $this->flat_size,
+            'waiver_code' => $this->waiver_code ?: null,
+            'booking_date' => now(),
+            'booking_amount' => 21100.00,
+            'total_amount' => $unitPrice,
+            'status' => 'Paid',
+            'remarks' => null,
         ]);
 
         Mail::to($this->lead->email)->cc('suresh5313@gmail.com')->send(new LeadSubmittedMail($this->lead));
