@@ -19,6 +19,7 @@ class Index extends Component
 
     // Filters
     public string $selectedProjectId = '';
+    public string $inventory_type = 'Plot Project';
     public string $statusFilter = '';
     public string $facingFilter = '';
     public string $searchPlot = '';
@@ -68,6 +69,26 @@ class Index extends Component
 
         if ($firstProject) {
             $this->selectedProjectId = $firstProject->id;
+            $this->updateInventoryType();
+        }
+    }
+
+    public function updateInventoryType(): void
+    {
+        if (!$this->selectedProjectId) {
+            $this->inventory_type = 'Plot Project';
+            return;
+        }
+        $project = Project::find($this->selectedProjectId);
+        if (!$project) {
+            $this->inventory_type = 'Plot Project';
+            return;
+        }
+        $typeName = $project->projectType ? $project->projectType->name : '';
+        if (stripos($typeName, 'plot') !== false) {
+            $this->inventory_type = 'Plot Project';
+        } else {
+            $this->inventory_type = 'Flat Project';
         }
     }
 
@@ -77,6 +98,7 @@ class Index extends Component
         $this->selectedUnitId = null;
         $this->selectedInventories = [];
         $this->selectAll = false;
+        $this->updateInventoryType();
     }
 
     public function updatedStatusFilter(): void
