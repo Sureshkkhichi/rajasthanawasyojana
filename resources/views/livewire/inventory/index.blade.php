@@ -84,7 +84,7 @@
             {{-- Summary Cards --}}
             <div class="row">
                 {{-- Card 1: Total Units --}}
-                <div class="col-lg-4 col-md-6 mb-3">
+                <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -105,7 +105,7 @@
                 </div>
 
                 {{-- Card 2: Available --}}
-                <div class="col-lg-4 col-md-6 mb-3">
+                <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -126,7 +126,7 @@
                 </div>
 
                 {{-- Card 3: Hold --}}
-                <div class="col-lg-4 col-md-6 mb-3">
+                <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -147,7 +147,7 @@
                 </div>
 
                 {{-- Card 4: Booked --}}
-                <div class="col-lg-4 col-md-6 mb-3">
+                <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -168,7 +168,7 @@
                 </div>
 
                 {{-- Card 5: Registered --}}
-                <div class="col-lg-4 col-md-6 mb-3">
+                <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -189,7 +189,7 @@
                 </div>
 
                 {{-- Card 6: Blocked --}}
-                <div class="col-lg-4 col-md-6 mb-3">
+                <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -272,7 +272,7 @@
                                             @if ($inventory_type === 'Flat Project')
                                                 <th>Floor</th>
                                                 <th>Flat No.</th>
-                                                <th>Type</th>
+                                                <th>Flat Type</th>
                                                 <th>Unit Type</th>
                                                 <th>Area (SBUP)</th>
                                                 <th>Carpet Area</th>

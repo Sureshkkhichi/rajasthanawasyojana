@@ -108,7 +108,20 @@
 
                                         <div class="col-md-4">
                                             <label class="form-label">Floor <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('floor') is-invalid @enderror" wire:model="floor" placeholder="e.g., 1st Floor">
+                                            <select class="form-select @error('floor') is-invalid @enderror" wire:model="floor">
+                                                <option value="">Select Floor</option>
+                                                <option value="Ground Floor">Ground Floor</option>
+                                                <option value="1st Floor">1st Floor</option>
+                                                <option value="2nd Floor">2nd Floor</option>
+                                                <option value="3rd Floor">3rd Floor</option>
+                                                <option value="4th Floor">4th Floor</option>
+                                                <option value="5th Floor">5th Floor</option>
+                                                <option value="6th Floor">6th Floor</option>
+                                                <option value="7th Floor">7th Floor</option>
+                                                <option value="8th Floor">8th Floor</option>
+                                                <option value="9th Floor">9th Floor</option>
+                                                <option value="10th Floor">10th Floor</option>
+                                            </select>
                                             @error('floor') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
 
@@ -119,24 +132,28 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label class="form-label">Type <span class="text-danger">*</span></label>
+                                            <label class="form-label">Flat Type <span class="text-danger">*</span></label>
                                             <select class="form-select @error('flat_type') is-invalid @enderror" wire:model="flat_type">
                                                 <option value="">Select Flat Type</option>
                                                 <option value="1BHK">1BHK</option>
                                                 <option value="2BHK">2BHK</option>
                                                 <option value="3BHK">3BHK</option>
                                                 <option value="4BHK">4BHK</option>
-                                                <option value="EWS">EWS</option>
-                                                <option value="LIG">LIG</option>
-                                                <option value="MIG">MIG</option>
-                                                <option value="HIG">HIG</option>
+                                                <option value="5BHK">5BHK</option>
                                             </select>
                                             @error('flat_type') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label">Unit Type <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('unit_type') is-invalid @enderror" wire:model="unit_type" placeholder="e.g., EWS, LIG, General">
+                                            <select class="form-select @error('unit_type') is-invalid @enderror" wire:model="unit_type">
+                                                <option value="">Select Unit Type</option>
+                                                <option value="EWS">EWS</option>
+                                                <option value="LIG">LIG</option>
+                                                <option value="MIG">MIG</option>
+                                                <option value="HIG">HIG</option>
+                                                <option value="General">General</option>
+                                            </select>
                                             @error('unit_type') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
 
