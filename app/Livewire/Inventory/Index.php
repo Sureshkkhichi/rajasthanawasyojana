@@ -516,24 +516,12 @@ class Index extends Component
         $units = $unitsQuery->orderBy($orderByCol)
             ->paginate($this->perPage);
 
-        // Sidebar unit load
-        $selectedUnit = null;
-        if ($this->selectedUnitId) {
-            $selectedUnit = Inventory::find($this->selectedUnitId);
-        } else {
-            $selectedUnit = $units->first();
-            if ($selectedUnit) {
-                $this->selectedUnitId = $selectedUnit->id;
-            }
-        }
-
         return view('livewire.inventory.index', [
             'projects' => $projects,
             'selectedProject' => $selectedProject,
             'counts' => $counts,
             'facingTypes' => $facingTypes,
             'units' => $units,
-            'selectedUnit' => $selectedUnit,
         ]);
     }
 }

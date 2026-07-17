@@ -217,9 +217,10 @@
             </div>
 
             {{-- Main Row with List & Details Sidebar --}}
+            {{-- Main Row with List --}}
             <div class="row">
                 {{-- Listing Table Column --}}
-                <div class="{{ $selectedUnit ? 'col-lg-8' : 'col-lg-12' }}">
+                <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header border-0 pb-0">
                             <div class="d-flex align-items-center justify-content-between">
@@ -295,7 +296,7 @@
                                     </thead>
                                     <tbody>
                                         @forelse($units as $unit)
-                                            <tr wire:key="unit-row-{{ $unit->id }}" class="{{ $selectedUnitId === $unit->id ? 'table-light border-primary' : '' }}" style="cursor: pointer;" wire:click="selectUnit('{{ $unit->id }}')">
+                                            <tr wire:key="unit-row-{{ $unit->id }}">
                                                 <td onclick="event.stopPropagation();">
                                                     <input type="checkbox" class="form-check-input" value="{{ $unit->id }}" wire:model.live="selectedInventories">
                                                 </td>
@@ -328,27 +329,38 @@
                                                     @endif
                                                 </td>
                                                 <td onclick="event.stopPropagation();">
-                                                    <div class="d-flex align-items-center justify-content-center gap-1">
-                                                        <button class="btn btn-soft-info btn-icon btn-sm" type="button" wire:click="selectUnit('{{ $unit->id }}')" title="View Details">
-                                                            <i class="ri-eye-line"></i>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+                                                            Action
                                                         </button>
-                                                        <a href="{{ route('inventories.edit', $unit->id) }}" class="btn btn-soft-primary btn-icon btn-sm" title="Edit Unit">
-                                                            <i class="ri-edit-line"></i>
-                                                        </a>
-                                                        <button class="btn btn-soft-warning btn-icon btn-sm" type="button" wire:click="selectUnit('{{ $unit->id }}'); setSidebarTab('history');" title="History">
-                                                            <i class="ri-history-line"></i>
-                                                        </button>
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-soft-secondary btn-icon btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
-                                                                <i class="ri-more-2-fill"></i>
-                                                            </button>
-                                                            <ul class="dropdown-menu">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);" wire:click="openPriceModal('{{ $unit->id }}')"><i class="ri-money-dollar-circle-line align-bottom me-2 text-muted"></i> Update Price</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);" wire:click="openStatusModal('{{ $unit->id }}')"><i class="ri-checkbox-circle-line align-bottom me-2 text-muted"></i> Change Status</a></li>
-                                                                <li><hr class="dropdown-divider"></li>
-                                                                <li><a class="dropdown-item text-danger" href="javascript:void(0);" wire:click="deleteUnit('{{ $unit->id }}')" wire:confirm="Are you sure you want to delete this unit?"><i class="ri-delete-bin-line align-bottom me-2"></i> Delete Unit</a></li>
-                                                            </ul>
-                                                        </div>
+                                                        <ul class="dropdown-menu shadow">
+                                                            <li>
+                                                                <a class="dropdown-item py-2" href="{{ route('inventories.edit', $unit->id) }}">
+                                                                    <i class="ri-edit-line align-bottom me-2 text-muted"></i> Edit
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item py-2" href="javascript:void(0);" wire:click="openPriceModal('{{ $unit->id }}')">
+                                                                    <i class="ri-money-dollar-circle-line align-bottom me-2 text-muted"></i> Update Price
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item py-2" href="javascript:void(0);" wire:click="openStatusModal('{{ $unit->id }}')">
+                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-muted"></i> Change Status
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item py-2" href="/leads/create?project_id={{ $unit->project_id }}&plot_no={{ $unit->inventory_type === 'flat' ? $unit->flat_no : $unit->plot_no }}">
+                                                                    <i class="ri-book-read-line align-bottom me-2 text-muted"></i> Book
+                                                                </a>
+                                                            </li>
+                                                            <li><hr class="dropdown-divider"></li>
+                                                            <li>
+                                                                <button class="dropdown-item py-2 text-danger" type="button" wire:click="deleteUnit('{{ $unit->id }}')" wire:confirm="Are you sure you want to delete this unit?">
+                                                                    <i class="ri-delete-bin-line align-bottom me-2"></i> Delete Unit
+                                                                </button>
+                                                            </li>
+                                                        </ul>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -367,162 +379,6 @@
                         </div>
                     </div>
                 </div>
-
-                {{-- Sidebar Unit Details Column --}}
-                @if($selectedUnit)
-                    <div class="col-lg-4">
-                        <div class="card sticky-side-div">
-                            <div class="card-header border-bottom d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center gap-2">
-                                    <h5 class="card-title mb-0">
-                                        {{ $selectedUnit->inventory_type === 'flat' ? 'Flat ' . $selectedUnit->flat_no : 'Plot ' . $selectedUnit->plot_no }}
-                                    </h5>
-                                    @if($selectedUnit->status === 'Available')
-                                        <span class="badge bg-success-subtle text-success fs-10">Available</span>
-                                    @elseif($selectedUnit->status === 'Hold')
-                                        <span class="badge bg-warning-subtle text-warning fs-10">Hold</span>
-                                    @elseif($selectedUnit->status === 'Booked')
-                                        <span class="badge bg-danger-subtle text-danger fs-10">Booked</span>
-                                    @elseif($selectedUnit->status === 'Registered')
-                                        <span class="badge bg-info-subtle text-info fs-10">Registered</span>
-                                    @else
-                                        <span class="badge bg-dark-subtle text-dark fs-10">{{ $selectedUnit->status }}</span>
-                                    @endif
-                                </div>
-                                <button type="button" class="btn-close" aria-label="Close" wire:click="$set('selectedUnitId', null)"></button>
-                            </div>
-
-                            {{-- Sidebar Tabs --}}
-                            <div class="card-body p-0">
-                                <ul class="nav nav-tabs nav-tabs-custom nav-success nav-justified" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link py-2 {{ $sidebarTab === 'general' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setSidebarTab('general')">General</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link py-2 {{ $sidebarTab === 'history' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setSidebarTab('history')">History</a>
-                                    </li>
-                                </ul>
-
-                                <div class="p-3" style="max-height: 480px; overflow-y: auto;">
-                                    @if($sidebarTab === 'general')
-                                        <div class="table-responsive table-card">
-                                            <table class="table table-borderless align-middle mb-0">
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="text-muted py-1" width="130">Project</td>
-                                                        <td class="fw-bold py-1">{{ $selectedProject ? $selectedProject->name : '-' }}</td>
-                                                    </tr>
-                                                    @if ($selectedUnit->inventory_type === 'flat')
-                                                        <tr>
-                                                            <td class="text-muted py-1">Floor</td>
-                                                            <td class="fw-semibold py-1">{{ $selectedUnit->floor }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-muted py-1">Flat No.</td>
-                                                            <td class="fw-semibold py-1">{{ $selectedUnit->flat_no }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-muted py-1">Type</td>
-                                                            <td class="py-1">{{ $selectedUnit->flat_type }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-muted py-1">Unit Type</td>
-                                                            <td class="py-1">{{ $selectedUnit->unit_type }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-muted py-1">Area (SBUP)</td>
-                                                            <td class="py-1">{{ number_format($selectedUnit->area_sbup, 2) }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-muted py-1">Carpet Area</td>
-                                                            <td class="py-1">{{ number_format($selectedUnit->carpet_area, 2) }}</td>
-                                                        </tr>
-                                                    @else
-                                                        <tr>
-                                                            <td class="text-muted py-1">Plot No.</td>
-                                                            <td class="fw-semibold py-1">{{ $selectedUnit->plot_no }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-muted py-1">Area (Sq. Yards)</td>
-                                                            <td class="py-1">{{ number_format($selectedUnit->area_sq_yards, 2) }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-muted py-1">Road Size</td>
-                                                            <td class="py-1">{{ $selectedUnit->road_size }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-muted py-1">PLC %</td>
-                                                            <td class="py-1">{{ $selectedUnit->plc_percentage }}%</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-muted py-1">PLC Status</td>
-                                                            <td class="py-1">{{ $selectedUnit->plc_status ?: '-' }}</td>
-                                                        </tr>
-                                                    @endif
-                                                    <tr>
-                                                        <td class="text-muted py-1">Price</td>
-                                                        <td class="fw-bold text-danger py-1">₹ {{ number_format($selectedUnit->price, 2) }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Current Status</td>
-                                                        <td class="py-1">{{ $selectedUnit->status }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Remarks</td>
-                                                        <td class="py-1 text-wrap">{{ $selectedUnit->remarks ?: '-' }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Created On</td>
-                                                        <td class="py-1">{{ $selectedUnit->created_at->format('d M Y') }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-muted py-1">Last Updated</td>
-                                                        <td class="py-1">{{ $selectedUnit->updated_at->format('d M Y h:i A') }}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    @elseif($sidebarTab === 'history')
-                                        @forelse($selectedUnit->histories as $history)
-                                            <div class="d-flex mb-3 position-relative">
-                                                <div class="avatar-xs flex-shrink-0 me-3">
-                                                    <span class="avatar-title bg-soft-secondary text-secondary rounded-circle fs-12">
-                                                        <i class="ri-history-line"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="d-flex align-items-center justify-content-between">
-                                                        <h6 class="fs-13 mb-1">{{ $history->from_status }} &rarr; {{ $history->to_status }}</h6>
-                                                        <span class="text-muted fs-11">{{ $history->created_at->format('d M h:i A') }}</span>
-                                                    </div>
-                                                    <p class="text-muted fs-12 mb-0">{{ $history->notes }}</p>
-                                                    <small class="text-muted">By: {{ $history->changed_by ?: 'System' }}</small>
-                                                </div>
-                                            </div>
-                                        @empty
-                                            <div class="text-center py-4 text-muted">
-                                                <p>No status transition logs recorded.</p>
-                                            </div>
-                                        @endforelse
-                                    @endif
-                                </div>
-                            </div>
-
-                            {{-- Sidebar Actions Footer --}}
-                            <div class="card-footer border-top bg-light d-flex gap-2">
-                                <button class="btn btn-outline-warning w-100" type="button" wire:click="openStatusModal('{{ $selectedUnit->id }}')">
-                                    <i class="ri-time-line"></i> Hold
-                                </button>
-                                <button class="btn btn-outline-success w-100" type="button" onclick="window.location.href='/leads/create?project_id={{ $selectedUnit->project_id }}&plot_no={{ $selectedUnit->inventory_type === 'flat' ? $selectedUnit->flat_no : $selectedUnit->plot_no }}'">
-                                    <i class="ri-book-read-line"></i> Book
-                                </button>
-                                <a href="{{ route('inventories.edit', $selectedUnit->id) }}" class="btn btn-outline-primary w-100">
-                                    <i class="ri-edit-line"></i> Edit
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                @endif
             </div>
         </div>
     </div>
