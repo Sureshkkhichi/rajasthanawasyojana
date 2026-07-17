@@ -95,6 +95,42 @@ class Index extends Component
         // Placeholder to match WithPagination traits if added later
     }
 
+    public function generateInvoice(string $id): void
+    {
+        $this->dispatch('swal:alert', [
+            'title' => 'Invoice Generated!',
+            'text' => 'Invoice has been successfully generated for Deal ID ' . $id,
+            'icon' => 'success'
+        ]);
+    }
+
+    public function sendSMS(string $id): void
+    {
+        $this->dispatch('swal:alert', [
+            'title' => 'SMS Sent!',
+            'text' => 'SMS notification sent successfully for Deal ID ' . $id,
+            'icon' => 'success'
+        ]);
+    }
+
+    public function sendEmail(string $id): void
+    {
+        $this->dispatch('swal:alert', [
+            'title' => 'Email Sent!',
+            'text' => 'Email notification sent successfully for Deal ID ' . $id,
+            'icon' => 'success'
+        ]);
+    }
+
+    public function viewFullForm(string $id): void
+    {
+        $this->dispatch('swal:alert', [
+            'title' => 'Form Viewed!',
+            'text' => 'Opening full booking form details for Deal ID ' . $id,
+            'icon' => 'info'
+        ]);
+    }
+
     public function deleteSelected(): void
     {
         $this->selectedDeals = [];
@@ -121,15 +157,12 @@ class Index extends Component
                 'id' => '1',
                 'name' => 'Mohit Verma',
                 'property' => 'Aavya Home',
-                'invoice_no' => '',
-                'allotment_date' => '',
                 'booking_date' => '2026-07-04 23:11:00',
                 'booking_amount' => 21000,
                 'area' => '',
                 'total_amount' => 350000,
-                'balance_due' => 328900,
                 'status' => 'Paid',
-                'agent' => '',
+                'agent_code' => 'PE7YD6F4',
                 'remarks' => ''
             ]
         ];

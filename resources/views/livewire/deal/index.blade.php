@@ -119,13 +119,11 @@
                                             <th width="100">Action</th>
                                             <th>Name</th>
                                             <th>Property</th>
-                                            <th>Invoice No</th>
-                                            <th>Allotment Date</th>
+                                            <th>Waiver Code</th>
                                             <th>Booking Date</th>
                                             <th>Booking Amount</th>
                                             <th>Area</th>
                                             <th>Total Amount</th>
-                                            <th>Balance Due</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
@@ -137,28 +135,52 @@
                                                 </td>
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>
-                                                    <div class="dropdown">
+                                                    <div class="dropdown" onclick="event.stopPropagation();">
                                                         <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
                                                             Action
                                                         </button>
                                                         <ul class="dropdown-menu shadow">
-                                                            <li><a class="dropdown-item py-2" href="#"><i class="ri-briefcase-line align-bottom me-2 text-muted"></i> Show Payment Plan</a></li>
-                                                            <li><a class="dropdown-item py-2" href="#"><i class="ri-money-dollar-circle-line align-bottom me-2 text-muted"></i> Make Payment</a></li>
-                                                            <li><a class="dropdown-item py-2" href="#"><i class="ri-briefcase-line align-bottom me-2 text-muted"></i> Show Payment</a></li>
-                                                            <li><a class="dropdown-item py-2" href="#"><i class="ri-printer-line align-bottom me-2 text-muted"></i> Allotment Letter</a></li>
-                                                            <li><a class="dropdown-item py-2" href="#"><i class="ri-send-plane-line align-bottom me-2 text-muted"></i> SMS/E-Mail</a></li>
-                                                            <li><a class="dropdown-item py-2" href="#"><i class="ri-fullscreen-line align-bottom me-2 text-muted"></i> View</a></li>
-                                                            <li><a class="dropdown-item py-2" href="#"><i class="ri-edit-line align-bottom me-2 text-muted"></i> Assign Inventory</a></li>
-                                                            <li><a class="dropdown-item py-2 text-danger" href="#"><i class="ri-delete-bin-line align-bottom me-2"></i> Delete</a></li>
-                                                            <li><a class="dropdown-item py-2" href="#"><i class="ri-close-circle-line align-bottom me-2 text-muted"></i> Cancel Allotment</a></li>
-                                                            <li><a class="dropdown-item py-2" href="#"><i class="ri-bank-card-line align-bottom me-2 text-muted"></i> Refund</a></li>
+                                                            <li>
+                                                                <button class="dropdown-item py-2" type="button" wire:click="generateInvoice('{{ $deal['id'] }}')">
+                                                                    <i class="ri-file-text-line align-bottom me-2 text-muted"></i> Generate Invoice
+                                                                </button>
+                                                            </li>
+                                                            <li>
+                                                                <button class="dropdown-item py-2" type="button" wire:click="sendSMS('{{ $deal['id'] }}')">
+                                                                    <i class="ri-message-3-line align-bottom me-2 text-muted"></i> Send SMS
+                                                                </button>
+                                                            </li>
+                                                            <li>
+                                                                <button class="dropdown-item py-2" type="button" wire:click="sendEmail('{{ $deal['id'] }}')">
+                                                                    <i class="ri-mail-send-line align-bottom me-2 text-muted"></i> Send Email
+                                                                </button>
+                                                            </li>
+                                                            <li>
+                                                                <button class="dropdown-item py-2" type="button" wire:click="viewFullForm('{{ $deal['id'] }}')">
+                                                                    <i class="ri-fullscreen-line align-bottom me-2 text-muted"></i> View Full Form
+                                                                </button>
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </td>
                                                 <td class="fw-semibold text-start text-nowrap">{{ $deal['name'] }}</td>
                                                 <td class="text-nowrap">{{ $deal['property'] }}</td>
-                                                <td>{{ $deal['invoice_no'] ?: '-' }}</td>
-                                                <td>{{ $deal['allotment_date'] ?: '-' }}</td>
+                                                <td>
+                                                    @if(!empty($deal['agent_code']))
+                                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                                            <span class="badge bg-light text-primary border border-primary fs-13">
+                                                                {{ $deal['agent_code'] }}
+                                                            </span>
+                                                            <button class="btn btn-link p-0 text-muted fs-15 lh-1" type="button" 
+                                                                onclick="copyToClipboard('{{ $deal['agent_code'] }}', this)" 
+                                                                title="Copy Waiver Code">
+                                                                <i class="ri-file-copy-line"></i>
+                                                            </button>
+                                                        </div>
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
                                                 <td class="text-nowrap">{{ $deal['booking_date'] }}</td>
                                                 <td class="text-end text-nowrap">
                                                     @if($deal['booking_amount'])
@@ -175,9 +197,6 @@
                                                         ₹
                                                     @endif
                                                 </td>
-                                                <td class="text-end text-nowrap">
-                                                    ₹ {{ number_format($deal['balance_due'], 0) }}
-                                                </td>
                                                 <td>
                                                     @if($deal['status'] === 'Paid')
                                                         <span class="badge bg-success px-2 py-1 fs-12">Paid</span>
@@ -192,7 +211,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="13" class="text-center py-4 text-muted">No deals found.</td>
+                                                <td colspan="11" class="text-center py-4 text-muted">No deals found.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -204,4 +223,42 @@
             </div>
         </div>
     </div>
+
+    @push('styles')
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    @endpush
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('swal:alert', (event) => {
+                    const data = event[0];
+                    Swal.fire({
+                        title: data.title,
+                        text: data.text,
+                        icon: data.icon,
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#405189'
+                    });
+                });
+            });
+
+            function copyToClipboard(text, buttonElement) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const icon = buttonElement.querySelector('i');
+                    const originalClass = icon.className;
+                    icon.className = 'ri-check-line text-success';
+                    buttonElement.setAttribute('title', 'Copied!');
+                    
+                    setTimeout(() => {
+                        icon.className = originalClass;
+                        buttonElement.setAttribute('title', 'Copy Waiver Code');
+                    }, 1500);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
+        </script>
+    @endpush
 </div>
