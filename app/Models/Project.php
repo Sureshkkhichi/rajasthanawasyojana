@@ -67,4 +67,9 @@ class Project extends Model
     {
         return $this->hasMany(Lead::class);
     }
+
+    public function inventories()
+    {
+        return $this->hasMany(Inventory::class);
+    }
 }

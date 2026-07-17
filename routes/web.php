@@ -15,6 +15,8 @@ use App\Livewire\Refund\Index as RefundIndex;
 use App\Livewire\Flat\Index as FlatIndex;
 use App\Livewire\Flat\Form as FlatForm;
 use App\Livewire\StaticPage\Index as StaticPageIndex;
+use App\Livewire\Inventory\Index as InventoryIndex;
+use App\Livewire\Inventory\Form as InventoryForm;
 
 use App\Livewire\Report\Purchase as PurchaseReport;
 use App\Livewire\Report\Sales as SalesReport;
@@ -48,6 +50,13 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::get('/', FlatIndex::class)->name('index');
         Route::get('/create', FlatForm::class)->name('create');
         Route::get('/{flat:id}/edit', FlatForm::class)->name('edit');
+    });
+
+    // Inventory
+    Route::prefix('inventories')->name('inventories.')->group(function () {
+        Route::get('/', InventoryIndex::class)->name('index');
+        Route::get('/create', InventoryForm::class)->name('create');
+        Route::get('/{inventory:id}/edit', InventoryForm::class)->name('edit');
     });
 
     // Projects

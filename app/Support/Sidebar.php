@@ -33,17 +33,9 @@ class Sidebar
                         'icon' => 'ri-file-edit-line',
                         'permission' => 'pages.view',
                     ],
-                    [
-                        'title' => 'Projects',
-                        'route' => 'projects.index',
-                        'is_route' => true,
-                        'icon' => 'ri-folder-2-line',
-                        'permission' => 'projects.view',
-                    ],
                 ],
             ],
             'project_management' => [
-                // PROJECTS
                 'project_types' => [
                     [
                         'title' => 'Project Type',
@@ -53,6 +45,33 @@ class Sidebar
                         'permission' => 'project.type.view',
                     ],
                 ],
+                'projects' => [
+                    [
+                        'title' => 'Projects',
+                        'route' => 'projects.index',
+                        'is_route' => true,
+                        'icon' => 'ri-folder-2-line',
+                        'permission' => 'projects.view',
+                    ],
+                ],
+                'inventory' => [
+                    [
+                        'title' => 'Inventory',
+                        'route' => 'inventories.index',
+                        'is_route' => true,
+                        'icon' => 'ri-building-4-line',
+                        'permission' => 'projects.view',
+                    ],
+                ],
+                'bookings' => [
+                    [
+                        'title' => 'Bookings',
+                        'route' => 'leads.index', // redirects to leads list for now
+                        'is_route' => true,
+                        'icon' => 'ri-book-read-line',
+                        'permission' => 'leads.view',
+                    ],
+                ],
                 'flats' => [
                     [
                         'title' => 'Flats',
@@ -60,6 +79,15 @@ class Sidebar
                         'is_route' => true,
                         'icon' => 'ri-building-2-line',
                         'permission' => 'flats.view',
+                    ],
+                ],
+                'plots' => [
+                    [
+                        'title' => 'Plots',
+                        'route' => 'inventories.index', // redirects to plots inventory list for now
+                        'is_route' => true,
+                        'icon' => 'ri-map-pin-line',
+                        'permission' => 'projects.view',
                     ],
                 ],
             ],
