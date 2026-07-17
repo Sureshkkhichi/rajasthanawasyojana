@@ -98,9 +98,16 @@
                                                 <td>{{ $agent->email ?: '-' }}</td>
                                                 <td>{{ $agent->phone ?: '-' }}</td>
                                                 <td>
-                                                    <span class="badge bg-light text-primary border border-primary fs-13">
-                                                        {{ $agent->code }}
-                                                    </span>
+                                                    <div class="d-flex align-items-center justify-content-center gap-1">
+                                                        <span class="badge bg-light text-primary border border-primary fs-13">
+                                                            {{ $agent->code }}
+                                                        </span>
+                                                        <button class="btn btn-link p-0 text-muted fs-15 lh-1" type="button" 
+                                                            onclick="copyToClipboard('{{ $agent->code }}', this)" 
+                                                            title="Copy Waiver Code">
+                                                            <i class="ri-file-copy-line"></i>
+                                                        </button>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <span class="badge bg-info-subtle text-info text-uppercase">
@@ -161,4 +168,24 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            function copyToClipboard(text, buttonElement) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const icon = buttonElement.querySelector('i');
+                    const originalClass = icon.className;
+                    icon.className = 'ri-check-line text-success';
+                    buttonElement.setAttribute('title', 'Copied!');
+                    
+                    setTimeout(() => {
+                        icon.className = originalClass;
+                        buttonElement.setAttribute('title', 'Copy Waiver Code');
+                    }, 1500);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            }
+        </script>
+    @endpush
 </div>
