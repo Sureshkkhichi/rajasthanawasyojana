@@ -72,9 +72,13 @@
                             <h4 class="card-title mb-0">Contact & Booking Information</h4>
                         </div>
                         <div class="card-body">
-                            <table class="table table-bordered mb-0">
+                             <table class="table table-bordered mb-0">
                                 <tr>
-                                    <th width="200">Mobile Number</th>
+                                    <th width="200">Project Name</th>
+                                    <td class="fw-semibold text-primary">{{ $deal->project?->name ?: '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Mobile Number</th>
                                     <td>{{ $deal->phone }}</td>
                                 </tr>
                                 <tr>
