@@ -330,23 +330,23 @@
                                                         <ul class="dropdown-menu shadow">
                                                             <li>
                                                                 <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Sold')">
-                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-danger"></i> Sold
+                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-danger"></i> Mark Sold
                                                                 </button>
                                                             </li>
                                                             <li>
                                                                 <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Available')">
-                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-success"></i> Available
+                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-success"></i> Mark Available
                                                                 </button>
                                                             </li>
                                                             <li>
                                                                 <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Hold')">
-                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-warning"></i> Hold
+                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-warning"></i> Mark Hold
                                                                 </button>
                                                             </li>
                                                             <li><hr class="dropdown-divider"></li>
                                                             <li>
-                                                                <button class="dropdown-item py-2 text-danger" type="button" wire:click="deleteUnit('{{ $unit->id }}')" wire:confirm="Are you sure you want to delete this unit?">
-                                                                    <i class="ri-delete-bin-line align-bottom me-2"></i> Delete Unit
+                                                                <button class="dropdown-item py-2 text-danger" type="button" wire:click="vacateUnit('{{ $unit->id }}')" wire:confirm="Are you sure you want to vacate this unit? This will cancel any active allotments for this unit.">
+                                                                    <i class="ri-close-circle-line align-bottom me-2"></i> Vacate
                                                                 </button>
                                                             </li>
                                                         </ul>

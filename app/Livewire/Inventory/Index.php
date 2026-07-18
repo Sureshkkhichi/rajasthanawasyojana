@@ -254,6 +254,39 @@ class Index extends Component
         }
     }
 
+    public function vacateUnit(string $id): void
+    {
+        $unit = Inventory::find($id);
+        if ($unit) {
+            $oldStatus = $unit->status;
+
+            // Reset status to Available
+            $unit->update([
+                'status' => 'Available',
+                'remarks' => null,
+            ]);
+
+            // Clear active allotments
+            \App\Models\Deal::where('allotted_inventory_id', $unit->id)
+                ->update(['allotted_inventory_id' => null]);
+
+            // Log history
+            InventoryHistory::create([
+                'inventory_id' => $unit->id,
+                'from_status' => $oldStatus,
+                'to_status' => 'Available',
+                'changed_by' => auth()->user()->name,
+                'notes' => 'Unit vacated and reset to Available.',
+            ]);
+
+            $this->dispatch('swal:alert', [
+                'title' => 'Unit Vacated!',
+                'text' => 'Unit has been successfully vacated and is now Available.',
+                'icon' => 'success'
+            ]);
+        }
+    }
+
     public function deleteUnit(string $id): void
     {
         $unit = Inventory::find($id);
