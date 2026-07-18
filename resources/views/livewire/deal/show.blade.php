@@ -133,12 +133,30 @@
                             <h4 class="card-title mb-0">Allotment Details</h4>
                             @if($deal->allotted_inventory_id)
                                 <div>
-                                    <a href="{{ route('deals.allotment-letter', $deal->id) }}" class="btn btn-success me-2" target="_blank">
-                                        <i class="ri-file-download-line align-middle me-1"></i> Allotment Letter
-                                    </a>
-                                    <a href="{{ route('deals.demand-letter', $deal->id) }}" class="btn btn-warning" target="_blank">
-                                        <i class="ri-file-download-line align-middle me-1"></i> Demand Letter
-                                    </a>
+                                    <button class="btn btn-success me-2" 
+                                            wire:click="downloadAllotment" 
+                                            wire:loading.attr="disabled"
+                                            wire:target="downloadAllotment, downloadDemand, cancelAllotment">
+                                        <span wire:loading.remove wire:target="downloadAllotment">
+                                            <i class="ri-file-download-line align-middle me-1"></i> Allotment Letter
+                                        </span>
+                                        <span wire:loading wire:target="downloadAllotment">
+                                            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                            Downloading...
+                                        </span>
+                                    </button>
+                                    <button class="btn btn-warning" 
+                                            wire:click="downloadDemand" 
+                                            wire:loading.attr="disabled"
+                                            wire:target="downloadAllotment, downloadDemand, cancelAllotment">
+                                        <span wire:loading.remove wire:target="downloadDemand">
+                                            <i class="ri-file-download-line align-middle me-1"></i> Demand Letter
+                                        </span>
+                                        <span wire:loading wire:target="downloadDemand">
+                                            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                            Downloading...
+                                        </span>
+                                    </button>
                                 </div>
                             @endif
                         </div>
@@ -166,7 +184,7 @@
                                         <button class="btn btn-danger" 
                                                 wire:click="cancelAllotment" 
                                                 wire:loading.attr="disabled"
-                                                wire:target="cancelAllotment"
+                                                wire:target="downloadAllotment, downloadDemand, cancelAllotment"
                                                 wire:confirm="Are you sure you want to cancel this unit allotment? This will return the unit to Available status.">
                                             <span wire:loading.remove wire:target="cancelAllotment">
                                                 <i class="ri-close-circle-line me-1"></i> Cancel Allotment
