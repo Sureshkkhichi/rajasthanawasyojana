@@ -65,7 +65,7 @@ class Show extends Component
         }
 
         // Lock unit status
-        $inventory->update(['status' => 'Sold']);
+        $inventory->update(['status' => 'Alloted']);
 
         // Link unit to deal
         $this->deal->update(['allotted_inventory_id' => $inventory->id]);
