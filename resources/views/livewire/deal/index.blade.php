@@ -146,16 +146,6 @@
                                                                  </button>
                                                              </li>
                                                              <li>
-                                                                 <button class="dropdown-item py-2" type="button" wire:click="sendSMS('{{ $deal->id }}')">
-                                                                     <i class="ri-message-3-line align-bottom me-2 text-muted"></i> Send SMS
-                                                                 </button>
-                                                             </li>
-                                                             <li>
-                                                                 <button class="dropdown-item py-2" type="button" wire:click="sendEmail('{{ $deal->id }}')">
-                                                                     <i class="ri-mail-send-line align-bottom me-2 text-muted"></i> Send Email
-                                                                 </button>
-                                                             </li>
-                                                             <li>
                                                                  <a class="dropdown-item py-2" href="{{ route('deals.show', $deal->id) }}">
                                                                      <i class="ri-fullscreen-line align-bottom me-2 text-muted"></i> View Full Form
                                                                  </a>
