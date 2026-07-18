@@ -343,11 +343,6 @@
                                                                     <i class="ri-checkbox-circle-line align-bottom me-2 text-warning"></i> Hold
                                                                 </button>
                                                             </li>
-                                                            <li>
-                                                                <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Alloted')">
-                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-info"></i> Alloted
-                                                                </button>
-                                                            </li>
                                                             <li><hr class="dropdown-divider"></li>
                                                             <li>
                                                                 <button class="dropdown-item py-2 text-danger" type="button" wire:click="deleteUnit('{{ $unit->id }}')" wire:confirm="Are you sure you want to delete this unit?">
