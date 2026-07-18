@@ -61,15 +61,15 @@ class Sidebar
                         'permission' => 'projects.view',
                     ],
                 ],
-                'bookings' => [
-                    [
-                        'title' => 'Bookings',
-                        'route' => 'leads.index', // redirects to leads list for now
-                        'is_route' => true,
-                        'icon' => 'ri-book-read-line',
-                        'permission' => 'leads.view',
-                    ],
-                ],
+                // 'bookings' => [
+                //     [
+                //         'title' => 'Bookings',
+                //         'route' => 'leads.index', // redirects to leads list for now
+                //         'is_route' => true,
+                //         'icon' => 'ri-book-read-line',
+                //         'permission' => 'leads.view',
+                //     ],
+                // ],
                 'flats' => [
                     [
                         'title' => 'Flats',

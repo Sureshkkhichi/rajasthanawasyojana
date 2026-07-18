@@ -358,8 +358,8 @@ class Index extends Component
                 $plcStatus = $row[5] ?? '';
                 $soldStatus = $row[6] ?? 'Available';
                 
-                // Map 'Sold' to 'Booked' status
-                $status = (stripos($soldStatus, 'sold') !== false) ? 'Booked' : 'Available';
+                // Map 'Sold' status
+                $status = (stripos($soldStatus, 'sold') !== false) ? 'Sold' : 'Available';
 
                 Inventory::create([
                     'project_id' => $project->id,
@@ -468,8 +468,8 @@ class Index extends Component
             'total' => 0,
             'available' => 0,
             'hold' => 0,
-            'booked' => 0,
-            'registered' => 0,
+            'sold' => 0,
+            'alloted' => 0,
             'blocked' => 0,
         ];
 
@@ -477,8 +477,8 @@ class Index extends Component
             $counts['total'] = Inventory::where('project_id', $this->selectedProjectId)->count();
             $counts['available'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Available')->count();
             $counts['hold'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Hold')->count();
-            $counts['booked'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Booked')->count();
-            $counts['registered'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Registered')->count();
+            $counts['sold'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Sold')->count();
+            $counts['alloted'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Alloted')->count();
             $counts['blocked'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Blocked')->count();
         }
 

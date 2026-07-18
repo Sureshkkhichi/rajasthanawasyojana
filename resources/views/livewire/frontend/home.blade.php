@@ -19,6 +19,11 @@
         font-weight: 700;
         text-transform: uppercase;
     }
+
+    .project-card img{
+        max-height: 255px;
+        height: 255px; 
+    }
     </style>
     @endpush
     {{-- Top Bar Section --}}

@@ -41,8 +41,8 @@
                                 <option value="">All</option>
                                 <option value="Available">Available</option>
                                 <option value="Hold">Hold</option>
-                                <option value="Booked">Booked</option>
-                                <option value="Registered">Registered</option>
+                                <option value="Sold">Sold</option>
+                                <option value="Alloted">Alloted</option>
                                 <option value="Blocked">Blocked</option>
                                 <option value="Cancelled">Cancelled</option>
                             </select>
@@ -146,7 +146,7 @@
                     </div>
                 </div>
 
-                {{-- Card 4: Booked --}}
+                {{-- Card 4: Booked -> Sold --}}
                 <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
@@ -158,16 +158,16 @@
                                 </div>
                                 <div class="flex-grow-1 ms-3">
                                     <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
-                                        {{ $inventory_type === 'Flat Project' ? 'Booked Flats' : 'Booked Plots' }}
+                                        {{ $inventory_type === 'Flat Project' ? 'Sold Flats' : 'Sold Plots' }}
                                     </p>
-                                    <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['booked'] }}">{{ $counts['booked'] }}</span></h4>
+                                    <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['sold'] }}">{{ $counts['sold'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Card 5: Registered --}}
+                {{-- Card 5: Registered -> Alloted --}}
                 <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
@@ -179,9 +179,9 @@
                                 </div>
                                 <div class="flex-grow-1 ms-3">
                                     <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
-                                        {{ $inventory_type === 'Flat Project' ? 'Registered Flats' : 'Registered Plots' }}
+                                        {{ $inventory_type === 'Flat Project' ? 'Alloted Flats' : 'Alloted Plots' }}
                                     </p>
-                                    <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['registered'] }}">{{ $counts['registered'] }}</span></h4>
+                                    <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['alloted'] }}">{{ $counts['alloted'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
@@ -230,10 +230,10 @@
                                         <a class="nav-link {{ $activeTab === 'Hold' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setTab('Hold')">Hold</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link {{ $activeTab === 'Booked' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setTab('Booked')">Booked</a>
+                                        <a class="nav-link {{ $activeTab === 'Sold' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setTab('Sold')">Sold</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link {{ $activeTab === 'Registered' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setTab('Registered')">Registered</a>
+                                        <a class="nav-link {{ $activeTab === 'Alloted' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setTab('Alloted')">Alloted</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link {{ $activeTab === 'Blocked' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setTab('Blocked')">Blocked</a>
@@ -314,10 +314,10 @@
                                                         <span class="badge bg-success-subtle text-success px-2 py-1">Available</span>
                                                     @elseif($unit->status === 'Hold')
                                                         <span class="badge bg-warning-subtle text-warning px-2 py-1">Hold</span>
-                                                    @elseif($unit->status === 'Booked')
-                                                        <span class="badge bg-danger-subtle text-danger px-2 py-1">Booked</span>
-                                                    @elseif($unit->status === 'Registered')
-                                                        <span class="badge bg-info-subtle text-info px-2 py-1">Registered</span>
+                                                    @elseif($unit->status === 'Sold')
+                                                        <span class="badge bg-danger-subtle text-danger px-2 py-1">Sold</span>
+                                                    @elseif($unit->status === 'Alloted')
+                                                        <span class="badge bg-info-subtle text-info px-2 py-1">Alloted</span>
                                                     @else
                                                         <span class="badge bg-dark-subtle text-dark px-2 py-1">{{ $unit->status }}</span>
                                                     @endif
@@ -452,8 +452,8 @@
                             <select class="form-select" wire:model.live="tempStatus">
                                 <option value="Available">Available</option>
                                 <option value="Hold">Hold</option>
-                                <option value="Booked">Booked</option>
-                                <option value="Registered">Registered</option>
+                                <option value="Sold">Sold</option>
+                                <option value="Alloted">Alloted</option>
                                 <option value="Blocked">Blocked</option>
                                 <option value="Cancelled">Cancelled</option>
                             </select>

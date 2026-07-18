@@ -87,7 +87,7 @@ class DealAllotmentTest extends TestCase
         $inventory->refresh();
         $deal->refresh();
 
-        $this->assertEquals('Booked', $inventory->status);
+        $this->assertEquals('Sold', $inventory->status);
         $this->assertEquals($inventory->id, $deal->allotted_inventory_id);
 
         Livewire::test(DealShow::class, ['deal' => $deal])

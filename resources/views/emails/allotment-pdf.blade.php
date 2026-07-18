@@ -4,20 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>आवंटन पत्र</title>
     <style>
-        @font-face {
-            font-family: 'Hind';
-            font-style: normal;
-            font-weight: 400;
-            src: url('{{ storage_path("fonts/Hind-Regular.ttf") }}') format('truetype');
-        }
-        @font-face {
-            font-family: 'Hind';
-            font-style: normal;
-            font-weight: bold;
-            src: url('{{ storage_path("fonts/Hind-Bold.ttf") }}') format('truetype');
-        }
         body {
-            font-family: 'Hind', Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             color: #333;

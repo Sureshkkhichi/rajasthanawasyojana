@@ -185,8 +185,8 @@
                                         <select class="form-select @error('status') is-invalid @enderror" wire:model="status">
                                             <option value="Available">Available</option>
                                             <option value="Hold">Hold</option>
-                                            <option value="Booked">Booked</option>
-                                            <option value="Registered">Registered</option>
+                                            <option value="Sold">Sold</option>
+                                            <option value="Alloted">Alloted</option>
                                             <option value="Blocked">Blocked</option>
                                             <option value="Cancelled">Cancelled</option>
                                         </select>

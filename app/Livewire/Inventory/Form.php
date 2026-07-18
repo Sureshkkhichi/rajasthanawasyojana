@@ -19,7 +19,7 @@ class Form extends Component
     public string $project_id = '';
     public string $inventory_type = 'plot'; // plot, flat
     public string $price = '';
-    public string $status = 'Available'; // Available, Hold, Booked, Registered, Blocked, Cancelled
+    public string $status = 'Available'; // Available, Hold, Sold, Alloted, Blocked, Cancelled
     public string $remarks = '';
 
     // Plot Specific Fields
@@ -97,7 +97,7 @@ class Form extends Component
         $rules = [
             'project_id' => 'required|uuid|exists:projects,id',
             'price' => 'required|numeric|min:0',
-            'status' => 'required|in:Available,Hold,Booked,Registered,Blocked,Cancelled',
+            'status' => 'required|in:Available,Hold,Sold,Alloted,Blocked,Cancelled',
             'remarks' => 'nullable|string',
         ];
 
