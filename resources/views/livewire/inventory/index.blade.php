@@ -214,9 +214,6 @@
                                     <li class="nav-item">
                                         <a class="nav-link {{ $activeTab === 'Alloted' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setTab('Alloted')">Alloted</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link {{ $activeTab === 'Blocked' ? 'active' : '' }}" href="javascript:void(0);" wire:click="setTab('Blocked')">Blocked</a>
-                                    </li>
                                 </ul>
 
                                 <div class="d-flex align-items-center gap-2">
@@ -229,7 +226,6 @@
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item" href="javascript:void(0);" wire:click="bulkChangeStatus('Available')">Change Status: Available</a></li>
                                                 <li><a class="dropdown-item" href="javascript:void(0);" wire:click="bulkChangeStatus('Hold')">Change Status: Hold</a></li>
-                                                <li><a class="dropdown-item" href="javascript:void(0);" wire:click="bulkChangeStatus('Blocked')">Change Status: Blocked</a></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item text-danger" href="javascript:void(0);" wire:click="bulkDelete">Delete Selected</a></li>
                                             </ul>
