@@ -84,7 +84,7 @@
             {{-- Summary Cards --}}
             <div class="row">
                 {{-- Card 1: Total Units --}}
-                <div class="col-lg-3 col-md-6 mb-3">
+                <div class="col-lg col-md-4 col-sm-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -105,7 +105,7 @@
                 </div>
 
                 {{-- Card 2: Available --}}
-                <div class="col-lg-3 col-md-6 mb-3">
+                <div class="col-lg col-md-4 col-sm-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -126,7 +126,7 @@
                 </div>
 
                 {{-- Card 3: Hold --}}
-                <div class="col-lg-3 col-md-6 mb-3">
+                <div class="col-lg col-md-4 col-sm-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -147,7 +147,7 @@
                 </div>
 
                 {{-- Card 4: Booked -> Sold --}}
-                <div class="col-lg-3 col-md-6 mb-3">
+                <div class="col-lg col-md-4 col-sm-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -168,7 +168,7 @@
                 </div>
 
                 {{-- Card 5: Registered -> Alloted --}}
-                <div class="col-lg-3 col-md-6 mb-3">
+                <div class="col-lg col-md-4 col-sm-6 mb-3">
                     <div class="card mb-0 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -182,27 +182,6 @@
                                         {{ $inventory_type === 'Flat Project' ? 'Alloted Flats' : 'Alloted Plots' }}
                                     </p>
                                     <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['alloted'] }}">{{ $counts['alloted'] }}</span></h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Card 6: Blocked --}}
-                <div class="col-lg-3 col-md-6 mb-3">
-                    <div class="card mb-0 shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-light text-dark rounded-circle fs-3 material-shadow">
-                                        <i class="ri-lock-line align-middle"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
-                                        {{ $inventory_type === 'Flat Project' ? 'Blocked Flats' : 'Blocked Plots' }}
-                                    </p>
-                                    <h4 class="mb-0"><span class="counter-value" data-target="{{ $counts['blocked'] }}">{{ $counts['blocked'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
