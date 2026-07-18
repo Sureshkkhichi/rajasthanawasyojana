@@ -329,16 +329,6 @@
                                                         </button>
                                                         <ul class="dropdown-menu shadow">
                                                             <li>
-                                                                <a class="dropdown-item py-2" href="{{ route('inventories.edit', $unit->id) }}">
-                                                                    <i class="ri-edit-line align-bottom me-2 text-muted"></i> Edit
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="dropdown-item py-2" href="javascript:void(0);" wire:click="openPriceModal('{{ $unit->id }}')">
-                                                                    <i class="ri-money-dollar-circle-line align-bottom me-2 text-muted"></i> Update Price
-                                                                </a>
-                                                            </li>
-                                                            <li>
                                                                 <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Sold')">
                                                                     <i class="ri-checkbox-circle-line align-bottom me-2 text-danger"></i> Sold
                                                                 </button>
