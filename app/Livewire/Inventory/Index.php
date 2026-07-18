@@ -227,6 +227,33 @@ class Index extends Component
         }
     }
 
+    public function changeSingleStatusDirectly(string $id, string $newStatus): void
+    {
+        $unit = Inventory::find($id);
+        if ($unit) {
+            $oldStatus = $unit->status;
+            
+            $unit->update([
+                'status' => $newStatus,
+            ]);
+
+            // Log history
+            InventoryHistory::create([
+                'inventory_id' => $unit->id,
+                'from_status' => $oldStatus,
+                'to_status' => $newStatus,
+                'changed_by' => auth()->user()->name,
+                'notes' => 'Status changed directly to ' . $newStatus,
+            ]);
+
+            $this->dispatch('swal:alert', [
+                'title' => 'Status Changed!',
+                'text' => 'Unit status updated to ' . $newStatus . ' successfully.',
+                'icon' => 'success'
+            ]);
+        }
+    }
+
     public function deleteUnit(string $id): void
     {
         $unit = Inventory::find($id);

@@ -339,14 +339,24 @@
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a class="dropdown-item py-2" href="javascript:void(0);" wire:click="openStatusModal('{{ $unit->id }}')">
-                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-muted"></i> Change Status
-                                                                </a>
+                                                                <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Sold')">
+                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-danger"></i> Sold
+                                                                </button>
                                                             </li>
                                                             <li>
-                                                                <a class="dropdown-item py-2" href="/leads/create?project_id={{ $unit->project_id }}&plot_no={{ $unit->inventory_type === 'flat' ? $unit->flat_no : $unit->plot_no }}">
-                                                                    <i class="ri-book-read-line align-bottom me-2 text-muted"></i> Book
-                                                                </a>
+                                                                <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Available')">
+                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-success"></i> Available
+                                                                </button>
+                                                            </li>
+                                                            <li>
+                                                                <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Hold')">
+                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-warning"></i> Hold
+                                                                </button>
+                                                            </li>
+                                                            <li>
+                                                                <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Alloted')">
+                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-info"></i> Alloted
+                                                                </button>
                                                             </li>
                                                             <li><hr class="dropdown-divider"></li>
                                                             <li>
