@@ -70,29 +70,12 @@ class Show extends Component
         // Link unit to deal
         $this->deal->update(['allotted_inventory_id' => $inventory->id]);
 
-        // Get contact phone from general settings
-        $project_contact_phone = \App\Models\FrontendSetting::getVal('mobile_number_1', '7374044044');
-
-        // Generate Allotment PDF
-        $pdf = Pdf::loadView('emails.allotment-pdf', [
-            'project' => $this->deal->project,
-            'deal' => $this->deal,
-            'inventory' => $inventory,
-            'project_contact_phone' => $project_contact_phone,
-        ]);
-        $pdfData = $pdf->output();
-
-        // Dispatch Email with PDF attachment
-        Mail::to($this->deal->email)
-            ->cc('suresh5313@gmail.com')
-            ->send(new AllotmentMail($this->deal, $this->deal->project, $inventory, $project_contact_phone, $pdfData));
-
         $this->deal->load(['project', 'agent', 'allottedInventory']);
         $this->loadInventories();
 
         $this->dispatch('swal:alert', [
             'title' => 'Allotment Successful!',
-            'text' => 'Unit has been allotted, and allotment mail with PDF has been successfully sent to the customer.',
+            'text' => 'Unit has been successfully allotted to the customer.',
             'icon' => 'success'
         ]);
     }

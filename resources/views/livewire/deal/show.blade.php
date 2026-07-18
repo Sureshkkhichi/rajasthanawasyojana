@@ -151,6 +151,14 @@
                                         <p class="mb-0 text-muted fs-13 mt-1">
                                             Booking Date: {{ $deal->booking_date ? $deal->booking_date->format('d M Y h:i A') : '-' }} | Booking Amount: ₹{{ number_format($deal->booking_amount, 2) }} | Total Value: ₹{{ number_format($deal->total_amount, 2) }}
                                         </p>
+                                        <div class="mt-3">
+                                            <a href="{{ route('deals.allotment-letter', $deal->id) }}" class="btn btn-soft-success btn-sm me-2">
+                                                <i class="ri-file-download-line align-middle me-1"></i> Allotment Letter
+                                            </a>
+                                            <a href="{{ route('deals.demand-letter', $deal->id) }}" class="btn btn-soft-warning btn-sm">
+                                                <i class="ri-file-download-line align-middle me-1"></i> Demand Letter
+                                            </a>
+                                        </div>
                                     </div>
                                     <div class="flex-shrink-0 ms-3">
                                         <button class="btn btn-danger" 

@@ -99,6 +99,10 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::get('/{deal:id}/edit', DealForm::class)->name('edit');
         // View Deal Details
         Route::get('/{deal:id}', DealShow::class)->name('show');
+        // Download Allotment Letter
+        Route::get('/{deal:id}/allotment-letter', [\App\Http\Controllers\DealDocumentController::class, 'allotmentLetter'])->name('allotment-letter');
+        // Download Demand Letter
+        Route::get('/{deal:id}/demand-letter', [\App\Http\Controllers\DealDocumentController::class, 'demandLetter'])->name('demand-letter');
     });
     // Invoices
     Route::prefix('invoices')->name('invoices.')->group(function () {
