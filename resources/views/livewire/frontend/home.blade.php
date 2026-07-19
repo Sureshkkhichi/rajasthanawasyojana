@@ -124,6 +124,11 @@
                                             <i class="ri-checkbox-circle-fill"></i>
                                             Registration Open
                                         </span>
+                                    @else
+                                        <span class="text-danger fs-13 fw-semibold">
+                                            <i class="ri-close-circle-fill"></i>
+                                            Registration Closed
+                                        </span>
                                     @endif
                                 </div>
                                 <h4 class="card-title mt-2 mb-1"
