@@ -296,6 +296,15 @@
                                                     @else
                                                         <span class="badge bg-dark-subtle text-dark px-2 py-1">{{ $unit->status }}</span>
                                                     @endif
+
+                                                    @if($unit->deal)
+                                                        <div class="mt-1 lh-sm">
+                                                            <a href="{{ route('deals.show', $unit->deal->id) }}" class="text-primary fw-semibold fs-12 d-block text-wrap" style="max-width: 150px; margin: 0 auto;">
+                                                                <i class="ri-user-line align-middle me-1"></i>{{ $unit->deal->first_name }} {{ $unit->deal->last_name }}
+                                                            </a>
+                                                            <span class="text-muted fs-11 d-block">({{ $unit->deal->phone }})</span>
+                                                        </div>
+                                                    @endif
                                                 </td>
                                                 <td onclick="event.stopPropagation();">
                                                     <div class="dropdown">

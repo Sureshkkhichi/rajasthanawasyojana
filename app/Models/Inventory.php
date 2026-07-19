@@ -69,4 +69,9 @@ class Inventory extends Model
     {
         return $this->hasMany(InventoryHistory::class)->orderBy('created_at', 'desc');
     }
+
+    public function deal(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Deal::class, 'allotted_inventory_id');
+    }
 }

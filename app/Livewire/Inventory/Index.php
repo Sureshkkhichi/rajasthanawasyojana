@@ -689,6 +689,7 @@ class Index extends Component
 
         // Query units table
         $unitsQuery = Inventory::query()
+            ->with('deal')
             ->where('project_id', $this->selectedProjectId);
 
         if ($this->statusFilter) {
