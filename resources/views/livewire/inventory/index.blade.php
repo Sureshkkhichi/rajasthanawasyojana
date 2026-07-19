@@ -326,6 +326,11 @@
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end shadow border-light-subtle">
                                                             <li>
+                                                                <a class="dropdown-item py-2" href="{{ route('inventories.edit', $unit->id) }}">
+                                                                    <i class="ri-edit-line align-bottom me-2 text-primary"></i> Edit Unit
+                                                                </a>
+                                                            </li>
+                                                            <li>
                                                                 <button class="dropdown-item py-2" type="button" wire:click="openSoldModal('{{ $unit->id }}')">
                                                                     <i class="ri-checkbox-circle-line align-bottom me-2 text-danger"></i> Mark Sold
                                                                 </button>
