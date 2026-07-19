@@ -61,4 +61,17 @@ class DealDocumentController extends Controller
 
         return $pdf->download("demand-letter-{$deal->id}.pdf");
     }
+
+    public function dealPdf(Deal $deal)
+    {
+        abort_unless(auth()->user()->can('leads.view'), 403);
+
+        $deal->load(['project', 'agent']);
+
+        $pdf = Pdf::loadView('emails.deal-pdf', [
+            'deal' => $deal,
+        ]);
+
+        return $pdf->download("deal-details-{$deal->id}.pdf");
+    }
 }

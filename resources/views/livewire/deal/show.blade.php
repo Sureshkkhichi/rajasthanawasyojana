@@ -5,19 +5,21 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                        <h4 class="mb-sm-0">
+                        <h4 class="mb-sm-0 d-flex align-items-center">
                             <a href="{{ route('deals.index') }}" class="btn btn-soft-secondary btn-sm me-3">
                                 <i class="ri-arrow-left-line align-bottom"></i> Back to Deals
                             </a>
                             Deal Details
                         </h4>
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item">
-                                    <a href="{{ route('deals.index') }}">Deals</a>
-                                </li>
-                                <li class="breadcrumb-item active">View</li>
-                            </ol>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('deals.download-pdf', $deal->id) }}" class="btn btn-soft-primary btn-sm" target="_blank">
+                                <i class="ri-file-download-line align-middle me-1"></i> Download Deal
+                            </a>
+                            @if(empty($deal->allotted_inventory_id))
+                                <a href="{{ route('deals.allot', $deal->id) }}" class="btn btn-success btn-sm">
+                                    <i class="ri-add-box-line align-middle me-1"></i> Allot Unit
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -197,118 +199,20 @@
                                     </div>
                                 </div>
                             @else
-                                {{-- Unit not allotted yet, show available inventories --}}
-                                <div class="alert alert-warning mb-3">
-                                    <i class="ri-alert-line align-middle me-2"></i> No unit has been allotted to this customer yet. Choose an available unit below to proceed with allotment.
-                                </div>
-
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-striped text-center align-middle mb-0">
-                                        <thead class="table-light">
-                                            @if($deal->project?->inventory_type === 'flat')
-                                                <tr>
-                                                    <th>Floor</th>
-                                                    <th>Flat No.</th>
-                                                    <th>Unit Type</th>
-                                                    <th>Area (SBUP)</th>
-                                                    <th>Carpet Area</th>
-                                                    <th>Super Buildup Area</th>
-                                                    <th>Price</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            @else
-                                                <tr>
-                                                    <th>Plot No.</th>
-                                                    <th>Area (Sq. Yards)</th>
-                                                    <th>Road Size</th>
-                                                    <th>PLC %</th>
-                                                    <th>Price</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            @endif
-                                        </thead>
-                                        <tbody>
-                                            @forelse($inventories as $unit)
-                                                @if($deal->project?->inventory_type === 'flat')
-                                                    <tr>
-                                                        <td>{{ $unit->floor }}</td>
-                                                        <td class="fw-semibold">{{ $unit->flat_no }}</td>
-                                                        <td>{{ $unit->unit_type }}</td>
-                                                        <td>{{ $unit->area_sbup }}</td>
-                                                        <td>{{ $unit->carpet_area }}</td>
-                                                        <td>{{ $unit->super_buildup_area }}</td>
-                                                        <td class="text-end fw-semibold">₹ {{ number_format($unit->price, 2) }}</td>
-                                                        <td>
-                                                            @if($unit->status === 'Available')
-                                                                <span class="badge bg-success">Available</span>
-                                                            @else
-                                                                <span class="badge bg-danger">{{ $unit->status }}</span>
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            @if($unit->status === 'Available')
-                                                                <button class="btn btn-sm btn-success px-3" 
-                                                                        wire:click="allotInventory('{{ $unit->id }}')" 
-                                                                        wire:loading.attr="disabled"
-                                                                        wire:target="allotInventory"
-                                                                        wire:confirm="Are you sure you want to allot Flat {{ $unit->flat_no }} to this customer? An allotment letter will be sent automatically.">
-                                                                    <span wire:loading.remove wire:target="allotInventory('{{ $unit->id }}')">
-                                                                        Allot Unit
-                                                                    </span>
-                                                                    <span wire:loading wire:target="allotInventory('{{ $unit->id }}')">
-                                                                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                                                        Sending Letter...
-                                                                    </span>
-                                                                </button>
-                                                            @else
-                                                                <button class="btn btn-sm btn-light disabled px-3" disabled>Not Available</button>
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @else
-                                                    <tr>
-                                                        <td class="fw-semibold">{{ $unit->plot_no }}</td>
-                                                        <td>{{ $unit->area_sq_yards }} Sq. Yards</td>
-                                                        <td>{{ $unit->road_size }}</td>
-                                                        <td>{{ $unit->plc_percentage ? $unit->plc_percentage . '%' : '-' }}</td>
-                                                        <td class="text-end fw-semibold">₹ {{ number_format($unit->price, 2) }}</td>
-                                                        <td>
-                                                            @if($unit->status === 'Available')
-                                                                <span class="badge bg-success">Available</span>
-                                                            @else
-                                                                <span class="badge bg-danger">{{ $unit->status }}</span>
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            @if($unit->status === 'Available')
-                                                                <button class="btn btn-sm btn-success px-3" 
-                                                                        wire:click="allotInventory('{{ $unit->id }}')" 
-                                                                        wire:loading.attr="disabled"
-                                                                        wire:target="allotInventory"
-                                                                        wire:confirm="Are you sure you want to allot Plot {{ $unit->plot_no }} to this customer? An allotment letter will be sent automatically.">
-                                                                    <span wire:loading.remove wire:target="allotInventory('{{ $unit->id }}')">
-                                                                        Allot Unit
-                                                                    </span>
-                                                                    <span wire:loading wire:target="allotInventory('{{ $unit->id }}')">
-                                                                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                                                        Sending Letter...
-                                                                    </span>
-                                                                </button>
-                                                            @else
-                                                                <button class="btn btn-sm btn-light disabled px-3" disabled>Not Available</button>
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                            @empty
-                                                <tr>
-                                                    <td colspan="10" class="text-center text-muted py-4">No inventory units defined for this project.</td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
+                                {{-- Unit not allotted yet, show warning and button to proceed to allotment page --}}
+                                <div class="alert alert-warning d-flex align-items-center p-4 border border-warning mb-0" role="alert">
+                                    <i class="ri-alert-line text-warning fs-24 me-3"></i>
+                                    <div class="flex-grow-1">
+                                        <h5 class="alert-heading text-warning mb-1 fw-semibold">No Unit Allotted</h5>
+                                        <p class="mb-0">
+                                            No flat or plot has been allotted to this customer yet. Click the button to choose an available unit and complete the allotment.
+                                        </p>
+                                    </div>
+                                    <div class="flex-shrink-0 ms-3">
+                                        <a href="{{ route('deals.allot', $deal->id) }}" class="btn btn-warning">
+                                            <i class="ri-add-box-line me-1"></i> Proceed to Allot Unit
+                                        </a>
+                                    </div>
                                 </div>
                             @endif
                         </div>

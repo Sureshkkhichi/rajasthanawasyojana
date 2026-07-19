@@ -103,6 +103,10 @@ Route::middleware(['web', 'auth'])->group(function () {
         Route::get('/{deal:id}/allotment-letter', [\App\Http\Controllers\DealDocumentController::class, 'allotmentLetter'])->name('allotment-letter');
         // Download Demand Letter
         Route::get('/{deal:id}/demand-letter', [\App\Http\Controllers\DealDocumentController::class, 'demandLetter'])->name('demand-letter');
+        // Download Deal Details PDF
+        Route::get('/{deal:id}/download-pdf', [\App\Http\Controllers\DealDocumentController::class, 'dealPdf'])->name('download-pdf');
+        // Allot Unit Page
+        Route::get('/{deal:id}/allot', \App\Livewire\Deal\Allot::class)->name('allot');
     });
     // Invoices
     Route::prefix('invoices')->name('invoices.')->group(function () {

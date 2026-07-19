@@ -17,7 +17,6 @@ use App\Mail\AllotmentMail;
 class Show extends Component
 {
     public Deal $deal;
-    public $inventories = [];
 
     public function mount(Deal $deal): void
     {
@@ -29,54 +28,6 @@ class Show extends Component
             'project',
             'agent',
             'allottedInventory'
-        ]);
-        $this->loadInventories();
-    }
-
-    public function loadInventories(): void
-    {
-        $this->inventories = Inventory::where('project_id', $this->deal->project_id)
-            ->orderBy('status')
-            ->orderBy('flat_no')
-            ->orderBy('plot_no')
-            ->get();
-    }
-
-    public function allotInventory($inventoryId): void
-    {
-        $inventory = Inventory::findOrFail($inventoryId);
-
-        if ($inventory->status !== 'Available') {
-            $this->dispatch('swal:alert', [
-                'title' => 'Error!',
-                'text' => 'This unit is not available for allotment.',
-                'icon' => 'error'
-            ]);
-            return;
-        }
-
-        if ($this->deal->allotted_inventory_id) {
-            $this->dispatch('swal:alert', [
-                'title' => 'Error!',
-                'text' => 'This customer already has an allotted unit.',
-                'icon' => 'error'
-            ]);
-            return;
-        }
-
-        // Lock unit status
-        $inventory->update(['status' => 'Alloted']);
-
-        // Link unit to deal
-        $this->deal->update(['allotted_inventory_id' => $inventory->id]);
-
-        $this->deal->load(['project', 'agent', 'allottedInventory']);
-        $this->loadInventories();
-
-        $this->dispatch('swal:alert', [
-            'title' => 'Allotment Successful!',
-            'text' => 'Unit has been successfully allotted to the customer.',
-            'icon' => 'success'
         ]);
     }
 
@@ -99,7 +50,6 @@ class Show extends Component
         $this->deal->update(['allotted_inventory_id' => null]);
 
         $this->deal->load(['project', 'agent', 'allottedInventory']);
-        $this->loadInventories();
 
         $this->dispatch('swal:alert', [
             'title' => 'Allotment Cancelled!',
