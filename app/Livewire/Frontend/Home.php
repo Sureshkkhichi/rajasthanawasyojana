@@ -35,6 +35,7 @@ class Home extends Component
 
         $this->projects = \App\Models\Project::query()
             ->active()
+            ->orderByRaw("CASE WHEN registration_status = 'open' THEN 0 ELSE 1 END")
             ->orderBy('created_at', 'desc')
             ->get();
 

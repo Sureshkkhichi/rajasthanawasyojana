@@ -138,6 +138,7 @@ class Index extends Component
                 $this->is_active,
                 fn($query) => $query->where('is_active', $this->is_active)
             )
+            ->orderByRaw("CASE WHEN registration_status = 'open' THEN 0 ELSE 1 END")
             ->latest()
             ->paginate(20);
         return view('livewire.project.index', [

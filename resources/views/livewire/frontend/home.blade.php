@@ -153,6 +153,12 @@
 
                             </div>
                         </a>
+                        @else
+                        <div class="card-footer text-center py-2" style="background-color: #f8d7da; border-top: 1px solid #f5c2c7; margin: 0; padding: 0; height: 49px; display: flex; align-items: center; justify-content: center;">
+                            <span class="text-danger fw-bold fs-14">
+                                <i class="ri-close-circle-fill align-middle me-1"></i> रजिस्ट्रेशन बंद हो गया है
+                            </span>
+                        </div>
                         @endif
                     </div>
                 </div>
