@@ -148,13 +148,24 @@
                                                                       <i class="ri-file-text-line align-bottom me-2 text-muted"></i> Generate Invoice
                                                                   </button>
                                                               </li>
-                                                              @if(empty($deal->allotted_inventory_id))
-                                                                  <li>
-                                                                      <button class="dropdown-item py-2 text-success" type="button" wire:click="openAllotModal('{{ $deal->id }}')">
-                                                                          <i class="ri-add-box-line align-bottom me-2"></i> Allot Unit
-                                                                      </button>
-                                                                  </li>
-                                                              @endif
+                                                               @if(empty($deal->allotted_inventory_id))
+                                                                   <li>
+                                                                       <button class="dropdown-item py-2 text-success" type="button" wire:click="openAllotModal('{{ $deal->id }}')">
+                                                                           <i class="ri-add-box-line align-bottom me-2"></i> Allot Unit
+                                                                       </button>
+                                                                   </li>
+                                                               @else
+                                                                   <li>
+                                                                       <a class="dropdown-item py-2 text-info" href="{{ route('deals.allotment-letter', $deal->id) }}" target="_blank">
+                                                                           <i class="ri-file-download-line align-bottom me-2"></i> Download Allotment Letter
+                                                                       </a>
+                                                                   </li>
+                                                                   <li>
+                                                                       <a class="dropdown-item py-2 text-info" href="{{ route('deals.demand-letter', $deal->id) }}" target="_blank">
+                                                                           <i class="ri-file-download-line align-bottom me-2"></i> Download Demand Letter
+                                                                       </a>
+                                                                   </li>
+                                                               @endif
                                                               <li><hr class="dropdown-divider"></li>
                                                               <li>
                                                                   <button class="dropdown-item py-2" type="button" wire:click="changeDealStatus('{{ $deal->id }}', 'Sold')">
