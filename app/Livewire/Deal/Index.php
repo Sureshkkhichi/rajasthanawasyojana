@@ -142,7 +142,27 @@ class Index extends Component
     {
         $deal = Deal::find($dealId);
         if ($deal) {
-            $deal->update(['status' => $newStatus]);
+            if ($newStatus === 'Not Alloted' && $deal->allotted_inventory_id) {
+                $unit = \App\Models\Inventory::find($deal->allotted_inventory_id);
+                if ($unit) {
+                    $oldStatus = $unit->status;
+                    $unit->update(['status' => 'Available']);
+
+                    \App\Models\InventoryHistory::create([
+                        'inventory_id' => $unit->id,
+                        'from_status' => $oldStatus,
+                        'to_status' => 'Available',
+                        'changed_by' => auth()->user()->name,
+                        'notes' => 'Unit vacated because Deal was marked Not Alloted.',
+                    ]);
+                }
+                $deal->update([
+                    'status' => $newStatus,
+                    'allotted_inventory_id' => null
+                ]);
+            } else {
+                $deal->update(['status' => $newStatus]);
+            }
 
             $this->dispatch('swal:alert', [
                 'title' => 'Status Updated!',
