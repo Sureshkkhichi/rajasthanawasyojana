@@ -541,13 +541,12 @@ class Index extends Component
                     'status' => 'Available',
                 ]);
             } else {
-                // Plot columns: 0: Sr. No., 1: Plot No., 2: Area (Sq. Yards), 3: Road Size, 4: PLC %, 5: PLC Status, 6: Sold
+                // Plot columns: 0: Sr. No., 1: Plot No., 2: Area (Sq. Yards), 3: Road Size, 4: PLC %, 5: Sold
                 $plotNo = $row[1] ?? '';
                 $areaSqYards = (float)($row[2] ?? 0.0);
                 $roadSize = $row[3] ?? '';
                 $plcPercentage = (float)($row[4] ?? 0.0);
-                $plcStatus = $row[5] ?? '';
-                $soldStatus = $row[6] ?? 'Available';
+                $soldStatus = $row[5] ?? 'Available';
                 
                 // Map 'Sold' status
                 $status = (stripos($soldStatus, 'sold') !== false) ? 'Sold' : 'Available';
@@ -559,7 +558,6 @@ class Index extends Component
                     'area_sq_yards' => $areaSqYards,
                     'road_size' => $roadSize,
                     'plc_percentage' => $plcPercentage,
-                    'plc_status' => $plcStatus,
                     'price' => 0.0, // Default price
                     'status' => $status,
                 ]);
@@ -588,8 +586,9 @@ class Index extends Component
             $query->where('status', $this->statusFilter);
         }
         if ($this->facingFilter) {
-            $filterCol = ($inventoryType === 'flat') ? 'unit_type' : 'plc_status';
-            $query->where($filterCol, $this->facingFilter);
+            if ($inventoryType === 'flat') {
+                $query->where('unit_type', $this->facingFilter);
+            }
         }
         if ($this->searchPlot) {
             $searchCol = ($inventoryType === 'flat') ? 'flat_no' : 'plot_no';
@@ -624,14 +623,13 @@ class Index extends Component
                     ]);
                 }
             } else {
-                fputcsv($file, ['Plot No.', 'Area (Sq. Yards)', 'Road Size', 'PLC %', 'PLC Status / Location', 'Price', 'Status']);
+                fputcsv($file, ['Plot No.', 'Area (Sq. Yards)', 'Road Size', 'PLC %', 'Price', 'Status']);
                 foreach ($units as $unit) {
                     fputcsv($file, [
                         $unit->plot_no,
                         $unit->area_sq_yards,
                         $unit->road_size,
                         $unit->plc_percentage,
-                        $unit->plc_status,
                         $unit->price,
                         $unit->status
                     ]);
@@ -677,14 +675,15 @@ class Index extends Component
         $facingTypes = [];
         if ($selectedProject) {
             $isFlat = ($selectedProject->inventory_type === 'flat');
-            $filterCol = $isFlat ? 'unit_type' : 'plc_status';
-            $facingTypes = Inventory::query()
-                ->where('project_id', $this->selectedProjectId)
-                ->whereNotNull($filterCol)
-                ->where($filterCol, '!=', '')
-                ->distinct()
-                ->orderBy($filterCol)
-                ->pluck($filterCol);
+            if ($isFlat) {
+                $facingTypes = Inventory::query()
+                    ->where('project_id', $this->selectedProjectId)
+                    ->whereNotNull('unit_type')
+                    ->where('unit_type', '!=', '')
+                    ->distinct()
+                    ->orderBy('unit_type')
+                    ->pluck('unit_type');
+            }
         }
 
         // Query units table
@@ -696,8 +695,9 @@ class Index extends Component
             $unitsQuery->where('status', $this->statusFilter);
         }
         if ($this->facingFilter) {
-            $filterCol = ($selectedProject && $selectedProject->inventory_type === 'flat') ? 'unit_type' : 'plc_status';
-            $unitsQuery->where($filterCol, $this->facingFilter);
+            if ($selectedProject && $selectedProject->inventory_type === 'flat') {
+                $unitsQuery->where('unit_type', $this->facingFilter);
+            }
         }
         if ($this->searchPlot) {
             $searchCol = ($selectedProject && $selectedProject->inventory_type === 'flat') ? 'flat_no' : 'plot_no';

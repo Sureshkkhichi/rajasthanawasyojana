@@ -24,7 +24,6 @@ class Inventory extends Model
         'area_sq_yards',
         'road_size',
         'plc_percentage',
-        'plc_status',
 
         // Flat specific fields
         'floor',

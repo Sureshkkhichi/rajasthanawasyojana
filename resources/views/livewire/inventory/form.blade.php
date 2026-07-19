@@ -82,22 +82,13 @@
                                             @error('road_size') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <label class="form-label">PLC %</label>
                                             <div class="input-group">
                                                 <input type="number" step="0.01" class="form-control @error('plc_percentage') is-invalid @enderror" wire:model="plc_percentage" placeholder="e.g., 10">
                                                 <span class="input-group-text">%</span>
                                             </div>
                                             @error('plc_percentage') <div class="text-danger fs-12 mt-1">{{ $message }}</div> @enderror
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label class="form-label">PLC Status</label>
-                                            <select class="form-select @error('plc_status') is-invalid @enderror" wire:model="plc_status">
-                                                <option value="">Select PLC</option>
-                                                <option value="Corner">Corner</option>
-                                            </select>
-                                            @error('plc_status') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
 
                                     @else

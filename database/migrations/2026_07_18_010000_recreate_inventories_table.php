@@ -23,7 +23,6 @@ return new class extends Migration {
             $table->decimal('area_sq_yards', 10, 2)->nullable();
             $table->string('road_size')->nullable();
             $table->decimal('plc_percentage', 5, 2)->nullable();
-            $table->string('plc_status')->nullable(); // e.g. Corner
 
             // Flat Fields
             $table->string('floor')->nullable();

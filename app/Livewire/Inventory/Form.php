@@ -27,7 +27,6 @@ class Form extends Component
     public string $area_sq_yards = '';
     public string $road_size = '';
     public string $plc_percentage = '';
-    public string $plc_status = ''; // e.g. Corner
 
     // Flat Specific Fields
     public string $floor = '';
@@ -57,7 +56,6 @@ class Form extends Component
             $this->area_sq_yards = $inventory->area_sq_yards ? (string)$inventory->area_sq_yards : '';
             $this->road_size = $inventory->road_size ?? '';
             $this->plc_percentage = $inventory->plc_percentage !== null ? (string)$inventory->plc_percentage : '';
-            $this->plc_status = $inventory->plc_status ?? '';
 
             // Flats
             $this->floor = $inventory->floor ?? '';
@@ -106,7 +104,6 @@ class Form extends Component
             $rules['area_sq_yards'] = 'required|numeric|min:0';
             $rules['road_size'] = 'required|string|max:255';
             $rules['plc_percentage'] = 'nullable|numeric|min:0|max:100';
-            $rules['plc_status'] = 'nullable|string|max:255';
         } else {
             $rules['floor'] = 'required|string|max:255';
             $rules['flat_no'] = 'required|string|max:255';
@@ -131,7 +128,6 @@ class Form extends Component
             $data['area_sq_yards'] = $this->area_sq_yards;
             $data['road_size'] = $this->road_size;
             $data['plc_percentage'] = $this->plc_percentage !== '' ? $this->plc_percentage : null;
-            $data['plc_status'] = $this->plc_status ?: null;
 
             // Clear flat fields
             $data['floor'] = null;
@@ -153,7 +149,6 @@ class Form extends Component
             $data['area_sq_yards'] = null;
             $data['road_size'] = null;
             $data['plc_percentage'] = null;
-            $data['plc_status'] = null;
         }
 
         if ($this->inventory && $this->inventory->exists) {

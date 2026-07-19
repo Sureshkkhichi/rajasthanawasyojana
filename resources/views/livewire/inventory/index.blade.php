@@ -25,7 +25,7 @@
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body p-3">
                     <div class="row g-3 align-items-end">
-                        <div class="col-md-4">
+                        <div class="{{ $inventory_type === 'Flat Project' ? 'col-md-4' : 'col-md-5' }}">
                             <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-building-4-line me-1"></i>Select Project <span class="text-danger">*</span></label>
                             <div class="d-flex gap-2">
                                 <select class="form-select border-light-subtle shadow-sm" wire:model.live="selectedProjectId">
@@ -40,7 +40,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="{{ $inventory_type === 'Flat Project' ? 'col-md-2' : 'col-md-3' }}">
                             <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-filter-2-line me-1"></i>Status</label>
                             <select class="form-select border-light-subtle shadow-sm" wire:model.live="statusFilter">
                                 <option value="">All Statuses</option>
@@ -52,17 +52,19 @@
                             </select>
                         </div>
 
-                        <div class="col-md-3">
-                            <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-layout-grid-line me-1"></i>{{ $inventory_type === 'Flat Project' ? 'Unit Type' : 'PLC Status' }}</label>
-                            <select class="form-select border-light-subtle shadow-sm" wire:model.live="facingFilter">
-                                <option value="">All {{ $inventory_type === 'Flat Project' ? 'Unit Types' : 'PLC Statuses' }}</option>
-                                @foreach($facingTypes as $facing)
-                                    <option value="{{ $facing }}">{{ $facing }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        @if ($inventory_type === 'Flat Project')
+                            <div class="col-md-3">
+                                <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-layout-grid-line me-1"></i>Unit Type</label>
+                                <select class="form-select border-light-subtle shadow-sm" wire:model.live="facingFilter">
+                                    <option value="">All Unit Types</option>
+                                    @foreach($facingTypes as $facing)
+                                        <option value="{{ $facing }}">{{ $facing }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
 
-                        <div class="col-md-3">
+                        <div class="{{ $inventory_type === 'Flat Project' ? 'col-md-3' : 'col-md-4' }}">
                             <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-search-line me-1"></i>Search Unit</label>
                             <div class="input-group shadow-sm">
                                 <input type="text" class="form-control border-light-subtle" placeholder="{{ $inventory_type === 'Flat Project' ? 'Search Flat No...' : 'Search Plot No...' }}" wire:model.live.debounce.300ms="searchPlot">
@@ -263,7 +265,6 @@
                                                 <th>Area (Sq. Yards)</th>
                                                 <th>Road Size</th>
                                                 <th>PLC %</th>
-                                                <th>PLC Status</th>
                                             @endif
                                             <th>Price (₹)</th>
                                             <th>Current Status</th>
@@ -288,7 +289,6 @@
                                                     <td>{{ number_format($unit->area_sq_yards, 2) }}</td>
                                                     <td>{{ $unit->road_size }}</td>
                                                     <td>{{ $unit->plc_percentage !== null ? $unit->plc_percentage . '%' : '-' }}</td>
-                                                    <td>{{ $unit->plc_status ?: '-' }}</td>
                                                 @endif
                                                 <td class="text-end fw-semibold text-dark">₹ {{ number_format($unit->price, 0) }}</td>
                                                 <td>
