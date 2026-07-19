@@ -70,24 +70,24 @@ class Sidebar
                 //         'permission' => 'leads.view',
                 //     ],
                 // ],
-                'flats' => [
-                    [
-                        'title' => 'Flats',
-                        'route' => 'flats.index',
-                        'is_route' => true,
-                        'icon' => 'ri-building-2-line',
-                        'permission' => 'flats.view',
-                    ],
-                ],
-                'plots' => [
-                    [
-                        'title' => 'Plots',
-                        'route' => 'inventories.index', // redirects to plots inventory list for now
-                        'is_route' => true,
-                        'icon' => 'ri-map-pin-line',
-                        'permission' => 'projects.view',
-                    ],
-                ],
+                // 'flats' => [
+                //     [
+                //         'title' => 'Flats',
+                //         'route' => 'flats.index',
+                //         'is_route' => true,
+                //         'icon' => 'ri-building-2-line',
+                //         'permission' => 'flats.view',
+                //     ],
+                // ],
+                // 'plots' => [
+                //     [
+                //         'title' => 'Plots',
+                //         'route' => 'inventories.index', // redirects to plots inventory list for now
+                //         'is_route' => true,
+                //         'icon' => 'ri-map-pin-line',
+                //         'permission' => 'projects.view',
+                //     ],
+                // ],
             ],
             // LEADS
             'leads_management' => [

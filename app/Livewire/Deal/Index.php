@@ -31,6 +31,13 @@ class Index extends Component
     public array $selectedDeals = [];
     public bool $selectAll = false;
 
+    // Allotment Modal & Status tracking properties
+    public bool $allotModalOpen = false;
+    public ?string $allotDealId = null;
+    public ?string $selectedUnitId = null;
+    public array $selectedUnitDetails = [];
+    public $availableUnits = [];
+
     public function updatedSelectAll($value): void
     {
         if ($value) {
@@ -131,6 +138,97 @@ class Index extends Component
         ]);
     }
 
+    public function changeDealStatus(string $dealId, string $newStatus): void
+    {
+        $deal = Deal::find($dealId);
+        if ($deal) {
+            $deal->update(['status' => $newStatus]);
+
+            $this->dispatch('swal:alert', [
+                'title' => 'Status Updated!',
+                'text' => 'Deal status updated to ' . $newStatus . ' successfully.',
+                'icon' => 'success'
+            ]);
+        }
+    }
+
+    public function openAllotModal(string $dealId): void
+    {
+        $deal = Deal::find($dealId);
+        if ($deal) {
+            $this->allotDealId = $dealId;
+            $this->selectedUnitId = null;
+            $this->selectedUnitDetails = [];
+            
+            $this->availableUnits = \App\Models\Inventory::where('project_id', $deal->project_id)
+                ->where('status', 'Available')
+                ->get();
+
+            $this->allotModalOpen = true;
+        }
+    }
+
+    public function updatedSelectedUnitId($value): void
+    {
+        if ($value) {
+            $unit = \App\Models\Inventory::find($value);
+            if ($unit) {
+                if ($unit->inventory_type === 'flat') {
+                    $this->selectedUnitDetails = [
+                        'type' => 'Flat',
+                        'label' => 'Flat No: ' . $unit->flat_no . ' (' . $unit->floor . ' Floor)',
+                        'info1' => 'Flat Type: ' . $unit->flat_type,
+                        'info2' => 'Unit Type: ' . $unit->unit_type,
+                        'price' => $unit->price,
+                    ];
+                } else {
+                    $this->selectedUnitDetails = [
+                        'type' => 'Plot',
+                        'label' => 'Plot No: ' . $unit->plot_no,
+                        'info1' => 'Area: ' . $unit->area_sq_yards . ' Sq. Yards',
+                        'info2' => 'Road Size: ' . $unit->road_size,
+                        'price' => $unit->price,
+                    ];
+                }
+            }
+        } else {
+            $this->selectedUnitDetails = [];
+        }
+    }
+
+    public function submitAllotment(): void
+    {
+        $this->validate([
+            'selectedUnitId' => 'required|exists:inventories,id',
+        ]);
+
+        $deal = Deal::find($this->allotDealId);
+        $unit = \App\Models\Inventory::find($this->selectedUnitId);
+
+        if ($deal && $unit) {
+            $deal->update(['allotted_inventory_id' => $unit->id]);
+
+            $oldStatus = $unit->status;
+            $unit->update(['status' => 'Alloted']);
+
+            \App\Models\InventoryHistory::create([
+                'inventory_id' => $unit->id,
+                'from_status' => $oldStatus,
+                'to_status' => 'Alloted',
+                'changed_by' => auth()->user()->name,
+                'notes' => 'Unit allotted via Deal Action Allotment: ' . $deal->first_name . ' ' . $deal->last_name,
+            ]);
+
+            $this->allotModalOpen = false;
+
+            $this->dispatch('swal:alert', [
+                'title' => 'Allotment Successful!',
+                'text' => 'Unit ' . ($unit->inventory_type === 'flat' ? $unit->flat_no : $unit->plot_no) . ' has been allotted to the deal.',
+                'icon' => 'success'
+            ]);
+        }
+    }
+
     public function deleteSelected(): void
     {
         Deal::whereIn('id', $this->selectedDeals)->delete();
@@ -159,7 +257,7 @@ class Index extends Component
             ->orderBy('flat_size')
             ->pluck('flat_size');
 
-        $query = Deal::query()->with(['project', 'agent']);
+        $query = Deal::query()->with(['project', 'agent', 'allottedInventory']);
 
         if ($this->search_name) {
             $query->where(function($q) {
