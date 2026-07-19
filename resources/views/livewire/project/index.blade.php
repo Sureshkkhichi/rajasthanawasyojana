@@ -140,13 +140,15 @@
                                                     <small class="text-muted"> {{ $project->slug }} </small>
                                                 </td>
                                                 <td> {{ $project->projectType?->name }} </td>
-                                                <td>
-                                                    <span class="badge {{ $project->inventory_type === 'flat' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} text-uppercase"
-                                                        style="cursor: pointer;"
-                                                        wire:click="toggleInventoryType('{{ $project->id }}')"
-                                                        title="Click to toggle Inventory Type">
-                                                        {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }}
-                                                    </span>
+                                                <td onclick="event.stopPropagation();">
+                                                    <div class="form-check form-switch d-flex align-items-center gap-2">
+                                                        <input class="form-check-input" type="checkbox" role="switch"
+                                                            wire:change="toggleInventoryType('{{ $project->id }}')"
+                                                            @checked($project->inventory_type === 'flat')>
+                                                        <span class="badge {{ $project->inventory_type === 'flat' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} text-uppercase">
+                                                            {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }}
+                                                        </span>
+                                                    </div>
                                                 </td>
                                                 <td> {{ $project->city }} </td>
                                                 <td>
