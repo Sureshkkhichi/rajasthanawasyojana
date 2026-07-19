@@ -23,6 +23,7 @@
     <!-- BOOKING FORM -->
     <section class="section nft-hero bg-light" id="booking-form">
         <div class="container">
+            @if($project->registration_status === 'open')
             <div class="row justify-content-center mb-0">
                 <div class="col-lg-12">
                     <div class="text-center">
@@ -102,7 +103,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Father/Husband Name
+                                            Father / Husband Name
                                         </label>
                                         <input type="text"
                                             class="form-control text-capitalize @error('father_husband_name') is-invalid @enderror"
@@ -114,12 +115,16 @@
                                         @enderror
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="row">
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
                                             PAN Number <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text"
+                                        <input type="text" id="pan_number"
                                             class="form-control text-uppercase @error('pan_number') is-invalid @enderror"
                                             wire:model.blur="pan_number" maxlength="10">
                                         @error('pan_number')
@@ -135,7 +140,7 @@
                                             Gender <span class="text-danger">*</span>
                                         </label>
                                         <select class="form-select @error('gender') is-invalid @enderror"
-                                            wire:model.blur="gender">
+                                            wire:model="gender">
                                             <option value="">Select Gender</option>
                                             <option value="male">Male</option>
                                             <option value="female">Female</option>
@@ -151,9 +156,10 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Email Address <span class="text-danger">*</span>
+                                            Email <span class="text-danger">*</span>
                                         </label>
-                                        <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        <input type="email"
+                                            class="form-control @error('email') is-invalid @enderror"
                                             wire:model.blur="email">
                                         @error('email')
                                             <div class="invalid-feedback">
@@ -162,13 +168,18 @@
                                         @enderror
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="row">
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Phone <span class="text-danger">*</span>
+                                            Mobile Number <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" class="form-control @error('phone') is-invalid @enderror"
-                                            wire:model.blur="phone" maxlength="10">
+                                        <input type="tel"
+                                            class="form-control @error('phone') is-invalid @enderror"
+                                            wire:model.blur="phone">
                                         @error('phone')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -179,12 +190,11 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Date Of Birth <span class="text-danger">*</span>
+                                            Date of Birth <span class="text-danger">*</span>
                                         </label>
                                         <input type="date"
                                             class="form-control @error('date_of_birth') is-invalid @enderror"
-                                            wire:model.blur="date_of_birth"
-                                            max="{{ now()->subYears(18)->format('Y-m-d') }}">
+                                            wire:model.blur="date_of_birth">
                                         @error('date_of_birth')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -197,12 +207,17 @@
                                         <label class="form-label">
                                             Occupation <span class="text-danger">*</span>
                                         </label>
-                                        <select class="form-control @error('occupation') is-invalid @enderror"
-                                            wire:model.blur="occupation">
+                                        <select class="form-select @error('occupation') is-invalid @enderror"
+                                            wire:model="occupation">
                                             <option value="">Select Occupation</option>
-                                            @foreach(config('constants.occupations') as $key => $lbl)
-                                                <option value="{{ $key }}">{{ $lbl }}</option>
-                                            @endforeach
+                                            <option value="Salaried">Salaried</option>
+                                            <option value="Self Employed">Self Employed</option>
+                                            <option value="Business">Business</option>
+                                            <option value="Professional">Professional</option>
+                                            <option value="Retired">Retired</option>
+                                            <option value="House Wife">House Wife</option>
+                                            <option value="Student">Student</option>
+                                            <option value="Other">Other</option>
                                         </select>
                                         @error('occupation')
                                             <div class="invalid-feedback">
@@ -211,14 +226,62 @@
                                         @enderror
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <!-- ADDRESS DETAILS -->
+                        <div class="mb-4">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            State <span class="text-danger">*</span>
+                                        </label>
+                                        <div wire:ignore>
+                                            <select id="state-select" class="form-select">
+                                                <option value="">Select State</option>
+                                                @foreach($states as $state)
+                                                    <option value="{{ $state->id }}" @selected($state->id == $state_id)>
+                                                        {{ $state->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('state_id')
+                                            <div class="text-danger fs-13 mt-1">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            City <span class="text-danger">*</span>
+                                        </label>
+                                        <div wire:ignore>
+                                            <select id="city-select" class="form-select">
+                                                <option value="">Select City</option>
+                                                @foreach($cities as $c)
+                                                    <option value="{{ $c->id }}" @selected($c->id == $city_id)>
+                                                        {{ $c->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('city_id')
+                                            <div class="text-danger fs-13 mt-1">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            Address <span class="text-danger">*</span>
+                                            Permanent Address <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text"
-                                            class="form-control text-capitalize @error('address') is-invalid @enderror"
-                                            wire:model.blur="address">
+                                        <textarea class="form-control text-capitalize @error('address') is-invalid @enderror"
+                                            wire:model.blur="address" rows="2"></textarea>
                                         @error('address')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -226,59 +289,15 @@
                                         @enderror
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <!-- APPLICATION DETAIL -->
+                        <div class="mb-4">
+                            <div class="row">
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            State <span class="text-danger">*</span>
-                                        </label>
-                                        <div wire:ignore wire:key="state-container-{{ $state_id }}">
-                                            <select id="state-select"
-                                                class="js-example-basic-single @error('state_id') is-invalid @enderror"
-                                                wire:model.blur="state_id">
-                                                <option value="">Select State</option>
-                                                @foreach ($states as $state)
-                                                    <option value="{{ $state->id }}">
-                                                        {{ $state->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @error('state_id')
-                                            <div class="invalid-feedback" style="display: block;">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-0">
-                                        <label class="form-label">
-                                            City <span class="text-danger">*</span>
-                                        </label>
-                                        <div wire:ignore
-                                            wire:key="city-container-{{ $state_id }}-{{ $city_id }}-{{ count($cities) }}">
-                                            <select id="city-select"
-                                                class="js-example-basic-single @error('city_id') is-invalid @enderror"
-                                                wire:model.blur="city_id">
-                                                <option value="">Select City</option>
-                                                @foreach ($cities as $cityItem)
-                                                    <option value="{{ $cityItem->id }}">
-                                                        {{ $cityItem->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @error('city_id')
-                                            <div class="invalid-feedback" style="display: block;">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-0">
-                                        <label class="form-label">
-                                            Co-Applicant (If Any)
+                                            Co-Applicant Name
                                         </label>
                                         <input type="text"
                                             class="form-control text-capitalize @error('co_applicant_name') is-invalid @enderror"
@@ -293,15 +312,17 @@
                                 <div class="col-lg-4">
                                     <div class="mb-0">
                                         <label class="form-label">
-                                            {{ $project->inventory_type === 'flat' ? 'Flat Type' : 'Area (Sq. Yards)' }} <span class="text-danger">*</span>
+                                            @if($project->inventory_type === 'flat')
+                                                Select Flat Size <span class="text-danger">*</span>
+                                            @else
+                                                Select Plot Size (Sq Yards) <span class="text-danger">*</span>
+                                            @endif
                                         </label>
                                         <select class="form-select @error('flat_size') is-invalid @enderror"
-                                            wire:model.blur="flat_size">
-                                            <option value="">
-                                                {{ $project->inventory_type === 'flat' ? 'Select Flat Type' : 'Select Area' }}
-                                            </option>
+                                            wire:model="flat_size">
+                                            <option value="">Select Option</option>
                                             @foreach($sizes as $size)
-                                                <option value="{{ $size }}">{{ $project->inventory_type === 'flat' ? $size : $size . ' Sq. Yards' }}</option>
+                                                <option value="{{ $size }}">{{ $size }}</option>
                                             @endforeach
                                         </select>
                                         @error('flat_size')
@@ -317,7 +338,7 @@
                                             Waiver Code
                                         </label>
                                         <input type="text"
-                                            class="form-control @error('waiver_code') is-invalid @enderror"
+                                            class="form-control text-uppercase @error('waiver_code') is-invalid @enderror"
                                             wire:model.blur="waiver_code">
                                         @error('waiver_code')
                                             <div class="invalid-feedback">
@@ -328,12 +349,34 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- PRICE CARD -->
-                        <div class="row">
-                            <div class="col-sm-12 form-group">
-                                <label>Total Flat value </label>
-                                <h2 id="total" style=" border-bottom:2px dotted #000;"></h2>
-                                <h3 class="" style="font-weight: 500;">Registration Amount Rs. 21100</h3>
+                        <!-- REGISTRATION FEE DETAILS -->
+                        <div class="mb-4 card border-0 shadow-sm" style="background-color: #e9ecef;">
+                            <div class="card-body">
+                                <h5 class="fw-bold mb-3 text-dark">
+                                    Registration Fee Details
+                                </h5>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <span class="text-muted">Registration Charge:</span>
+                                            <span class="fw-bold text-dark ms-2">₹ 20,000.00</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <span class="text-muted">GST (18%):</span>
+                                            <span class="fw-bold text-dark ms-2">₹ 3,600.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <span class="text-muted">Gateway & Handling Charges:</span>
+                                            <span class="fw-bold text-dark ms-2">₹ 1,500.00</span>
+                                        </div>
+                                        <div class="mb-0 border-top pt-2">
+                                            <span class="text-muted fw-bold">Total Amount to Pay:</span>
+                                            <span class="fw-extrabold text-success ms-2 fs-18">₹ 21,100.00</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- TERMS -->
@@ -373,6 +416,26 @@
                     </form>
                 </div>
             </div>
+            @else
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg border-0 py-5 px-4 text-center rounded-4 bg-white">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <i class="ri-error-warning-fill text-danger" style="font-size: 64px;"></i>
+                            </div>
+                            <h3 class="fw-bold text-dark mb-3">रजिस्ट्रेशन बंद हो गए हैं!</h3>
+                            <p class="text-muted fs-15 mb-4">
+                                क्षमा करें, इस योजना (<strong>{{ $project->name }}</strong>) के लिए ऑनलाइन आवेदन / रजिस्ट्रेशन की समय सीमा समाप्त हो चुकी है। अधिक जानकारी के लिए कृपया प्रशासनिक कार्यालय से संपर्क करें.
+                            </p>
+                            <a href="{{ route('front') }}" class="btn btn-primary px-4 py-2 fs-15 rounded-pill shadow-sm" style="background-color: #ff0000; border-color: #ff0000; border: none;">
+                                <i class="ri-home-4-line align-middle me-1"></i> मुख्य पृष्ठ पर जाएं
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
         </div>
     </section>
 

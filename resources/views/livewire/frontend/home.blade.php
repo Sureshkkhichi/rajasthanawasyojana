@@ -142,6 +142,7 @@
                                 </div>
                             </div>
                         </a>
+                        @if($project->registration_status === 'open')
                         <a href="{{ route('booking', $project->id) }}" class="text-decoration-none">
                             <div class="card-footer d-flex"
                                 style="flex-direction: row;justify-content: space-between;align-items: center;padding: 0;margin: 0;">
@@ -152,6 +153,7 @@
 
                             </div>
                         </a>
+                        @endif
                     </div>
                 </div>
                 @endforeach
