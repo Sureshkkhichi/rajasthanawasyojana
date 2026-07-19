@@ -350,34 +350,12 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- REGISTRATION FEE DETAILS -->
-                        <div class="mb-4 card border-0 shadow-sm" style="background-color: #e9ecef;">
-                            <div class="card-body">
-                                <h5 class="fw-bold mb-3 text-dark">
-                                    Registration Fee Details
-                                </h5>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <span class="text-muted">Registration Charge:</span>
-                                            <span class="fw-bold text-dark ms-2">₹ 20,000.00</span>
-                                        </div>
-                                        <div class="mb-3">
-                                            <span class="text-muted">GST (18%):</span>
-                                            <span class="fw-bold text-dark ms-2">₹ 3,600.00</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <span class="text-muted">Gateway & Handling Charges:</span>
-                                            <span class="fw-bold text-dark ms-2">₹ 1,500.00</span>
-                                        </div>
-                                        <div class="mb-0 border-top pt-2">
-                                            <span class="text-muted fw-bold">Total Amount to Pay:</span>
-                                            <span class="fw-extrabold text-success ms-2 fs-18">₹ 21,100.00</span>
-                                        </div>
-                                    </div>
-                                </div>
+                        <!-- PRICE CARD -->
+                        <div class="row">
+                            <div class="col-sm-12 form-group">
+                                <label>Total Flat value </label>
+                                <h2 id="total" style=" border-bottom:2px dotted #000;"></h2>
+                                <h3 class="" style="font-weight: 500;">Registration Amount Rs. 21100</h3>
                             </div>
                         </div>
                         <!-- TERMS -->
