@@ -48,7 +48,6 @@
                                 <option value="Hold">Hold</option>
                                 <option value="Sold">Sold</option>
                                 <option value="Alloted">Alloted</option>
-                                <option value="Blocked">Blocked</option>
                                 <option value="Cancelled">Cancelled</option>
                             </select>
                         </div>
@@ -322,8 +321,8 @@
                                                 </td>
                                                 <td onclick="event.stopPropagation();">
                                                     <div class="dropdown">
-                                                        <button class="btn btn-soft-secondary btn-icon btn-sm dropdown-toggle arrow-none" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false">
-                                                            <i class="ri-more-fill align-middle"></i>
+                                                        <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false">
+                                                            Action
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end shadow border-light-subtle">
                                                             <li>
