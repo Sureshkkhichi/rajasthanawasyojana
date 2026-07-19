@@ -121,6 +121,11 @@
                                                 <option value="8th Floor">8th Floor</option>
                                                 <option value="9th Floor">9th Floor</option>
                                                 <option value="10th Floor">10th Floor</option>
+                                                <option value="11th Floor">11th Floor</option>
+                                                <option value="12th Floor">12th Floor</option>
+                                                <option value="13th Floor">13th Floor</option>
+                                                <option value="14th Floor">14th Floor</option>
+                                                <option value="15th Floor">15th Floor</option>
                                             </select>
                                             @error('floor') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
