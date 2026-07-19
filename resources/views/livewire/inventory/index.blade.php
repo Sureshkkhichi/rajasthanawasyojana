@@ -26,7 +26,7 @@
                                 <select class="form-select" wire:model.live="selectedProjectId">
                                     <option value="">Select Project</option>
                                     @foreach($projects as $p)
-                                        <option value="{{ $p->id }}">{{ $p->name }}</option>
+                                        <option value="{{ $p->id }}">{{ $p->name }} ({{ $p->inventory_type === 'flat' ? 'Flat' : 'Plot' }}) - {{ $p->registration_status === 'open' ? 'Registration Open' : 'Registration Closed' }}</option>
                                     @endforeach
                                 </select>
                                 <span class="badge {{ $inventory_type === 'Flat Project' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} d-flex align-items-center px-3 py-2 border border-{{ $inventory_type === 'Flat Project' ? 'info' : 'success' }}-subtle text-nowrap rounded">

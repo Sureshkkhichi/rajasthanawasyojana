@@ -41,7 +41,7 @@
                                         <select class="form-select @error('project_id') is-invalid @enderror" wire:model.live="project_id" @disabled($inventory && $inventory->exists)>
                                             <option value="">Select Project</option>
                                             @foreach($projects as $p)
-                                                <option value="{{ $p->id }}">{{ $p->name }}</option>
+                                                <option value="{{ $p->id }}">{{ $p->name }} ({{ $p->inventory_type === 'flat' ? 'Flat' : 'Plot' }}) - {{ $p->registration_status === 'open' ? 'Registration Open' : 'Registration Closed' }}</option>
                                             @endforeach
                                         </select>
                                         @error('project_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
