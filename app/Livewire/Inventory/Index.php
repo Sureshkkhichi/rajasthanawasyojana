@@ -44,6 +44,22 @@ class Index extends Component
     public string $tempStatus = '';
     public string $tempRemarks = '';
 
+    // Sold Allotment Popup Modals & Properties
+    public bool $soldModalOpen = false;
+    public ?string $soldUnitId = null;
+    public ?string $selectedDealId = null;
+    public array $selectedDealDetails = [];
+    public bool $createNewDealMode = false;
+    public array $newDealForm = [
+        'first_name' => '',
+        'last_name' => '',
+        'phone' => '',
+        'email' => '',
+        'booking_amount' => 21100,
+        'total_amount' => '',
+    ];
+    public $unallottedDeals = [];
+
     protected $queryString = [
         'selectedProjectId' => ['except' => ''],
         'statusFilter' => ['except' => ''],
@@ -252,6 +268,121 @@ class Index extends Component
                 'icon' => 'success'
             ]);
         }
+    }
+
+    public function openSoldModal(string $unitId): void
+    {
+        $unit = Inventory::find($unitId);
+        if ($unit) {
+            $this->soldUnitId = $unitId;
+            $this->selectedDealId = null;
+            $this->selectedDealDetails = [];
+            $this->createNewDealMode = false;
+            $this->newDealForm = [
+                'first_name' => '',
+                'last_name' => '',
+                'phone' => '',
+                'email' => '',
+                'booking_amount' => 21100,
+                'total_amount' => $unit->price,
+            ];
+            
+            $this->unallottedDeals = \App\Models\Deal::where('project_id', $unit->project_id)
+                ->whereNull('allotted_inventory_id')
+                ->get();
+
+            $this->soldModalOpen = true;
+        }
+    }
+
+    public function updatedSelectedDealId($value): void
+    {
+        if ($value) {
+            $deal = \App\Models\Deal::find($value);
+            if ($deal) {
+                $this->selectedDealDetails = [
+                    'name' => $deal->first_name . ' ' . $deal->last_name,
+                    'phone' => $deal->phone,
+                    'email' => $deal->email,
+                    'booking_amount' => $deal->booking_amount,
+                    'total_amount' => $deal->total_amount,
+                ];
+            }
+        } else {
+            $this->selectedDealDetails = [];
+        }
+    }
+
+    public function submitSoldAllotment(): void
+    {
+        $unit = Inventory::find($this->soldUnitId);
+        if (!$unit) {
+            $this->soldModalOpen = false;
+            return;
+        }
+
+        if ($this->createNewDealMode) {
+            $this->validate([
+                'newDealForm.first_name' => 'required|string|max:255',
+                'newDealForm.last_name' => 'nullable|string|max:255',
+                'newDealForm.phone' => 'required|string|max:20',
+                'newDealForm.email' => 'nullable|email|max:255',
+                'newDealForm.booking_amount' => 'required|numeric|min:0',
+                'newDealForm.total_amount' => 'required|numeric|min:0',
+            ]);
+
+            $deal = \App\Models\Deal::create([
+                'project_id' => $unit->project_id,
+                'first_name' => $this->newDealForm['first_name'],
+                'last_name' => $this->newDealForm['last_name'] ?: '',
+                'phone' => $this->newDealForm['phone'],
+                'email' => $this->newDealForm['email'] ?: '',
+                'booking_amount' => $this->newDealForm['booking_amount'],
+                'total_amount' => $this->newDealForm['total_amount'],
+                'booking_date' => now(),
+                'status' => 'Paid',
+                'allotted_inventory_id' => $unit->id,
+            ]);
+
+            $oldStatus = $unit->status;
+            $unit->update(['status' => 'Alloted']);
+
+            InventoryHistory::create([
+                'inventory_id' => $unit->id,
+                'from_status' => $oldStatus,
+                'to_status' => 'Alloted',
+                'changed_by' => auth()->user()->name,
+                'notes' => 'Unit allotted via new Deal creation: ' . $deal->first_name . ' ' . $deal->last_name,
+            ]);
+        } else {
+            $this->validate([
+                'selectedDealId' => 'required|exists:deals,id',
+            ]);
+
+            $deal = \App\Models\Deal::find($this->selectedDealId);
+            if ($deal) {
+                $deal->update(['allotted_inventory_id' => $unit->id]);
+
+                $oldStatus = $unit->status;
+                $unit->update(['status' => 'Alloted']);
+
+                InventoryHistory::create([
+                    'inventory_id' => $unit->id,
+                    'from_status' => $oldStatus,
+                    'to_status' => 'Alloted',
+                    'changed_by' => auth()->user()->name,
+                    'notes' => 'Unit allotted to existing Deal: ' . $deal->first_name . ' ' . $deal->last_name,
+                ]);
+            }
+        }
+
+        $this->soldModalOpen = false;
+
+        $this->dispatch('swal:alert', [
+            'title' => 'Allotment Successful!',
+            'text' => 'Unit has been successfully allotted and marked as Alloted.',
+            'icon' => 'success'
+        ]);
     }
 
     public function vacateUnit(string $id): void

@@ -304,7 +304,7 @@
                                                         </button>
                                                         <ul class="dropdown-menu shadow">
                                                             <li>
-                                                                <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Sold')">
+                                                                <button class="dropdown-item py-2" type="button" wire:click="openSoldModal('{{ $unit->id }}')">
                                                                     <i class="ri-checkbox-circle-line align-bottom me-2 text-danger"></i> Mark Sold
                                                                 </button>
                                                             </li>
@@ -437,6 +437,138 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" wire:click="$set('statusModalOpen', false)">Close</button>
                         <button type="submit" class="btn btn-primary">Update Status</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Mark Sold & Allot Deal Modal --}}
+    <div class="modal fade @if($soldModalOpen) show d-block @endif" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered @if($createNewDealMode) modal-lg @endif">
+            <div class="modal-content shadow-lg border-0 rounded-4">
+                <div class="modal-header bg-danger text-white py-3 rounded-top-4">
+                    <h5 class="modal-title text-white fw-bold d-flex align-items-center">
+                        <i class="ri-checkbox-circle-line me-2"></i> Allot Unit & Mark Sold
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" wire:click="$set('soldModalOpen', false)"></button>
+                </div>
+                <form wire:submit="submitSoldAllotment">
+                    <div class="modal-body p-4">
+                        {{-- Mode Selector Toggle --}}
+                        <div class="d-flex justify-content-center mb-4">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-danger @if(!$createNewDealMode) active @endif" wire:click="$set('createNewDealMode', false)">
+                                    <i class="ri-user-search-line align-middle me-1"></i> Select Existing Deal
+                                </button>
+                                <button type="button" class="btn btn-outline-danger @if($createNewDealMode) active @endif" wire:click="$set('createNewDealMode', true)">
+                                    <i class="ri-user-add-line align-middle me-1"></i> Create New Deal
+                                </button>
+                            </div>
+                        </div>
+
+                        @if(!$createNewDealMode)
+                            {{-- Select Existing Deal View --}}
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-muted">Select Customer Deal *</label>
+                                <select class="form-select border-2" wire:model.live="selectedDealId">
+                                    <option value="">-- Choose Existing Deal --</option>
+                                    @foreach($unallottedDeals as $deal)
+                                        <option value="{{ $deal->id }}">
+                                            {{ $deal->first_name }} {{ $deal->last_name }} ({{ $deal->phone }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('selectedDealId') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                            </div>
+
+                            @if($selectedDealDetails)
+                                {{-- Deal Details card --}}
+                                <div class="card border border-2 border-dashed border-success bg-success-subtle mb-0 mt-3 rounded-3">
+                                    <div class="card-body p-3">
+                                        <h6 class="fw-semibold text-success mb-2 d-flex align-items-center">
+                                            <i class="ri-user-line me-1"></i> Selected Customer Details
+                                        </h6>
+                                        <div class="row text-dark">
+                                            <div class="col-md-6 mb-2">
+                                                <span class="text-muted fs-13">Customer Name:</span><br>
+                                                <strong>{{ $selectedDealDetails['name'] }}</strong>
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <span class="text-muted fs-13">Mobile Number:</span><br>
+                                                <strong>{{ $selectedDealDetails['phone'] }}</strong>
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <span class="text-muted fs-13">Email Address:</span><br>
+                                                <strong>{{ $selectedDealDetails['email'] ?: '-' }}</strong>
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <span class="text-muted fs-13">Booking Amount:</span><br>
+                                                <strong>₹{{ number_format($selectedDealDetails['booking_amount'], 2) }}</strong>
+                                            </div>
+                                            <div class="col-12">
+                                                <span class="text-muted fs-13">Total Amount:</span><br>
+                                                <strong>₹{{ number_format($selectedDealDetails['total_amount'], 2) }}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @elseif(count($unallottedDeals) === 0)
+                                <div class="alert alert-warning mb-0 mt-2 d-flex align-items-center">
+                                    <i class="ri-error-warning-line fs-20 me-2 text-warning"></i>
+                                    <div>No unallotted deals found for this project. Choose "Create New Deal" to register one!</div>
+                                </div>
+                            @endif
+
+                        @else
+                            {{-- Create New Deal View Form --}}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-muted">First Name *</label>
+                                    <input type="text" class="form-control border-2" placeholder="Enter first name" wire:model="newDealForm.first_name">
+                                    @error('newDealForm.first_name') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-muted">Last Name</label>
+                                    <input type="text" class="form-control border-2" placeholder="Enter last name" wire:model="newDealForm.last_name">
+                                    @error('newDealForm.last_name') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-muted">Mobile Number *</label>
+                                    <input type="text" class="form-control border-2" placeholder="Enter mobile number" wire:model="newDealForm.phone">
+                                    @error('newDealForm.phone') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-muted">Email Address</label>
+                                    <input type="email" class="form-control border-2" placeholder="Enter email" wire:model="newDealForm.email">
+                                    @error('newDealForm.email') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-muted">Booking Amount Paid (₹) *</label>
+                                    <input type="number" step="0.01" class="form-control border-2" placeholder="Enter booking amount" wire:model="newDealForm.booking_amount">
+                                    @error('newDealForm.booking_amount') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-muted">Total Price (₹) *</label>
+                                    <input type="number" step="0.01" class="form-control border-2" placeholder="Enter total price" wire:model="newDealForm.total_amount">
+                                    @error('newDealForm.total_amount') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer bg-light py-3 rounded-bottom-4">
+                        <button type="button" class="btn btn-light border" wire:click="$set('soldModalOpen', false)">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-danger px-4">
+                            <span wire:loading.remove wire:target="submitSoldAllotment">
+                                <i class="ri-checkbox-circle-line align-middle me-1"></i> Allot & Mark Sold
+                            </span>
+                            <span wire:loading wire:target="submitSoldAllotment">
+                                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                Processing...
+                            </span>
+                        </button>
                     </div>
                 </form>
             </div>
