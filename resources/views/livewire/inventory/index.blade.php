@@ -250,6 +250,7 @@
                                                 <th>Unit Type</th>
                                                 <th>Area (SBUP)</th>
                                                 <th>Carpet Area</th>
+                                                <th>Super Buildup Area</th>
                                             @else
                                                 <th>Plot No.</th>
                                                 <th>Area (Sq. Yards)</th>
@@ -274,6 +275,7 @@
                                                     <td>{{ $unit->unit_type }}</td>
                                                     <td>{{ number_format($unit->area_sbup, 2) }}</td>
                                                     <td>{{ number_format($unit->carpet_area, 2) }}</td>
+                                                    <td>{{ number_format($unit->super_buildup_area, 2) }}</td>
                                                 @else
                                                     <td class="fw-bold">{{ $unit->plot_no }}</td>
                                                     <td>{{ number_format($unit->area_sq_yards, 2) }}</td>

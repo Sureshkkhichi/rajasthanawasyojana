@@ -32,6 +32,7 @@ class Inventory extends Model
         'unit_type',
         'area_sbup',
         'carpet_area',
+        'super_buildup_area',
     ];
 
     protected $casts = [
@@ -40,6 +41,7 @@ class Inventory extends Model
         'plc_percentage' => 'float',
         'area_sbup' => 'float',
         'carpet_area' => 'float',
+        'super_buildup_area' => 'float',
     ];
 
     /*

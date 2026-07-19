@@ -35,6 +35,7 @@ class Form extends Component
     public string $unit_type = ''; // EWS, LIG, MIG, HIG, etc.
     public string $area_sbup = '';
     public string $carpet_area = '';
+    public string $super_buildup_area = '';
 
     public function mount(?Inventory $inventory = null): void
     {
@@ -64,6 +65,7 @@ class Form extends Component
             $this->unit_type = $inventory->unit_type ?? '';
             $this->area_sbup = $inventory->area_sbup ? (string)$inventory->area_sbup : '';
             $this->carpet_area = $inventory->carpet_area ? (string)$inventory->carpet_area : '';
+            $this->super_buildup_area = $inventory->super_buildup_area ? (string)$inventory->super_buildup_area : '';
         } else {
             // Set default project to first active project
             $firstProj = Project::query()
@@ -111,6 +113,7 @@ class Form extends Component
             $rules['unit_type'] = 'required|string|max:255';
             $rules['area_sbup'] = 'required|numeric|min:0';
             $rules['carpet_area'] = 'required|numeric|min:0';
+            $rules['super_buildup_area'] = 'required|numeric|min:0';
         }
 
         $validated = $this->validate($rules);
@@ -136,12 +139,14 @@ class Form extends Component
             $data['unit_type'] = null;
             $data['area_sbup'] = null;
             $data['carpet_area'] = null;
+            $data['super_buildup_area'] = null;
         } else {
             $data['floor'] = $this->floor;
             $data['flat_no'] = $this->flat_no;
             $data['unit_type'] = $this->unit_type;
             $data['area_sbup'] = $this->area_sbup;
             $data['carpet_area'] = $this->carpet_area;
+            $data['super_buildup_area'] = $this->super_buildup_area;
 
             // Clear plot fields
             $data['plot_no'] = null;

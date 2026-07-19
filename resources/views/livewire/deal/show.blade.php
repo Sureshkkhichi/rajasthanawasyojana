@@ -212,6 +212,7 @@
                                                     <th>Unit Type</th>
                                                     <th>Area (SBUP)</th>
                                                     <th>Carpet Area</th>
+                                                    <th>Super Buildup Area</th>
                                                     <th>Price</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
@@ -237,6 +238,7 @@
                                                         <td>{{ $unit->unit_type }}</td>
                                                         <td>{{ $unit->area_sbup }}</td>
                                                         <td>{{ $unit->carpet_area }}</td>
+                                                        <td>{{ $unit->super_buildup_area }}</td>
                                                         <td class="text-end fw-semibold">₹ {{ number_format($unit->price, 2) }}</td>
                                                         <td>
                                                             @if($unit->status === 'Available')

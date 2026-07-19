@@ -520,12 +520,13 @@ class Index extends Component
             if (count($row) < 5) continue;
             
             if ($inventoryType === 'flat') {
-                // Flat columns: 0: Sr. No., 1: Floor, 2: Flat No., 3: Unit Type, 4: Area (SBUP), 5: Carpet Area
+                // Flat columns: 0: Sr. No., 1: Floor, 2: Flat No., 3: Unit Type, 4: Area (SBUP), 5: Carpet Area, 6: Super Buildup Area
                 $floor = $row[1] ?? '';
                 $flatNo = $row[2] ?? '';
                 $unitType = $row[3] ?? '';
                 $areaSbup = (float)($row[4] ?? 0.0);
                 $carpetArea = (float)($row[5] ?? 0.0);
+                $superBuildupArea = (float)($row[6] ?? 0.0);
                 
                 Inventory::create([
                     'project_id' => $project->id,
@@ -535,6 +536,7 @@ class Index extends Component
                     'unit_type' => $unitType,
                     'area_sbup' => $areaSbup,
                     'carpet_area' => $carpetArea,
+                    'super_buildup_area' => $superBuildupArea,
                     'price' => 0.0, // Default price
                     'status' => 'Available',
                 ]);
@@ -608,7 +610,7 @@ class Index extends Component
             $file = fopen('php://output', 'w');
             
             if ($inventoryType === 'flat') {
-                fputcsv($file, ['Floor', 'Flat No.', 'Unit Type', 'Area (SBUP)', 'Carpet Area', 'Price', 'Status']);
+                fputcsv($file, ['Floor', 'Flat No.', 'Unit Type', 'Area (SBUP)', 'Carpet Area', 'Super Buildup Area', 'Price', 'Status']);
                 foreach ($units as $unit) {
                     fputcsv($file, [
                         $unit->floor,
@@ -616,6 +618,7 @@ class Index extends Component
                         $unit->unit_type,
                         $unit->area_sbup,
                         $unit->carpet_area,
+                        $unit->super_buildup_area,
                         $unit->price,
                         $unit->status
                     ]);

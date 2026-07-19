@@ -160,6 +160,12 @@
                                             <input type="number" step="0.01" class="form-control @error('carpet_area') is-invalid @enderror" wire:model="carpet_area" placeholder="e.g., 260">
                                             @error('carpet_area') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label">Super Buildup Area <span class="text-danger">*</span></label>
+                                            <input type="number" step="0.01" class="form-control @error('super_buildup_area') is-invalid @enderror" wire:model="super_buildup_area" placeholder="e.g., 380">
+                                            @error('super_buildup_area') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                        </div>
                                     @endif
 
                                     <hr class="my-4">
