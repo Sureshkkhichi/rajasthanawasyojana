@@ -194,7 +194,8 @@
                                         </label>
                                         <input type="date"
                                             class="form-control @error('date_of_birth') is-invalid @enderror"
-                                            wire:model.blur="date_of_birth">
+                                            wire:model.blur="date_of_birth"
+                                            max="{{ now()->subYears(18)->format('Y-m-d') }}">
                                         @error('date_of_birth')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
