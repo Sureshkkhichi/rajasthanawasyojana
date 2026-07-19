@@ -119,17 +119,6 @@
                                         <i class="ri-map-pin-line text-primary"></i>
                                         {{ $project->city }}
                                     </span>
-                                    @if($project->registration_status === 'open')
-                                        <span class="text-success fs-13 fw-semibold">
-                                            <i class="ri-checkbox-circle-fill"></i>
-                                            Registration Open
-                                        </span>
-                                    @else
-                                        <span class="text-danger fs-13 fw-semibold">
-                                            <i class="ri-close-circle-fill"></i>
-                                            Registration Closed
-                                        </span>
-                                    @endif
                                 </div>
                                 <h4 class="card-title mt-2 mb-1"
                                     style="font-size: 16px; font-weight: 700; color: #212529;">{{ $project->name }}</h4>
