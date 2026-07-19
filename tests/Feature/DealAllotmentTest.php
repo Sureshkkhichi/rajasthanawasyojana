@@ -51,7 +51,6 @@ class DealAllotmentTest extends TestCase
             'project_id' => $project->id,
             'inventory_type' => 'flat',
             'flat_no' => '510',
-            'flat_type' => '2BHK',
             'unit_type' => 'EWS',
             'floor' => '5th Floor',
             'price' => 350000.00,

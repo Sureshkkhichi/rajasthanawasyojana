@@ -86,11 +86,11 @@ class Booking extends Component
             $this->sizes = \App\Models\Inventory::query()
                 ->where('project_id', $this->project->id)
                 ->where('inventory_type', 'flat')
-                ->whereNotNull('flat_type')
-                ->where('flat_type', '!=', '')
+                ->whereNotNull('unit_type')
+                ->where('unit_type', '!=', '')
                 ->distinct()
-                ->orderBy('flat_type')
-                ->pluck('flat_type')
+                ->orderBy('unit_type')
+                ->pluck('unit_type')
                 ->toArray();
         } else {
             $this->sizes = \App\Models\Inventory::query()
@@ -308,7 +308,7 @@ class Booking extends Component
             $matchingUnit = \App\Models\Inventory::query()
                 ->where('project_id', $this->project->id)
                 ->where('inventory_type', 'flat')
-                ->where('flat_type', $this->flat_size)
+                ->where('unit_type', $this->flat_size)
                 ->first();
             if ($matchingUnit) {
                 $unitPrice = $matchingUnit->price;

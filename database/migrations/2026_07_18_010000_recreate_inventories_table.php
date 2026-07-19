@@ -28,7 +28,6 @@ return new class extends Migration {
             // Flat Fields
             $table->string('floor')->nullable();
             $table->string('flat_no')->nullable();
-            $table->string('flat_type')->nullable(); // 1BHK, 2BHK, 3BHK, etc.
             $table->string('unit_type')->nullable(); // EWS, LIG, MIG, HIG, etc.
             $table->decimal('area_sbup', 10, 2)->nullable();
             $table->decimal('carpet_area', 10, 2)->nullable();

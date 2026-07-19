@@ -28,7 +28,7 @@
             <tr style="background-color: #f9f9f9;">
                 <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Unit Type/Size</td>
                 <td style="padding: 10px; border: 1px solid #ddd;">
-                    {{ $inventory->inventory_type === 'flat' ? $inventory->flat_type : $inventory->area_sq_yards . ' Sq. Yards' }}
+                    {{ $inventory->inventory_type === 'flat' ? $inventory->unit_type : $inventory->area_sq_yards . ' Sq. Yards' }}
                 </td>
             </tr>
         </table>

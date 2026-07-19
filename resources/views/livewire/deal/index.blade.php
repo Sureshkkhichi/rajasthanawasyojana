@@ -289,7 +289,7 @@
                                 @foreach($availableUnits as $unit)
                                     @if($unit->inventory_type === 'flat')
                                         <option value="{{ $unit->id }}">
-                                            Flat: {{ $unit->flat_no }} (Floor: {{ $unit->floor }}, Type: {{ $unit->flat_type }}, ₹{{ number_format($unit->price, 0) }})
+                                            Flat: {{ $unit->flat_no }} (Floor: {{ $unit->floor }}, Type: {{ $unit->unit_type }}, ₹{{ number_format($unit->price, 0) }})
                                         </option>
                                     @else
                                         <option value="{{ $unit->id }}">
@@ -314,13 +314,15 @@
                                             <strong>{{ $selectedUnitDetails['label'] }}</strong>
                                         </div>
                                         <div class="col-md-6 mb-2">
-                                            <span class="text-muted fs-13">{{ $selectedUnitDetails['type'] === 'Flat' ? 'Flat Type' : 'Plot Area' }}:</span><br>
+                                            <span class="text-muted fs-13">{{ $selectedUnitDetails['type'] === 'Flat' ? 'Unit Type' : 'Plot Area' }}:</span><br>
                                             <strong>{{ $selectedUnitDetails['info1'] }}</strong>
                                         </div>
-                                        <div class="col-md-6 mb-2">
-                                            <span class="text-muted fs-13">{{ $selectedUnitDetails['type'] === 'Flat' ? 'Unit Type' : 'Road Size' }}:</span><br>
-                                            <strong>{{ $selectedUnitDetails['info2'] }}</strong>
-                                        </div>
+                                        @if($selectedUnitDetails['type'] !== 'Flat')
+                                            <div class="col-md-6 mb-2">
+                                                <span class="text-muted fs-13">Road Size:</span><br>
+                                                <strong>{{ $selectedUnitDetails['info2'] }}</strong>
+                                            </div>
+                                        @endif
                                         <div class="col-12">
                                             <span class="text-muted fs-13">Price:</span><br>
                                             <strong class="text-danger fs-15">₹{{ number_format($selectedUnitDetails['price'], 2) }}</strong>

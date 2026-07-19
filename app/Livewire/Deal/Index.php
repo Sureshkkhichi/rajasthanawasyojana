@@ -177,8 +177,8 @@ class Index extends Component
                     $this->selectedUnitDetails = [
                         'type' => 'Flat',
                         'label' => 'Flat No: ' . $unit->flat_no . ' (' . $unit->floor . ' Floor)',
-                        'info1' => 'Flat Type: ' . $unit->flat_type,
-                        'info2' => 'Unit Type: ' . $unit->unit_type,
+                        'info1' => $unit->unit_type,
+                        'info2' => '-',
                         'price' => $unit->price,
                     ];
                 } else {

@@ -137,23 +137,14 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label class="form-label">Flat Type <span class="text-danger">*</span></label>
-                                            <select class="form-select @error('flat_type') is-invalid @enderror" wire:model="flat_type">
-                                                <option value="">Select Flat Type</option>
-                                                <option value="1BHK">1BHK</option>
-                                                <option value="2BHK">2BHK</option>
-                                                <option value="3BHK">3BHK</option>
-                                                <option value="4BHK">4BHK</option>
-                                                <option value="5BHK">5BHK</option>
-                                            </select>
-                                            @error('flat_type') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                        </div>
-
-                                        <div class="col-md-4">
                                             <label class="form-label">Unit Type <span class="text-danger">*</span></label>
                                             <select class="form-select @error('unit_type') is-invalid @enderror" wire:model="unit_type">
                                                 <option value="">Select Unit Type</option>
                                                 <option value="EWS">EWS</option>
+                                                <option value="LIG">LIG</option>
+                                                <option value="3BHK">3BHK</option>
+                                                <option value="4BHK">4BHK</option>
+                                                <option value="5BHK">5BHK</option>
                                             </select>
                                             @error('unit_type') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>

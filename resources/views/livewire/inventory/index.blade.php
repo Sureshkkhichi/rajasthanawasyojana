@@ -247,7 +247,6 @@
                                             @if ($inventory_type === 'Flat Project')
                                                 <th>Floor</th>
                                                 <th>Flat No.</th>
-                                                <th>Flat Type</th>
                                                 <th>Unit Type</th>
                                                 <th>Area (SBUP)</th>
                                                 <th>Carpet Area</th>
@@ -272,7 +271,6 @@
                                                 @if ($inventory_type === 'Flat Project')
                                                     <td>{{ $unit->floor }}</td>
                                                     <td class="fw-bold">{{ $unit->flat_no }}</td>
-                                                    <td>{{ $unit->flat_type }}</td>
                                                     <td>{{ $unit->unit_type }}</td>
                                                     <td>{{ number_format($unit->area_sbup, 2) }}</td>
                                                     <td>{{ number_format($unit->carpet_area, 2) }}</td>

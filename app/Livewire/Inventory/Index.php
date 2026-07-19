@@ -520,20 +520,18 @@ class Index extends Component
             if (count($row) < 5) continue;
             
             if ($inventoryType === 'flat') {
-                // Flat columns: 0: Sr. No., 1: Floor, 2: Flat No., 3: Type, 4: Unit Type, 5: Area (SBUP), 6: Carpet Area
+                // Flat columns: 0: Sr. No., 1: Floor, 2: Flat No., 3: Unit Type, 4: Area (SBUP), 5: Carpet Area
                 $floor = $row[1] ?? '';
                 $flatNo = $row[2] ?? '';
-                $flatType = $row[3] ?? '';
-                $unitType = $row[4] ?? '';
-                $areaSbup = (float)($row[5] ?? 0.0);
-                $carpetArea = (float)($row[6] ?? 0.0);
+                $unitType = $row[3] ?? '';
+                $areaSbup = (float)($row[4] ?? 0.0);
+                $carpetArea = (float)($row[5] ?? 0.0);
                 
                 Inventory::create([
                     'project_id' => $project->id,
                     'inventory_type' => 'flat',
                     'floor' => $floor,
                     'flat_no' => $flatNo,
-                    'flat_type' => $flatType,
                     'unit_type' => $unitType,
                     'area_sbup' => $areaSbup,
                     'carpet_area' => $carpetArea,
@@ -610,12 +608,11 @@ class Index extends Component
             $file = fopen('php://output', 'w');
             
             if ($inventoryType === 'flat') {
-                fputcsv($file, ['Floor', 'Flat No.', 'Type', 'Unit Type', 'Area (SBUP)', 'Carpet Area', 'Price', 'Status']);
+                fputcsv($file, ['Floor', 'Flat No.', 'Unit Type', 'Area (SBUP)', 'Carpet Area', 'Price', 'Status']);
                 foreach ($units as $unit) {
                     fputcsv($file, [
                         $unit->floor,
                         $unit->flat_no,
-                        $unit->flat_type,
                         $unit->unit_type,
                         $unit->area_sbup,
                         $unit->carpet_area,

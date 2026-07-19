@@ -170,7 +170,7 @@
                                         <p class="mb-0">
                                             The customer has been allotted 
                                             @if($deal->allottedInventory?->inventory_type === 'flat')
-                                                <strong>Flat Number {{ $deal->allottedInventory->flat_no }}</strong> (Floor: {{ $deal->allottedInventory->floor }}, Type: {{ $deal->allottedInventory->flat_type }})
+                                                <strong>Flat Number {{ $deal->allottedInventory->flat_no }}</strong> (Floor: {{ $deal->allottedInventory->floor }}, Type: {{ $deal->allottedInventory->unit_type }})
                                             @else
                                                 <strong>Plot Number {{ $deal->allottedInventory?->plot_no }}</strong> (Area: {{ $deal->allottedInventory?->area_sq_yards }} Sq. Yards)
                                             @endif
@@ -209,7 +209,6 @@
                                                 <tr>
                                                     <th>Floor</th>
                                                     <th>Flat No.</th>
-                                                    <th>Flat Type</th>
                                                     <th>Unit Type</th>
                                                     <th>Area (SBUP)</th>
                                                     <th>Carpet Area</th>
@@ -235,7 +234,6 @@
                                                     <tr>
                                                         <td>{{ $unit->floor }}</td>
                                                         <td class="fw-semibold">{{ $unit->flat_no }}</td>
-                                                        <td>{{ $unit->flat_type }}</td>
                                                         <td>{{ $unit->unit_type }}</td>
                                                         <td>{{ $unit->area_sbup }}</td>
                                                         <td>{{ $unit->carpet_area }}</td>
