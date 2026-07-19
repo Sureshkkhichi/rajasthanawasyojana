@@ -79,6 +79,41 @@ class Index extends Component
             : 'open';
         $project->save();
     }
+    public function toggleInventoryType(string $id): void
+    {
+        abort_unless(
+            auth()->user()->can('projects.edit'),
+            403
+        );
+        $project = Project::findOrFail($id);
+
+        $hasLeads = $project->leads()->exists();
+        $hasDeals = \App\Models\Deal::where('project_id', $project->id)->exists();
+        $hasInventory = $project->inventories()->exists();
+
+        if ($hasLeads || $hasDeals || $hasInventory) {
+            $reasons = [];
+            if ($hasLeads) $reasons[] = 'Leads';
+            if ($hasDeals) $reasons[] = 'Deals';
+            if ($hasInventory) $reasons[] = 'Inventories';
+
+            $this->dispatch('swal:alert', [
+                'title' => 'Cannot Switch Inventory Type!',
+                'text' => 'This project has existing ' . implode(', ', $reasons) . '. You cannot switch the inventory type.',
+                'icon' => 'error'
+            ]);
+            return;
+        }
+
+        $project->inventory_type = $project->inventory_type === 'flat' ? 'plot' : 'flat';
+        $project->save();
+
+        $this->dispatch('swal:alert', [
+            'title' => 'Inventory Type Updated!',
+            'text' => 'Inventory type changed to ' . ($project->inventory_type === 'flat' ? 'Flat' : 'Plot') . ' successfully.',
+            'icon' => 'success'
+        ]);
+    }
     public function render()
     {
         $projects = Project::query()

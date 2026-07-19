@@ -141,7 +141,10 @@
                                                 </td>
                                                 <td> {{ $project->projectType?->name }} </td>
                                                 <td>
-                                                    <span class="badge {{ $project->inventory_type === 'flat' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} text-uppercase">
+                                                    <span class="badge {{ $project->inventory_type === 'flat' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} text-uppercase"
+                                                        style="cursor: pointer;"
+                                                        wire:click="toggleInventoryType('{{ $project->id }}')"
+                                                        title="Click to toggle Inventory Type">
                                                         {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }}
                                                     </span>
                                                 </td>
