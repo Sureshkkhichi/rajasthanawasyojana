@@ -245,7 +245,7 @@ class Form extends Component
             File::delete(public_path($slider->image));
         }
 
-        $slider->delete();
+        $slider->forceDelete();
 
 
         $this->loadSliders();

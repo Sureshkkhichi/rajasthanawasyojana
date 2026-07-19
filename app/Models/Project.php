@@ -25,6 +25,34 @@ class Project extends Model
         'registration_status',
     ];
 
+    protected static function booted()
+    {
+        static::deleting(function ($project) {
+            if ($project->isForceDeleting()) {
+                // 1. Delete featured image from disk
+                if ($project->featured_image && \Illuminate\Support\Facades\File::exists(public_path($project->featured_image))) {
+                    \Illuminate\Support\Facades\File::delete(public_path($project->featured_image));
+                }
+
+                // 2. Delete all slider images from disk and force delete records
+                $project->sliders()->get()->each(function ($slider) {
+                    if ($slider->image && \Illuminate\Support\Facades\File::exists(public_path($slider->image))) {
+                        \Illuminate\Support\Facades\File::delete(public_path($slider->image));
+                    }
+                    $slider->forceDelete();
+                });
+
+                // 3. Delete all information images from disk and delete records
+                $project->informationImages()->get()->each(function ($infoImage) {
+                    if ($infoImage->image_path && \Illuminate\Support\Facades\File::exists(public_path($infoImage->image_path))) {
+                        \Illuminate\Support\Facades\File::delete(public_path($infoImage->image_path));
+                    }
+                    $infoImage->delete();
+                });
+            }
+        });
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Scopes
