@@ -64,12 +64,12 @@
                                         <label class="form-label">Waiver Code <span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <input type="text" class="form-control @error('code') is-invalid @enderror" 
-                                                placeholder="Enter 8-digit Waiver Code" wire:model="code" maxlength="8" style="text-transform: uppercase;">
+                                                placeholder="Enter 8-digit Waiver Code" wire:model="code" maxlength="8" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                             <button class="btn btn-outline-secondary" type="button" wire:click="generateCode">
                                                 <i class="ri-refresh-line me-1"></i> Auto-generate
                                             </button>
                                         </div>
-                                        <small class="text-muted">An 8-digit unique alphanumeric code to identify the agent on Booking / Lead forms.</small>
+                                        <small class="text-muted">An 8-digit unique numeric code to identify the agent on Booking / Lead forms.</small>
                                         @error('code') <div class="text-danger mt-1 fs-12">{{ $message }}</div> @enderror
                                     </div>
                                 </div>

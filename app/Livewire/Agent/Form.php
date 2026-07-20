@@ -49,7 +49,7 @@ class Form extends Component
 
     public function generateCode(): void
     {
-        $chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $chars = '0123456789';
         do {
             $newCode = '';
             for ($i = 0; $i < 8; $i++) {
@@ -66,7 +66,7 @@ class Form extends Component
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|regex:/^[6-9][0-9]{9}$/',
-            'code' => 'required|string|size:8|alpha_num|unique:agents,code,' . ($this->agent->id ?? 'NULL'),
+            'code' => 'required|string|size:8|numeric|unique:agents,code,' . ($this->agent->id ?? 'NULL'),
             'commission_type' => 'required|in:percentage,fixed',
             'commission_value' => 'required|numeric|min:0',
             'status' => 'required|in:active,inactive',
@@ -74,8 +74,8 @@ class Form extends Component
 
         $validated = $this->validate($rules, [
             'phone.regex' => 'The mobile number must be a valid 10-digit number.',
-            'code.size' => 'The Waiver Code must be exactly 8 alphanumeric characters.',
-            'code.alpha_num' => 'The Waiver Code must contain only alphanumeric characters.',
+            'code.size' => 'The Waiver Code must be exactly 8 digits.',
+            'code.numeric' => 'The Waiver Code must contain only numbers.',
             'code.unique' => 'This Waiver Code has already been taken.',
         ]);
 

@@ -252,6 +252,7 @@ class Booking extends Component
             'city_id' => ['required'],
             'flat_size' => ['required'],
             'terms' => ['accepted'],
+            'waiver_code' => ['nullable', 'numeric', 'digits:8'],
         ];
     }
     public function messages(): array
@@ -259,6 +260,8 @@ class Booking extends Component
         return [
             'date_of_birth.before_or_equal' => 'Age must be 18 years or older.',
             'phone.regex' => 'Phone must be a valid 10-digit mobile number.',
+            'waiver_code.numeric' => 'Waiver Code must contain only numbers.',
+            'waiver_code.digits' => 'Waiver Code must be exactly 8 digits.',
         ];
     }
     public function submit()

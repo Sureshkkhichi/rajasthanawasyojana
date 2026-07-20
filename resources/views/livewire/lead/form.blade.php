@@ -192,7 +192,7 @@
                                          <label class="form-label">
                                              Waiver Code
                                          </label>
-                                         <input type="text" class="form-control @error('waiver_code') is-invalid @enderror" wire:model="waiver_code">
+                                         <input type="text" class="form-control @error('waiver_code') is-invalid @enderror" wire:model="waiver_code" maxlength="8" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                          @error('waiver_code') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                      </div>
                                 </div>

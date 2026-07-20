@@ -175,7 +175,7 @@ class Form extends Component
             'city_id' => ['required', 'exists:cities,id'],
             'flat_size' => ['required', 'string'],
             'co_applicant_name' => ['nullable', 'string', 'max:255'],
-            'waiver_code' => ['nullable', 'string', 'max:50'],
+            'waiver_code' => ['nullable', 'numeric', 'digits:8'],
             'status' => ['required'],
             'payment_status' => ['required'],
         ];
@@ -186,6 +186,8 @@ class Form extends Component
         return [
             'date_of_birth.before_or_equal' => 'Age must be 18 years or older.',
             'phone.regex' => 'Phone must be a valid 10-digit mobile number.',
+            'waiver_code.numeric' => 'Waiver Code must contain only numbers.',
+            'waiver_code.digits' => 'Waiver Code must be exactly 8 digits.',
         ];
     }
 

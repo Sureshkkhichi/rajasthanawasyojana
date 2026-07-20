@@ -339,8 +339,10 @@
                                             Waiver Code
                                         </label>
                                         <input type="text"
-                                            class="form-control text-uppercase @error('waiver_code') is-invalid @enderror"
-                                            wire:model.blur="waiver_code">
+                                            class="form-control @error('waiver_code') is-invalid @enderror"
+                                            wire:model.blur="waiver_code"
+                                            maxlength="8"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                         @error('waiver_code')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
