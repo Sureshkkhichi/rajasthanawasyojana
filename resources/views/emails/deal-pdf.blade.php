@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>ग्राहक विवरण (Deal Details)</title>
+    <title>Customer Details</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'hind', 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             color: #333;
@@ -88,91 +88,91 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="title">{{ $deal->project?->name ?: 'मुख्यमंत्री जन आवास योजना' }}</div>
-            <div class="subtitle">आवेदन फॉर्म विवरण (Application Form Details)</div>
-            <div class="badge-box">ग्राहक विवरण पत्र (Customer Details)</div>
+            <div class="title">{{ $deal->project?->name ?: 'Rajasthan Awas Yojana' }}</div>
+            <div class="subtitle">Application Form Details</div>
+            <div class="badge-box">Customer Details</div>
         </div>
 
-        <div class="section-title">व्यक्तिगत विवरण (Personal Details)</div>
+        <div class="section-title">Personal Details</div>
         <table class="details-table">
             <tr>
-                <th>प्रथम नाम (First Name)</th>
+                <th>First Name</th>
                 <td>{{ $deal->first_name }}</td>
             </tr>
             <tr>
-                <th>अंतिम नाम (Last Name)</th>
+                <th>Last Name</th>
                 <td>{{ $deal->last_name }}</td>
             </tr>
             <tr>
-                <th>पिता / पति का नाम (Father / Husband Name)</th>
+                <th>Father / Husband Name</th>
                 <td>{{ $deal->father_husband_name ?: '-' }}</td>
             </tr>
             <tr>
-                <th>पैन नंबर (PAN Number)</th>
+                <th>PAN Number</th>
                 <td>{{ $deal->pan_number }}</td>
             </tr>
             <tr>
-                <th>लिंग (Gender)</th>
+                <th>Gender</th>
                 <td>{{ ucfirst($deal->gender) }}</td>
             </tr>
             <tr>
-                <th>जन्म तिथि (Date of Birth)</th>
+                <th>Date of Birth</th>
                 <td>{{ $deal->date_of_birth ? $deal->date_of_birth->format('d M Y') : '-' }}</td>
             </tr>
             <tr>
-                <th>व्यवसाय (Occupation)</th>
+                <th>Occupation</th>
                 <td>{{ $deal->occupation }}</td>
             </tr>
         </table>
 
-        <div class="section-title">संपर्क एवं बुकिंग विवरण (Contact & Booking Details)</div>
+        <div class="section-title">Contact & Booking Details</div>
         <table class="details-table">
             <tr>
-                <th>योजना का नाम (Project Name)</th>
+                <th>Project Name</th>
                 <td><strong>{{ $deal->project?->name ?: '-' }}</strong></td>
             </tr>
             <tr>
-                <th>मोबाइल नंबर (Mobile Number)</th>
+                <th>Mobile Number</th>
                 <td>{{ $deal->phone }}</td>
             </tr>
             <tr>
-                <th>ईमेल पता (Email Address)</th>
+                <th>Email Address</th>
                 <td>{{ $deal->email }}</td>
             </tr>
             <tr>
-                <th>पता (Address)</th>
+                <th>Address</th>
                 <td>{{ $deal->address }}</td>
             </tr>
             <tr>
-                <th>राज्य / शहर (State / City)</th>
+                <th>State / City</th>
                 <td>{{ $deal->state_name }} / {{ $deal->city }}</td>
             </tr>
             <tr>
-                <th>चयनित आकार (Selected Flat Size / Area)</th>
+                <th>Selected Flat Size / Area</th>
                 <td>{{ $deal->flat_size }}</td>
             </tr>
             <tr>
-                <th>सह-आवेदक (Co-Applicant Name)</th>
+                <th>Co-Applicant Name</th>
                 <td>{{ $deal->co_applicant_name ?: '-' }}</td>
             </tr>
             <tr>
-                <th>वेवर कोड (Waiver Code)</th>
+                <th>Waiver Code</th>
                 <td>{{ $deal->waiver_code ?: '-' }}</td>
             </tr>
             @if($deal->booking_date)
                 <tr>
-                    <th>बुकिंग तिथि (Booking Date)</th>
+                    <th>Booking Date</th>
                     <td>{{ $deal->booking_date->format('d M Y h:i A') }}</td>
                 </tr>
             @endif
             <tr>
-                <th>बुकिंग राशि (Booking Amount)</th>
+                <th>Booking Amount</th>
                 <td>₹ {{ number_format($deal->booking_amount, 2) }}</td>
             </tr>
         </table>
 
         <div class="computer-generated">
-            * यह एक कंप्यूटर जनित विवरण पत्र है।
+            * This is a computer generated document.
         </div>
     </div>
 </body>
