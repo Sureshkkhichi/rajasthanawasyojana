@@ -22,12 +22,14 @@ class DealDocumentController extends Controller
 
         $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
 
-        $pdf = Pdf::loadView('emails.allotment-pdf', [
+        $html = view('emails.allotment-pdf', [
             'project' => $deal->project,
             'deal' => $deal,
             'inventory' => $inventory,
             'project_contact_phone' => $project_contact_phone,
-        ]);
+        ])->render();
+
+        $pdf = Pdf::loadHTML(reshapeDevanagari($html));
 
         return $pdf->download("allotment-letter-{$deal->id}.pdf");
     }
@@ -49,7 +51,7 @@ class DealDocumentController extends Controller
         $totalAmount = $deal->total_amount ?: ($inventory->price ?: 0.00);
         $balanceDue = max(0.00, $totalAmount - $bookingAmount);
 
-        $pdf = Pdf::loadView('emails.demand-pdf', [
+        $html = view('emails.demand-pdf', [
             'project' => $deal->project,
             'deal' => $deal,
             'inventory' => $inventory,
@@ -57,7 +59,9 @@ class DealDocumentController extends Controller
             'totalAmount' => $totalAmount,
             'balanceDue' => $balanceDue,
             'project_contact_phone' => $project_contact_phone,
-        ]);
+        ])->render();
+
+        $pdf = Pdf::loadHTML(reshapeDevanagari($html));
 
         return $pdf->download("demand-letter-{$deal->id}.pdf");
     }
@@ -68,9 +72,11 @@ class DealDocumentController extends Controller
 
         $deal->load(['project', 'agent']);
 
-        $pdf = Pdf::loadView('emails.deal-pdf', [
+        $html = view('emails.deal-pdf', [
             'deal' => $deal,
-        ]);
+        ])->render();
+
+        $pdf = Pdf::loadHTML(reshapeDevanagari($html));
 
         return $pdf->download("deal-details-{$deal->id}.pdf");
     }

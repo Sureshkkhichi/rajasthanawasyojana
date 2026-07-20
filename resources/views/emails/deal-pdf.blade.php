@@ -1,62 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Customer Deal Details</title>
     <style>
-        body {
-            font-family: 'hind', 'Arial', sans-serif;
-            margin: 0;
-            padding: 10px;
-            color: #212529;
-            font-size: 13px;
-            line-height: 1.4;
-        }
-        .header {
-            margin-bottom: 20px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
-        }
-        .header h2 {
-            margin: 0;
-            font-size: 20px;
-            color: #333;
-        }
-        .header p {
-            margin: 4px 0 0 0;
-            color: #666;
-            font-size: 12px;
-        }
-        .section-title {
-            font-size: 14px;
-            font-weight: bold;
-            margin-top: 15px;
-            margin-bottom: 8px;
-            color: #333;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 3px;
-        }
-        .details-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10px;
-        }
-        .details-table td {
-            padding: 6px 8px;
-            border: 1px solid #dee2e6;
-            vertical-align: top;
-        }
-        .details-table td.label {
-            font-weight: bold;
-            background-color: #f8f9fa;
-            width: 35%;
-        }
+    body {
+        font-family: 'hind', 'Arial', sans-serif;
+        color: #212529;
+        font-size: 13px;
+    }
+
+    .header {
+        margin-bottom: 20px;
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+    }
+
+    .header h2 {
+        margin: 0;
+        font-size: 20px;
+        color: #333;
+    }
+
+    .header p {
+        margin: 4px 0 0 0;
+        color: #666;
+        font-size: 12px;
+    }
+
+    .section-title {
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 15px;
+        margin-bottom: 8px;
+        color: #333;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 3px;
+    }
+
+    .details-table {
+        width: 100%;
+    }
+
+    .details-table td {
+        vertical-align: middle;
+    }
+
+    .details-table td.label {
+        font-weight: bold;
+        width: 35%;
+    }
+
+    tr,
+    td {
+        margin: 0;
+        padding: 0;
+
+    }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h2>{{ $deal->project?->name ?: 'Rajasthan Awas Yojana' }}</h2>
-        <p>Customer Registration Form Details</p>
     </div>
 
     <div class="section-title">Personal Information</div>
@@ -126,10 +133,10 @@
             <td>{{ $deal->waiver_code ?: '-' }}</td>
         </tr>
         @if($deal->booking_date)
-            <tr>
-                <td class="label">Booking Date</td>
-                <td>{{ $deal->booking_date->format('d M Y h:i A') }}</td>
-            </tr>
+        <tr>
+            <td class="label">Booking Date</td>
+            <td>{{ $deal->booking_date->format('d M Y h:i A') }}</td>
+        </tr>
         @endif
         <tr>
             <td class="label">Booking Amount</td>
@@ -137,4 +144,5 @@
         </tr>
     </table>
 </body>
+
 </html>

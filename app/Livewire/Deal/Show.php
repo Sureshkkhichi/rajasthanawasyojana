@@ -63,12 +63,14 @@ class Show extends Component
         $project_contact_phone = \App\Models\FrontendSetting::getVal('mobile_number_1', '7374044044');
         $inventory = $this->deal->allottedInventory;
 
-        $pdf = Pdf::loadView('emails.allotment-pdf', [
+        $html = view('emails.allotment-pdf', [
             'project' => $this->deal->project,
             'deal' => $this->deal,
             'inventory' => $inventory,
             'project_contact_phone' => $project_contact_phone,
-        ]);
+        ])->render();
+
+        $pdf = Pdf::loadHTML(reshapeDevanagari($html));
 
         return response()->streamDownload(
             fn () => print($pdf->output()),
@@ -85,7 +87,7 @@ class Show extends Component
         $totalAmount = $this->deal->total_amount ?: ($inventory->price ?: 0.00);
         $balanceDue = max(0.00, $totalAmount - $bookingAmount);
 
-        $pdf = Pdf::loadView('emails.demand-pdf', [
+        $html = view('emails.demand-pdf', [
             'project' => $this->deal->project,
             'deal' => $this->deal,
             'inventory' => $inventory,
@@ -93,7 +95,9 @@ class Show extends Component
             'totalAmount' => $totalAmount,
             'balanceDue' => $balanceDue,
             'project_contact_phone' => $project_contact_phone,
-        ]);
+        ])->render();
+
+        $pdf = Pdf::loadHTML(reshapeDevanagari($html));
 
         return response()->streamDownload(
             fn () => print($pdf->output()),
