@@ -77,7 +77,6 @@
             font-size: 15px;
             line-height: 1.6;
             margin-bottom: 20px;
-            text-align: justify;
         }
         .data-table th, .data-table td {
             border: 1px solid #ccc;
