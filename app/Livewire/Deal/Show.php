@@ -24,7 +24,8 @@ class Show extends Component
             auth()->user()->can('leads.view'),
             403
         );
-        $this->deal = $deal->load([
+        \App\Livewire\Deal\Index::expireOldAllotments();
+        $this->deal = $deal->fresh([
             'project',
             'agent',
             'allottedInventory'
@@ -47,7 +48,10 @@ class Show extends Component
             $inventory->update(['status' => 'Available']);
         }
 
-        $this->deal->update(['allotted_inventory_id' => null]);
+        $this->deal->update([
+            'allotted_inventory_id' => null,
+            'allotted_at' => null
+        ]);
 
         $this->deal->load(['project', 'agent', 'allottedInventory']);
 

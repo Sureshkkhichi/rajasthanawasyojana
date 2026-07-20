@@ -73,7 +73,10 @@ class Allot extends Component
         $unit->update(['status' => 'Alloted']);
 
         // Link unit to deal
-        $this->deal->update(['allotted_inventory_id' => $unit->id]);
+        $this->deal->update([
+            'allotted_inventory_id' => $unit->id,
+            'allotted_at' => now()
+        ]);
 
         // Create history log
         \App\Models\InventoryHistory::create([

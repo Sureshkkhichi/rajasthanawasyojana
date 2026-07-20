@@ -12,6 +12,7 @@ class Deal extends Model
     protected $fillable = [
         'project_id',
         'allotted_inventory_id',
+        'allotted_at',
         'first_name',
         'last_name',
         'father_husband_name',
@@ -41,6 +42,7 @@ class Deal extends Model
         return [
             'date_of_birth' => 'date',
             'booking_date' => 'datetime',
+            'allotted_at' => 'datetime',
             'booking_amount' => 'decimal:2',
             'total_amount' => 'decimal:2',
         ];

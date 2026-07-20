@@ -158,7 +158,8 @@ class Index extends Component
                 }
                 $deal->update([
                     'status' => $newStatus,
-                    'allotted_inventory_id' => null
+                    'allotted_inventory_id' => null,
+                    'allotted_at' => null
                 ]);
             } else {
                 $deal->update(['status' => $newStatus]);
@@ -226,7 +227,10 @@ class Index extends Component
         $unit = \App\Models\Inventory::find($this->selectedUnitId);
 
         if ($deal && $unit) {
-            $deal->update(['allotted_inventory_id' => $unit->id]);
+            $deal->update([
+                'allotted_inventory_id' => $unit->id,
+                'allotted_at' => now(),
+            ]);
 
             $oldStatus = $unit->status;
             $unit->update(['status' => 'Alloted']);
@@ -259,6 +263,8 @@ class Index extends Component
 
     public function render()
     {
+        self::expireOldAllotments();
+
         $projects = Project::query()
             ->where('status', 'active')
             ->where('is_active', 'active')
@@ -322,5 +328,42 @@ class Index extends Component
             'cities' => $cities,
             'flatSizes' => $flatSizes,
         ]);
+    }
+
+    public static function expireOldAllotments(): void
+    {
+        $expiredDeals = Deal::query()
+            ->whereNotNull('allotted_inventory_id')
+            ->where('status', '!=', 'Sold')
+            ->where(function($q) {
+                $q->where('allotted_at', '<=', now()->subDays(7))
+                  ->orWhere(function($sub) {
+                      $sub->whereNull('allotted_at')
+                          ->where('updated_at', '<=', now()->subDays(7));
+                  });
+            })
+            ->get();
+
+        foreach ($expiredDeals as $deal) {
+            $unit = \App\Models\Inventory::find($deal->allotted_inventory_id);
+            if ($unit) {
+                $oldStatus = $unit->status;
+                $unit->update(['status' => 'Available']);
+
+                \App\Models\InventoryHistory::create([
+                    'inventory_id' => $unit->id,
+                    'from_status' => $oldStatus,
+                    'to_status' => 'Available',
+                    'changed_by' => 'System (Auto-expiry)',
+                    'notes' => 'Unit allotment automatically cancelled after 7 days without being marked Sold.',
+                ]);
+            }
+
+            $deal->update([
+                'allotted_inventory_id' => null,
+                'allotted_at' => null,
+                'status' => 'Not Alloted',
+            ]);
+        }
     }
 }
