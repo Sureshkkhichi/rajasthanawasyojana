@@ -131,7 +131,7 @@ class Form extends Component
             if ($this->featured_image && File::exists(public_path($this->featured_image))) {
                 File::delete(public_path($this->featured_image));
             }
-            $uploadPath = public_path('uploads/projects');
+            $uploadPath = public_path('uploads/' . $this->slug);
             if (!File::exists($uploadPath)) {
                 File::makeDirectory($uploadPath, 0755, true);
             }
@@ -140,7 +140,7 @@ class Form extends Component
                 $this->featured_image_file->getRealPath(),
                 $uploadPath . '/' . $fileName
             );
-            $this->featured_image = 'uploads/projects/' . $fileName;
+            $this->featured_image = 'uploads/' . $this->slug . '/' . $fileName;
         }
     }
     public function save()
@@ -200,9 +200,9 @@ class Form extends Component
 
         $lastOrder = ProjectSlider::where('project_id', $project->id)
             ->max('sort_order') ?? 0;
-        $uploadPath = public_path('uploads/projects/sliders');
-        if (!file_exists($uploadPath)) {
-            mkdir($uploadPath, 0755, true);
+        $uploadPath = public_path('uploads/' . $project->slug . '/sliders');
+        if (!File::exists($uploadPath)) {
+            File::makeDirectory($uploadPath, 0755, true);
         }
         foreach ($this->sliderImages as $image) {
             if (!$image instanceof TemporaryUploadedFile) {
@@ -220,7 +220,7 @@ class Form extends Component
                     $image->getClientOriginalName(),
                     PATHINFO_FILENAME
                 ),
-                'image' => 'uploads/projects/sliders/' . $fileName,
+                'image' => 'uploads/' . $project->slug . '/sliders/' . $fileName,
                 'sort_order' => ++$lastOrder,
                 'is_active' => 'active',
             ]);
@@ -314,7 +314,8 @@ class Form extends Component
             'infoImageFiles.*' => 'image|max:2048'
         ]);
 
-        $uploadPath = public_path('uploads/projects/information');
+        $project = Project::findOrFail($this->projectId);
+        $uploadPath = public_path('uploads/' . $project->slug . '/information');
         if (!File::exists($uploadPath)) {
             File::makeDirectory($uploadPath, 0755, true);
         }
@@ -332,7 +333,7 @@ class Form extends Component
 
             \App\Models\ProjectInformationImage::create([
                 'project_id' => $this->projectId,
-                'image_path' => 'uploads/projects/information/' . $fileName,
+                'image_path' => 'uploads/' . $project->slug . '/information/' . $fileName,
                 'sort_order' => ++$lastOrder,
             ]);
         }
