@@ -536,8 +536,8 @@
                             <form action="javascript:void(0);">
                                 <div class="row g-3 mb-0 align-items-center">
                                     <div class="col-sm-auto">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control border-0 minimal-border dash-filter-picker shadow" data-provider="flatpickr" data-range-date="true" data-date-format="d M, Y" data-deafult-date="01 Jan 2022 to 31 Jan 2022">
+                                        <div class="input-group" wire:ignore>
+                                            <input type="text" id="dashboard-date-filter" class="form-control border-0 minimal-border dash-filter-picker shadow" placeholder="Select date range" readonly value="{{ $dateRange }}">
                                             <div class="input-group-text bg-primary border-primary text-white">
                                                 <i class="ri-calendar-2-line"></i>
                                             </div>
@@ -1503,6 +1503,17 @@
     <script src="{{ asset('assets/js/pages/dashboard-ecommerce.init.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            flatpickr("#dashboard-date-filter", {
+                mode: "range",
+                dateFormat: "d M, Y",
+                defaultDate: "{{ $dateRange }}",
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length === 2) {
+                        @this.set('dateRange', dateStr);
+                    }
+                }
+            });
+
             var options = {
                 series: [{
                         name: "Collection"
@@ -1617,11 +1628,11 @@
                     , intersect: false
                 }
             };
-            var chart = new ApexCharts(
+            window.salesOverviewChart = new ApexCharts(
                 document.querySelector("#salesOverviewChart")
                 , options
             );
-            chart.render();
+            window.salesOverviewChart.render();
         });
 
         // Deals
@@ -1648,11 +1659,11 @@
                 , colors: chartDeals
             , };
 
-            var chart = new ApexCharts(
+            window.dealsChart = new ApexCharts(
                 document.querySelector("#deal-stage-source")
                 , options
             );
-            chart.render();
+            window.dealsChart.render();
         }
 
         // Project Status
@@ -1679,11 +1690,11 @@
                 , colors: chartProjectStatus
             , };
 
-            var chart = new ApexCharts(
+            window.projectStatusChart = new ApexCharts(
                 document.querySelector("#project-status-source")
                 , options
             );
-            chart.render();
+            window.projectStatusChart.render();
         }
 
         // Collection vs Pending Chart
@@ -1756,11 +1767,11 @@
             }
         };
 
-        var collectionVsPendingChart = new ApexCharts(
+        window.collectionVsPendingChart = new ApexCharts(
             document.querySelector("#collectionVsPendingChart")
             , collectionVsPendingOptions
         );
-        collectionVsPendingChart.render();
+        window.collectionVsPendingChart.render();
 
         // Sales Trend Chart
         var salesTrendOptions = {
@@ -1828,11 +1839,11 @@
             }
         };
 
-        var salesTrendChart = new ApexCharts(
+        window.salesTrendChart = new ApexCharts(
             document.querySelector("#salesTrendChart")
             , salesTrendOptions
         );
-        salesTrendChart.render();
+        window.salesTrendChart.render();
 
         // Hourly Registration Chart
         var hourlyData = @json($hourlyData);
@@ -1913,11 +1924,11 @@
             }
         };
 
-        var hourlyRegistrationChart = new ApexCharts(
+        window.hourlyRegistrationChart = new ApexCharts(
             document.querySelector("#hourlyRegistrationChart")
             , hourlyRegistrationOptions
         );
-        hourlyRegistrationChart.render();
+        window.hourlyRegistrationChart.render();
 
         // Calculate and display peak hour text
         let maxVal = -1;
@@ -1980,8 +1991,8 @@
                 }
             }
         };
-        var ageWiseChart = new ApexCharts(document.querySelector("#ageWiseChart"), ageWiseOptions);
-        ageWiseChart.render();
+        window.ageWiseChart = new ApexCharts(document.querySelector("#ageWiseChart"), ageWiseOptions);
+        window.ageWiseChart.render();
 
         // City Wise Chart (Bar)
         var cityData = @json($cityData);
@@ -2045,8 +2056,72 @@
                 show: false
             }
         };
-        var cityWiseChart = new ApexCharts(document.querySelector("#cityWiseChart"), cityWiseOptions);
-        cityWiseChart.render();
+        window.cityWiseChart = new ApexCharts(document.querySelector("#cityWiseChart"), cityWiseOptions);
+        window.cityWiseChart.render();
+
+        window.addEventListener('dashboard-updated', event => {
+            if (window.salesOverviewChart) {
+                window.salesOverviewChart.updateSeries([
+                    { name: "Collection", data: event.detail.salesTrendCollection },
+                    { name: "Pending Amount", data: event.detail.salesTrendPending },
+                    { name: "Booking Amount", data: event.detail.salesTrendBooking },
+                    { name: "Refund Amount", data: event.detail.salesTrendRefund }
+                ]);
+                window.salesOverviewChart.updateOptions({
+                    xaxis: { categories: event.detail.salesTrendDays }
+                });
+            }
+
+            if (window.dealsChart) {
+                window.dealsChart.updateSeries([
+                    event.detail.paidLeads,
+                    event.detail.pendingLeads,
+                    event.detail.draftLeads
+                ]);
+            }
+
+            if (window.projectStatusChart) {
+                window.projectStatusChart.updateSeries(event.detail.projectStatusData);
+            }
+
+            if (window.collectionVsPendingChart) {
+                window.collectionVsPendingChart.updateSeries([
+                    event.detail.totalCollection,
+                    event.detail.pendingAmount
+                ]);
+            }
+
+            if (window.salesTrendChart) {
+                window.salesTrendChart.updateSeries([
+                    { name: "Collection", data: event.detail.salesTrendCollection },
+                    { name: "Pending Amount", data: event.detail.salesTrendPending },
+                    { name: "Booking Amount", data: event.detail.salesTrendBooking },
+                    { name: "Refund Amount", data: event.detail.salesTrendRefund }
+                ]);
+                window.salesTrendChart.updateOptions({
+                    xaxis: { categories: event.detail.salesTrendDays }
+                });
+            }
+
+            if (window.hourlyRegistrationChart) {
+                window.hourlyRegistrationChart.updateSeries([
+                    { name: "Registrations", data: event.detail.hourlyData }
+                ]);
+            }
+
+            if (window.ageWiseChart) {
+                window.ageWiseChart.updateSeries(event.detail.ageData);
+            }
+
+            if (window.cityWiseChart) {
+                window.cityWiseChart.updateSeries([
+                    { name: "Leads", data: event.detail.cityData }
+                ]);
+                window.cityWiseChart.updateOptions({
+                    xaxis: { categories: event.detail.cityLabels }
+                });
+            }
+        });
 
     </script>
     @endsection

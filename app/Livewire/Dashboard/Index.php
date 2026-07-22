@@ -57,37 +57,72 @@ class Index extends Component
     public array $salesTrendBooking = [];
     public array $salesTrendRefund = [];
 
+    public string $dateRange = '';
+
     public function mount(): void
     {
+        $this->dateRange = now()->startOfMonth()->format('d M, Y') . ' to ' . now()->endOfMonth()->format('d M, Y');
         $this->loadDashboard();
+    }
+
+    private function parseDate(string $dateStr)
+    {
+        try {
+            return \Carbon\Carbon::createFromFormat('d M, Y', $dateStr);
+        } catch (\Exception $e) {
+            try {
+                return \Carbon\Carbon::createFromFormat('d M Y', $dateStr);
+            } catch (\Exception $e2) {
+                return \Carbon\Carbon::parse($dateStr);
+            }
+        }
     }
 
     protected function loadDashboard(): void
     {
-        $this->totalLeads = Lead::count();
+        // Parse date range
+        $startDate = now()->startOfMonth();
+        $endDate = now()->endOfMonth();
+
+        if ($this->dateRange) {
+            $dates = explode(' to ', $this->dateRange);
+            if (count($dates) === 2) {
+                try {
+                    $startDate = $this->parseDate(trim($dates[0]))->startOfDay();
+                    $endDate = $this->parseDate(trim($dates[1]))->endOfDay();
+                } catch (\Exception $e) {}
+            } else if (count($dates) === 1) {
+                try {
+                    $startDate = $this->parseDate(trim($dates[0]))->startOfDay();
+                    $endDate = $this->parseDate(trim($dates[0]))->endOfDay();
+                } catch (\Exception $e) {}
+            }
+        }
+
+        $this->totalLeads = Lead::whereBetween('created_at', [$startDate, $endDate])->count();
         $this->totalProjects = Project::count();
 
         $this->activeProjects = Project::where('status', 'active')->count();
         $this->upcomingProjects = Project::where('status', 'upcoming')->count();
 
-        $this->draftLeads = Lead::draft()->count();
-        $this->submittedLeads = Lead::submitted()->count();
-        $this->paidLeads = Lead::paid()->count();
-        $this->pendingLeads = Lead::pendingPayment()->count();
+        $this->draftLeads = Lead::draft()->whereBetween('created_at', [$startDate, $endDate])->count();
+        $this->submittedLeads = Lead::submitted()->whereBetween('created_at', [$startDate, $endDate])->count();
+        $this->paidLeads = Lead::paid()->whereBetween('created_at', [$startDate, $endDate])->count();
+        $this->pendingLeads = Lead::pendingPayment()->whereBetween('created_at', [$startDate, $endDate])->count();
 
-        $this->totalDeals = Deal::count();
+        $this->totalDeals = Deal::whereBetween('created_at', [$startDate, $endDate])->count();
 
         $bookingAmountVal = (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100.00);
 
-        $this->totalAmount = Lead::submitted()->count() * $bookingAmountVal;
+        $this->totalAmount = Lead::submitted()->whereBetween('created_at', [$startDate, $endDate])->count() * $bookingAmountVal;
 
-        $this->totalRefund = Deal::where('status', 'Refund')->count() * $bookingAmountVal;
+        $this->totalRefund = Deal::where('status', 'Refund')->whereBetween('created_at', [$startDate, $endDate])->count() * $bookingAmountVal;
 
-        $this->totalCollection = Deal::where('status', '!=', 'Refund')->count() * $bookingAmountVal;
+        $this->totalCollection = Deal::where('status', '!=', 'Refund')->whereBetween('created_at', [$startDate, $endDate])->count() * $bookingAmountVal;
 
-        $this->pendingAmount = Lead::pendingPayment()->count() * $bookingAmountVal;
+        $this->pendingAmount = Lead::pendingPayment()->whereBetween('created_at', [$startDate, $endDate])->count() * $bookingAmountVal;
 
-        $this->bookingAmount = Deal::count() * $bookingAmountVal;
+        $this->bookingAmount = Deal::whereBetween('created_at', [$startDate, $endDate])->count() * $bookingAmountVal;
 
         $this->conversionRate = $this->totalLeads > 0 
             ? round(($this->paidLeads / $this->totalLeads) * 100, 2) 
@@ -106,36 +141,45 @@ class Index extends Component
             $cancelledProjects
         ];
 
-        // Sales Trend (Last 30 Days)
+        // Sales Trend within the selected range
         $days = [];
         $trendCollection = [];
         $trendPending = [];
         $trendBooking = [];
         $trendRefund = [];
 
-        for ($i = 29; $i >= 0; $i--) {
-            $date = now()->subDays($i)->format('Y-m-d');
-            $dateLabel = now()->subDays($i)->format('d M');
+        $diffInDays = $startDate->diffInDays($endDate);
+        if ($diffInDays > 60) {
+            $diffInDays = 60;
+        }
+        if ($diffInDays < 1) {
+            $diffInDays = 1;
+        }
+
+        for ($i = $diffInDays; $i >= 0; $i--) {
+            $currentDate = (clone $endDate)->subDays($i);
+            $dateStr = $currentDate->format('Y-m-d');
+            $dateLabel = $currentDate->format('d M');
             $days[] = $dateLabel;
 
             // Collection (Paid Deals)
             $trendCollection[] = round(Deal::where('status', '!=', 'Refund')
-                ->whereDate('created_at', $date)
+                ->whereDate('created_at', $dateStr)
                 ->count() * $bookingAmountVal / 100000, 2);
 
             // Pending
             $trendPending[] = round(Lead::pendingPayment()
-                ->whereDate('created_at', $date)
+                ->whereDate('created_at', $dateStr)
                 ->count() * $bookingAmountVal / 100000, 2);
 
             // Booking (Submitted)
             $trendBooking[] = round(Lead::submitted()
-                ->whereDate('created_at', $date)
+                ->whereDate('created_at', $dateStr)
                 ->count() * $bookingAmountVal / 100000, 2);
 
             // Refund (Refunded Deals)
             $trendRefund[] = round(Deal::where('status', 'Refund')
-                ->whereDate('created_at', $date)
+                ->whereDate('created_at', $dateStr)
                 ->count() * $bookingAmountVal / 100000, 2);
         }
 
@@ -149,12 +193,14 @@ class Index extends Component
         $driver = DB::connection()->getDriverName();
         if ($driver === 'sqlite') {
             $hourlyStats = Lead::query()
+                ->whereBetween('created_at', [$startDate, $endDate])
                 ->select(DB::raw("strftime('%H', created_at) as hour"), DB::raw('count(*) as count'))
                 ->groupBy('hour')
                 ->pluck('count', 'hour')
                 ->toArray();
         } else {
             $hourlyStats = Lead::query()
+                ->whereBetween('created_at', [$startDate, $endDate])
                 ->select(DB::raw("DATE_FORMAT(created_at, '%H') as hour"), DB::raw('count(*) as count'))
                 ->groupBy('hour')
                 ->pluck('count', 'hour')
@@ -175,7 +221,10 @@ class Index extends Component
         $this->hourlyData = $data;
 
         // 1. Age Wise Distribution
-        $leads = Lead::select('date_of_birth')->whereNotNull('date_of_birth')->get();
+        $leads = Lead::select('date_of_birth')
+            ->whereNotNull('date_of_birth')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
         $ageGroups = [
             '18-25' => 0,
             '26-35' => 0,
@@ -208,6 +257,7 @@ class Index extends Component
 
         // 2. City Wise Distribution (Top 10)
         $cityStats = Lead::query()
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->select('city', DB::raw('count(*) as count'))
             ->whereNotNull('city')
             ->where('city', '!=', '')
@@ -219,12 +269,51 @@ class Index extends Component
 
         $this->cityLabels = array_keys($cityStats);
         $this->cityData = array_values($cityStats);
+
+        $this->dispatch('dashboard-updated', [
+            'paidLeads' => $this->paidLeads,
+            'pendingLeads' => $this->pendingLeads,
+            'draftLeads' => $this->draftLeads,
+            'projectStatusData' => $this->projectStatusData,
+            'totalCollection' => $this->totalCollection,
+            'pendingAmount' => $this->pendingAmount,
+            'salesTrendCollection' => $this->salesTrendCollection,
+            'salesTrendPending' => $this->salesTrendPending,
+            'salesTrendBooking' => $this->salesTrendBooking,
+            'salesTrendRefund' => $this->salesTrendRefund,
+            'salesTrendDays' => $this->salesTrendDays,
+            'hourlyData' => $this->hourlyData,
+            'ageData' => $this->ageData,
+            'cityData' => $this->cityData,
+            'cityLabels' => $this->cityLabels,
+        ]);
     }
 
     public function render()
     {
+        $this->loadDashboard();
+
+        // Parse date range for recent leads
+        $startDate = now()->startOfMonth();
+        $endDate = now()->endOfMonth();
+
+        if ($this->dateRange) {
+            $dates = explode(' to ', $this->dateRange);
+            if (count($dates) === 2) {
+                try {
+                    $startDate = $this->parseDate(trim($dates[0]))->startOfDay();
+                    $endDate = $this->parseDate(trim($dates[1]))->endOfDay();
+                } catch (\Exception $e) {}
+            } else if (count($dates) === 1) {
+                try {
+                    $startDate = $this->parseDate(trim($dates[0]))->startOfDay();
+                    $endDate = $this->parseDate(trim($dates[0]))->endOfDay();
+                } catch (\Exception $e) {}
+            }
+        }
+
         return view('livewire.dashboard.index', [
-            'recentLeads' => Lead::latest()->limit(10)->get(),
+            'recentLeads' => Lead::whereBetween('created_at', [$startDate, $endDate])->latest()->limit(10)->get(),
             'recentProjects' => Project::latest()->limit(5)->get(),
         ]);
     }
