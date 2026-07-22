@@ -175,8 +175,9 @@
             body {
                 background: #e0e0e0;
             }
+
             .page-wrapper {
-                box-shadow: 0 0 20px rgba(0,0,0,0.3);
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
                 margin: 20px auto;
             }
         }
@@ -185,6 +186,7 @@
             body {
                 background: none !important;
             }
+
             .page-wrapper {
                 width: 100%;
                 min-height: 100vh;
@@ -199,7 +201,7 @@
     <div class="page-wrapper">
         <!-- Background image rendered as actual img tag so it always prints -->
         <div class="bg-image">
-            <img src="https://rajasthanawasyojana.com/admin/img/back_img.png" alt="" />
+            <img src="{{ asset('back_img.png') }}" alt="" />
         </div>
 
         <div class="content">
@@ -213,7 +215,8 @@
             <table class="meta-table">
                 <tr>
                     <td width="15%"><span class="meta-label">फॉर्म संख्या:</span></td>
-                    <td width="35%">RAJAWS-{{ $deal->created_at?->format('Y') ?: date('Y') }}-{{ substr($deal->id, 0, 8) }}</td>
+                    <td width="35%">
+                        RAJAWS-{{ $deal->created_at?->format('Y') ?: date('Y') }}-{{ substr($deal->id, 0, 8) }}</td>
                     <td width="15%"><span class="meta-label">दिनांक -</span></td>
                     <td width="35%">
                         {{ $deal->booking_date ? \Carbon\Carbon::parse($deal->booking_date)->format('d-m-Y') : date('d-m-Y') }}
@@ -236,7 +239,8 @@
             <div class="salutation">महोदय / महोदया,</div>
 
             <div class="body-text">
-                हमें यह उद्घोषित करते हुए प्रसन्नता हो रही है कि हमारी योजना <strong>{{ $project->name }}</strong> में आपका
+                हमें यह उद्घोषित करते हुए प्रसन्नता हो रही है कि हमारी योजना <strong>{{ $project->name }}</strong> में
+                आपका
                 भूखण्ड \ फ्लैट का आवंटित किया जाना प्रस्तावित है जिसका विवरण निम्न प्रकार से है:
             </div>
 
@@ -250,7 +254,8 @@
                 <tbody>
                     <tr>
                         <td><strong>{{ $inventory->plot_no ?: $inventory->flat_no }}</strong></td>
-                        <td><strong>{{ number_format($inventory->area_sq_yards ?: $inventory->area_sbup, 2) }}</strong></td>
+                        <td><strong>{{ number_format($inventory->area_sq_yards ?: $inventory->area_sbup, 2) }}</strong>
+                        </td>
                     </tr>
                 </tbody>
             </table>
