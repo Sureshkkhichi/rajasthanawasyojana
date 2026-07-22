@@ -57,47 +57,19 @@ class Index extends Component
     public array $salesTrendBooking = [];
     public array $salesTrendRefund = [];
 
-    public string $dateRange = '';
+    public string $fromDate = '';
+    public string $toDate = '';
 
     public function mount(): void
     {
-        $this->dateRange = now()->startOfMonth()->format('d M, Y') . ' to ' . now()->endOfMonth()->format('d M, Y');
+        $this->fromDate = now()->startOfMonth()->format('Y-m-d');
+        $this->toDate = now()->endOfMonth()->format('Y-m-d');
         $this->loadDashboard();
     }
-
-    private function parseDate(string $dateStr)
-    {
-        try {
-            return \Carbon\Carbon::createFromFormat('d M, Y', $dateStr);
-        } catch (\Exception $e) {
-            try {
-                return \Carbon\Carbon::createFromFormat('d M Y', $dateStr);
-            } catch (\Exception $e2) {
-                return \Carbon\Carbon::parse($dateStr);
-            }
-        }
-    }
-
     protected function loadDashboard(): void
     {
-        // Parse date range
-        $startDate = now()->startOfMonth();
-        $endDate = now()->endOfMonth();
-
-        if ($this->dateRange) {
-            $dates = explode(' to ', $this->dateRange);
-            if (count($dates) === 2) {
-                try {
-                    $startDate = $this->parseDate(trim($dates[0]))->startOfDay();
-                    $endDate = $this->parseDate(trim($dates[1]))->endOfDay();
-                } catch (\Exception $e) {}
-            } else if (count($dates) === 1) {
-                try {
-                    $startDate = $this->parseDate(trim($dates[0]))->startOfDay();
-                    $endDate = $this->parseDate(trim($dates[0]))->endOfDay();
-                } catch (\Exception $e) {}
-            }
-        }
+        $startDate = $this->fromDate ? \Carbon\Carbon::parse($this->fromDate)->startOfDay() : now()->startOfMonth();
+        $endDate = $this->toDate ? \Carbon\Carbon::parse($this->toDate)->endOfDay() : now()->endOfMonth();
 
         $this->totalLeads = Lead::whereBetween('created_at', [$startDate, $endDate])->count();
         $this->totalProjects = Project::count();
@@ -293,24 +265,8 @@ class Index extends Component
     {
         $this->loadDashboard();
 
-        // Parse date range for recent leads
-        $startDate = now()->startOfMonth();
-        $endDate = now()->endOfMonth();
-
-        if ($this->dateRange) {
-            $dates = explode(' to ', $this->dateRange);
-            if (count($dates) === 2) {
-                try {
-                    $startDate = $this->parseDate(trim($dates[0]))->startOfDay();
-                    $endDate = $this->parseDate(trim($dates[1]))->endOfDay();
-                } catch (\Exception $e) {}
-            } else if (count($dates) === 1) {
-                try {
-                    $startDate = $this->parseDate(trim($dates[0]))->startOfDay();
-                    $endDate = $this->parseDate(trim($dates[0]))->endOfDay();
-                } catch (\Exception $e) {}
-            }
-        }
+        $startDate = $this->fromDate ? \Carbon\Carbon::parse($this->fromDate)->startOfDay() : now()->startOfMonth();
+        $endDate = $this->toDate ? \Carbon\Carbon::parse($this->toDate)->endOfDay() : now()->endOfMonth();
 
         return view('livewire.dashboard.index', [
             'recentLeads' => Lead::whereBetween('created_at', [$startDate, $endDate])->latest()->limit(10)->get(),
