@@ -1547,7 +1547,7 @@
                 yaxis: {
                     labels: {
                         formatter: function (val) {
-                            return val + "L";
+                            return val.toFixed(2) + " Lac";
                         }
                     }
                 },
@@ -1567,7 +1567,8 @@
                 tooltip: {
                     y: {
                         formatter: function (val) {
-                            return val + " L";
+                            var fullAmount = Math.round(val * 100000);
+                            return "₹" + fullAmount.toLocaleString('en-IN');
                         }
                     }
                 }

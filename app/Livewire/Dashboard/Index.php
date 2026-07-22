@@ -280,12 +280,12 @@ class Index extends Component
             $colCount = Deal::where('status', '!=', 'Refund')
                 ->whereBetween('created_at', [$week['start'], $week['end']])
                 ->count();
-            $this->weeklyCollection[] = round($colCount * $bookingAmountVal / 100000, 2);
+            $this->weeklyCollection[] = ($colCount * $bookingAmountVal) / 100000;
 
             $refCount = Deal::where('status', 'Refund')
                 ->whereBetween('created_at', [$week['start'], $week['end']])
                 ->count();
-            $this->weeklyRefund[] = round($refCount * $bookingAmountVal / 100000, 2);
+            $this->weeklyRefund[] = ($refCount * $bookingAmountVal) / 100000;
         }
 
         $this->dispatch('dashboard-updated', [
