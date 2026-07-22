@@ -328,7 +328,7 @@ class Booking extends Component
             'merchantId' => $merchantId,
             'merchantTransactionId' => $transactionId,
             'merchantUserId' => 'USR' . $this->lead->phone,
-            'amount' => 2110000, // 21100.00 * 100 paise
+            'amount' => (int) (((float) \App\Models\FrontendSetting::getVal('booking_amount', 21100)) * 100),
             'redirectUrl' => route('phonepe.redirect') . '?transactionId=' . $transactionId,
             'redirectMode' => 'GET',
             'callbackUrl' => route('phonepe.callback'),

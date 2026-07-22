@@ -137,6 +137,16 @@
                                                 @enderror
                                             </div>
 
+                                            <!-- Booking Amount -->
+                                            <div class="col-md-4">
+                                                <label for="booking_amount" class="form-label fw-medium">Booking Amount (₹)</label>
+                                                <input type="number" id="booking_amount" class="form-control"
+                                                    wire:model="booking_amount" placeholder="e.g. 21100">
+                                                @error('booking_amount')
+                                                <div class="text-danger mt-1">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
                                             <div class="col-12 text-end">
                                                 <button type="submit" class="btn btn-success"
                                                     wire:loading.attr="disabled" wire:target="saveGeneral">

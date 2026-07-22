@@ -29,6 +29,7 @@ class Index extends Component
     public string $mobile_number_1 = '';
     public string $mobile_number_2 = '';
     public string $rera_number = '';
+    public string $booking_amount = '';
 
     // Top Bar properties
     public string $top_bar_text = '';
@@ -68,6 +69,7 @@ class Index extends Component
         $this->mobile_number_1 = FrontendSetting::getVal('mobile_number_1', '');
         $this->mobile_number_2 = FrontendSetting::getVal('mobile_number_2', '');
         $this->rera_number = FrontendSetting::getVal('rera_number', '');
+        $this->booking_amount = FrontendSetting::getVal('booking_amount', '21100');
 
         // Load Top Bar Settings
         $this->top_bar_text = FrontendSetting::getVal('top_bar_text', '');
@@ -89,6 +91,7 @@ class Index extends Component
             'mobile_number_1' => ['nullable', 'string', 'max:20'],
             'mobile_number_2' => ['nullable', 'string', 'max:20'],
             'rera_number' => ['nullable', 'string', 'max:100'],
+            'booking_amount' => ['required', 'numeric', 'min:0'],
         ];
         $this->validate($rules);
 
@@ -116,6 +119,7 @@ class Index extends Component
         FrontendSetting::setVal('mobile_number_1', $this->mobile_number_1);
         FrontendSetting::setVal('mobile_number_2', $this->mobile_number_2);
         FrontendSetting::setVal('rera_number', $this->rera_number);
+        FrontendSetting::setVal('booking_amount', $this->booking_amount);
 
         session()->flash('success_general', 'General settings saved successfully.');
     }

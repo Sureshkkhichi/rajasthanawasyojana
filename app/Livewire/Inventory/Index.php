@@ -327,7 +327,7 @@ class Index extends Component
                 'co_applicant_name' => '',
                 'flat_size' => $flatSize,
                 'waiver_code' => '',
-                'booking_amount' => 21100,
+                'booking_amount' => (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100),
                 'total_amount' => $unit->price,
             ];
 

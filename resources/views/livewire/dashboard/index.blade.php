@@ -1208,7 +1208,15 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-end mb-2">
-                                <span class="fw-bold text-dark fs-16">₹ 8.64 Cr</span>
+                                <span class="fw-bold text-dark fs-16" title="₹ {{ number_format($totalAmount) }}">
+                                    @if($totalAmount >= 10000000)
+                                        ₹ {{ number_format($totalAmount / 10000000, 2) }} Cr
+                                    @elseif($totalAmount >= 100000)
+                                        ₹ {{ number_format($totalAmount / 100000, 2) }} L
+                                    @else
+                                        ₹ {{ number_format($totalAmount) }}
+                                    @endif
+                                </span>
                             </div>
                             <div id="salesTrendChart" class="apex-charts" dir="ltr" style="height: 250px; min-height: 250px;"></div>
                         </div>

@@ -77,21 +77,15 @@ class Index extends Component
 
         $this->totalDeals = $this->submittedLeads;
 
-        $this->totalAmount = Lead::submitted()
-            ->join('projects', 'leads.project_id', '=', 'projects.id')
-            ->sum('projects.price');
+        $bookingAmountVal = (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100.00);
 
-        $this->totalRefund = Lead::where('leads.status', 'cancelled')
-            ->join('projects', 'leads.project_id', '=', 'projects.id')
-            ->sum('projects.price');
+        $this->totalAmount = Lead::submitted()->count() * $bookingAmountVal;
 
-        $this->totalCollection = Lead::paid()
-            ->join('projects', 'leads.project_id', '=', 'projects.id')
-            ->sum('projects.price');
+        $this->totalRefund = Lead::where('status', 'cancelled')->count() * $bookingAmountVal;
 
-        $this->pendingAmount = Lead::pendingPayment()
-            ->join('projects', 'leads.project_id', '=', 'projects.id')
-            ->sum('projects.price');
+        $this->totalCollection = Lead::paid()->count() * $bookingAmountVal;
+
+        $this->pendingAmount = Lead::pendingPayment()->count() * $bookingAmountVal;
 
         $this->bookingAmount = $this->totalAmount;
 
@@ -126,27 +120,23 @@ class Index extends Component
 
             // Collection (Paid)
             $trendCollection[] = round(Lead::paid()
-                ->whereDate('leads.created_at', $date)
-                ->join('projects', 'leads.project_id', '=', 'projects.id')
-                ->sum('projects.price') / 100000, 2);
+                ->whereDate('created_at', $date)
+                ->count() * $bookingAmountVal / 100000, 2);
 
             // Pending
             $trendPending[] = round(Lead::pendingPayment()
-                ->whereDate('leads.created_at', $date)
-                ->join('projects', 'leads.project_id', '=', 'projects.id')
-                ->sum('projects.price') / 100000, 2);
+                ->whereDate('created_at', $date)
+                ->count() * $bookingAmountVal / 100000, 2);
 
             // Booking (Submitted)
             $trendBooking[] = round(Lead::submitted()
-                ->whereDate('leads.created_at', $date)
-                ->join('projects', 'leads.project_id', '=', 'projects.id')
-                ->sum('projects.price') / 100000, 2);
+                ->whereDate('created_at', $date)
+                ->count() * $bookingAmountVal / 100000, 2);
 
             // Refund (Cancelled)
-            $trendRefund[] = round(Lead::where('leads.status', 'cancelled')
-                ->whereDate('leads.created_at', $date)
-                ->join('projects', 'leads.project_id', '=', 'projects.id')
-                ->sum('projects.price') / 100000, 2);
+            $trendRefund[] = round(Lead::where('status', 'cancelled')
+                ->whereDate('created_at', $date)
+                ->count() * $bookingAmountVal / 100000, 2);
         }
 
         $this->salesTrendDays = $days;

@@ -357,7 +357,7 @@
                             <div class="col-sm-12 form-group">
                                 <label>Total Flat value </label>
                                 <h2 id="total" style=" border-bottom:2px dotted #000;"></h2>
-                                <h3 class="" style="font-weight: 500;">Registration Amount Rs. 21100</h3>
+                                <h3 class="" style="font-weight: 500;">Registration Amount Rs. {{ number_format(\App\Models\FrontendSetting::getVal('booking_amount', 21100)) }}</h3>
                             </div>
                         </div>
                         <!-- TERMS -->

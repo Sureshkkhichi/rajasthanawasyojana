@@ -205,7 +205,7 @@ class PaymentController extends Controller
                 'flat_size' => $lead->flat_size,
                 'waiver_code' => $lead->waiver_code,
                 'booking_date' => now(),
-                'booking_amount' => 21100.00,
+                'booking_amount' => (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100.00),
                 'total_amount' => $unitPrice,
                 'status' => 'Paid',
                 'remarks' => null,
