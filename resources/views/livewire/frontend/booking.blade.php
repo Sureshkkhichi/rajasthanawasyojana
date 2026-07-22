@@ -5,6 +5,11 @@
                 border-color: #dc3545 !important;
             }
 
+            .project-detail-body {
+                background: #f8f9fa;
+                padding: 20px 28px;
+            }
+
             .nft-hero {
                 background-image: unset;
                 padding: 110px 0 60px 0;
@@ -21,16 +26,16 @@
 
             /* Project Info Panel */
             .proj-panel {
-                background: #fff;
+                background: #f8f9fa;
                 border: 1px solid #e8e8e8;
                 border-radius: 12px;
-                box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+                box-shadow: none;
                 margin-bottom: 22px;
                 overflow: hidden;
             }
             .proj-panel-top {
                 padding: 18px 24px 14px;
-                border-bottom: 1px solid #f0f0f0;
+                border-bottom: 1px solid #e0e0e0;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
@@ -85,13 +90,13 @@
                 display: flex;
                 flex-wrap: wrap;
                 padding: 0;
-                border-bottom: 1px solid #f0f0f0;
+                border-bottom: 1px solid #e0e0e0;
             }
             .proj-stat-item {
                 flex: 1;
                 min-width: 120px;
                 padding: 14px 22px;
-                border-right: 1px solid #f0f0f0;
+                border-right: 1px solid #e0e0e0;
                 position: relative;
             }
             .proj-stat-item:last-child {
@@ -137,9 +142,9 @@
                 white-space: nowrap;
             }
             .proj-size-chip {
-                background: #f5f5f5;
-                border: 1px solid #e0e0e0;
-                color: #333;
+                background: #fff;
+                border: 1px solid #ddd;
+                color: #444;
                 border-radius: 6px;
                 padding: 3px 10px;
                 font-size: 12px;
@@ -152,7 +157,7 @@
                 display: flex;
                 align-items: flex-start;
                 gap: 6px;
-                border-top: 1px solid #f0f0f0;
+                border-top: 1px solid #e0e0e0;
             }
             .proj-address i {
                 color: #bbb;
