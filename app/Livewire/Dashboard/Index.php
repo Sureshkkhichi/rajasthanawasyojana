@@ -75,19 +75,19 @@ class Index extends Component
         $this->paidLeads = Lead::paid()->count();
         $this->pendingLeads = Lead::pendingPayment()->count();
 
-        $this->totalDeals = $this->submittedLeads;
+        $this->totalDeals = Deal::count();
 
         $bookingAmountVal = (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100.00);
 
         $this->totalAmount = Lead::submitted()->count() * $bookingAmountVal;
 
-        $this->totalRefund = Lead::where('status', 'cancelled')->count() * $bookingAmountVal;
+        $this->totalRefund = Deal::where('status', 'Refund')->count() * $bookingAmountVal;
 
-        $this->totalCollection = Lead::paid()->count() * $bookingAmountVal;
+        $this->totalCollection = Deal::where('status', '!=', 'Refund')->count() * $bookingAmountVal;
 
         $this->pendingAmount = Lead::pendingPayment()->count() * $bookingAmountVal;
 
-        $this->bookingAmount = $this->totalAmount;
+        $this->bookingAmount = Deal::count() * $bookingAmountVal;
 
         $this->conversionRate = $this->totalLeads > 0 
             ? round(($this->paidLeads / $this->totalLeads) * 100, 2) 
@@ -118,8 +118,8 @@ class Index extends Component
             $dateLabel = now()->subDays($i)->format('d M');
             $days[] = $dateLabel;
 
-            // Collection (Paid)
-            $trendCollection[] = round(Lead::paid()
+            // Collection (Paid Deals)
+            $trendCollection[] = round(Deal::where('status', '!=', 'Refund')
                 ->whereDate('created_at', $date)
                 ->count() * $bookingAmountVal / 100000, 2);
 
@@ -133,8 +133,8 @@ class Index extends Component
                 ->whereDate('created_at', $date)
                 ->count() * $bookingAmountVal / 100000, 2);
 
-            // Refund (Cancelled)
-            $trendRefund[] = round(Lead::where('status', 'cancelled')
+            // Refund (Refunded Deals)
+            $trendRefund[] = round(Deal::where('status', 'Refund')
                 ->whereDate('created_at', $date)
                 ->count() * $bookingAmountVal / 100000, 2);
         }
