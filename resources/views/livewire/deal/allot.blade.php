@@ -207,7 +207,7 @@
                                         @if($isFlat)
                                             <td>{{ $unit->floor }}</td>
                                             <td class="fw-bold text-dark">{{ $unit->flat_no }}</td>
-                                            <td><span class="badge bg-light text-secondary border border-light-subtle rounded px-2 py-1 fs-11">{{ $unit->unit_type }}</span></td>
+                                            <td><span class="badge bg-light text-secondary border border-light-subtle rounded px-2 py-1 fs-11">{{ $unit->unit_type_label }}</span></td>
                                             <td>{{ number_format($unit->area_sbup, 2) }}</td>
                                             <td>{{ number_format($unit->carpet_area, 2) }}</td>
                                             <td>{{ number_format($unit->super_buildup_area, 2) }}</td>

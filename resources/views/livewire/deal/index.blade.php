@@ -300,7 +300,7 @@
                                 @foreach($availableUnits as $unit)
                                     @if($unit->inventory_type === 'flat')
                                         <option value="{{ $unit->id }}">
-                                            Flat: {{ $unit->flat_no }} (Floor: {{ $unit->floor }}, Type: {{ $unit->unit_type }}, ₹{{ number_format($unit->price, 0) }})
+                                            Flat: {{ $unit->flat_no }} (Floor: {{ $unit->floor }}, Type: {{ $unit->unit_type_label }}, ₹{{ number_format($unit->price, 0) }})
                                         </option>
                                     @else
                                         <option value="{{ $unit->id }}">

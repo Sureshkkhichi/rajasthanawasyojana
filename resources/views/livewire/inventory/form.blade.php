@@ -4,11 +4,13 @@
             {{-- Header --}}
             <div class="row">
                 <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
+                    <div
+                        class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
                         <h4 class="mb-sm-0">{{ $inventory ? 'Edit Unit' : 'Add Unit' }}</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('inventories.index') }}">Inventory</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('inventories.index') }}">Inventory</a>
+                                </li>
                                 <li class="breadcrumb-item active">{{ $inventory ? 'Edit' : 'Create' }}</li>
                             </ol>
                         </div>
@@ -38,19 +40,25 @@
                                     {{-- Project selection --}}
                                     <div class="col-md-6">
                                         <label class="form-label">Project <span class="text-danger">*</span></label>
-                                        <select class="form-select @error('project_id') is-invalid @enderror" wire:model.live="project_id" @disabled($inventory && $inventory->exists)>
+                                        <select class="form-select @error('project_id') is-invalid @enderror"
+                                            wire:model.live="project_id" @disabled($inventory && $inventory->exists)>
                                             <option value="">Select Project</option>
                                             @foreach($projects as $p)
-                                                <option value="{{ $p->id }}">{{ $p->name }} ({{ $p->inventory_type === 'flat' ? 'Flat' : 'Plot' }}) - {{ $p->registration_status === 'open' ? 'Registration Open' : 'Registration Closed' }}</option>
+                                                <option value="{{ $p->id }}">{{ $p->name }}
+                                                    ({{ $p->inventory_type === 'flat' ? 'Flat' : 'Plot' }}) -
+                                                    {{ $p->registration_status === 'open' ? 'Registration Open' : 'Registration Closed' }}
+                                                </option>
                                             @endforeach
                                         </select>
-                                        @error('project_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                        @error('project_id') <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     {{-- Inventory Type badge --}}
                                     <div class="col-md-6 d-flex align-items-end">
                                         <div class="mb-2">
-                                            <span class="badge {{ $inventory_type === 'flat' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} text-uppercase fs-12 px-3 py-2 border border-{{ $inventory_type === 'flat' ? 'info' : 'success' }}-subtle">
+                                            <span
+                                                class="badge {{ $inventory_type === 'flat' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} text-uppercase fs-12 px-3 py-2 border border-{{ $inventory_type === 'flat' ? 'info' : 'success' }}-subtle">
                                                 {{ $inventory_type === 'flat' ? 'Flat Project' : 'Plot Project' }}
                                             </span>
                                         </div>
@@ -66,29 +74,38 @@
 
                                         <div class="col-md-4">
                                             <label class="form-label">Plot No. <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('plot_no') is-invalid @enderror" wire:model="plot_no" placeholder="e.g., F-01">
+                                            <input type="text" class="form-control @error('plot_no') is-invalid @enderror"
+                                                wire:model="plot_no" placeholder="e.g., F-01">
                                             @error('plot_no') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label class="form-label">Area (Sq. Yards) <span class="text-danger">*</span></label>
-                                            <input type="number" step="0.01" class="form-control @error('area_sq_yards') is-invalid @enderror" wire:model="area_sq_yards" placeholder="e.g., 357.77">
-                                            @error('area_sq_yards') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                            <label class="form-label">Area (Sq. Yards) <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="number" step="0.01"
+                                                class="form-control @error('area_sq_yards') is-invalid @enderror"
+                                                wire:model="area_sq_yards" placeholder="e.g., 357.77">
+                                            @error('area_sq_yards') <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label">Road Size <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('road_size') is-invalid @enderror" wire:model="road_size" placeholder="e.g., 100' or 40'">
+                                            <input type="text" class="form-control @error('road_size') is-invalid @enderror"
+                                                wire:model="road_size" placeholder="e.g., 100' or 40'">
                                             @error('road_size') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
 
                                         <div class="col-md-12">
                                             <label class="form-label">PLC %</label>
                                             <div class="input-group">
-                                                <input type="number" step="0.01" class="form-control @error('plc_percentage') is-invalid @enderror" wire:model="plc_percentage" placeholder="e.g., 10">
+                                                <input type="number" step="0.01"
+                                                    class="form-control @error('plc_percentage') is-invalid @enderror"
+                                                    wire:model="plc_percentage" placeholder="e.g., 10">
                                                 <span class="input-group-text">%</span>
                                             </div>
-                                            @error('plc_percentage') <div class="text-danger fs-12 mt-1">{{ $message }}</div> @enderror
+                                            @error('plc_percentage') <div class="text-danger fs-12 mt-1">{{ $message }}
+                                            </div> @enderror
                                         </div>
 
                                     @else
@@ -99,7 +116,8 @@
 
                                         <div class="col-md-4">
                                             <label class="form-label">Floor <span class="text-danger">*</span></label>
-                                            <select class="form-select @error('floor') is-invalid @enderror" wire:model="floor">
+                                            <select class="form-select @error('floor') is-invalid @enderror"
+                                                wire:model="floor">
                                                 <option value="">Select Floor</option>
                                                 <option value="Ground Floor">Ground Floor</option>
                                                 <option value="1st Floor">1st Floor</option>
@@ -123,16 +141,18 @@
 
                                         <div class="col-md-4">
                                             <label class="form-label">Flat No. <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('flat_no') is-invalid @enderror" wire:model="flat_no" placeholder="e.g., 101">
+                                            <input type="text" class="form-control @error('flat_no') is-invalid @enderror"
+                                                wire:model="flat_no" placeholder="e.g., 101">
                                             @error('flat_no') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label">Unit Type <span class="text-danger">*</span></label>
-                                            <select class="form-select @error('unit_type') is-invalid @enderror" wire:model="unit_type">
+                                            <select class="form-select @error('unit_type') is-invalid @enderror"
+                                                wire:model="unit_type">
                                                 <option value="">Select Unit Type</option>
-                                                <option value="EWS">EWS</option>
-                                                <option value="LIG">LIG</option>
+                                                <option value="EWS">EWS (1BHK)</option>
+                                                <option value="LIG">LIG (2BHK)</option>
                                                 <option value="3BHK">3BHK</option>
                                                 <option value="4BHK">4BHK</option>
                                                 <option value="5BHK">5BHK</option>
@@ -142,20 +162,29 @@
 
                                         <div class="col-md-4">
                                             <label class="form-label">Area (SBUP) <span class="text-danger">*</span></label>
-                                            <input type="number" step="0.01" class="form-control @error('area_sbup') is-invalid @enderror" wire:model="area_sbup" placeholder="e.g., 350">
+                                            <input type="number" step="0.01"
+                                                class="form-control @error('area_sbup') is-invalid @enderror"
+                                                wire:model="area_sbup" placeholder="e.g., 350">
                                             @error('area_sbup') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label">Carpet Area <span class="text-danger">*</span></label>
-                                            <input type="number" step="0.01" class="form-control @error('carpet_area') is-invalid @enderror" wire:model="carpet_area" placeholder="e.g., 260">
-                                            @error('carpet_area') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                            <input type="number" step="0.01"
+                                                class="form-control @error('carpet_area') is-invalid @enderror"
+                                                wire:model="carpet_area" placeholder="e.g., 260">
+                                            @error('carpet_area') <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label class="form-label">Super Buildup Area <span class="text-danger">*</span></label>
-                                            <input type="number" step="0.01" class="form-control @error('super_buildup_area') is-invalid @enderror" wire:model="super_buildup_area" placeholder="e.g., 380">
-                                            @error('super_buildup_area') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                            <label class="form-label">Super Buildup Area <span
+                                                    class="text-danger">*</span></label>
+                                            <input type="number" step="0.01"
+                                                class="form-control @error('super_buildup_area') is-invalid @enderror"
+                                                wire:model="super_buildup_area" placeholder="e.g., 380">
+                                            @error('super_buildup_area') <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     @endif
 
@@ -167,15 +196,21 @@
                                         <label class="form-label">Price (₹) <span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-text">₹</span>
-                                            <input type="number" class="form-control @error('price') is-invalid @enderror" wire:model="price" placeholder="e.g., 3500000">
+                                            <input type="number"
+                                                class="form-control @error('price') is-invalid @enderror"
+                                                wire:model="price" placeholder="e.g., 3500000">
                                         </div>
-                                        @error('price') <div class="text-danger fs-12 mt-1">{{ $message }}</div> @enderror
+                                        @error('price') <div class="text-danger fs-12 mt-1">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     {{-- Status --}}
                                     <div class="col-md-6">
-                                        <label class="form-label">{{ $inventory_type === 'flat' ? 'Flat Status' : 'Plot Status' }} <span class="text-danger">*</span></label>
-                                        <select class="form-select @error('status') is-invalid @enderror" wire:model="status">
+                                        <label
+                                            class="form-label">{{ $inventory_type === 'flat' ? 'Flat Status' : 'Plot Status' }}
+                                            <span class="text-danger">*</span></label>
+                                        <select class="form-select @error('status') is-invalid @enderror"
+                                            wire:model="status">
                                             <option value="Available">Available</option>
                                             <option value="Hold">Hold</option>
                                             <option value="Sold">Sold</option>
@@ -189,7 +224,8 @@
                                     {{-- Remarks --}}
                                     <div class="col-12">
                                         <label class="form-label">Remarks</label>
-                                        <textarea class="form-control" rows="3" wire:model="remarks" placeholder="Enter remarks (optional)"></textarea>
+                                        <textarea class="form-control" rows="3" wire:model="remarks"
+                                            placeholder="Enter remarks (optional)"></textarea>
                                     </div>
 
                                     {{-- Submit Buttons --}}

@@ -158,7 +158,7 @@
                                         <p class="mb-0">
                                             The customer has been allotted 
                                             @if($deal->allottedInventory?->inventory_type === 'flat')
-                                                <strong>Flat Number {{ $deal->allottedInventory->flat_no }}</strong> (Floor: {{ $deal->allottedInventory->floor }}, Type: {{ $deal->allottedInventory->unit_type }})
+                                                <strong>Flat Number {{ $deal->allottedInventory->flat_no }}</strong> (Floor: {{ $deal->allottedInventory->floor }}, Type: {{ $deal->allottedInventory->unit_type_label }})
                                             @else
                                                 <strong>Plot Number {{ $deal->allottedInventory?->plot_no }}</strong> (Area: {{ $deal->allottedInventory?->area_sq_yards }} Sq. Yards)
                                             @endif

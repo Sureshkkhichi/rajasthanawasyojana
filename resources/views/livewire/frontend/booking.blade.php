@@ -237,7 +237,14 @@
                         @if($project->inventory_type === 'flat') Flat Sizes: @else Plot Sizes (Sq Yds): @endif
                     </span>
                     @foreach($sizes as $sz)
-                        <span class="proj-size-chip">{{ $sz }}</span>
+                        @php
+                            $szLabel = match($sz) {
+                                'EWS' => 'EWS (1BHK)',
+                                'LIG' => 'LIG (2BHK)',
+                                default => $sz,
+                            };
+                        @endphp
+                        <span class="proj-size-chip">{{ $szLabel }}</span>
                     @endforeach
                 </div>
                 @endif
@@ -533,7 +540,14 @@
                                             wire:model="flat_size">
                                             <option value="">Select Option</option>
                                             @foreach($sizes as $size)
-                                                <option value="{{ $size }}">{{ $size }}</option>
+                                                @php
+                                                    $sizeLabel = match($size) {
+                                                        'EWS' => 'EWS (1BHK)',
+                                                        'LIG' => 'LIG (2BHK)',
+                                                        default => $size,
+                                                    };
+                                                @endphp
+                                                <option value="{{ $size }}">{{ $sizeLabel }}</option>
                                             @endforeach
                                         </select>
                                         @error('flat_size')

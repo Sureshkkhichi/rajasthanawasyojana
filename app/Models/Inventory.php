@@ -54,6 +54,15 @@ class Inventory extends Model
         return $this->inventory_type === 'flat' ? 'Flat Project' : 'Plot Project';
     }
 
+    public function getUnitTypeLabelAttribute(): string
+    {
+        return match($this->unit_type) {
+            'EWS' => 'EWS (1BHK)',
+            'LIG' => 'LIG (2BHK)',
+            default => $this->unit_type ?? '',
+        };
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Relationships
