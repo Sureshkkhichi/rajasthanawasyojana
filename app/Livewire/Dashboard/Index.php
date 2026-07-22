@@ -254,6 +254,8 @@ class Index extends Component
             'unpaidLeads' => $this->unpaidLeads,
             'projectStatusData' => $this->projectStatusData,
             'totalCollection' => $this->totalCollection,
+            'bookingAmount' => $this->bookingAmount,
+            'totalRefund' => $this->totalRefund,
             'pendingAmount' => $this->pendingAmount,
             'salesTrendCollection' => $this->salesTrendCollection,
             'salesTrendPending' => $this->salesTrendPending,

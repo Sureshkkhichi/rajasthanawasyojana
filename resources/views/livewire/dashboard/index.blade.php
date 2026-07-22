@@ -911,88 +911,30 @@
                     </div>
                 </div>
 
-                <!-- Deals by Stage -->
+                <!-- Financial Distribution -->
                 <div class="col-xl-4">
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Deals by Stage</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">Financial Distribution</h4>
                         </div>
                         <div class="card-body">
                             <div id="deal-stage-source"
-                                data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger", "--vz-info"]'
-                                data-colors-minimal='["--vz-primary", "--vz-primary-rgb, 0.85", "--vz-primary-rgb, 0.70", "--vz-primary-rgb, 0.60", "--vz-primary-rgb, 0.45"]'
-                                data-colors-interactive='["--vz-primary", "--vz-primary-rgb, 0.85", "--vz-primary-rgb, 0.70", "--vz-primary-rgb, 0.60", "--vz-primary-rgb, 0.45"]'
-                                data-colors-galaxy='["--vz-primary", "--vz-primary-rgb, 0.85", "--vz-primary-rgb, 0.70", "--vz-primary-rgb, 0.60", "--vz-primary-rgb, 0.45"]'
+                                data-colors='["--vz-success", "--vz-primary", "--vz-danger"]'
                                 class="apex-charts" dir="ltr"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Recent Activities -->
-                <div class="col-xl-4 col-lg-4">
-                    <div class="card h-100 dashboard-status-card">
-                        <div class="card-header border-0 align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Recent Activities</h4>
+                <!-- Lead Status Distribution -->
+                <div class="col-xl-4">
+                    <div class="card card-height-100">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Lead Status Distribution</h4>
                         </div>
                         <div class="card-body">
-                            <div class="activity-feed">
-                                <div class="activity-item">
-                                    <div class="activity-icon-wrap act-bg-success">
-                                        <i class="ri-user-add-line fs-16"></i>
-                                    </div>
-                                    <div class="activity-item-content">
-                                        <h5>New lead <span class="fw-semibold text-dark">Rahul Sharma</span>
-                                            created</h5>
-                                        <p>2 min ago</p>
-                                    </div>
-                                </div>
-                                <div class="activity-item">
-                                    <div class="activity-icon-wrap act-bg-indigo">
-                                        <i class="ri-file-text-line fs-16"></i>
-                                    </div>
-                                    <div class="activity-item-content">
-                                        <h5>Project <span class="fw-semibold text-dark">"Sunrise
-                                                Residency"</span> created</h5>
-                                        <p>15 min ago</p>
-                                    </div>
-                                </div>
-                                <div class="activity-item">
-                                    <div class="activity-icon-wrap act-bg-warning">
-                                        <i class="ri-file-list-3-line fs-16"></i>
-                                    </div>
-                                    <div class="activity-item-content">
-                                        <h5>Invoice <span class="fw-semibold text-dark">#INV-00125</span>
-                                            generated</h5>
-                                        <p>45 min ago</p>
-                                    </div>
-                                </div>
-                                <div class="activity-item">
-                                    <div class="activity-icon-wrap act-bg-teal">
-                                        <i class="ri-wallet-3-line fs-16"></i>
-                                    </div>
-                                    <div class="activity-item-content">
-                                        <h5>Payment received for Invoice <span
-                                                class="fw-semibold text-dark">#INV-00120</span></h5>
-                                        <p>1 hr ago</p>
-                                    </div>
-                                </div>
-                                <div class="activity-item">
-                                    <div class="activity-icon-wrap act-bg-purple">
-                                        <i class="ri-handshake-line fs-16"></i>
-                                    </div>
-                                    <div class="activity-item-content">
-                                        <h5>New deal <span class="fw-semibold text-dark">"Green
-                                                Valley"</span> won</h5>
-                                        <p>2 hrs ago</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-4 pt-1 w-100">
-                                <a href="#" class="btn btn-light w-100 border fs-13 py-2 fw-medium"
-                                    style="border: 1px solid #e2e8f0 !important; background-color: #fff; color: #495057; border-radius: 6px; transition: all 0.2s ease;">
-                                    View All Activities
-                                </a>
-                            </div>
+                            <div id="lead-status-distribution-chart"
+                                data-colors='["--vz-info", "--vz-success", "--vz-warning"]'
+                                class="apex-charts" dir="ltr"></div>
                         </div>
                     </div>
                 </div>
@@ -1688,12 +1630,12 @@
                 window.salesOverviewChart.render();
             });
 
-            // Deals
+            // Financial Distribution
             var chartDeals = getChartColorsArray("deal-stage-source");
             if (chartDeals) {
                 var options = {
-                    series: [@json($paidLeads), @json($pendingLeads), @json($draftLeads)],
-                    labels: ["Paid", "Pending Payment", "Draft"],
+                    series: [@json($totalCollection), @json($bookingAmount), @json($totalRefund)],
+                    labels: ["Total Collection", "Booking Amount", "Total Refund"],
                     chart: {
                         height: 333,
                         type: "donut",
@@ -1709,6 +1651,13 @@
                             enabled: false,
                         },
                     },
+                    tooltip: {
+                        y: {
+                            formatter: function (val) {
+                                return "₹" + val.toLocaleString('en-IN');
+                            }
+                        }
+                    },
                     colors: chartDeals,
                 };
 
@@ -1716,6 +1665,36 @@
                     document.querySelector("#deal-stage-source"), options
                 );
                 window.dealsChart.render();
+            }
+
+            // Lead Status Distribution
+            var chartLeadStatus = getChartColorsArray("lead-status-distribution-chart");
+            if (chartLeadStatus) {
+                var leadStatusOptions = {
+                    series: [@json($inProcessLeads), @json($paidLeads), @json($unpaidLeads)],
+                    labels: ["In Process", "Paid", "Unpaid"],
+                    chart: {
+                        height: 333,
+                        type: "donut",
+                    },
+                    legend: {
+                        position: "bottom",
+                    },
+                    stroke: {
+                        show: false
+                    },
+                    dataLabels: {
+                        dropShadow: {
+                            enabled: false,
+                        },
+                    },
+                    colors: chartLeadStatus,
+                };
+
+                window.leadStatusChart = new ApexCharts(
+                    document.querySelector("#lead-status-distribution-chart"), leadStatusOptions
+                );
+                window.leadStatusChart.render();
             }
 
             // Project Status
@@ -2134,9 +2113,17 @@
 
                 if (window.dealsChart) {
                     window.dealsChart.updateSeries([
+                        event.detail.totalCollection,
+                        event.detail.bookingAmount,
+                        event.detail.totalRefund
+                    ]);
+                }
+
+                if (window.leadStatusChart) {
+                    window.leadStatusChart.updateSeries([
+                        event.detail.inProcessLeads,
                         event.detail.paidLeads,
-                        event.detail.pendingLeads,
-                        event.detail.draftLeads
+                        event.detail.unpaidLeads
                     ]);
                 }
 
