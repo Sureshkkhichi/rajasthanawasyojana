@@ -127,7 +127,8 @@
                                             <th>Booking Amount</th>
                                             <th>Area</th>
                                             <th>Total Amount</th>
-                                            <th>Status</th>
+                                             <th>Payment Status</th>
+                                             <th>Deal Status</th>
                                         </tr>
                                     </thead>
                                      <tbody>
@@ -245,27 +246,33 @@
                                                          ₹
                                                      @endif
                                                  </td>
+                                                 {{-- Payment Status: always Paid for a deal --}}
                                                  <td>
-                                                     @if($deal->status === 'Paid')
-                                                          <span class="badge bg-success px-2 py-1 fs-12">Paid</span>
-                                                     @elseif($deal->status === 'Partial')
+                                                     <span class="badge bg-success px-2 py-1 fs-12">Paid</span>
+                                                 </td>
+                                                 {{-- Deal Status --}}
+                                                 <td>
+                                                     @php $ds = $deal->deal_status ?? $deal->status; @endphp
+                                                     @if($ds === 'Paid' || $ds === 'Sold')
+                                                          <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fs-12">{{ $ds }}</span>
+                                                     @elseif($ds === 'Partial')
                                                           <span class="badge bg-warning text-white px-2 py-1 fs-12">Partial</span>
-                                                     @elseif($deal->status === 'Refund')
+                                                     @elseif($ds === 'Refund')
                                                           <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1 fs-12">Refund</span>
-                                                     @elseif($deal->status === 'Sold')
-                                                          <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fs-12">Sold</span>
-                                                     @elseif($deal->status === 'Cancel')
+                                                     @elseif($ds === 'Cancel')
                                                           <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1 fs-12">Cancel</span>
-                                                     @elseif($deal->status === 'Not Alloted')
+                                                     @elseif($ds === 'Not Alloted')
                                                           <span class="badge bg-dark-subtle text-dark border border-dark-subtle px-2 py-1 fs-12">Not Alloted</span>
+                                                     @elseif($ds)
+                                                          <span class="badge bg-danger text-white px-2 py-1 fs-12">{{ $ds }}</span>
                                                      @else
-                                                          <span class="badge bg-danger text-white px-2 py-1 fs-12">{{ $deal->status }}</span>
+                                                          <span class="badge bg-light text-muted px-2 py-1 fs-12">-</span>
                                                      @endif
                                                  </td>
                                              </tr>
                                          @empty
                                              <tr>
-                                                 <td colspan="11" class="text-center py-4 text-muted">No deals found.</td>
+                                                 <td colspan="12" class="text-center py-4 text-muted">No deals found.</td>
                                              </tr>
                                          @endforelse
                                      </tbody>

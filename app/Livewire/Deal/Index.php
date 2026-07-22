@@ -157,12 +157,16 @@ class Index extends Component
                     ]);
                 }
                 $deal->update([
-                    'status' => $newStatus,
+                    'deal_status' => $newStatus,
+                    'status'      => $newStatus,
                     'allotted_inventory_id' => null,
                     'allotted_at' => null
                 ]);
             } else {
-                $deal->update(['status' => $newStatus]);
+                $deal->update([
+                    'deal_status' => $newStatus,
+                    'status'      => $newStatus,
+                ]);
             }
 
             $this->dispatch('swal:alert', [

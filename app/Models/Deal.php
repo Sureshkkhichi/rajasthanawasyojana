@@ -34,6 +34,8 @@ class Deal extends Model
         'booking_amount',
         'total_amount',
         'status',
+        'deal_status',
+        'payment_status',
         'remarks',
     ];
 
