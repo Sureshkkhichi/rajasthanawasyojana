@@ -22,16 +22,12 @@ class DealDocumentController extends Controller
 
         $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
 
-        $html = view('emails.allotment-pdf', [
+        return view('emails.allotment-pdf', [
             'project' => $deal->project,
             'deal' => $deal,
             'inventory' => $inventory,
             'project_contact_phone' => $project_contact_phone,
-        ])->render();
-
-        $pdf = Pdf::loadHTML(reshapeDevanagari($html));
-
-        return $pdf->download("allotment-letter-{$deal->id}.pdf");
+        ]);
     }
 
     public function demandLetter(Deal $deal)
@@ -47,11 +43,11 @@ class DealDocumentController extends Controller
 
         $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
 
-        $bookingAmount = 21100.00;
+        $bookingAmount = (float) FrontendSetting::getVal('booking_amount', 21100.00);
         $totalAmount = $deal->total_amount ?: ($inventory->price ?: 0.00);
         $balanceDue = max(0.00, $totalAmount - $bookingAmount);
 
-        $html = view('emails.demand-pdf', [
+        return view('emails.demand-pdf', [
             'project' => $deal->project,
             'deal' => $deal,
             'inventory' => $inventory,
@@ -59,11 +55,7 @@ class DealDocumentController extends Controller
             'totalAmount' => $totalAmount,
             'balanceDue' => $balanceDue,
             'project_contact_phone' => $project_contact_phone,
-        ])->render();
-
-        $pdf = Pdf::loadHTML(reshapeDevanagari($html));
-
-        return $pdf->download("demand-letter-{$deal->id}.pdf");
+        ]);
     }
 
     public function dealPdf(Deal $deal)

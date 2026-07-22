@@ -135,30 +135,16 @@
                             <h4 class="card-title mb-0">Allotment Details</h4>
                             @if($deal->allotted_inventory_id)
                                 <div>
-                                    <button class="btn btn-success me-2" 
-                                            wire:click="downloadAllotment" 
-                                            wire:loading.attr="disabled"
-                                            wire:target="downloadAllotment, downloadDemand, cancelAllotment">
-                                        <span wire:loading.remove wire:target="downloadAllotment">
-                                            <i class="ri-file-download-line align-middle me-1"></i> Allotment Letter
-                                        </span>
-                                        <span wire:loading wire:target="downloadAllotment">
-                                            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                            Downloading...
-                                        </span>
-                                    </button>
-                                    <button class="btn btn-warning" 
-                                            wire:click="downloadDemand" 
-                                            wire:loading.attr="disabled"
-                                            wire:target="downloadAllotment, downloadDemand, cancelAllotment">
-                                        <span wire:loading.remove wire:target="downloadDemand">
-                                            <i class="ri-file-download-line align-middle me-1"></i> Demand Letter
-                                        </span>
-                                        <span wire:loading wire:target="downloadDemand">
-                                            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                            Downloading...
-                                        </span>
-                                    </button>
+                                    <a class="btn btn-success me-2" 
+                                       href="{{ route('deals.allotment-letter', $deal->id) }}" 
+                                       target="_blank">
+                                        <i class="ri-printer-line align-middle me-1"></i> Allotment Letter
+                                    </a>
+                                    <a class="btn btn-warning" 
+                                       href="{{ route('deals.demand-letter', $deal->id) }}" 
+                                       target="_blank">
+                                        <i class="ri-printer-line align-middle me-1"></i> Demand Letter
+                                    </a>
                                 </div>
                             @endif
                         </div>

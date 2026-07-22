@@ -3,13 +3,18 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>मांग पत्र</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'hind', 'Arial', sans-serif;
+            font-family: 'Hind', 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             color: #333;
-            background-color: #fff;
+            background: url(https://rajasthanawasyojana.com/admin/img/back_img.png) no-repeat center center !important;
+            -webkit-background-size: cover !important;
+            -moz-background-size: cover !important;
+            -o-background-size: cover !important;
+            background-size: 100% 100% !important;
         }
         .container {
             border: 4px double #d32f2f;
@@ -181,5 +186,10 @@
             </tr>
         </table>
     </div>
+    <script type="text/javascript">
+        window.onload = function() {
+            window.print();
+        }
+    </script>
 </body>
 </html>
