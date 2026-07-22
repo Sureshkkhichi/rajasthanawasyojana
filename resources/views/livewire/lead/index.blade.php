@@ -189,10 +189,15 @@
                                                     {{ $lead->first_name }}
                                                     {{ $lead->last_name }}
                                                 </div>
-                                                <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex justify-content-between align-items-center mt-1">
                                                     <small class="text-muted">
                                                         {{ $lead->pan_number }}
                                                     </small>
+                                                    @if($lead->deal)
+                                                        <a href="{{ route('deals.show', $lead->deal->id) }}" target="_blank" class="badge bg-success-subtle text-success border border-success fs-10 px-2 py-0.5" title="View Deal">
+                                                            <i class="ri-external-link-line me-1"></i>Deal ID
+                                                        </a>
+                                                    @endif
                                                     @if($lead->agent)
                                                         <span class="badge bg-light text-primary border border-primary fs-11" title="Agent: {{ $lead->agent->name }} ({{ $lead->agent->commission_type === 'percentage' ? $lead->agent->commission_value.'%' : '₹'.$lead->agent->commission_value }} Comm.)">
                                                             {{ $lead->waiver_code }}
@@ -311,7 +316,7 @@
                     const data = event[0];
                     Swal.fire({
                         title: data.title,
-                        text: data.text,
+                        html: data.html || data.text,
                         icon: data.icon,
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#405189'

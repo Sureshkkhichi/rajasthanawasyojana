@@ -170,7 +170,8 @@
             </div>
         </nav>
         <div class="vertical-overlay" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent.show"></div>
-        {{ $slot }}
+        {{ $slot ?? '' }}
+        @yield('content')
         <livewire:frontend.components.footer />
     </div>
     <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>

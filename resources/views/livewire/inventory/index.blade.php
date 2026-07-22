@@ -556,35 +556,137 @@
                         @else
                             {{-- Create New Deal View Form --}}
                             <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold text-muted">First Name *</label>
+                                <!-- First Name -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">First Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control border-2" placeholder="Enter first name" wire:model="newDealForm.first_name">
-                                    @error('newDealForm.first_name') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                                    @error('newDealForm.first_name') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold text-muted">Last Name</label>
+                                <!-- Last Name -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">Last Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control border-2" placeholder="Enter last name" wire:model="newDealForm.last_name">
-                                    @error('newDealForm.last_name') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                                    @error('newDealForm.last_name') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold text-muted">Mobile Number *</label>
-                                    <input type="text" class="form-control border-2" placeholder="Enter mobile number" wire:model="newDealForm.phone">
-                                    @error('newDealForm.phone') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                                <!-- Father / Husband Name -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">Father / Husband Name</label>
+                                    <input type="text" class="form-control border-2" placeholder="Enter father name" wire:model="newDealForm.father_husband_name">
+                                    @error('newDealForm.father_husband_name') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold text-muted">Email Address</label>
-                                    <input type="email" class="form-control border-2" placeholder="Enter email" wire:model="newDealForm.email">
-                                    @error('newDealForm.email') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+
+                                <!-- PAN Number -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">PAN Number <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control border-2" placeholder="Enter PAN number" wire:model="newDealForm.pan_number" maxlength="10">
+                                    @error('newDealForm.pan_number') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold text-muted">Booking Amount Paid (₹) *</label>
+                                <!-- Gender -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">Gender <span class="text-danger">*</span></label>
+                                    <select class="form-select border-2" wire:model="newDealForm.gender">
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                    @error('newDealForm.gender') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                </div>
+                                <!-- Date of Birth -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">Date of Birth <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control border-2" wire:model="newDealForm.date_of_birth" max="{{ now()->subYears(18)->format('Y-m-d') }}">
+                                    @error('newDealForm.date_of_birth') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                </div>
+
+                                <!-- Occupation -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">Occupation <span class="text-danger">*</span></label>
+                                    <select class="form-select border-2" wire:model="newDealForm.occupation">
+                                        <option value="">Select Occupation</option>
+                                        <option value="Salaried">Salaried</option>
+                                        <option value="Self Employed">Self Employed</option>
+                                        <option value="Business">Business</option>
+                                        <option value="Professional">Professional</option>
+                                        <option value="Retired">Retired</option>
+                                        <option value="House Wife">House Wife</option>
+                                        <option value="Student">Student</option>
+                                    </select>
+                                    @error('newDealForm.occupation') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                </div>
+                                <!-- Mobile Number -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">Mobile Number <span class="text-danger">*</span></label>
+                                    <input type="tel" class="form-control border-2" placeholder="Enter mobile number" wire:model="newDealForm.phone">
+                                    @error('newDealForm.phone') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                </div>
+                                <!-- Email Address -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">Email Address <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control border-2" placeholder="Enter email address" wire:model="newDealForm.email">
+                                    @error('newDealForm.email') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                </div>
+
+                                <!-- State -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">State <span class="text-danger">*</span></label>
+                                    <select class="form-select border-2" wire:model.live="newDealForm.state_id">
+                                        <option value="">Select State</option>
+                                        @foreach($states as $st)
+                                            <option value="{{ $st->id }}">{{ $st->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('newDealForm.state_id') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                </div>
+                                <!-- City -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">City <span class="text-danger">*</span></label>
+                                    <select class="form-select border-2" wire:model="newDealForm.city_id">
+                                        <option value="">Select City</option>
+                                        @foreach($cities as $ct)
+                                            <option value="{{ $ct->id }}">{{ $ct->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('newDealForm.city_id') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                </div>
+                                <!-- Flat Size -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">Flat Size / Area <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control border-2 bg-light text-muted" wire:model="newDealForm.flat_size" readonly>
+                                    @error('newDealForm.flat_size') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                </div>
+
+                                <!-- Permanent Address -->
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold text-muted mb-1">Permanent Address <span class="text-danger">*</span></label>
+                                    <textarea class="form-control border-2" rows="2" placeholder="Enter permanent address" wire:model="newDealForm.address"></textarea>
+                                    @error('newDealForm.address') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                </div>
+
+                                <!-- Co-Applicant Name -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">Co-Applicant Name</label>
+                                    <input type="text" class="form-control border-2" placeholder="Enter co-applicant name" wire:model="newDealForm.co_applicant_name">
+                                    @error('newDealForm.co_applicant_name') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                </div>
+                                <!-- Waiver Code -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">Waiver Code</label>
+                                    <input type="text" class="form-control border-2" placeholder="Enter waiver code" wire:model="newDealForm.waiver_code">
+                                    @error('newDealForm.waiver_code') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                </div>
+                                <!-- Booking Amount Paid -->
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-muted mb-1">Booking Amount Paid (₹) *</label>
                                     <input type="number" step="0.01" class="form-control border-2" placeholder="Enter booking amount" wire:model="newDealForm.booking_amount">
-                                    @error('newDealForm.booking_amount') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                                    @error('newDealForm.booking_amount') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold text-muted">Total Price (₹) *</label>
+
+                                <!-- Total Price -->
+                                <div class="col-md-4 offset-md-8">
+                                    <label class="form-label fw-semibold text-muted mb-1">Total Price (₹) *</label>
                                     <input type="number" step="0.01" class="form-control border-2" placeholder="Enter total price" wire:model="newDealForm.total_amount">
-                                    @error('newDealForm.total_amount') <span class="text-danger fs-13">{{ $message }}</span> @enderror
+                                    @error('newDealForm.total_amount') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         @endif

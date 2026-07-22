@@ -296,96 +296,99 @@ class Booking extends Component
             $validated['co_applicant_name'] =
                 ucwords(strtolower($validated['co_applicant_name']));
         }
+
+        // Generate unique transaction ID
+        $transactionId = 'TXN' . strtoupper(\Illuminate\Support\Str::random(12));
+
         $this->lead->update([
             ...$validated,
             'state_name' => $this->state_name,
             'city' => $this->city,
             'project_id' => $this->project->id,
             'is_submitted' => true,
-            'payment_status' => 'paid',
+            'status' => 'unpaid',
+            'payment_status' => 'unpaid',
+            'transaction_id' => $transactionId,
         ]);
 
-        // Find unit price or project price fallback for Deal total_amount
-        $unitPrice = null;
-        if ($this->project->inventory_type === 'flat') {
-            $matchingUnit = \App\Models\Inventory::query()
-                ->where('project_id', $this->project->id)
-                ->where('inventory_type', 'flat')
-                ->where('unit_type', $this->flat_size)
-                ->first();
-            if ($matchingUnit) {
-                $unitPrice = $matchingUnit->price;
-            }
-        } else {
-            $matchingUnit = \App\Models\Inventory::query()
-                ->where('project_id', $this->project->id)
-                ->where('inventory_type', 'plot')
-                ->where('area_sq_yards', $this->flat_size)
-                ->first();
-            if ($matchingUnit) {
-                $unitPrice = $matchingUnit->price;
-            }
+        // Send submission confirmation email
+        try {
+            Mail::to($this->lead->email)->cc('suresh5313@gmail.com')->send(new LeadSubmittedMail($this->lead));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send lead submitted mail: ' . $e->getMessage());
         }
 
-        if (!$unitPrice) {
-            $unitPrice = $this->project->price;
+        // Call PhonePe Payment API
+        $merchantId = config('phonepe.merchant_id');
+        $saltKey = config('phonepe.salt_key');
+        $saltIndex = config('phonepe.salt_index');
+        $payUrl = config('phonepe.pay_url');
+
+        $payload = [
+            'merchantId' => $merchantId,
+            'merchantTransactionId' => $transactionId,
+            'merchantUserId' => 'USR' . $this->lead->phone,
+            'amount' => 2110000, // 21100.00 * 100 paise
+            'redirectUrl' => route('phonepe.redirect') . '?transactionId=' . $transactionId,
+            'redirectMode' => 'REDIRECT',
+            'callbackUrl' => route('phonepe.callback'),
+            'mobileNumber' => $this->lead->phone,
+            'paymentInstrument' => [
+                'type' => 'PAY_PAGE'
+            ]
+        ];
+
+        $payloadJson = json_encode($payload);
+        $base64Payload = base64_encode($payloadJson);
+        $stringToHash = $base64Payload . '/pg/v1/pay' . $saltKey;
+        $sha256 = hash('sha256', $stringToHash);
+        $xVerify = $sha256 . '###' . $saltIndex;
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'X-VERIFY' => $xVerify,
+            ])->timeout(15)->post($payUrl, [
+                'request' => $base64Payload,
+            ]);
+
+            if ($response->successful()) {
+                $resData = $response->json();
+                $checkoutUrl = $resData['data']['instrumentResponse']['redirectInfo']['url'] ?? null;
+
+                if ($checkoutUrl) {
+                    $this->reset([
+                        'first_name',
+                        'last_name',
+                        'father_husband_name',
+                        'pan_number',
+                        'gender',
+                        'email',
+                        'phone',
+                        'date_of_birth',
+                        'occupation',
+                        'address',
+                        'city_id',
+                        'city',
+                        'co_applicant_name',
+                        'flat_size',
+                        'waiver_code',
+                        'terms',
+                    ]);
+                    $this->lead = null;
+
+                    return $this->redirect($checkoutUrl, navigate: false);
+                }
+            }
+
+            \Log::error('PhonePe Pay API error: ' . $response->body());
+            session()->flash('error', 'Unable to initiate payment with PhonePe. Please try again.');
+        } catch (\Exception $e) {
+            \Log::error('PhonePe Pay request exception: ' . $e->getMessage());
+            session()->flash('error', 'Something went wrong while initiating the payment. Please try again.');
         }
 
-        \App\Models\Deal::create([
-            'project_id' => $this->project->id,
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'father_husband_name' => $validated['father_husband_name'] ?? null,
-            'pan_number' => $validated['pan_number'],
-            'gender' => $validated['gender'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'date_of_birth' => $validated['date_of_birth'],
-            'occupation' => $validated['occupation'],
-            'address' => $validated['address'],
-            'state_id' => $this->state_id,
-            'state_name' => $this->state_name,
-            'city_id' => $this->city_id,
-            'city' => $this->city,
-            'co_applicant_name' => $validated['co_applicant_name'] ?? null,
-            'flat_size' => $this->flat_size,
-            'waiver_code' => $this->waiver_code ?: null,
-            'booking_date' => now(),
-            'booking_amount' => 21100.00,
-            'total_amount' => $unitPrice,
-            'status' => 'Paid',
-            'remarks' => null,
-        ]);
-
-        Mail::to($this->lead->email)->cc('suresh5313@gmail.com')->send(new LeadSubmittedMail($this->lead));
-
-        session()->flash(
-            'success',
-            'Your registration form has been submitted successfully.'
-        );
-
-
-        $this->reset([
-            'first_name',
-            'last_name',
-            'father_husband_name',
-            'pan_number',
-            'gender',
-            'email',
-            'phone',
-            'date_of_birth',
-            'occupation',
-            'address',
-            'city_id',
-            'city',
-            'co_applicant_name',
-            'flat_size',
-            'waiver_code',
-            'terms',
-        ]);
-
-        $this->lead = null;
-
+        // If error, reload Rajasthan cities
         $rajasthan = State::query()
             ->where('name', 'Rajasthan')
             ->first();
@@ -397,11 +400,6 @@ class Booking extends Component
                 ->orderBy('name')
                 ->get();
         }
-
-        return redirect()->route(
-            'booking',
-            ['project' => $this->project->id]
-        );
     }
     public function render()
     {

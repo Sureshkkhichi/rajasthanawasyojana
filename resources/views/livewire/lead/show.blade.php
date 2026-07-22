@@ -173,6 +173,16 @@
                                         @endif
                                     </td>
                                 </tr>
+                                @if($lead->deal)
+                                <tr>
+                                    <th>Linked Deal</th>
+                                    <td>
+                                        <a href="{{ route('deals.show', $lead->deal->id) }}" target="_blank" class="btn btn-sm btn-soft-success">
+                                            <i class="ri-external-link-line me-1"></i> View Deal
+                                        </a>
+                                    </td>
+                                </tr>
+                                @endif
                                 <tr>
                                     <th>IP Address</th>
                                     <td>{{ $lead->ip_address }}</td>
@@ -219,6 +229,10 @@
                                 <i class="ri-message-3-line me-1"></i>
                                 Send SMS
                             </button>
+                            <a href="{{ route('leads.download-pdf', $lead->id) }}" class="btn btn-danger">
+                                <i class="ri-file-pdf-line me-1"></i>
+                                Download PDF
+                            </a>
                             <a href="{{ route('leads.index') }}" class="btn btn-light">
                                 Back To List
                             </a>

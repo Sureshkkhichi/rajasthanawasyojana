@@ -16,6 +16,7 @@ class Lead extends Model
 
         'status',
         'payment_status',
+        'transaction_id',
 
         'first_name',
         'last_name',
@@ -78,6 +79,11 @@ class Lead extends Model
     public function state()
     {
         return $this->belongsTo(State::class);
+    }
+
+    public function deal()
+    {
+        return $this->hasOne(Deal::class, 'pan_number', 'pan_number');
     }
 
     /*

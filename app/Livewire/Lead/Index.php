@@ -153,6 +153,7 @@ class Index extends Component
                     'project:id,name',
                     'state:id,name',
                     'agent:id,name,code,commission_type,commission_value',
+                    'deal',
                 ])
                 ->when(
                     $this->search_name,
@@ -228,6 +229,38 @@ class Index extends Component
             403
         );
         $lead = Lead::findOrFail($id);
+
+        // Check if there is a corresponding Deal
+        $deal = \App\Models\Deal::where('project_id', $lead->project_id)
+            ->where(function ($q) use ($lead) {
+                if ($lead->phone) {
+                    $q->where('phone', $lead->phone);
+                }
+                if ($lead->pan_number) {
+                    $q->orWhere('pan_number', $lead->pan_number);
+                }
+            })
+            ->first();
+
+        if ($lead->payment_status === 'paid' || $deal) {
+            $dealName = $deal ? "{$deal->first_name} {$deal->last_name}" : "{$lead->first_name} {$lead->last_name}";
+
+            if ($deal) {
+                $dealUrl = route('deals.show', $deal->id);
+                $dealLink = "<a href=\"{$dealUrl}\" target=\"_blank\" class=\"fw-bold text-decoration-underline text-primary\">{$deal->id}</a>";
+                $htmlMessage = "This lead has a completed payment and is already converted into a Deal (Deal ID: {$dealLink}) for customer {$dealName}.";
+            } else {
+                $htmlMessage = "This lead has a completed payment and is converted into a Deal for customer {$dealName}.";
+            }
+
+            $this->dispatch('swal:alert', [
+                'title' => 'Cannot Delete Lead!',
+                'html' => $htmlMessage,
+                'icon' => 'error'
+            ]);
+            return;
+        }
+
         $lead->delete();
         session()->flash(
             'success',
@@ -258,6 +291,7 @@ class Index extends Component
                 'project:id,name',
                 'state:id,name',
                 'agent:id,name,code,commission_type,commission_value',
+                'deal',
             ])
             ->when(
                 $this->search_name,

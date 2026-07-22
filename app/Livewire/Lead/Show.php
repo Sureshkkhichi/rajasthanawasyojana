@@ -18,6 +18,7 @@ class Show extends Component
         $this->lead = $lead->load([
             'project',
             'state',
+            'deal',
         ]);
     }
     public function sendMail(): void

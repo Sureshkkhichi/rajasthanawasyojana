@@ -5,6 +5,8 @@ namespace App\Livewire\Inventory;
 use App\Models\Project;
 use App\Models\Inventory;
 use App\Models\InventoryHistory;
+use App\Models\State;
+use App\Models\City;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -53,12 +55,25 @@ class Index extends Component
     public array $newDealForm = [
         'first_name' => '',
         'last_name' => '',
-        'phone' => '',
+        'father_husband_name' => '',
+        'pan_number' => '',
+        'gender' => '',
         'email' => '',
+        'phone' => '',
+        'date_of_birth' => '',
+        'occupation' => '',
+        'address' => '',
+        'state_id' => '',
+        'city_id' => '',
+        'co_applicant_name' => '',
+        'flat_size' => '',
+        'waiver_code' => '',
         'booking_amount' => 21100,
         'total_amount' => '',
     ];
     public $unallottedDeals = [];
+    public $states = [];
+    public $cities = [];
 
     protected $queryString = [
         'selectedProjectId' => ['except' => ''],
@@ -124,6 +139,21 @@ class Index extends Component
     public function updatedSearchPlot(): void
     {
         $this->resetPage();
+    }
+
+    public function updated($property, $value): void
+    {
+        if ($property === 'newDealForm.state_id') {
+            if ($value) {
+                $this->cities = City::query()
+                    ->where('state_id', $value)
+                    ->orderBy('name')
+                    ->get();
+            } else {
+                $this->cities = [];
+            }
+            $this->newDealForm['city_id'] = '';
+        }
     }
 
     public function setTab(string $tab): void
@@ -278,14 +308,47 @@ class Index extends Component
             $this->selectedDealId = null;
             $this->selectedDealDetails = [];
             $this->createNewDealMode = false;
+
+            $flatSize = $unit->inventory_type === 'flat' ? $unit->unit_type : $unit->area_sq_yards;
+
             $this->newDealForm = [
                 'first_name' => '',
                 'last_name' => '',
-                'phone' => '',
+                'father_husband_name' => '',
+                'pan_number' => '',
+                'gender' => '',
                 'email' => '',
+                'phone' => '',
+                'date_of_birth' => '',
+                'occupation' => '',
+                'address' => '',
+                'state_id' => '',
+                'city_id' => '',
+                'co_applicant_name' => '',
+                'flat_size' => $flatSize,
+                'waiver_code' => '',
                 'booking_amount' => 21100,
                 'total_amount' => $unit->price,
             ];
+
+            $this->states = State::query()
+                ->where('country_id', 101)
+                ->orderBy('name')
+                ->get();
+
+            $rajasthan = State::query()
+                ->where('name', 'Rajasthan')
+                ->first();
+
+            if ($rajasthan) {
+                $this->newDealForm['state_id'] = $rajasthan->id;
+                $this->cities = City::query()
+                    ->where('state_id', $rajasthan->id)
+                    ->orderBy('name')
+                    ->get();
+            } else {
+                $this->cities = [];
+            }
             
             $this->unallottedDeals = \App\Models\Deal::where('project_id', $unit->project_id)
                 ->whereNull('allotted_inventory_id')
@@ -324,19 +387,51 @@ class Index extends Component
         if ($this->createNewDealMode) {
             $this->validate([
                 'newDealForm.first_name' => 'required|string|max:255',
-                'newDealForm.last_name' => 'nullable|string|max:255',
-                'newDealForm.phone' => 'required|string|max:20',
-                'newDealForm.email' => 'nullable|email|max:255',
+                'newDealForm.last_name' => 'required|string|max:255',
+                'newDealForm.father_husband_name' => 'nullable|string|max:255',
+                'newDealForm.pan_number' => ['required', 'string', 'max:10'],
+                'newDealForm.gender' => 'required',
+                'newDealForm.email' => 'required|email|max:255',
+                'newDealForm.phone' => ['required', 'string', 'regex:/^[6-9][0-9]{9}$/'],
+                'newDealForm.date_of_birth' => ['required', 'date', 'before_or_equal:' . now()->subYears(18)->format('Y-m-d')],
+                'newDealForm.occupation' => 'required',
+                'newDealForm.address' => 'required|string',
+                'newDealForm.state_id' => 'required',
+                'newDealForm.city_id' => 'required',
+                'newDealForm.co_applicant_name' => 'nullable|string|max:255',
+                'newDealForm.flat_size' => 'required|string',
+                'newDealForm.waiver_code' => ['nullable', 'numeric', 'digits:8'],
                 'newDealForm.booking_amount' => 'required|numeric|min:0',
                 'newDealForm.total_amount' => 'required|numeric|min:0',
+            ], [
+                'newDealForm.date_of_birth.before_or_equal' => 'Age must be 18 years or older.',
+                'newDealForm.phone.regex' => 'Phone must be a valid 10-digit mobile number.',
+                'newDealForm.waiver_code.numeric' => 'Waiver Code must contain only numbers.',
+                'newDealForm.waiver_code.digits' => 'Waiver Code must be exactly 8 digits.',
             ]);
+
+            $state = State::find($this->newDealForm['state_id']);
+            $cityModel = City::find($this->newDealForm['city_id']);
 
             $deal = \App\Models\Deal::create([
                 'project_id' => $unit->project_id,
-                'first_name' => $this->newDealForm['first_name'],
-                'last_name' => $this->newDealForm['last_name'] ?: '',
-                'phone' => $this->newDealForm['phone'],
-                'email' => $this->newDealForm['email'] ?: '',
+                'first_name' => ucwords(strtolower(trim($this->newDealForm['first_name']))),
+                'last_name' => ucwords(strtolower(trim($this->newDealForm['last_name']))),
+                'father_husband_name' => $this->newDealForm['father_husband_name'] ? ucwords(strtolower(trim($this->newDealForm['father_husband_name']))) : null,
+                'pan_number' => strtoupper(trim($this->newDealForm['pan_number'])),
+                'gender' => $this->newDealForm['gender'],
+                'email' => strtolower(trim($this->newDealForm['email'])),
+                'phone' => trim($this->newDealForm['phone']),
+                'date_of_birth' => $this->newDealForm['date_of_birth'],
+                'occupation' => $this->newDealForm['occupation'],
+                'address' => ucwords(strtolower(trim($this->newDealForm['address']))),
+                'state_id' => $this->newDealForm['state_id'],
+                'state_name' => $state ? $state->name : null,
+                'city_id' => $this->newDealForm['city_id'],
+                'city' => $cityModel ? $cityModel->name : '',
+                'co_applicant_name' => $this->newDealForm['co_applicant_name'] ? ucwords(strtolower(trim($this->newDealForm['co_applicant_name']))) : null,
+                'flat_size' => $this->newDealForm['flat_size'],
+                'waiver_code' => $this->newDealForm['waiver_code'] ?: null,
                 'booking_amount' => $this->newDealForm['booking_amount'],
                 'total_amount' => $this->newDealForm['total_amount'],
                 'booking_date' => now(),

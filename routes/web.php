@@ -82,6 +82,8 @@ Route::middleware(['web', 'auth'])->group(function () {
         // Edit Lead
         Route::get('/{lead:id}/edit', LeadForm::class)
             ->name('edit');
+        // Download Lead Details PDF
+        Route::get('/{lead:id}/download-pdf', [\App\Http\Controllers\DealDocumentController::class, 'leadPdf'])->name('download-pdf');
     });
     // Agents
     Route::prefix('agents')->name('agents.')->group(function () {
@@ -154,4 +156,10 @@ Route::get('/cancellation-refund-policy', FrontStaticPage::class)
     ->name('pages.refund-policy');
 Route::get('/projects/{slug}', FrontProject::class)->name('project.show');
 Route::get('/projects/{project}/registration', Booking::class)->name('booking');
+
+// PhonePe Payment Routes
+use App\Http\Controllers\PaymentController;
+Route::get('/payment/phonepe/redirect', [PaymentController::class, 'redirect'])->name('phonepe.redirect');
+Route::post('/payment/phonepe/callback', [PaymentController::class, 'callback'])->name('phonepe.callback');
+
 require __DIR__ . '/auth.php';

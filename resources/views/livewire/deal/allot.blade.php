@@ -11,10 +11,15 @@
                             </a>
                             Allot Unit
                         </h4>
-                        <div class="page-title-right">
+                        <div class="page-title-right d-flex gap-2">
                             <span class="badge bg-light text-primary border border-primary fs-12 px-3 py-2">
                                 Customer: {{ $deal->first_name }} {{ $deal->last_name }} (Project: {{ $project?->name }})
                             </span>
+                            @if($deal->booking_amount > 0)
+                                <span class="badge bg-success-subtle text-success border border-success fs-12 px-3 py-2">
+                                    <i class="ri-wallet-3-line align-bottom me-1"></i> Booking Amount: ₹{{ number_format($deal->booking_amount, 2) }}
+                                </span>
+                            @endif
                         </div>
                     </div>
                 </div>

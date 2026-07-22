@@ -80,4 +80,19 @@ class DealDocumentController extends Controller
 
         return $pdf->download("deal-details-{$deal->id}.pdf");
     }
+
+    public function leadPdf(\App\Models\Lead $lead)
+    {
+        abort_unless(auth()->user()->can('leads.view'), 403);
+
+        $lead->load(['project', 'agent']);
+
+        $html = view('emails.lead-pdf', [
+            'lead' => $lead,
+        ])->render();
+
+        $pdf = Pdf::loadHTML(reshapeDevanagari($html));
+
+        return $pdf->download("lead-details-{$lead->id}.pdf");
+    }
 }
