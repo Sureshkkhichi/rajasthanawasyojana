@@ -701,6 +701,31 @@
                         </div>
                     </a>
                 </div>
+                <!-- Total Collection -->
+                <div class="col-xl-3 col-md-6">
+                    <a href="{{ route('deals.index') }}" class="dashboard-link">
+                        <div class="card dashboard-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted text-uppercase fw-semibold fs-12 mb-2">
+                                            Total Collection
+                                        </p>
+                                        <h2 class="mb-2">
+                                            ₹ <span class="counter-value" data-target="{{ (int)$totalCollection }}">0</span>
+                                        </h2>
+                                        <span class="fs-13 text-success">
+                                            View All
+                                        </span>
+                                    </div>
+                                    <div class="avatar-sm bg-gradient bg-success rounded d-flex align-items-center justify-content-center">
+                                        <i class="bx bx-rupee fs-20 text-light"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
             {{-- Sales Overview --}}
             <div class="row">
