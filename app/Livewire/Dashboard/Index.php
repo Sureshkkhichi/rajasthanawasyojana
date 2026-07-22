@@ -44,6 +44,8 @@ class Index extends Component
     public int $submittedLeads = 0;
     public int $paidLeads = 0;
     public int $pendingLeads = 0;
+    public int $inProcessLeads = 0;
+    public int $unpaidLeads = 0;
     public float $conversionRate = 0;
 
     // Project Status Chart
@@ -81,6 +83,8 @@ class Index extends Component
         $this->submittedLeads = Lead::submitted()->whereBetween('created_at', [$startDate, $endDate])->count();
         $this->paidLeads = Lead::paid()->whereBetween('created_at', [$startDate, $endDate])->count();
         $this->pendingLeads = Lead::pendingPayment()->whereBetween('created_at', [$startDate, $endDate])->count();
+        $this->inProcessLeads = Lead::inProcess()->whereBetween('created_at', [$startDate, $endDate])->count();
+        $this->unpaidLeads = Lead::pendingPayment()->whereBetween('created_at', [$startDate, $endDate])->count();
 
         $this->totalDeals = Deal::whereBetween('created_at', [$startDate, $endDate])->count();
 
@@ -246,6 +250,8 @@ class Index extends Component
             'paidLeads' => $this->paidLeads,
             'pendingLeads' => $this->pendingLeads,
             'draftLeads' => $this->draftLeads,
+            'inProcessLeads' => $this->inProcessLeads,
+            'unpaidLeads' => $this->unpaidLeads,
             'projectStatusData' => $this->projectStatusData,
             'totalCollection' => $this->totalCollection,
             'pendingAmount' => $this->pendingAmount,

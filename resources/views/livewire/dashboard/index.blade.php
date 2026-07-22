@@ -105,17 +105,12 @@
 
             .funnel-3 {
                 width: 182px;
-                background: linear-gradient(90deg, #34c38f, #20c997);
+                background: linear-gradient(90deg, #f7b84b, #f59e0b);
             }
 
             .funnel-4 {
                 width: 146px;
-                background: linear-gradient(90deg, #f7b84b, #f59e0b);
-            }
-
-            .funnel-5 {
-                width: 118px;
-                background: linear-gradient(90deg, #ff6b6b, #ff4d4f);
+                background: linear-gradient(90deg, #34c38f, #20c997);
             }
 
             /* =========================
@@ -314,10 +309,6 @@
                     width: 125px;
                 }
 
-                .funnel-5 {
-                    width: 101px;
-                }
-
                 .funnel-stage {
                     height: 42px;
                 }
@@ -342,10 +333,6 @@
 
                 .funnel-4 {
                     width: 104px;
-                }
-
-                .funnel-5 {
-                    width: 84px;
                 }
 
                 .funnel-stage {
@@ -751,7 +738,7 @@
                         <div class="card-body pt-0">
                             <!-- Stats -->
                             <div class="row mb-4 sales-overview-stats">
-                                <div class="col-md-3 border-end">
+                                <div class="col-md-4 border-end">
                                     <h3 class="mb-1 fw-semibold" title="₹ {{ number_format($totalCollection) }}">
                                         @if($totalCollection >= 10000000)
                                             ₹ {{ number_format($totalCollection / 10000000, 2) }} Cr
@@ -766,22 +753,7 @@
                                         Total Collection
                                     </p>
                                 </div>
-                                <div class="col-md-3 border-end">
-                                    <h3 class="mb-1 fw-semibold" title="₹ {{ number_format($pendingAmount) }}">
-                                        @if($pendingAmount >= 10000000)
-                                            ₹ {{ number_format($pendingAmount / 10000000, 2) }} Cr
-                                        @elseif($pendingAmount >= 100000)
-                                            ₹ {{ number_format($pendingAmount / 100000, 2) }} L
-                                        @else
-                                            ₹ {{ number_format($pendingAmount) }}
-                                        @endif
-                                    </h3>
-                                    <p class="text-muted mb-0">
-                                        <i class="ri-checkbox-blank-circle-fill text-warning me-1"></i>
-                                        Pending Amount
-                                    </p>
-                                </div>
-                                <div class="col-md-3 border-end">
+                                <div class="col-md-4 border-end">
                                     <h3 class="mb-1 fw-semibold" title="₹ {{ number_format($bookingAmount) }}">
                                         @if($bookingAmount >= 10000000)
                                             ₹ {{ number_format($bookingAmount / 10000000, 2) }} Cr
@@ -796,7 +768,7 @@
                                         Booking Amount
                                     </p>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <h3 class="mb-1 fw-semibold" title="₹ {{ number_format($totalRefund) }}">
                                         @if($totalRefund >= 10000000)
                                             ₹ {{ number_format($totalRefund / 10000000, 2) }} Cr
@@ -842,9 +814,6 @@
                                         <div class="funnel-stage-parent">
                                             <div class="funnel-stage funnel-4"></div>
                                         </div>
-                                        <div class="funnel-stage-parent">
-                                            <div class="funnel-stage funnel-5"></div>
-                                        </div>
                                     </div>
                                 </div>
                                 <!-- Stats -->
@@ -864,21 +833,10 @@
                                         <span class="funnel-line funnel-line-info"></span>
                                         <div>
                                             <div class="text-muted">
-                                                Submitted
+                                                In Process
                                             </div>
                                             <h3 class="mb-0 text-info">
-                                                {{ number_format($submittedLeads) }}
-                                            </h3>
-                                        </div>
-                                    </div>
-                                    <div class="funnel-stat-item">
-                                        <span class="funnel-line funnel-line-success"></span>
-                                        <div>
-                                            <div class="text-muted">
-                                                Paid Bookings
-                                            </div>
-                                            <h3 class="mb-0 text-success">
-                                                {{ number_format($paidLeads) }}
+                                                {{ number_format($inProcessLeads) }}
                                             </h3>
                                         </div>
                                     </div>
@@ -886,21 +844,21 @@
                                         <span class="funnel-line funnel-line-warning"></span>
                                         <div>
                                             <div class="text-muted">
-                                                Pending Payment
+                                                Unpaid
                                             </div>
                                             <h3 class="mb-0 text-warning">
-                                                {{ number_format($pendingLeads) }}
+                                                {{ number_format($unpaidLeads) }}
                                             </h3>
                                         </div>
                                     </div>
                                     <div class="funnel-stat-item mb-0">
-                                        <span class="funnel-line funnel-line-danger"></span>
+                                        <span class="funnel-line funnel-line-success"></span>
                                         <div>
                                             <div class="text-muted">
-                                                Drafts
+                                                Paid
                                             </div>
-                                            <h3 class="mb-0 text-danger">
-                                                {{ number_format($draftLeads) }}
+                                            <h3 class="mb-0 text-success">
+                                                {{ number_format($paidLeads) }}
                                             </h3>
                                         </div>
                                     </div>
@@ -1624,9 +1582,6 @@
                         name: "Collection",
                         data: @json($salesTrendCollection)
                     }, {
-                        name: "Pending Amount",
-                        data: @json($salesTrendPending)
-                    }, {
                         name: "Booking Amount",
                         data: @json($salesTrendBooking)
                     }, {
@@ -1649,7 +1604,6 @@
                             blur: 4,
                             color: [
                                 "#4F6DF5", // Collection
-                                "#F7A928", // Pending
                                 "#34C38F", // Booking
                                 "#F46A6A" // Refund
                             ],
@@ -1670,7 +1624,6 @@
                     },
                     colors: [
                         "#4F6DF5", // Collection
-                        "#F7A928", // Pending
                         "#34C38F", // Booking
                         "#F46A6A" // Refund
                     ],
@@ -2164,10 +2117,6 @@
                         data: event.detail.salesTrendCollection
                     },
                     {
-                        name: "Pending Amount",
-                        data: event.detail.salesTrendPending
-                    },
-                    {
                         name: "Booking Amount",
                         data: event.detail.salesTrendBooking
                     },
@@ -2206,10 +2155,6 @@
                     window.salesTrendChart.updateSeries([{
                         name: "Collection",
                         data: event.detail.salesTrendCollection
-                    },
-                    {
-                        name: "Pending Amount",
-                        data: event.detail.salesTrendPending
                     },
                     {
                         name: "Booking Amount",
