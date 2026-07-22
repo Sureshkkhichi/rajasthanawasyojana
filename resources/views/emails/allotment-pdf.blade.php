@@ -6,133 +6,163 @@
     <title>आवंटन पत्र</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-    body {
-        font-family: 'Hind', 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        color: #333;
-        background: url(https://rajasthanawasyojana.com/admin/img/back_img.png) no-repeat center center !important;
-        -webkit-background-size: cover !important;
-        -moz-background-size: cover !important;
-        -o-background-size: cover !important;
-        background-size: 100% 100% !important;
-    }
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
 
-    .container {
-        border: 4px double #d32f2f;
-        padding: 30px;
-        margin: 10px;
-        position: relative;
-        background-color: #fff;
-    }
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
 
-    .header {
-        text-align: center;
-        margin-bottom: 25px;
-    }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 297mm;
+            font-family: 'Hind', 'Arial', sans-serif;
+            color: #333;
+            background-image: url('https://rajasthanawasyojana.com/admin/img/back_img.png') !important;
+            background-repeat: no-repeat !important;
+            background-position: center center !important;
+            background-size: 100% 100% !important;
+        }
 
-    .title {
-        font-size: 32px;
-        color: #d32f2f;
-        font-weight: bold;
-        margin: 0 0 5px 0;
-    }
+        .container {
+            padding: 30px 50px;
+            margin: 0;
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+        }
 
-    .subtitle {
-        font-size: 18px;
-        font-weight: bold;
-        margin: 0 0 5px 0;
-    }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    .location {
-        font-size: 16px;
-        margin: 0 0 15px 0;
-    }
+        .title {
+            font-size: 32px;
+            color: #d32f2f;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+        }
 
-    .badge-box {
-        display: inline-block;
-        background-color: #d32f2f;
-        color: #fff;
-        font-size: 20px;
-        font-weight: bold;
-        padding: 5px 25px;
-        border-radius: 4px;
-        margin-bottom: 20px;
-    }
+        .subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+        }
 
-    .meta-table,
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
+        .location {
+            font-size: 16px;
+            margin: 0 0 15px 0;
+        }
 
-    .meta-table td {
-        padding: 8px 5px;
-        font-size: 15px;
-        border: none;
-    }
+        .badge-box {
+            display: inline-block;
+            background-color: #d32f2f !important;
+            color: #fff !important;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 5px 25px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
 
-    .meta-label {
-        font-weight: bold;
-    }
+        .meta-table,
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
 
-    .divider {
-        border-top: 1px solid #ccc;
-        margin: 15px 0;
-    }
+        .meta-table td {
+            padding: 6px 5px;
+            font-size: 15px;
+            border: none;
+        }
 
-    .subject {
-        font-weight: bold;
-        font-size: 16px;
-        margin-bottom: 15px;
-    }
+        .meta-label {
+            font-weight: bold;
+        }
 
-    .salutation {
-        font-size: 15px;
-        margin-bottom: 10px;
-    }
+        .divider {
+            border-top: 1px solid #ccc;
+            margin: 12px 0;
+        }
 
-    .body-text {
-        font-size: 15px;
-        line-height: 1.6;
-        margin-bottom: 20px;
-    }
+        .subject {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
 
-    .data-table th,
-    .data-table td {
-        border: 1px solid #ccc;
-        padding: 10px;
-        font-size: 15px;
-        text-align: center;
-    }
+        .salutation {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
 
-    .data-table th {
-        background-color: #f5f5f5;
-        font-weight: bold;
-    }
+        .body-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
 
-    .footer-note {
-        font-size: 13px;
-        margin-top: 25px;
-        font-weight: bold;
-    }
+        .data-table th,
+        .data-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            font-size: 14px;
+            text-align: center;
+        }
 
-    .computer-generated {
-        font-size: 11px;
-        color: #777;
-        margin-top: 5px;
-    }
+        .data-table th {
+            background-color: #f5f5f5 !important;
+            font-weight: bold;
+        }
 
-    .footer-signatures {
-        margin-top: 40px;
-        width: 100%;
-    }
+        .footer-note {
+            font-size: 13px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
 
-    .footer-signatures td {
-        font-size: 14px;
-        vertical-align: top;
-    }
+        .computer-generated {
+            font-size: 11px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .footer-signatures {
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .footer-signatures td {
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        @media print {
+            html, body {
+                background-image: url('https://rajasthanawasyojana.com/admin/img/back_img.png') !important;
+                background-repeat: no-repeat !important;
+                background-position: center center !important;
+                background-size: 100% 100% !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .badge-box {
+                background-color: #d32f2f !important;
+                color: #fff !important;
+            }
+            .data-table th {
+                background-color: #f5f5f5 !important;
+            }
+        }
     </style>
 </head>
 
@@ -212,7 +242,7 @@
         </table>
     </div>
     <script type="text/javascript">
-        window.onload = function() {
+        window.onload = function () {
             window.print();
         }
     </script>
