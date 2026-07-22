@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('inventories', function (Blueprint $table) {
-            $table->dropColumn('plc_status');
-        });
+        if (Schema::hasColumn('inventories', 'plc_status')) {
+            Schema::table('inventories', function (Blueprint $table) {
+                $table->dropColumn('plc_status');
+            });
+        }
     }
 
     /**
