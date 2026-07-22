@@ -330,7 +330,7 @@ class Booking extends Component
             'merchantUserId' => 'USR' . $this->lead->phone,
             'amount' => 2110000, // 21100.00 * 100 paise
             'redirectUrl' => route('phonepe.redirect') . '?transactionId=' . $transactionId,
-            'redirectMode' => 'REDIRECT',
+            'redirectMode' => 'GET',
             'callbackUrl' => route('phonepe.callback'),
             'mobileNumber' => $this->lead->phone,
             'paymentInstrument' => [
