@@ -4,8 +4,8 @@
         <link href="{{ asset('assets/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
         <style>
             /* =========================
-                    SALES OVERVIEW CARD
-                ========================= */
+                            SALES OVERVIEW CARD
+                        ========================= */
 
             .dashboard-sales-card,
             .dashboard-funnel-card {
@@ -56,12 +56,12 @@
             }
 
             /* =========================
-                    FUNNEL
-                ========================= */
+                            FUNNEL
+                        ========================= */
 
             /* =========================
-                    FUNNEL
-                ========================= */
+                            FUNNEL
+                        ========================= */
 
             .lead-funnel-wrapper {
                 display: flex;
@@ -114,8 +114,8 @@
             }
 
             /* =========================
-                    FUNNEL RIGHT SIDE STATS
-                ========================= */
+                            FUNNEL RIGHT SIDE STATS
+                        ========================= */
 
             .funnel-stat-item {
                 display: flex;
@@ -259,8 +259,8 @@
             }
 
             /* =========================
-                    FOOTER
-                ========================= */
+                            FOOTER
+                        ========================= */
 
             .dashboard-funnel-card .card-footer {
                 padding: 18px 20px;
@@ -289,8 +289,8 @@
             }
 
             /* =========================
-                    RESPONSIVE WIDTH ADJUSTMENTS (PREVENTS SQUISHING CHART)
-                ========================= */
+                            RESPONSIVE WIDTH ADJUSTMENTS (PREVENTS SQUISHING CHART)
+                        ========================= */
 
             @media(max-width:1399px) {
                 .funnel-1 {
@@ -360,8 +360,8 @@
             }
 
             /* =========================
-                    CUSTOM APEXCHARTS STYLES
-                ========================= */
+                            CUSTOM APEXCHARTS STYLES
+                        ========================= */
             .apexcharts-legend-marker {
                 position: relative;
                 overflow: visible !important;
@@ -386,8 +386,8 @@
             }
 
             /* =========================
-                    SALES OVERVIEW STATS LEFT ALIGN
-                ========================= */
+                            SALES OVERVIEW STATS LEFT ALIGN
+                        ========================= */
             .sales-overview-stats .col-md-3 {
                 text-align: left;
                 padding-left: 20px;
@@ -414,8 +414,8 @@
             }
 
             /* =========================
-                    NEW ROW CARDS (PROJECT STATUS, DEALS, ACTIVITIES)
-                ========================= */
+                            NEW ROW CARDS (PROJECT STATUS, DEALS, ACTIVITIES)
+                        ========================= */
             .dashboard-status-card {
                 border: 0 !important;
                 border-radius: 12px !important;
@@ -522,11 +522,13 @@
                             <div class="d-flex gap-2 align-items-center">
                                 <div class="d-flex align-items-center gap-1">
                                     <span class="text-muted fw-semibold fs-12 text-uppercase">From:</span>
-                                    <input type="date" class="form-control border-0 minimal-border shadow" wire:model.live="fromDate" style="max-width: 145px; height: 38px;">
+                                    <input type="date" class="form-control border-0 minimal-border shadow"
+                                        wire:model.live="fromDate" style="max-width: 145px; height: 38px;">
                                 </div>
                                 <div class="d-flex align-items-center gap-1">
                                     <span class="text-muted fw-semibold fs-12 text-uppercase">To:</span>
-                                    <input type="date" class="form-control border-0 minimal-border shadow" wire:model.live="toDate" style="max-width: 145px; height: 38px;">
+                                    <input type="date" class="form-control border-0 minimal-border shadow"
+                                        wire:model.live="toDate" style="max-width: 145px; height: 38px;">
                                 </div>
                             </div>
                         </div>
@@ -546,7 +548,8 @@
                                             Total Leads
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="{{ $totalLeads }}">{{ number_format($totalLeads) }}</span>
+                                            <span class="counter-value"
+                                                data-target="{{ $totalLeads }}">{{ number_format($totalLeads) }}</span>
                                         </h2>
                                         <span class="fs-13 text-primary">
                                             View Leads
@@ -572,7 +575,8 @@
                                             Active Projects
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="{{ $activeProjects }}">{{ number_format($activeProjects) }}</span>
+                                            <span class="counter-value"
+                                                data-target="{{ $activeProjects }}">{{ number_format($activeProjects) }}</span>
                                         </h2>
                                         <span class="fs-13 text-success">
                                             View Projects
@@ -598,7 +602,8 @@
                                             Upcoming Projects
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="{{ $upcomingProjects }}">{{ number_format($upcomingProjects) }}</span>
+                                            <span class="counter-value"
+                                                data-target="{{ $upcomingProjects }}">{{ number_format($upcomingProjects) }}</span>
                                         </h2>
                                         <span class="fs-13 text-warning">
                                             View Projects
@@ -624,7 +629,8 @@
                                             Total Deals
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="{{ $totalDeals }}">{{ number_format($totalDeals) }}</span>
+                                            <span class="counter-value"
+                                                data-target="{{ $totalDeals }}">{{ number_format($totalDeals) }}</span>
                                         </h2>
                                         <span class="fs-13 text-secondary">
                                             View Deals
@@ -650,7 +656,8 @@
                                             Total Amount
                                         </p>
                                         <h2 class="mb-2">
-                                            ₹ <span class="counter-value" data-target="{{ (int) $totalAmount }}">{{ number_format($totalAmount) }}</span>
+                                            ₹ <span class="counter-value"
+                                                data-target="{{ (int) $totalAmount }}">{{ number_format($totalAmount) }}</span>
                                         </h2>
                                         <span class="fs-13 text-info">
                                             View All
@@ -676,7 +683,8 @@
                                             Total Collection
                                         </p>
                                         <h2 class="mb-2">
-                                            ₹ <span class="counter-value" data-target="{{ (int) $totalCollection }}">{{ number_format($totalCollection) }}</span>
+                                            ₹ <span class="counter-value"
+                                                data-target="{{ (int) $totalCollection }}">{{ number_format($totalCollection) }}</span>
                                         </h2>
                                         <span class="fs-13 text-success">
                                             View All
@@ -702,7 +710,8 @@
                                             Total Refund
                                         </p>
                                         <h2 class="mb-2">
-                                            ₹ <span class="counter-value" data-target="{{ (int) $totalRefund }}">{{ number_format($totalRefund) }}</span>
+                                            ₹ <span class="counter-value"
+                                                data-target="{{ (int) $totalRefund }}">{{ number_format($totalRefund) }}</span>
                                         </h2>
                                         <span class="fs-13 text-danger">
                                             View All
@@ -727,13 +736,6 @@
                             <h4 class="card-title mb-0 flex-grow-1">
                                 Sales Overview
                             </h4>
-                            <div class="flex-shrink-0">
-                                <select class="form-select form-select-sm">
-                                    <option>This Month</option>
-                                    <option>Last Month</option>
-                                    <option>This Year</option>
-                                </select>
-                            </div>
                         </div>
                         <div class="card-body pt-0">
                             <!-- Stats -->
@@ -918,8 +920,7 @@
                             <h4 class="card-title mb-0 flex-grow-1">Financial Distribution</h4>
                         </div>
                         <div class="card-body">
-                            <div id="deal-stage-source"
-                                data-colors='["--vz-success", "--vz-primary", "--vz-danger"]'
+                            <div id="deal-stage-source" data-colors='["--vz-success", "--vz-primary", "--vz-danger"]'
                                 class="apex-charts" dir="ltr"></div>
                         </div>
                     </div>
@@ -933,233 +934,8 @@
                         </div>
                         <div class="card-body">
                             <div id="lead-status-distribution-chart"
-                                data-colors='["--vz-info", "--vz-success", "--vz-warning"]'
-                                class="apex-charts" dir="ltr"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- New Row: Top Performing Projects & Recent Leads -->
-            <div class="row mb-4">
-                <!-- Top Performing Projects -->
-                <div class="col-xl-6">
-                    <div class="card h-100 dashboard-status-card">
-                        <div class="card-header border-0 align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Top Performing Projects</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive table-card">
-                                <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
-                                    <thead class="text-muted table-light">
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Project Name</th>
-                                            <th scope="col">Type</th>
-                                            <th scope="col">Leads</th>
-                                            <th scope="col">Deals</th>
-                                            <th scope="col">Collection</th>
-                                            <th scope="col">Progress</th>
-                                            <th scope="col">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td class="fw-semibold">Sunrise Residency</td>
-                                            <td>Residential</td>
-                                            <td>186</td>
-                                            <td>42</td>
-                                            <td>₹ 2.45 Cr</td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <div class="progress progress-sm flex-grow-1"
-                                                        style="height: 5px; width: 60px; border-radius: 30px; background-color: #eff2f7;">
-                                                        <div class="progress-bar bg-success" role="progressbar"
-                                                            style="width: 75%; border-radius: 30px;" aria-valuenow="75"
-                                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <span class="fs-12 fw-medium text-muted">75%</span>
-                                                </div>
-                                            </td>
-                                            <td><span
-                                                    class="badge bg-primary-subtle text-primary py-1 px-2 rounded fs-11">In
-                                                    Progress</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td class="fw-semibold">Green Valley</td>
-                                            <td>Residential</td>
-                                            <td>152</td>
-                                            <td>38</td>
-                                            <td>₹ 1.98 Cr</td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <div class="progress progress-sm flex-grow-1"
-                                                        style="height: 5px; width: 60px; border-radius: 30px; background-color: #eff2f7;">
-                                                        <div class="progress-bar bg-success" role="progressbar"
-                                                            style="width: 60%; border-radius: 30px;" aria-valuenow="60"
-                                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <span class="fs-12 fw-medium text-muted">60%</span>
-                                                </div>
-                                            </td>
-                                            <td><span
-                                                    class="badge bg-primary-subtle text-primary py-1 px-2 rounded fs-11">In
-                                                    Progress</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td class="fw-semibold">Royal Homes</td>
-                                            <td>Commercial</td>
-                                            <td>98</td>
-                                            <td>26</td>
-                                            <td>₹ 1.42 Cr</td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <div class="progress progress-sm flex-grow-1"
-                                                        style="height: 5px; width: 60px; border-radius: 30px; background-color: #eff2f7;">
-                                                        <div class="progress-bar bg-success" role="progressbar"
-                                                            style="width: 45%; border-radius: 30px;" aria-valuenow="45"
-                                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <span class="fs-12 fw-medium text-muted">45%</span>
-                                                </div>
-                                            </td>
-                                            <td><span
-                                                    class="badge bg-primary-subtle text-primary py-1 px-2 rounded fs-11">In
-                                                    Progress</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td class="fw-semibold">Elite Square</td>
-                                            <td>Commercial</td>
-                                            <td>74</td>
-                                            <td>18</td>
-                                            <td>₹ 0.96 Cr</td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <div class="progress progress-sm flex-grow-1"
-                                                        style="height: 5px; width: 60px; border-radius: 30px; background-color: #eff2f7;">
-                                                        <div class="progress-bar bg-success" role="progressbar"
-                                                            style="width: 35%; border-radius: 30px;" aria-valuenow="35"
-                                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <span class="fs-12 fw-medium text-muted">35%</span>
-                                                </div>
-                                            </td>
-                                            <td><span
-                                                    class="badge bg-warning-subtle text-warning py-1 px-2 rounded fs-11">On
-                                                    Hold</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td class="fw-semibold">Lake View Residency</td>
-                                            <td>Residential</td>
-                                            <td>65</td>
-                                            <td>15</td>
-                                            <td>₹ 0.68 Cr</td>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <div class="progress progress-sm flex-grow-1"
-                                                        style="height: 5px; width: 60px; border-radius: 30px; background-color: #eff2f7;">
-                                                        <div class="progress-bar bg-success" role="progressbar"
-                                                            style="width: 20%; border-radius: 30px;" aria-valuenow="20"
-                                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                    <span class="fs-12 fw-medium text-muted">20%</span>
-                                                </div>
-                                            </td>
-                                            <td><span
-                                                    class="badge bg-warning-subtle text-warning py-1 px-2 rounded fs-11">On
-                                                    Hold</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="mt-4 pt-1 w-100">
-                                <a href="#" class="btn btn-light w-100 border fs-13 py-2 fw-medium"
-                                    style="border: 1px solid #e2e8f0 !important; background-color: #fff; color: #495057; border-radius: 6px; transition: all 0.2s ease;">
-                                    View All Projects
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Leads -->
-                <div class="col-xl-6">
-                    <div class="card h-100 dashboard-status-card">
-                        <div class="card-header border-0 align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Recent Leads</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive table-card">
-                                <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
-                                    <thead class="text-muted table-light">
-                                        <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Mobile</th>
-                                            <th scope="col">Project Interest</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="fw-semibold">Rahul Sharma</td>
-                                            <td class="text-muted">9876543210</td>
-                                            <td>Sunrise Residency</td>
-                                            <td><span
-                                                    class="badge bg-primary-subtle text-primary py-1 px-2 rounded fs-11">New</span>
-                                            </td>
-                                            <td class="text-muted">21 Jun 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-semibold">Priya Verma</td>
-                                            <td class="text-muted">8765432109</td>
-                                            <td>Green Valley</td>
-                                            <td><span
-                                                    class="badge bg-success-subtle text-success py-1 px-2 rounded fs-11">Contacted</span>
-                                            </td>
-                                            <td class="text-muted">21 Jun 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-semibold">Amit Singh</td>
-                                            <td class="text-muted">7654321098</td>
-                                            <td>Royal Homes</td>
-                                            <td><span class="badge bg-info-subtle text-info py-1 px-2 rounded fs-11"
-                                                    style="background-color: #f3f0ff !important; color: #7c3aed !important;">Qualified</span>
-                                            </td>
-                                            <td class="text-muted">20 Jun 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-semibold">Neha Joshi</td>
-                                            <td class="text-muted">6543210987</td>
-                                            <td>Elite Square</td>
-                                            <td><span
-                                                    class="badge bg-primary-subtle text-primary py-1 px-2 rounded fs-11">New</span>
-                                            </td>
-                                            <td class="text-muted">20 Jun 2026</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-semibold">Vikram Patel</td>
-                                            <td class="text-muted">5432109876</td>
-                                            <td>Lake View Residency</td>
-                                            <td><span
-                                                    class="badge bg-success-subtle text-success py-1 px-2 rounded fs-11">Contacted</span>
-                                            </td>
-                                            <td class="text-muted">19 Jun 2026</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="mt-4 pt-1 w-100">
-                                <a href="#" class="btn btn-light w-100 border fs-13 py-2 fw-medium"
-                                    style="border: 1px solid #e2e8f0 !important; background-color: #fff; color: #495057; border-radius: 6px; transition: all 0.2s ease;">
-                                    View All Leads
-                                </a>
-                            </div>
+                                data-colors='["--vz-info", "--vz-success", "--vz-warning"]' class="apex-charts"
+                                dir="ltr"></div>
                         </div>
                     </div>
                 </div>
@@ -1171,7 +947,7 @@
                 <div class="col-xl-4 col-md-6">
                     <div class="card">
                         <div class="card-header border-0 align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Collection vs Pending <span
+                            <h4 class="card-title mb-0 flex-grow-1">Collection vs Refund <span
                                     class="text-muted fs-12 fw-normal">(This Month)</span></h4>
                         </div>
                         <div class="card-body">
@@ -1727,14 +1503,14 @@
                 window.projectStatusChart.render();
             }
 
-            // Collection vs Pending Chart
+            // Collection vs Refund Chart
             var collectionVsPendingOptions = {
                 series: [{
                     name: 'Collection',
-                    data: [135, 195, 158, 210]
+                    data: @json($weeklyCollection)
                 }, {
-                    name: 'Pending',
-                    data: [48, 105, 70, 112]
+                    name: 'Refund',
+                    data: @json($weeklyRefund)
                 }],
                 chart: {
                     type: 'bar',
@@ -1758,7 +1534,7 @@
                     width: 2,
                     colors: ['transparent']
                 },
-                colors: ['#3b82f6', '#f59e0b'],
+                colors: ['#3b82f6', '#ef4444'],
                 xaxis: {
                     categories: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
                     axisBorder: {
@@ -2090,7 +1866,8 @@
             window.cityWiseChart.render();
 
             window.addEventListener('dashboard-updated', event => {
-                const detail = Array.isArray(event.detail) ? event.detail[0] : (event.detail && typeof event.detail === 'object' ? event.detail : {});
+                const detail = Array.isArray(event.detail) ? event.detail[0] : (event.detail && typeof event.detail ===
+                    'object' ? event.detail : {});
                 if (!detail) return;
 
                 if (window.salesOverviewChart) {
@@ -2135,10 +1912,13 @@
                 }
 
                 if (window.collectionVsPendingChart) {
-                    window.collectionVsPendingChart.updateSeries([
-                        Number(detail.totalCollection) || 0,
-                        Number(detail.pendingAmount) || 0
-                    ]);
+                    window.collectionVsPendingChart.updateSeries([{
+                        name: "Collection",
+                        data: detail.weeklyCollection || []
+                    }, {
+                        name: "Refund",
+                        data: detail.weeklyRefund || []
+                    }]);
                 }
 
                 if (window.salesTrendChart) {

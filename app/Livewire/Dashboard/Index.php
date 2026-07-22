@@ -52,6 +52,10 @@ class Index extends Component
     public array $projectStatusLabels = [];
     public array $projectStatusData = [];
 
+    // Collection vs Refund Weekly Chart
+    public array $weeklyCollection = [];
+    public array $weeklyRefund = [];
+
     // Sales Trend (Overview)
     public array $salesTrendDays = [];
     public array $salesTrendCollection = [];
@@ -246,6 +250,44 @@ class Index extends Component
         $this->cityLabels = array_keys($cityStats);
         $this->cityData = array_values($cityStats);
 
+        // Collection vs Refund (This Month - Weekly Breakdown)
+        $startOfMonth = now()->startOfMonth();
+        $endOfMonth = now()->endOfMonth();
+
+        $week1Start = $startOfMonth->copy();
+        $week1End = $startOfMonth->copy()->addDays(6)->endOfDay();
+
+        $week2Start = $startOfMonth->copy()->addDays(7)->startOfDay();
+        $week2End = $startOfMonth->copy()->addDays(13)->endOfDay();
+
+        $week3Start = $startOfMonth->copy()->addDays(14)->startOfDay();
+        $week3End = $startOfMonth->copy()->addDays(20)->endOfDay();
+
+        $week4Start = $startOfMonth->copy()->addDays(21)->startOfDay();
+        $week4End = $endOfMonth->copy()->endOfDay();
+
+        $weeks = [
+            ['start' => $week1Start, 'end' => $week1End],
+            ['start' => $week2Start, 'end' => $week2End],
+            ['start' => $week3Start, 'end' => $week3End],
+            ['start' => $week4Start, 'end' => $week4End],
+        ];
+
+        $this->weeklyCollection = [];
+        $this->weeklyRefund = [];
+
+        foreach ($weeks as $week) {
+            $colCount = Deal::where('status', '!=', 'Refund')
+                ->whereBetween('created_at', [$week['start'], $week['end']])
+                ->count();
+            $this->weeklyCollection[] = round($colCount * $bookingAmountVal / 100000, 2);
+
+            $refCount = Deal::where('status', 'Refund')
+                ->whereBetween('created_at', [$week['start'], $week['end']])
+                ->count();
+            $this->weeklyRefund[] = round($refCount * $bookingAmountVal / 100000, 2);
+        }
+
         $this->dispatch('dashboard-updated', [
             'paidLeads' => $this->paidLeads,
             'pendingLeads' => $this->pendingLeads,
@@ -257,6 +299,8 @@ class Index extends Component
             'bookingAmount' => $this->bookingAmount,
             'totalRefund' => $this->totalRefund,
             'pendingAmount' => $this->pendingAmount,
+            'weeklyCollection' => $this->weeklyCollection,
+            'weeklyRefund' => $this->weeklyRefund,
             'salesTrendCollection' => $this->salesTrendCollection,
             'salesTrendPending' => $this->salesTrendPending,
             'salesTrendBooking' => $this->salesTrendBooking,
