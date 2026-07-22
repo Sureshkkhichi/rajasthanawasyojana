@@ -559,7 +559,7 @@
                                             Total Leads
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="{{ $totalLeads }}">0</span>
+                                            <span class="counter-value" data-target="{{ $totalLeads }}">{{ number_format($totalLeads) }}</span>
                                         </h2>
                                         <span class="fs-13 text-primary">
                                             View Leads
@@ -585,7 +585,7 @@
                                             Active Projects
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="{{ $activeProjects }}">0</span>
+                                            <span class="counter-value" data-target="{{ $activeProjects }}">{{ number_format($activeProjects) }}</span>
                                         </h2>
                                         <span class="fs-13 text-success">
                                             View Projects
@@ -611,7 +611,7 @@
                                             Upcoming Projects
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="{{ $upcomingProjects }}">0</span>
+                                            <span class="counter-value" data-target="{{ $upcomingProjects }}">{{ number_format($upcomingProjects) }}</span>
                                         </h2>
                                         <span class="fs-13 text-warning">
                                             View Projects
@@ -637,7 +637,7 @@
                                             Total Deals
                                         </p>
                                         <h2 class="mb-2">
-                                            <span class="counter-value" data-target="{{ $totalDeals }}">0</span>
+                                            <span class="counter-value" data-target="{{ $totalDeals }}">{{ number_format($totalDeals) }}</span>
                                         </h2>
                                         <span class="fs-13 text-secondary">
                                             View Deals
@@ -663,7 +663,7 @@
                                             Total Amount
                                         </p>
                                         <h2 class="mb-2">
-                                            ₹ <span class="counter-value" data-target="{{ (int) $totalAmount }}">0</span>
+                                            ₹ <span class="counter-value" data-target="{{ (int) $totalAmount }}">{{ number_format($totalAmount) }}</span>
                                         </h2>
                                         <span class="fs-13 text-info">
                                             View All
@@ -689,8 +689,7 @@
                                             Total Collection
                                         </p>
                                         <h2 class="mb-2">
-                                            ₹ <span class="counter-value"
-                                                data-target="{{ (int) $totalCollection }}">0</span>
+                                            ₹ <span class="counter-value" data-target="{{ (int) $totalCollection }}">{{ number_format($totalCollection) }}</span>
                                         </h2>
                                         <span class="fs-13 text-success">
                                             View All
@@ -716,7 +715,7 @@
                                             Total Refund
                                         </p>
                                         <h2 class="mb-2">
-                                            ₹ <span class="counter-value" data-target="{{ (int) $totalRefund }}">0</span>
+                                            ₹ <span class="counter-value" data-target="{{ (int) $totalRefund }}">{{ number_format($totalRefund) }}</span>
                                         </h2>
                                         <span class="fs-13 text-danger">
                                             View All
