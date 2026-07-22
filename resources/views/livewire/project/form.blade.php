@@ -441,8 +441,7 @@
                                                         </td>
                                                         <td>
                                                             <button type="button" class="btn btn-sm btn-danger"
-                                                                wire:click="deleteInfoImage('{{ $img->id }}')"
-                                                                onclick="return confirm('Are you sure you want to delete this image?')">
+                                                                wire:click="deleteInfoImage('{{ $img->id }}')">
                                                                 <i class="ri-delete-bin-line"></i>
                                                             </button>
                                                         </td>
