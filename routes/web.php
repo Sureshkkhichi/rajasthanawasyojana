@@ -159,7 +159,7 @@ Route::get('/projects/{project}/registration', Booking::class)->name('booking');
 
 // PhonePe Payment Routes
 use App\Http\Controllers\PaymentController;
-Route::get('/payment/phonepe/redirect', [PaymentController::class, 'redirect'])->name('phonepe.redirect');
+Route::match(['get', 'post'], '/payment/phonepe/redirect', [PaymentController::class, 'redirect'])->name('phonepe.redirect');
 Route::post('/payment/phonepe/callback', [PaymentController::class, 'callback'])->name('phonepe.callback');
 
 require __DIR__ . '/auth.php';

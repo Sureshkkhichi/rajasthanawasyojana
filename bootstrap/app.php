@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->validateCsrfTokens(except: [
             'payment/phonepe/callback',
+            'payment/phonepe/redirect',
         ]);
 
         $middleware->alias([

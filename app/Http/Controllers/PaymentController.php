@@ -19,7 +19,7 @@ class PaymentController extends Controller
      */
     public function redirect(Request $request)
     {
-        $transactionId = $request->query('transactionId');
+        $transactionId = $request->input('transactionId');
 
         if (!$transactionId) {
             Log::error('PhonePe redirect accessed without transactionId.');

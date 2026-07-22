@@ -7,17 +7,16 @@
                     <div class="swiper home-slider">
                         <div class="swiper-wrapper">
                             @foreach ($project->sliders as $slide)
-                            <div class="swiper-slide">
-                                @if($project->registration_status === 'open')
-                                    <a href="{{ route('booking', $project->id) }}">
-                                        <img src="{{ asset($slide->image) }}" alt="{{ $slide->title }}"
-                                            class="w-100 d-block" />
-                                    </a>
-                                @else
-                                    <img src="{{ asset($slide->image) }}" alt="{{ $slide->title }}"
-                                        class="w-100 d-block" />
-                                @endif
-                            </div>
+                                <div class="swiper-slide">
+                                    @if($project->registration_status === 'open')
+                                        <a href="{{ route('booking', $project->id) }}">
+                                            <img src="{{ asset($slide->image) }}" alt="{{ $slide->title }}"
+                                                class="w-100 d-block" />
+                                        </a>
+                                    @else
+                                        <img src="{{ asset($slide->image) }}" alt="{{ $slide->title }}" class="w-100 d-block" />
+                                    @endif
+                                </div>
                             @endforeach
                         </div>
                         <div class="swiper-pagination"></div>
@@ -41,9 +40,9 @@
     </div>
     <div class="row">
         @foreach ($project->informationImages as $infoImage)
-        <div class="col-lg-12 mb-2">
-            <a href="#"><img src="{{ asset($infoImage->image_path) }}" class="img-fluid w-100" alt="Project Info"></a>
-        </div>
+            <div class="col-lg-12 mb-0">
+                <a href="#"><img src="{{ asset($infoImage->image_path) }}" class="img-fluid w-100" alt="Project Info"></a>
+            </div>
         @endforeach
     </div>
 </div>
