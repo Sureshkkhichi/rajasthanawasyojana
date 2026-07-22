@@ -2090,71 +2090,74 @@
             window.cityWiseChart.render();
 
             window.addEventListener('dashboard-updated', event => {
+                const detail = Array.isArray(event.detail) ? event.detail[0] : (event.detail && typeof event.detail === 'object' ? event.detail : {});
+                if (!detail) return;
+
                 if (window.salesOverviewChart) {
                     window.salesOverviewChart.updateSeries([{
                         name: "Collection",
-                        data: event.detail.salesTrendCollection
+                        data: detail.salesTrendCollection
                     },
                     {
                         name: "Booking Amount",
-                        data: event.detail.salesTrendBooking
+                        data: detail.salesTrendBooking
                     },
                     {
                         name: "Refund Amount",
-                        data: event.detail.salesTrendRefund
+                        data: detail.salesTrendRefund
                     }
                     ]);
                     window.salesOverviewChart.updateOptions({
                         xaxis: {
-                            categories: event.detail.salesTrendDays
+                            categories: detail.salesTrendDays
                         }
                     });
                 }
 
                 if (window.dealsChart) {
                     window.dealsChart.updateSeries([
-                        event.detail.totalCollection,
-                        event.detail.bookingAmount,
-                        event.detail.totalRefund
+                        Number(detail.totalCollection) || 0,
+                        Number(detail.bookingAmount) || 0,
+                        Number(detail.totalRefund) || 0
                     ]);
                 }
 
                 if (window.leadStatusChart) {
                     window.leadStatusChart.updateSeries([
-                        event.detail.inProcessLeads,
-                        event.detail.paidLeads,
-                        event.detail.unpaidLeads
+                        Number(detail.inProcessLeads) || 0,
+                        Number(detail.paidLeads) || 0,
+                        Number(detail.unpaidLeads) || 0
                     ]);
                 }
 
                 if (window.projectStatusChart) {
-                    window.projectStatusChart.updateSeries(event.detail.projectStatusData);
+                    window.projectStatusChart.updateSeries(detail.projectStatusData || []);
                 }
 
                 if (window.collectionVsPendingChart) {
                     window.collectionVsPendingChart.updateSeries([
-                        event.detail.totalCollection,
-                        event.detail.pendingAmount
+                        Number(detail.totalCollection) || 0,
+                        Number(detail.pendingAmount) || 0
                     ]);
                 }
 
                 if (window.salesTrendChart) {
                     window.salesTrendChart.updateSeries([{
                         name: "Collection",
-                        data: event.detail.salesTrendCollection
+                        data: detail.salesTrendCollection || []
                     },
                     {
                         name: "Booking Amount",
-                        data: event.detail.salesTrendBooking
+                        data: detail.salesTrendBooking || []
                     },
                     {
                         name: "Refund Amount",
-                        data: event.detail.salesTrendRefund
+                        data: detail.salesTrendRefund || []
                     }
                     ]);
                     window.salesTrendChart.updateOptions({
                         xaxis: {
-                            categories: event.detail.salesTrendDays
+                            categories: detail.salesTrendDays || []
                         }
                     });
                 }
@@ -2162,22 +2165,22 @@
                 if (window.hourlyRegistrationChart) {
                     window.hourlyRegistrationChart.updateSeries([{
                         name: "Registrations",
-                        data: event.detail.hourlyData
+                        data: detail.hourlyData || []
                     }]);
                 }
 
                 if (window.ageWiseChart) {
-                    window.ageWiseChart.updateSeries(event.detail.ageData);
+                    window.ageWiseChart.updateSeries(detail.ageData || []);
                 }
 
                 if (window.cityWiseChart) {
                     window.cityWiseChart.updateSeries([{
                         name: "Leads",
-                        data: event.detail.cityData
+                        data: detail.cityData || []
                     }]);
                     window.cityWiseChart.updateOptions({
                         xaxis: {
-                            categories: event.detail.cityLabels
+                            categories: detail.cityLabels || []
                         }
                     });
                 }
