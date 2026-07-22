@@ -199,18 +199,28 @@
                                                   </td>
                                                   <td class="fw-semibold text-start text-nowrap">{{ $deal->first_name }} {{ $deal->last_name }}</td>
                                                   <td class="text-nowrap">
-                                                      <div>{{ $deal->project?->name ?: '-' }}</div>
+                                                      @if($deal->project)
+                                                          <div>
+                                                              <a href="{{ route('projects.edit', $deal->project->id) }}" target="_blank" class="text-dark fw-semibold text-decoration-underline" title="Open project details in new tab">
+                                                                  {{ $deal->project->name }}
+                                                              </a>
+                                                          </div>
+                                                      @else
+                                                          <div>-</div>
+                                                      @endif
                                                       @if($deal->allottedInventory)
                                                           <div class="mt-1">
-                                                              @if($deal->allottedInventory->inventory_type === 'flat')
-                                                                  <span class="badge bg-info fw-semibold fs-11">
-                                                                      Flat: {{ $deal->allottedInventory->flat_no }} ({{ $deal->allottedInventory->floor }})
-                                                                  </span>
-                                                              @else
-                                                                  <span class="badge bg-info fw-semibold fs-11">
-                                                                      Plot: {{ $deal->allottedInventory->plot_no }}
-                                                                  </span>
-                                                              @endif
+                                                              <a href="{{ route('inventories.edit', $deal->allottedInventory->id) }}" target="_blank" class="text-decoration-none" title="Open unit details in new tab">
+                                                                  @if($deal->allottedInventory->inventory_type === 'flat')
+                                                                      <span class="badge bg-info fw-semibold fs-11">
+                                                                          Flat: {{ $deal->allottedInventory->flat_no }} ({{ $deal->allottedInventory->floor }}) <i class="ri-external-link-line ms-0.5"></i>
+                                                                      </span>
+                                                                  @else
+                                                                      <span class="badge bg-info fw-semibold fs-11">
+                                                                          Plot: {{ $deal->allottedInventory->plot_no }} <i class="ri-external-link-line ms-0.5"></i>
+                                                                      </span>
+                                                                  @endif
+                                                              </a>
                                                           </div>
                                                       @endif
                                                   </td>

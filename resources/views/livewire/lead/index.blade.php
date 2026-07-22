@@ -213,7 +213,15 @@
                                                     {{ $lead->email }}
                                                 </small>
                                             </td>
-                                            <td> {{ $lead->project?->name }} </td>
+                                            <td>
+                                                @if($lead->project)
+                                                    <a href="{{ route('projects.edit', $lead->project->id) }}" target="_blank" class="text-dark fw-semibold text-decoration-underline" title="Open project details in new tab">
+                                                        {{ $lead->project->name }}
+                                                    </a>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
                                             <td> {{ $lead->city }} </td>
                                             <td> {{ $lead->flat_size }} </td>
                                             <td>
