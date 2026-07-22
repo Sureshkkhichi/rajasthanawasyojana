@@ -19,94 +19,143 @@
                 margin-bottom: 0px !important;
             }
 
-            /* Project Details Card */
-            .project-detail-card {
-                border-radius: 16px;
-                overflow: hidden;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-                margin-bottom: 24px;
-                border: none;
-            }
-            .project-detail-header {
-                background: linear-gradient(135deg, #c0392b 0%, #e74c3c 50%, #c0392b 100%);
-                padding: 20px 28px;
-                color: #fff;
-            }
-            .project-detail-header .project-title {
-                font-size: 22px;
-                font-weight: 700;
-                margin: 0 0 4px 0;
-                letter-spacing: 0.3px;
-            }
-            .project-detail-header .project-subtitle {
-                font-size: 13px;
-                opacity: 0.88;
-                margin: 0;
-            }
-            .project-detail-body {
+            /* Project Info Panel */
+            .proj-panel {
                 background: #fff;
-                padding: 20px 28px;
+                border: 1px solid #e8e8e8;
+                border-radius: 12px;
+                box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+                margin-bottom: 22px;
+                overflow: hidden;
             }
-            .info-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-                gap: 14px;
+            .proj-panel-top {
+                padding: 18px 24px 14px;
+                border-bottom: 1px solid #f0f0f0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                flex-wrap: wrap;
             }
-            .info-item {
-                background: #f8f9fa;
-                border-radius: 10px;
-                padding: 12px 14px;
-                border-left: 3px solid #e74c3c;
+            .proj-panel-name {
+                font-size: 19px;
+                font-weight: 700;
+                color: #1a1a1a;
+                margin: 0 0 3px 0;
+                line-height: 1.3;
             }
-            .info-item .info-label {
-                font-size: 11px;
-                color: #888;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                margin-bottom: 4px;
-            }
-            .info-item .info-value {
-                font-size: 15px;
-                font-weight: 600;
-                color: #222;
+            .proj-panel-meta {
+                font-size: 13px;
+                color: #777;
                 margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 6px;
             }
-            .info-item.highlight {
-                background: #fff5f5;
-                border-left-color: #c0392b;
+            .proj-panel-meta i {
+                font-size: 14px;
+                color: #aaa;
             }
-            .info-item.highlight .info-value {
-                color: #c0392b;
+            .proj-status-pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                background: #f0fdf4;
+                color: #16a34a;
+                border: 1px solid #bbf7d0;
+                border-radius: 20px;
+                padding: 4px 12px;
+                font-size: 12px;
+                font-weight: 600;
+                white-space: nowrap;
             }
-            .sizes-wrap {
+            .proj-status-pill .dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: #22c55e;
+                display: inline-block;
+                animation: pulse-dot 1.5s infinite;
+            }
+            @keyframes pulse-dot {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.4; }
+            }
+            .proj-stats {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 6px;
-                margin-top: 4px;
+                padding: 0;
+                border-bottom: 1px solid #f0f0f0;
             }
-            .size-badge {
-                background: #fff;
-                border: 1.5px solid #e74c3c;
+            .proj-stat-item {
+                flex: 1;
+                min-width: 120px;
+                padding: 14px 22px;
+                border-right: 1px solid #f0f0f0;
+                position: relative;
+            }
+            .proj-stat-item:last-child {
+                border-right: none;
+            }
+            .proj-stat-label {
+                font-size: 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                color: #999;
+                margin-bottom: 5px;
+            }
+            .proj-stat-value {
+                font-size: 15px;
+                font-weight: 700;
+                color: #1a1a1a;
+                margin: 0;
+                line-height: 1.2;
+            }
+            .proj-stat-value.accent {
                 color: #c0392b;
-                border-radius: 20px;
-                padding: 2px 10px;
+            }
+            .proj-stat-sub {
+                font-size: 11px;
+                color: #aaa;
+                font-weight: 400;
+                margin-top: 2px;
+            }
+            .proj-sizes-row {
+                padding: 12px 24px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            .proj-sizes-label {
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.6px;
+                color: #999;
+                white-space: nowrap;
+            }
+            .proj-size-chip {
+                background: #f5f5f5;
+                border: 1px solid #e0e0e0;
+                color: #333;
+                border-radius: 6px;
+                padding: 3px 10px;
                 font-size: 12px;
                 font-weight: 600;
             }
-            .project-address-row {
-                margin-top: 14px;
-                padding-top: 14px;
-                border-top: 1px dashed #e0e0e0;
+            .proj-address {
+                padding: 10px 24px 14px;
+                font-size: 13px;
+                color: #666;
                 display: flex;
                 align-items: flex-start;
-                gap: 8px;
-                font-size: 13px;
-                color: #555;
+                gap: 6px;
+                border-top: 1px solid #f0f0f0;
             }
-            .project-address-row i {
-                color: #e74c3c;
-                font-size: 15px;
+            .proj-address i {
+                color: #bbb;
                 margin-top: 1px;
                 flex-shrink: 0;
             }
@@ -134,72 +183,67 @@
                 </div>
             </div>
 
-            {{-- PROJECT DETAILS CARD --}}
-            <div class="project-detail-card mb-4">
-                <div class="project-detail-header">
-                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                        <div>
-                            <div class="project-title">{{ $project->name }}</div>
-                            <div class="project-subtitle">
-                                <i class="ri-map-pin-2-line me-1"></i>{{ $project->city ?? 'Jaipur' }}
-                                &nbsp;|&nbsp; जयपुर विकास प्राधिकरण द्वारा अनुमोदित
-                            </div>
+            {{-- PROJECT INFO PANEL --}}
+            <div class="proj-panel">
+                {{-- Top: Name + Status --}}
+                <div class="proj-panel-top">
+                    <div>
+                        <div class="proj-panel-name">{{ $project->name }}</div>
+                        <div class="proj-panel-meta">
+                            <i class="ri-map-pin-2-fill"></i>
+                            {{ $project->city ?? 'Jaipur' }}
+                            <span style="color:#ddd;">|</span>
+                            जयपुर विकास प्राधिकरण द्वारा अनुमोदित
                         </div>
-                        <span class="badge bg-white text-success fw-semibold px-3 py-2 fs-13 rounded-pill">
-                            <i class="ri-checkbox-circle-fill me-1"></i> Registration Open
-                        </span>
+                    </div>
+                    <div class="proj-status-pill">
+                        <span class="dot"></span> Registration Open
                     </div>
                 </div>
-                <div class="project-detail-body">
-                    <div class="info-grid">
-                        {{-- Type --}}
-                        <div class="info-item">
-                            <div class="info-label">Property Type</div>
-                            <div class="info-value">
-                                @if($project->inventory_type === 'flat')
-                                    <i class="ri-building-2-line me-1 text-danger"></i> Flat
-                                @else
-                                    <i class="ri-layout-grid-line me-1 text-danger"></i> Plot
-                                @endif
-                            </div>
+
+                {{-- Stats Strip --}}
+                <div class="proj-stats">
+                    <div class="proj-stat-item">
+                        <div class="proj-stat-label">Property Type</div>
+                        <div class="proj-stat-value">
+                            @if($project->inventory_type === 'flat') Flat @else Plot @endif
                         </div>
-                        {{-- Price --}}
-                        @if($project->price)
-                        <div class="info-item highlight">
-                            <div class="info-label">Base Price</div>
-                            <div class="info-value">
-                                ₹ {{ number_format($project->price) }}
-                                @if($project->inventory_type !== 'flat') <small class="fw-normal text-muted">/ sq.yd</small>@endif
-                            </div>
-                        </div>
-                        @endif
-                        {{-- Booking Amount --}}
-                        <div class="info-item highlight">
-                            <div class="info-label">Registration Amount</div>
-                            <div class="info-value">₹ {{ number_format(\App\Models\FrontendSetting::getVal('booking_amount', 21100)) }}</div>
-                        </div>
-                        {{-- Available Sizes --}}
-                        @if(count($sizes) > 0)
-                        <div class="info-item" style="grid-column: span 1;">
-                            <div class="info-label">
-                                @if($project->inventory_type === 'flat') Available Flat Sizes @else Available Plot Sizes (Sq Yds) @endif
-                            </div>
-                            <div class="sizes-wrap">
-                                @foreach($sizes as $sz)
-                                    <span class="size-badge">{{ $sz }}</span>
-                                @endforeach
-                            </div>
-                        </div>
-                        @endif
                     </div>
-                    {{-- Address --}}
-                    @if($project->address)
-                    <div class="project-address-row">
-                        <i class="ri-map-pin-line"></i>
-                        <span>{{ $project->address }}</span>
+                    @if($project->price)
+                    <div class="proj-stat-item">
+                        <div class="proj-stat-label">Base Price</div>
+                        <div class="proj-stat-value accent">₹ {{ number_format($project->price) }}</div>
+                        @if($project->inventory_type !== 'flat')
+                        <div class="proj-stat-sub">per sq. yard</div>
+                        @endif
                     </div>
                     @endif
+                    <div class="proj-stat-item">
+                        <div class="proj-stat-label">Registration Amount</div>
+                        <div class="proj-stat-value accent">₹ {{ number_format(\App\Models\FrontendSetting::getVal('booking_amount', 21100)) }}</div>
+                        <div class="proj-stat-sub">One-time, refundable</div>
+                    </div>
                 </div>
+
+                {{-- Available Sizes --}}
+                @if(count($sizes) > 0)
+                <div class="proj-sizes-row">
+                    <span class="proj-sizes-label">
+                        @if($project->inventory_type === 'flat') Flat Sizes: @else Plot Sizes (Sq Yds): @endif
+                    </span>
+                    @foreach($sizes as $sz)
+                        <span class="proj-size-chip">{{ $sz }}</span>
+                    @endforeach
+                </div>
+                @endif
+
+                {{-- Address --}}
+                @if($project->address)
+                <div class="proj-address">
+                    <i class="ri-map-pin-line"></i>
+                    <span>{{ $project->address }}</span>
+                </div>
+                @endif
             </div>
 
             <div class="card border-0 p-0">
