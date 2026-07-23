@@ -6,7 +6,7 @@
     <title>Customer Deal Details</title>
     <style>
     body {
-        font-family: 'hind', 'Arial', sans-serif;
+        font-family: 'Helvetica', 'Arial', sans-serif;
         color: #212529;
         font-size: 13px;
     }
