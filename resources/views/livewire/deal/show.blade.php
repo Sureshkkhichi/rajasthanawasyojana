@@ -146,21 +146,15 @@
                                         <i class="ri-printer-line align-middle me-1"></i> Demand Letter
                                     </a>
                                     <button class="btn btn-primary" 
-                                            wire:click="sendEmail" 
+                                            wire:click="openEmailModal" 
                                             wire:loading.attr="disabled"
-                                            wire:target="sendEmail, sendSms, cancelAllotment">
-                                        <span wire:loading.remove wire:target="sendEmail">
-                                            <i class="ri-mail-send-line align-middle me-1"></i> Send Email
-                                        </span>
-                                        <span wire:loading wire:target="sendEmail">
-                                            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                            Sending...
-                                        </span>
+                                            wire:target="openEmailModal, sendSms, cancelAllotment">
+                                        <i class="ri-mail-send-line align-middle me-1"></i> Send Email
                                     </button>
                                     <button class="btn btn-info" 
                                             wire:click="sendSms" 
                                             wire:loading.attr="disabled"
-                                            wire:target="sendEmail, sendSms, cancelAllotment">
+                                            wire:target="openEmailModal, sendSms, cancelAllotment">
                                         <i class="ri-message-2-line align-middle me-1"></i> Send SMS
                                     </button>
                                 </div>
@@ -178,29 +172,16 @@
                                             @if($deal->allottedInventory?->inventory_type === 'flat')
                                                 <strong>Flat Number {{ $deal->allottedInventory->flat_no }}</strong> (Floor: {{ $deal->allottedInventory->floor }}, Type: {{ $deal->allottedInventory->unit_type_label }})
                                             @else
-                                                <strong>Plot Number {{ $deal->allottedInventory?->plot_no }}</strong> (Area: {{ $deal->allottedInventory?->area_sq_yards }} Sq. Yards)
+                                                <strong>Plot Number {{ $deal->allottedInventory?->plot_no }}</strong> (Type: {{ $deal->allottedInventory->unit_type_label }})
                                             @endif
-                                            in project <strong>{{ $deal->project?->name }}</strong>.
-                                        </p>
-                                        <p class="mb-0 text-muted fs-13 mt-1">
-                                            Booking Date: {{ $deal->booking_date ? $deal->booking_date->format('d M Y h:i A') : '-' }} | Booking Amount: ₹{{ number_format($deal->booking_amount, 2) }} | Total Value: ₹{{ number_format($deal->total_amount, 2) }}
                                         </p>
                                     </div>
-                                    <div class="flex-shrink-0 ms-3">
-                                        <button class="btn btn-danger" 
-                                                wire:click="cancelAllotment" 
-                                                wire:loading.attr="disabled"
-                                                wire:target="downloadAllotment, downloadDemand, cancelAllotment"
-                                                wire:confirm="Are you sure you want to cancel this unit allotment? This will return the unit to Available status.">
-                                            <span wire:loading.remove wire:target="cancelAllotment">
-                                                <i class="ri-close-circle-line me-1"></i> Cancel Allotment
-                                            </span>
-                                            <span wire:loading wire:target="cancelAllotment">
-                                                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                                Cancelling Allotment...
-                                            </span>
-                                        </button>
-                                    </div>
+                                    <button class="btn btn-outline-danger btn-sm ms-3" 
+                                            wire:click="cancelAllotment"
+                                            wire:confirm="Are you sure you want to cancel this unit allotment?"
+                                            wire:loading.attr="disabled">
+                                        <i class="ri-close-circle-line me-1"></i> Cancel Allotment
+                                    </button>
                                 </div>
                             @else
                                 {{-- Unit not allotted yet, show warning and button to proceed to allotment page --}}
@@ -225,6 +206,80 @@
             </div>
         </div>
     </div>
+
+    {{-- Send Email with PDF Selection Modal --}}
+    @if($showEmailModal)
+        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5); z-index: 1055;">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title text-white d-flex align-items-center">
+                            <i class="ri-mail-send-line me-2 fs-18"></i> Send Allotment & Demand Letters Email
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" wire:click="closeEmailModal"></button>
+                    </div>
+                    <form wire:submit.prevent="sendEmail">
+                        <div class="modal-body p-4">
+                            <div class="alert alert-soft-info d-flex align-items-center mb-4" role="alert">
+                                <i class="ri-information-line fs-20 me-2"></i>
+                                <div>
+                                    Please select the <strong>Allotment Letter PDF</strong> and <strong>Demand Letter PDF</strong> saved from your browser print preview to send to the customer.
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Customer Email Address <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control @error('email_recipient') is-invalid @enderror" wire:model="email_recipient" placeholder="Enter customer email address">
+                                @error('email_recipient') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="border rounded p-3 bg-light">
+                                        <label class="form-label fw-semibold d-block mb-1">
+                                            <i class="ri-file-pdf-2-line text-danger me-1"></i> Allotment Letter PDF <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="file" class="form-control @error('allotment_pdf_file') is-invalid @enderror" wire:model="allotment_pdf_file" accept=".pdf">
+                                        <small class="text-muted d-block mt-1">Select Allotment Letter PDF file.</small>
+                                        @error('allotment_pdf_file') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                        @if($allotment_pdf_file)
+                                            <div class="text-success fs-12 mt-2 fw-semibold"><i class="ri-checkbox-circle-fill me-1"></i> {{ $allotment_pdf_file->getClientOriginalName() }}</div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <div class="border rounded p-3 bg-light">
+                                        <label class="form-label fw-semibold d-block mb-1">
+                                            <i class="ri-file-pdf-2-line text-danger me-1"></i> Demand Letter PDF <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="file" class="form-control @error('demand_pdf_file') is-invalid @enderror" wire:model="demand_pdf_file" accept=".pdf">
+                                        <small class="text-muted d-block mt-1">Select Demand Letter PDF file.</small>
+                                        @error('demand_pdf_file') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                        @if($demand_pdf_file)
+                                            <div class="text-success fs-12 mt-2 fw-semibold"><i class="ri-checkbox-circle-fill me-1"></i> {{ $demand_pdf_file->getClientOriginalName() }}</div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-light px-4 py-3">
+                            <button type="button" class="btn btn-light me-2" wire:click="closeEmailModal">Cancel</button>
+                            <button type="submit" class="btn btn-primary px-4" wire:loading.attr="disabled" wire:target="sendEmail, allotment_pdf_file, demand_pdf_file">
+                                <span wire:loading.remove wire:target="sendEmail">
+                                    <i class="ri-send-plane-fill me-1"></i> Send Email
+                                </span>
+                                <span wire:loading wire:target="sendEmail">
+                                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                    Sending Email & Attachments...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
 
     @push('styles')
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">

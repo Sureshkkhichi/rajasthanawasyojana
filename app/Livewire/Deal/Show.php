@@ -12,11 +12,19 @@ use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\AllotmentMail;
 
+use Livewire\WithFileUploads;
+
 #[Layout('layouts.app')]
 #[Title('Deal Details')]
 class Show extends Component
 {
+    use WithFileUploads;
+
     public Deal $deal;
+    public bool $showEmailModal = false;
+    public $allotment_pdf_file;
+    public $demand_pdf_file;
+    public string $email_recipient = '';
 
     public function mount(Deal $deal): void
     {
@@ -30,83 +38,29 @@ class Show extends Component
             'agent',
             'allottedInventory'
         ]);
+        $this->email_recipient = $this->deal->email ?: '';
     }
 
-    public function cancelAllotment(): void
+    public function openEmailModal(): void
     {
         if (!$this->deal->allotted_inventory_id) {
             $this->dispatch('swal:alert', [
                 'title' => 'Error!',
-                'text' => 'No allotted unit found to cancel.',
+                'text' => 'No allotted unit found to send email.',
                 'icon' => 'error'
             ]);
             return;
         }
 
-        $inventory = $this->deal->allottedInventory;
-        if ($inventory) {
-            $inventory->update(['status' => 'Available']);
-        }
-
-        $this->deal->update([
-            'allotted_inventory_id' => null,
-            'allotted_at' => null
-        ]);
-
-        $this->deal->load(['project', 'agent', 'allottedInventory']);
-
-        $this->dispatch('swal:alert', [
-            'title' => 'Allotment Cancelled!',
-            'text' => 'Unit allotment has been successfully cancelled and the unit is now available.',
-            'icon' => 'warning'
-        ]);
+        $this->reset(['allotment_pdf_file', 'demand_pdf_file']);
+        $this->resetErrorBag();
+        $this->email_recipient = $this->deal->email ?: '';
+        $this->showEmailModal = true;
     }
 
-    public function downloadAllotment()
+    public function closeEmailModal(): void
     {
-        $project_contact_phone = \App\Models\FrontendSetting::getVal('mobile_number_1', '7374044044');
-        $inventory = $this->deal->allottedInventory;
-
-        $html = view('emails.allotment-pdf', [
-            'project' => $this->deal->project,
-            'deal' => $this->deal,
-            'inventory' => $inventory,
-            'project_contact_phone' => $project_contact_phone,
-        ])->render();
-
-        $pdf = Pdf::loadHTML(reshapeDevanagari($html));
-
-        return response()->streamDownload(
-            fn () => print($pdf->output()),
-            "allotment-letter-{$this->deal->id}.pdf"
-        );
-    }
-
-    public function downloadDemand()
-    {
-        $project_contact_phone = \App\Models\FrontendSetting::getVal('mobile_number_1', '7374044044');
-        $inventory = $this->deal->allottedInventory;
-
-        $bookingAmount = 21100.00;
-        $totalAmount = $this->deal->total_amount ?: ($inventory->price ?: 0.00);
-        $balanceDue = max(0.00, $totalAmount - $bookingAmount);
-
-        $html = view('emails.demand-pdf', [
-            'project' => $this->deal->project,
-            'deal' => $this->deal,
-            'inventory' => $inventory,
-            'bookingAmount' => $bookingAmount,
-            'totalAmount' => $totalAmount,
-            'balanceDue' => $balanceDue,
-            'project_contact_phone' => $project_contact_phone,
-        ])->render();
-
-        $pdf = Pdf::loadHTML(reshapeDevanagari($html));
-
-        return response()->streamDownload(
-            fn () => print($pdf->output()),
-            "demand-letter-{$this->deal->id}.pdf"
-        );
+        $this->showEmailModal = false;
     }
 
     public function sendEmail(): void
@@ -120,44 +74,28 @@ class Show extends Component
             return;
         }
 
-        if (empty($this->deal->email)) {
-            $this->dispatch('swal:alert', [
-                'title' => 'Error!',
-                'text' => 'Customer email address is missing.',
-                'icon' => 'error'
-            ]);
-            return;
-        }
+        $this->validate([
+            'email_recipient' => 'required|email',
+            'allotment_pdf_file' => 'required|file|mimes:pdf|max:10240',
+            'demand_pdf_file' => 'required|file|mimes:pdf|max:10240',
+        ], [
+            'email_recipient.required' => 'Customer email address is required.',
+            'email_recipient.email' => 'Please enter a valid email address.',
+            'allotment_pdf_file.required' => 'Please select the Allotment Letter PDF file.',
+            'allotment_pdf_file.mimes' => 'Allotment Letter file must be a PDF.',
+            'demand_pdf_file.required' => 'Please select the Demand Letter PDF file.',
+            'demand_pdf_file.mimes' => 'Demand Letter file must be a PDF.',
+        ]);
 
         try {
             $project_contact_phone = \App\Models\FrontendSetting::getVal('mobile_number_1', '7374044044');
             $inventory = $this->deal->allottedInventory;
 
-            // 1. Generate Allotment Letter PDF
-            $allotmentPdf = $this->generatePdfBinary('emails.allotment-pdf', [
-                'project' => $this->deal->project,
-                'deal' => $this->deal,
-                'inventory' => $inventory,
-                'project_contact_phone' => $project_contact_phone,
-            ]);
-
-            // 2. Generate Demand Letter PDF
-            $bookingAmount = (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100.00);
-            $totalAmount = $this->deal->total_amount ?: ($inventory->price ?: 0.00);
-            $balanceDue = max(0.00, $totalAmount - $bookingAmount);
-
-            $demandPdf = $this->generatePdfBinary('emails.demand-pdf', [
-                'project' => $this->deal->project,
-                'deal' => $this->deal,
-                'inventory' => $inventory,
-                'bookingAmount' => $bookingAmount,
-                'totalAmount' => $totalAmount,
-                'balanceDue' => $balanceDue,
-                'project_contact_phone' => $project_contact_phone,
-            ]);
+            $allotmentPdf = file_get_contents($this->allotment_pdf_file->getRealPath());
+            $demandPdf = file_get_contents($this->demand_pdf_file->getRealPath());
 
             // Send Mail
-            Mail::to($this->deal->email)
+            Mail::to($this->email_recipient)
                 ->cc('suresh5313@gmail.com')
                 ->send(new AllotmentMail(
                     $this->deal,
@@ -168,9 +106,11 @@ class Show extends Component
                     $demandPdf
                 ));
 
+            $this->showEmailModal = false;
+
             $this->dispatch('swal:alert', [
-                'title' => 'Email Sent!',
-                'text' => 'Allotment and Demand letters have been sent successfully to ' . $this->deal->email,
+                'title' => 'Email Sent Successfully!',
+                'text' => 'Allotment and Demand letters have been sent to ' . $this->email_recipient,
                 'icon' => 'success'
             ]);
         } catch (\Exception $e) {
