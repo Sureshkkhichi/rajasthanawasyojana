@@ -2,5 +2,8 @@
     "hind": {
         "normal": "\/Users\/karankumar\/Documents\/RajasthanAwasYojana\/rajasthanawasyojana\/storage\/fonts\/hind_normal_cb0e93afb7c7dc9012d07ecd185dc2f3",
         "bold": "hind_bold_b879073b644ad45daf80b6cbe9d1cd74"
+    },
+    "noto sans devanagari": {
+        "normal": "noto_sans_devanagari_normal_1513d5fcfe370ee8d515fe4b8234af7a"
     }
 }

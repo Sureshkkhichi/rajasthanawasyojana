@@ -133,32 +133,23 @@ class Show extends Component
             $project_contact_phone = \App\Models\FrontendSetting::getVal('mobile_number_1', '7374044044');
             $inventory = $this->deal->allottedInventory;
 
-            // Prepare base64 background image for DomPDF email attachment
-            $bgImagePath = public_path('back_img.png');
-            $bgBase64 = file_exists($bgImagePath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($bgImagePath)) : asset('back_img.png');
-
             // 1. Generate Allotment Letter PDF
-            $allotmentHtml = view('emails.allotment-pdf', [
+            $allotmentHtml = $this->preparePdfHtmlForEmail('emails.allotment-pdf', [
                 'project' => $this->deal->project,
                 'deal' => $this->deal,
                 'inventory' => $inventory,
                 'project_contact_phone' => $project_contact_phone,
-            ])->render();
-
-            $allotmentHtml = str_replace([
-                asset('back_img.png'),
-                'https://rajasthanawasyojana.com/admin/img/back_img.png',
-                'https://www.rajasthanawasyojana.com/admin/img/back_img.png'
-            ], $bgBase64, $allotmentHtml);
-
-            $allotmentPdf = Pdf::loadHTML(reshapeDevanagari($allotmentHtml))->output();
+            ]);
+            $allotmentPdfObj = Pdf::loadHTML($allotmentHtml);
+            $allotmentPdfObj->setPaper('a4', 'portrait');
+            $allotmentPdf = $allotmentPdfObj->output();
 
             // 2. Generate Demand Letter PDF
             $bookingAmount = (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100.00);
             $totalAmount = $this->deal->total_amount ?: ($inventory->price ?: 0.00);
             $balanceDue = max(0.00, $totalAmount - $bookingAmount);
 
-            $demandHtml = view('emails.demand-pdf', [
+            $demandHtml = $this->preparePdfHtmlForEmail('emails.demand-pdf', [
                 'project' => $this->deal->project,
                 'deal' => $this->deal,
                 'inventory' => $inventory,
@@ -166,15 +157,10 @@ class Show extends Component
                 'totalAmount' => $totalAmount,
                 'balanceDue' => $balanceDue,
                 'project_contact_phone' => $project_contact_phone,
-            ])->render();
-
-            $demandHtml = str_replace([
-                asset('back_img.png'),
-                'https://rajasthanawasyojana.com/admin/img/back_img.png',
-                'https://www.rajasthanawasyojana.com/admin/img/back_img.png'
-            ], $bgBase64, $demandHtml);
-
-            $demandPdf = Pdf::loadHTML(reshapeDevanagari($demandHtml))->output();
+            ]);
+            $demandPdfObj = Pdf::loadHTML($demandHtml);
+            $demandPdfObj->setPaper('a4', 'portrait');
+            $demandPdf = $demandPdfObj->output();
 
             // Send Mail
             Mail::to($this->deal->email)
@@ -210,6 +196,48 @@ class Show extends Component
             'text' => 'SMS functionality is triggered (service integration pending).',
             'icon' => 'info'
         ]);
+    }
+
+    private function preparePdfHtmlForEmail(string $viewName, array $data): string
+    {
+        $html = view($viewName, $data)->render();
+
+        // 1. Replace background image URL with base64 data URI for DomPDF
+        $bgImagePath = public_path('back_img.png');
+        $bgBase64 = file_exists($bgImagePath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($bgImagePath)) : asset('back_img.png');
+
+        $html = str_replace([
+            asset('back_img.png'),
+            'https://rajasthanawasyojana.com/admin/img/back_img.png',
+            'https://www.rajasthanawasyojana.com/admin/img/back_img.png'
+        ], $bgBase64, $html);
+
+        // 2. Fix A4 height & remove @media screen margins so DomPDF generates exactly 1 page
+        $html = str_replace('min-height: 297mm;', 'height: 297mm; max-height: 297mm;', $html);
+        $html = str_replace('margin: 20px auto;', 'margin: 0 auto;', $html);
+        $html = str_replace('background: #e0e0e0;', 'background: #ffffff;', $html);
+
+        // 3. Inject Noto Sans Devanagari font for DomPDF
+        $fontPath = storage_path('fonts/NotoSansDevanagari.ttf');
+        if (file_exists($fontPath)) {
+            $cssFont = '<style>
+            @font-face {
+                font-family: "Noto Sans Devanagari";
+                font-style: normal;
+                font-weight: 400;
+                src: url("' . $fontPath . '") format("truetype");
+            }
+            body, table, td, th, div, span, p, *, html {
+                font-family: "Noto Sans Devanagari", sans-serif !important;
+            }
+            </style>';
+            $html = str_replace('</head>', $cssFont . '</head>', $html);
+        }
+
+        // 4. Reorder short i matra for DomPDF rendering
+        $html = preg_replace('/((?:[\x{0915}-\x{0939}]\x{094d})?[\x{0915}-\x{0939}])\x{093f}/u', 'ि$1', $html);
+
+        return $html;
     }
 
     public function render()
