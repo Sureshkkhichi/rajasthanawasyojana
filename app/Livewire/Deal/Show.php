@@ -134,22 +134,19 @@ class Show extends Component
             $inventory = $this->deal->allottedInventory;
 
             // 1. Generate Allotment Letter PDF
-            $allotmentHtml = $this->preparePdfHtmlForEmail('emails.allotment-pdf', [
+            $allotmentPdf = $this->generatePdfBinary('emails.allotment-pdf', [
                 'project' => $this->deal->project,
                 'deal' => $this->deal,
                 'inventory' => $inventory,
                 'project_contact_phone' => $project_contact_phone,
             ]);
-            $allotmentPdfObj = Pdf::loadHTML($allotmentHtml);
-            $allotmentPdfObj->setPaper('a4', 'portrait');
-            $allotmentPdf = $allotmentPdfObj->output();
 
             // 2. Generate Demand Letter PDF
             $bookingAmount = (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100.00);
             $totalAmount = $this->deal->total_amount ?: ($inventory->price ?: 0.00);
             $balanceDue = max(0.00, $totalAmount - $bookingAmount);
 
-            $demandHtml = $this->preparePdfHtmlForEmail('emails.demand-pdf', [
+            $demandPdf = $this->generatePdfBinary('emails.demand-pdf', [
                 'project' => $this->deal->project,
                 'deal' => $this->deal,
                 'inventory' => $inventory,
@@ -158,9 +155,6 @@ class Show extends Component
                 'balanceDue' => $balanceDue,
                 'project_contact_phone' => $project_contact_phone,
             ]);
-            $demandPdfObj = Pdf::loadHTML($demandHtml);
-            $demandPdfObj->setPaper('a4', 'portrait');
-            $demandPdf = $demandPdfObj->output();
 
             // Send Mail
             Mail::to($this->deal->email)
@@ -198,11 +192,11 @@ class Show extends Component
         ]);
     }
 
-    private function preparePdfHtmlForEmail(string $viewName, array $data): string
+    private function generatePdfBinary(string $viewName, array $data): string
     {
         $html = view($viewName, $data)->render();
 
-        // 1. Replace background image URL with base64 data URI for DomPDF
+        // Prepare Base64 background image
         $bgImagePath = public_path('back_img.png');
         $bgBase64 = file_exists($bgImagePath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($bgImagePath)) : asset('back_img.png');
 
@@ -212,38 +206,88 @@ class Show extends Component
             'https://www.rajasthanawasyojana.com/admin/img/back_img.png'
         ], $bgBase64, $html);
 
-        // 2. Fix A4 height & remove @media screen margins so DomPDF generates exactly 1 page
-        $html = str_replace('min-height: 297mm;', 'height: 297mm; max-height: 297mm;', $html);
-        $html = str_replace('margin: 20px auto;', 'margin: 0 auto;', $html);
-        $html = str_replace('background: #e0e0e0;', 'background: #ffffff;', $html);
+        // Add Chrome Print CSS for exact 1-page A4 printing with full Devanagari font rendering
+        $chromePrintCss = '<style>
+        @page {
+            size: A4 portrait;
+            margin: 0mm;
+        }
+        body {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            margin: 0 !important;
+        }
+        .page-wrapper {
+            margin: 0 auto !important;
+            box-shadow: none !important;
+        }
+        </style>';
+        $htmlForChrome = str_replace('</head>', $chromePrintCss . '</head>', $html);
 
-        // 3. Inject Mukta Devanagari font specifically for DomPDF email attachment
+        // 1. Try Chrome Headless (100% Perfect Chromium Devanagari font rendering)
+        $chromePaths = [
+            '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+            '/usr/bin/google-chrome',
+            '/usr/bin/chromium-browser',
+            '/usr/bin/chromium',
+            'google-chrome',
+            'chromium',
+            'chrome'
+        ];
+
+        foreach ($chromePaths as $binary) {
+            if (file_exists($binary) || ($binary !== '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' && @shell_exec("which " . escapeshellarg($binary)))) {
+                $tempHtml = tempnam(sys_get_temp_dir(), 'pdf_') . '.html';
+                $tempPdf = tempnam(sys_get_temp_dir(), 'pdf_') . '.pdf';
+
+                file_put_contents($tempHtml, $htmlForChrome);
+
+                $cmd = sprintf(
+                    '%s --headless --disable-gpu --no-sandbox --print-to-pdf=%s --no-pdf-header-footer %s 2>&1',
+                    escapeshellarg($binary),
+                    escapeshellarg($tempPdf),
+                    escapeshellarg($tempHtml)
+                );
+
+                exec($cmd, $output, $returnCode);
+                @unlink($tempHtml);
+
+                if ($returnCode === 0 && file_exists($tempPdf) && filesize($tempPdf) > 0) {
+                    $pdfContent = file_get_contents($tempPdf);
+                    @unlink($tempPdf);
+                    return $pdfContent;
+                }
+                @unlink($tempPdf);
+            }
+        }
+
+        // 2. Fallback to DomPDF if Chrome Headless is not available on server
+        $htmlDompdf = str_replace('min-height: 297mm;', 'height: 297mm; max-height: 297mm;', $html);
+        $htmlDompdf = str_replace('margin: 20px auto;', 'margin: 0 auto;', $htmlDompdf);
+        $htmlDompdf = str_replace('background: #e0e0e0;', 'background: #ffffff;', $htmlDompdf);
+
         $regularFont = storage_path('fonts/Mukta-Regular.ttf');
         $boldFont = storage_path('fonts/Mukta-Bold.ttf');
-
         if (file_exists($regularFont) && file_exists($boldFont)) {
             $cssFont = '<style>
             @font-face {
-                font-family: "Mukta";
-                font-style: normal;
-                font-weight: 400;
+                font-family: "Mukta"; font-style: normal; font-weight: 400;
                 src: url("' . $regularFont . '") format("truetype");
             }
             @font-face {
-                font-family: "Mukta";
-                font-style: normal;
-                font-weight: 700;
+                font-family: "Mukta"; font-style: normal; font-weight: 700;
                 src: url("' . $boldFont . '") format("truetype");
             }
             body, table, td, th, div, span, p, *, html {
                 font-family: "Mukta", sans-serif !important;
             }
             </style>';
-            $html = str_replace('</head>', $cssFont . '</head>', $html);
+            $htmlDompdf = str_replace('</head>', $cssFont . '</head>', $htmlDompdf);
         }
 
-        // 4. Apply reshapeDevanagari for DomPDF
-        return reshapeDevanagari($html);
+        $pdfObj = Pdf::loadHTML(reshapeDevanagari($htmlDompdf));
+        $pdfObj->setPaper('a4', 'portrait');
+        return $pdfObj->output();
     }
 
     public function render()
