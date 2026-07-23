@@ -133,6 +133,10 @@ class Show extends Component
             $project_contact_phone = \App\Models\FrontendSetting::getVal('mobile_number_1', '7374044044');
             $inventory = $this->deal->allottedInventory;
 
+            // Prepare base64 background image for DomPDF email attachment
+            $bgImagePath = public_path('back_img.png');
+            $bgBase64 = file_exists($bgImagePath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($bgImagePath)) : asset('back_img.png');
+
             // 1. Generate Allotment Letter PDF
             $allotmentHtml = view('emails.allotment-pdf', [
                 'project' => $this->deal->project,
@@ -140,6 +144,13 @@ class Show extends Component
                 'inventory' => $inventory,
                 'project_contact_phone' => $project_contact_phone,
             ])->render();
+
+            $allotmentHtml = str_replace([
+                asset('back_img.png'),
+                'https://rajasthanawasyojana.com/admin/img/back_img.png',
+                'https://www.rajasthanawasyojana.com/admin/img/back_img.png'
+            ], $bgBase64, $allotmentHtml);
+
             $allotmentPdf = Pdf::loadHTML(reshapeDevanagari($allotmentHtml))->output();
 
             // 2. Generate Demand Letter PDF
@@ -156,6 +167,13 @@ class Show extends Component
                 'balanceDue' => $balanceDue,
                 'project_contact_phone' => $project_contact_phone,
             ])->render();
+
+            $demandHtml = str_replace([
+                asset('back_img.png'),
+                'https://rajasthanawasyojana.com/admin/img/back_img.png',
+                'https://www.rajasthanawasyojana.com/admin/img/back_img.png'
+            ], $bgBase64, $demandHtml);
+
             $demandPdf = Pdf::loadHTML(reshapeDevanagari($demandHtml))->output();
 
             // Send Mail

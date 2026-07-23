@@ -1,7 +1,3 @@
-@php
-    $bgImagePath = public_path('back_img.png');
-    $bgImageData = file_exists($bgImagePath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($bgImagePath)) : asset('back_img.png');
-@endphp
 <!DOCTYPE html>
 <html lang="hi">
 
@@ -11,22 +7,9 @@
     <title>मांग पत्र</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @font-face {
-            font-family: 'Hind';
-            font-style: normal;
-            font-weight: 400;
-            src: url("{{ storage_path('fonts/Hind-Regular.ttf') }}") format('truetype');
-        }
-        @font-face {
-            font-family: 'Hind';
-            font-style: normal;
-            font-weight: 700;
-            src: url("{{ storage_path('fonts/Hind-Bold.ttf') }}") format('truetype');
-        }
-
         @page {
             size: A4 portrait;
-            margin: 0px;
+            margin: 0mm;
         }
 
         * {
@@ -37,21 +20,17 @@
         }
 
         html, body {
-            margin: 0px;
-            padding: 0px;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+            margin: 0;
+            padding: 0;
             font-family: 'Hind', Arial, sans-serif;
             color: #333;
         }
 
         .page-wrapper {
             position: relative;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
             overflow: hidden;
         }
 
@@ -68,12 +47,13 @@
             width: 100%;
             height: 100%;
             display: block;
+            object-fit: fill;
         }
 
         .content {
             position: relative;
             z-index: 1;
-            padding: 16mm 16mm 10mm 16mm;
+            padding: 22mm 18mm 12mm 18mm;
         }
 
         /* Header */
@@ -218,13 +198,22 @@
             margin-top: 4px;
         }
 
-        body {
-            background: #fff;
+        @media screen {
+            body { background: #e0e0e0; }
+            .page-wrapper {
+                box-shadow: 0 0 20px rgba(0,0,0,0.3);
+                margin: 20px auto;
+            }
         }
 
-        .page-wrapper {
-            box-shadow: none;
-            margin: 0 auto;
+        @media print {
+            body { background: none !important; }
+            .page-wrapper {
+                width: 100%;
+                min-height: 100vh;
+                margin: 0;
+                box-shadow: none;
+            }
         }
     </style>
 </head>
@@ -233,7 +222,7 @@
     <div class="page-wrapper">
         <!-- Background as actual img tag so it always prints -->
         <div class="bg-image">
-            <img src="{{ $bgImageData }}" alt="" />
+            <img src="https://rajasthanawasyojana.com/admin/img/back_img.png" alt="" />
         </div>
 
         <div class="content">
