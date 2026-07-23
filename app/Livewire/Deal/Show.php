@@ -217,27 +217,16 @@ class Show extends Component
         $html = str_replace('margin: 20px auto;', 'margin: 0 auto;', $html);
         $html = str_replace('background: #e0e0e0;', 'background: #ffffff;', $html);
 
-        // 3. Inject Noto Sans Devanagari font for DomPDF
-        $fontPath = storage_path('fonts/NotoSansDevanagari.ttf');
-        if (file_exists($fontPath)) {
-            $cssFont = '<style>
-            @font-face {
-                font-family: "Noto Sans Devanagari";
-                font-style: normal;
-                font-weight: 400;
-                src: url("' . $fontPath . '") format("truetype");
-            }
-            body, table, td, th, div, span, p, *, html {
-                font-family: "Noto Sans Devanagari", sans-serif !important;
-            }
-            </style>';
-            $html = str_replace('</head>', $cssFont . '</head>', $html);
+        // 3. Inject registered "hind" font for DomPDF (pre-compiled .ufm metrics in storage/fonts)
+        $cssFont = '<style>
+        body, table, td, th, div, span, p, *, html {
+            font-family: "hind", sans-serif !important;
         }
+        </style>';
+        $html = str_replace('</head>', $cssFont . '</head>', $html);
 
-        // 4. Reorder short i matra for DomPDF rendering
-        $html = preg_replace('/((?:[\x{0915}-\x{0939}]\x{094d})?[\x{0915}-\x{0939}])\x{093f}/u', 'ि$1', $html);
-
-        return $html;
+        // 4. Apply reshapeDevanagari for DomPDF
+        return reshapeDevanagari($html);
     }
 
     public function render()
