@@ -261,10 +261,35 @@ class Show extends Component
             }
         }
 
-        // 2. Fallback to DomPDF if Chrome Headless is not available on server
+        // 2. Fallback to DomPDF with GD FreeType Devanagari text rendering for Hostinger Shared Hosting
         $htmlDompdf = str_replace('min-height: 297mm;', 'height: 297mm; max-height: 297mm;', $html);
         $htmlDompdf = str_replace('margin: 20px auto;', 'margin: 0 auto;', $htmlDompdf);
         $htmlDompdf = str_replace('background: #e0e0e0;', 'background: #ffffff;', $htmlDompdf);
+
+        // Replace title badges with crisp FreeType Devanagari images
+        $badgeAllotmentDataUri = $this->renderDevanagariTextToPng('आवंटन पत्र', 18, '#ffffff', '#d32f2f', true);
+        if ($badgeAllotmentDataUri) {
+            $htmlDompdf = str_replace('<div class="badge-box">आवंटन पत्र</div>', '<div style="text-align:center; margin-bottom:14px;"><img src="' . $badgeAllotmentDataUri . '" style="height:36px; display:inline-block;" /></div>', $htmlDompdf);
+        }
+
+        $badgeDemandDataUri = $this->renderDevanagariTextToPng('मांग पत्र', 18, '#ffffff', '#d32f2f', true);
+        if ($badgeDemandDataUri) {
+            $htmlDompdf = str_replace('<div class="badge-box">मांग पत्र</div>', '<div style="text-align:center; margin-bottom:14px;"><img src="' . $badgeDemandDataUri . '" style="height:36px; display:inline-block;" /></div>', $htmlDompdf);
+        }
+
+        // Replace key unshaped text lines with FreeType rendered text images for 100% perfect Hostinger PDF rendering
+        $phrases = [
+            'जयपुर विकास प्राधिकरण द्वारा अनुमोदित' => $this->renderDevanagariTextToPng('जयपुर विकास प्राधिकरण द्वारा अनुमोदित', 16, '#333333', null, true),
+            'विषय:- आवासीय भूखण्ड \ फ्लैट \ व्यवसायिक भूखण्ड आवंटन की सूचना बाबत !' => $this->renderDevanagariTextToPng('विषय:- आवासीय भूखण्ड \ फ्लैट \ व्यवसायिक भूखण्ड आवंटन की सूचना बाबत !', 13, '#333333', null, true),
+            'क्षेत्रफल (वर्ग फीट में)' => $this->renderDevanagariTextToPng('क्षेत्रफल (वर्ग फीट में)', 12, '#333333', null, true),
+            'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।' => $this->renderDevanagariTextToPng('नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।', 11, '#333333', null, true),
+        ];
+
+        foreach ($phrases as $search => $uri) {
+            if ($uri) {
+                $htmlDompdf = str_replace($search, '<img src="' . $uri . '" style="vertical-align:middle; max-height:22px;" />', $htmlDompdf);
+            }
+        }
 
         $regularFont = storage_path('fonts/Mukta-Regular.ttf');
         $boldFont = storage_path('fonts/Mukta-Bold.ttf');
@@ -288,6 +313,50 @@ class Show extends Component
         $pdfObj = Pdf::loadHTML(reshapeDevanagari($htmlDompdf));
         $pdfObj->setPaper('a4', 'portrait');
         return $pdfObj->output();
+    }
+
+    private function renderDevanagariTextToPng(string $text, int $fontSize = 14, string $fontColor = '#333333', ?string $bgColor = null, bool $isBold = false): ?string
+    {
+        if (!extension_loaded('gd')) {
+            return null;
+        }
+
+        $fontFile = $isBold ? storage_path('fonts/Mukta-Bold.ttf') : storage_path('fonts/Mukta-Regular.ttf');
+        if (!file_exists($fontFile)) {
+            $fontFile = storage_path('fonts/Hind-Bold.ttf');
+        }
+        if (!file_exists($fontFile)) {
+            return null;
+        }
+
+        $bbox = imagettfbbox($fontSize, 0, $fontFile, $text);
+        $width = abs($bbox[4] - $bbox[0]) + 16;
+        $height = abs($bbox[5] - $bbox[1]) + 14;
+
+        $image = imagecreatetruecolor($width, $height);
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+
+        $hex = ltrim($fontColor, '#');
+        $textColor = imagecolorallocate($image, hexdec(substr($hex, 0, 2)), hexdec(substr($hex, 2, 2)), hexdec(substr($hex, 4, 2)));
+
+        if ($bgColor) {
+            $bgHex = ltrim($bgColor, '#');
+            $background = imagecolorallocate($image, hexdec(substr($bgHex, 0, 2)), hexdec(substr($bgHex, 2, 2)), hexdec(substr($bgHex, 4, 2)));
+            imagefilledrectangle($image, 0, 0, $width, $height, $background);
+        } else {
+            $transparent = imagecolorallocatealpha($image, 255, 255, 255, 127);
+            imagefilledrectangle($image, 0, 0, $width, $height, $transparent);
+        }
+
+        imagettftext($image, $fontSize, 0, 8, $fontSize + 5, $textColor, $fontFile, $text);
+
+        ob_start();
+        imagepng($image);
+        $imageData = ob_get_clean();
+        imagedestroy($image);
+
+        return 'data:image/png;base64,' . base64_encode($imageData);
     }
 
     public function render()
