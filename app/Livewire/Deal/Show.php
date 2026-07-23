@@ -109,6 +109,91 @@ class Show extends Component
         );
     }
 
+    public function sendEmail(): void
+    {
+        if (!$this->deal->allotted_inventory_id) {
+            $this->dispatch('swal:alert', [
+                'title' => 'Error!',
+                'text' => 'No allotted unit found to send email.',
+                'icon' => 'error'
+            ]);
+            return;
+        }
+
+        if (empty($this->deal->email)) {
+            $this->dispatch('swal:alert', [
+                'title' => 'Error!',
+                'text' => 'Customer email address is missing.',
+                'icon' => 'error'
+            ]);
+            return;
+        }
+
+        try {
+            $project_contact_phone = \App\Models\FrontendSetting::getVal('mobile_number_1', '7374044044');
+            $inventory = $this->deal->allottedInventory;
+
+            // 1. Generate Allotment Letter PDF
+            $allotmentHtml = view('emails.allotment-pdf', [
+                'project' => $this->deal->project,
+                'deal' => $this->deal,
+                'inventory' => $inventory,
+                'project_contact_phone' => $project_contact_phone,
+            ])->render();
+            $allotmentPdf = Pdf::loadHTML(reshapeDevanagari($allotmentHtml))->output();
+
+            // 2. Generate Demand Letter PDF
+            $bookingAmount = (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100.00);
+            $totalAmount = $this->deal->total_amount ?: ($inventory->price ?: 0.00);
+            $balanceDue = max(0.00, $totalAmount - $bookingAmount);
+
+            $demandHtml = view('emails.demand-pdf', [
+                'project' => $this->deal->project,
+                'deal' => $this->deal,
+                'inventory' => $inventory,
+                'bookingAmount' => $bookingAmount,
+                'totalAmount' => $totalAmount,
+                'balanceDue' => $balanceDue,
+                'project_contact_phone' => $project_contact_phone,
+            ])->render();
+            $demandPdf = Pdf::loadHTML(reshapeDevanagari($demandHtml))->output();
+
+            // Send Mail
+            Mail::to($this->deal->email)
+                ->cc('suresh5313@gmail.com')
+                ->send(new AllotmentMail(
+                    $this->deal,
+                    $this->deal->project,
+                    $inventory,
+                    $project_contact_phone,
+                    $allotmentPdf,
+                    $demandPdf
+                ));
+
+            $this->dispatch('swal:alert', [
+                'title' => 'Email Sent!',
+                'text' => 'Allotment and Demand letters have been sent successfully to ' . $this->deal->email,
+                'icon' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to send allotment & demand email: ' . $e->getMessage());
+            $this->dispatch('swal:alert', [
+                'title' => 'Email Error!',
+                'text' => 'Failed to send email: ' . $e->getMessage(),
+                'icon' => 'error'
+            ]);
+        }
+    }
+
+    public function sendSms(): void
+    {
+        $this->dispatch('swal:alert', [
+            'title' => 'SMS Notification',
+            'text' => 'SMS functionality is triggered (service integration pending).',
+            'icon' => 'info'
+        ]);
+    }
+
     public function render()
     {
         return view('livewire.deal.show');

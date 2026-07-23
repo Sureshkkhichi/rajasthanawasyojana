@@ -21,14 +21,15 @@ class AllotmentMail extends Mailable
         public Project $project,
         public Inventory $inventory,
         public string $project_contact_phone,
-        protected $pdfData
+        protected $allotmentPdfData,
+        protected $demandPdfData = null
     ) {
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Flat/Plot Allotment Letter - ' . $this->project->name
+            subject: 'Allotment Letter & Demand Letter - ' . $this->project->name
         );
     }
 
@@ -41,9 +42,16 @@ class AllotmentMail extends Mailable
 
     public function attachments(): array
     {
-        return [
-            Attachment::fromData(fn () => $this->pdfData, 'allotment-letter.pdf')
+        $attachments = [
+            Attachment::fromData(fn () => $this->allotmentPdfData, 'Allotment-Letter-' . $this->deal->id . '.pdf')
                 ->withMime('application/pdf'),
         ];
+
+        if ($this->demandPdfData) {
+            $attachments[] = Attachment::fromData(fn () => $this->demandPdfData, 'Demand-Letter-' . $this->deal->id . '.pdf')
+                ->withMime('application/pdf');
+        }
+
+        return $attachments;
     }
 }

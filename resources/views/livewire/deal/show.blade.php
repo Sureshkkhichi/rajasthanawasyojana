@@ -131,11 +131,11 @@
             <div class="row mt-3">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
                             <h4 class="card-title mb-0">Allotment Details</h4>
                             @if($deal->allotted_inventory_id)
-                                <div>
-                                    <a class="btn btn-success me-2" 
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a class="btn btn-success" 
                                        href="{{ route('deals.allotment-letter', $deal->id) }}" 
                                        target="_blank">
                                         <i class="ri-printer-line align-middle me-1"></i> Allotment Letter
@@ -145,6 +145,24 @@
                                        target="_blank">
                                         <i class="ri-printer-line align-middle me-1"></i> Demand Letter
                                     </a>
+                                    <button class="btn btn-primary" 
+                                            wire:click="sendEmail" 
+                                            wire:loading.attr="disabled"
+                                            wire:target="sendEmail, sendSms, cancelAllotment">
+                                        <span wire:loading.remove wire:target="sendEmail">
+                                            <i class="ri-mail-send-line align-middle me-1"></i> Send Email
+                                        </span>
+                                        <span wire:loading wire:target="sendEmail">
+                                            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                            Sending...
+                                        </span>
+                                    </button>
+                                    <button class="btn btn-info" 
+                                            wire:click="sendSms" 
+                                            wire:loading.attr="disabled"
+                                            wire:target="sendEmail, sendSms, cancelAllotment">
+                                        <i class="ri-message-2-line align-middle me-1"></i> Send SMS
+                                    </button>
                                 </div>
                             @endif
                         </div>

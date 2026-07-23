@@ -33,7 +33,7 @@
             </tr>
         </table>
         
-        <p>Please find the official <strong>Allotment Letter (आवंटन पत्र)</strong> attached to this email as a PDF document for your records.</p>
+        <p>Please find the official <strong>Allotment Letter (आवंटन पत्र)</strong> and <strong>Demand Letter (मांग पत्र)</strong> attached to this email as PDF documents for your records.</p>
         
         <p>If you have any questions or require further assistance, feel free to contact us at {{ $project_contact_phone }}.</p>
         
