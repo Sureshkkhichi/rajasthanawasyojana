@@ -235,12 +235,19 @@
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <div class="border rounded p-3 bg-light">
-                                        <label class="form-label fw-semibold d-block mb-1">
-                                            <i class="ri-file-pdf-2-line text-danger me-1"></i> Allotment Letter PDF <span class="text-danger">*</span>
-                                        </label>
+                                    <div class="border rounded p-3 bg-light h-100">
+                                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+                                            <label class="form-label fw-semibold mb-0">
+                                                <i class="ri-file-pdf-2-line text-danger me-1"></i> Allotment Letter PDF <span class="text-danger">*</span>
+                                            </label>
+                                            <a href="{{ route('deals.allotment-letter', $deal->id) }}" target="_blank" class="btn btn-soft-success btn-sm py-1 px-2">
+                                                <i class="ri-printer-line me-1"></i> View / Print
+                                            </a>
+                                        </div>
                                         <input type="file" class="form-control @error('allotment_pdf_file') is-invalid @enderror" wire:model="allotment_pdf_file" accept=".pdf">
-                                        <small class="text-muted d-block mt-1">Select Allotment Letter PDF file.</small>
+                                        <small class="text-muted d-block mt-1 fs-11">
+                                            <i class="ri-arrow-right-s-line me-1"></i>Click <strong>View / Print</strong> & save as PDF, then select file here.
+                                        </small>
                                         @error('allotment_pdf_file') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                         @if($allotment_pdf_file)
                                             <div class="text-success fs-12 mt-2 fw-semibold"><i class="ri-checkbox-circle-fill me-1"></i> {{ $allotment_pdf_file->getClientOriginalName() }}</div>
@@ -249,12 +256,19 @@
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <div class="border rounded p-3 bg-light">
-                                        <label class="form-label fw-semibold d-block mb-1">
-                                            <i class="ri-file-pdf-2-line text-danger me-1"></i> Demand Letter PDF <span class="text-danger">*</span>
-                                        </label>
+                                    <div class="border rounded p-3 bg-light h-100">
+                                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+                                            <label class="form-label fw-semibold mb-0">
+                                                <i class="ri-file-pdf-2-line text-danger me-1"></i> Demand Letter PDF <span class="text-danger">*</span>
+                                            </label>
+                                            <a href="{{ route('deals.demand-letter', $deal->id) }}" target="_blank" class="btn btn-soft-warning btn-sm py-1 px-2">
+                                                <i class="ri-printer-line me-1"></i> View / Print
+                                            </a>
+                                        </div>
                                         <input type="file" class="form-control @error('demand_pdf_file') is-invalid @enderror" wire:model="demand_pdf_file" accept=".pdf">
-                                        <small class="text-muted d-block mt-1">Select Demand Letter PDF file.</small>
+                                        <small class="text-muted d-block mt-1 fs-11">
+                                            <i class="ri-arrow-right-s-line me-1"></i>Click <strong>View / Print</strong> & save as PDF, then select file here.
+                                        </small>
                                         @error('demand_pdf_file') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                         @if($demand_pdf_file)
                                             <div class="text-success fs-12 mt-2 fw-semibold"><i class="ri-checkbox-circle-fill me-1"></i> {{ $demand_pdf_file->getClientOriginalName() }}</div>
