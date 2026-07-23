@@ -5,5 +5,12 @@
     },
     "noto sans devanagari": {
         "normal": "noto_sans_devanagari_normal_1513d5fcfe370ee8d515fe4b8234af7a"
+    },
+    "tiro devanagari": {
+        "normal": "tiro_devanagari_normal_7e7eb06d86efad9e7311a7b042d48041"
+    },
+    "mukta": {
+        "normal": "\/Users\/karankumar\/Documents\/RajasthanAwasYojana\/rajasthanawasyojana\/storage\/fonts\/mukta_normal_a417a20f50e2384b942bdd99bc19722e",
+        "bold": "mukta_bold_b786b252315b77ce76796a2c62ca1d20"
     }
 }

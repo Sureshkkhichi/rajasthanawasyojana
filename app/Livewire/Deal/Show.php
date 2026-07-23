@@ -217,13 +217,30 @@ class Show extends Component
         $html = str_replace('margin: 20px auto;', 'margin: 0 auto;', $html);
         $html = str_replace('background: #e0e0e0;', 'background: #ffffff;', $html);
 
-        // 3. Inject registered "hind" font for DomPDF (pre-compiled .ufm metrics in storage/fonts)
-        $cssFont = '<style>
-        body, table, td, th, div, span, p, *, html {
-            font-family: "hind", sans-serif !important;
+        // 3. Inject Mukta Devanagari font specifically for DomPDF email attachment
+        $regularFont = storage_path('fonts/Mukta-Regular.ttf');
+        $boldFont = storage_path('fonts/Mukta-Bold.ttf');
+
+        if (file_exists($regularFont) && file_exists($boldFont)) {
+            $cssFont = '<style>
+            @font-face {
+                font-family: "Mukta";
+                font-style: normal;
+                font-weight: 400;
+                src: url("' . $regularFont . '") format("truetype");
+            }
+            @font-face {
+                font-family: "Mukta";
+                font-style: normal;
+                font-weight: 700;
+                src: url("' . $boldFont . '") format("truetype");
+            }
+            body, table, td, th, div, span, p, *, html {
+                font-family: "Mukta", sans-serif !important;
+            }
+            </style>';
+            $html = str_replace('</head>', $cssFont . '</head>', $html);
         }
-        </style>';
-        $html = str_replace('</head>', $cssFont . '</head>', $html);
 
         // 4. Apply reshapeDevanagari for DomPDF
         return reshapeDevanagari($html);
