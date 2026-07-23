@@ -26,7 +26,7 @@
 
         @page {
             size: A4 portrait;
-            margin: 0mm;
+            margin: 0px;
         }
 
         * {
@@ -36,24 +36,20 @@
             box-sizing: border-box;
         }
 
-        html {
-            margin: 0;
-            padding: 0;
+        html, body {
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Hind', Arial, sans-serif;
-            color: #333;
-        }
-
-        /* Background image wrapper — covers entire page including print */
         .page-wrapper {
             position: relative;
-            width: 210mm;
-            min-height: 297mm;
-            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
             overflow: hidden;
         }
 
@@ -70,13 +66,12 @@
             width: 100%;
             height: 100%;
             display: block;
-            object-fit: fill;
         }
 
         .content {
             position: relative;
             z-index: 1;
-            padding: 25mm 18mm 15mm 18mm;
+            padding: 16mm 16mm 10mm 16mm;
         }
 
         .header {
@@ -188,28 +183,13 @@
             vertical-align: top;
         }
 
-        @media screen {
-            body {
-                background: #e0e0e0;
-            }
-
-            .page-wrapper {
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-                margin: 20px auto;
-            }
+        body {
+            background: #fff;
         }
 
-        @media print {
-            body {
-                background: none !important;
-            }
-
-            .page-wrapper {
-                width: 100%;
-                min-height: 100vh;
-                margin: 0;
-                box-shadow: none;
-            }
+        .page-wrapper {
+            box-shadow: none;
+            margin: 0 auto;
         }
     </style>
 </head>
