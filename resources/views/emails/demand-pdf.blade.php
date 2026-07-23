@@ -1,3 +1,7 @@
+@php
+    $bgImagePath = public_path('back_img.png');
+    $bgImageData = file_exists($bgImagePath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($bgImagePath)) : asset('back_img.png');
+@endphp
 <!DOCTYPE html>
 <html lang="hi">
 
@@ -7,6 +11,19 @@
     <title>मांग पत्र</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'Hind';
+            font-style: normal;
+            font-weight: 400;
+            src: url("{{ storage_path('fonts/Hind-Regular.ttf') }}") format('truetype');
+        }
+        @font-face {
+            font-family: 'Hind';
+            font-style: normal;
+            font-weight: 700;
+            src: url("{{ storage_path('fonts/Hind-Bold.ttf') }}") format('truetype');
+        }
+
         @page {
             size: A4 portrait;
             margin: 0mm;
@@ -222,7 +239,7 @@
     <div class="page-wrapper">
         <!-- Background as actual img tag so it always prints -->
         <div class="bg-image">
-            <img src="https://rajasthanawasyojana.com/admin/img/back_img.png" alt="" />
+            <img src="{{ $bgImageData }}" alt="" />
         </div>
 
         <div class="content">
