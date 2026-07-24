@@ -249,13 +249,13 @@
                                                      @endif
                                                  </td>
                                                  <td>{{ $deal->flat_size ?: '-' }}</td>
-                                                 <td class="text-end text-nowrap">
-                                                     @if($deal->total_amount)
-                                                         ₹ {{ number_format($deal->total_amount, 2) }}
-                                                     @else
-                                                         ₹
-                                                     @endif
-                                                 </td>
+                                                  <td class="text-end text-nowrap">
+                                                      @if($deal->calculated_total_amount > 0)
+                                                          ₹ {{ number_format($deal->calculated_total_amount, 2) }}
+                                                      @else
+                                                          -
+                                                      @endif
+                                                  </td>
                                                  {{-- Payment Status: always Paid for a deal --}}
                                                  <td>
                                                      <span class="badge bg-success px-2 py-1 fs-12">Paid</span>

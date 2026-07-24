@@ -181,7 +181,11 @@ class PaymentController extends Controller
             }
 
             if (!$unitPrice) {
-                $unitPrice = $project->price;
+                if ($project->inventory_type === 'plot' && is_numeric($lead->flat_size) && (float)$lead->flat_size > 0 && is_numeric($project->price)) {
+                    $unitPrice = (float)$project->price * (float)$lead->flat_size;
+                } else {
+                    $unitPrice = $project->price;
+                }
             }
 
             // Create Deal
