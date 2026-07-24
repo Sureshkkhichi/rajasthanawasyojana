@@ -753,7 +753,6 @@ class Index extends Component
             'available' => 0,
             'hold' => 0,
             'sold' => 0,
-            'alloted' => 0,
             'blocked' => 0,
         ];
 
@@ -761,8 +760,7 @@ class Index extends Component
             $counts['total'] = Inventory::where('project_id', $this->selectedProjectId)->count();
             $counts['available'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Available')->count();
             $counts['hold'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Hold')->count();
-            $counts['sold'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Sold')->count();
-            $counts['alloted'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Alloted')->count();
+            $counts['sold'] = Inventory::where('project_id', $this->selectedProjectId)->whereIn('status', ['Sold', 'Alloted'])->count();
             $counts['blocked'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Blocked')->count();
         }
 

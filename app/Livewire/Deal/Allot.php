@@ -70,7 +70,7 @@ class Allot extends Component
         }
 
         // Lock unit status
-        $unit->update(['status' => 'Alloted']);
+        $unit->update(['status' => 'Sold']);
 
         // Link unit to deal
         $this->deal->update([
@@ -82,7 +82,7 @@ class Allot extends Component
         \App\Models\InventoryHistory::create([
             'inventory_id' => $unit->id,
             'from_status' => 'Available',
-            'to_status' => 'Alloted',
+            'to_status' => 'Sold',
             'changed_by' => auth()->user()->name,
             'notes' => 'Unit allotted via Deals Allotment Page to: ' . $this->deal->first_name . ' ' . $this->deal->last_name,
         ]);

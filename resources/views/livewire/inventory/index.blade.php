@@ -47,7 +47,6 @@
                                 <option value="Available">Available</option>
                                 <option value="Hold">Hold</option>
                                 <option value="Sold">Sold</option>
-                                <option value="Alloted">Alloted</option>
                                 <option value="Cancelled">Cancelled</option>
                             </select>
                         </div>
@@ -78,7 +77,7 @@
             {{-- Summary Cards --}}
             <div class="row">
                 {{-- Card 1: Total Units --}}
-                <div class="col-lg col-md-4 col-sm-6 mb-3">
+                <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card card-animate h-100 shadow-sm border-0 border-start border-3 border-primary">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -99,7 +98,7 @@
                 </div>
 
                 {{-- Card 2: Available --}}
-                <div class="col-lg col-md-4 col-sm-6 mb-3">
+                <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card card-animate h-100 shadow-sm border-0 border-start border-3 border-success">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -120,7 +119,7 @@
                 </div>
 
                 {{-- Card 3: Hold --}}
-                <div class="col-lg col-md-4 col-sm-6 mb-3">
+                <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card card-animate h-100 shadow-sm border-0 border-start border-3 border-warning">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -141,7 +140,7 @@
                 </div>
 
                 {{-- Card 4: Sold --}}
-                <div class="col-lg col-md-4 col-sm-6 mb-3">
+                <div class="col-lg-3 col-md-6 mb-3">
                     <div class="card card-animate h-100 shadow-sm border-0 border-start border-3 border-danger">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -155,27 +154,6 @@
                                         {{ $inventory_type === 'Flat Project' ? 'Sold Flats' : 'Sold Plots' }}
                                     </p>
                                     <h4 class="mb-0 fw-bold"><span class="counter-value" data-target="{{ $counts['sold'] }}">{{ $counts['sold'] }}</span></h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Card 5: Alloted --}}
-                <div class="col-lg col-md-4 col-sm-6 mb-3">
-                    <div class="card card-animate h-100 shadow-sm border-0 border-start border-3 border-info">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-info-subtle text-info rounded-circle fs-3 shadow-none">
-                                        <i class="ri-award-line align-middle"></i>
-                                    </span>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
-                                        {{ $inventory_type === 'Flat Project' ? 'Alloted Flats' : 'Alloted Plots' }}
-                                    </p>
-                                    <h4 class="mb-0 fw-bold"><span class="counter-value" data-target="{{ $counts['alloted'] }}">{{ $counts['alloted'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
@@ -215,12 +193,6 @@
                                         <a class="nav-link {{ $activeTab === 'Sold' ? 'active text-danger' : 'text-muted' }} fw-bold" href="javascript:void(0);" wire:click="setTab('Sold')">
                                             Sold
                                             <span class="badge bg-danger-subtle text-danger ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['sold'] }}</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link {{ $activeTab === 'Alloted' ? 'active text-info' : 'text-muted' }} fw-bold" href="javascript:void(0);" wire:click="setTab('Alloted')">
-                                            Alloted
-                                            <span class="badge bg-info-subtle text-info ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['alloted'] }}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -333,11 +305,6 @@
                                                             <li>
                                                                 <button class="dropdown-item py-2" type="button" wire:click="openSoldModal('{{ $unit->id }}')">
                                                                     <i class="ri-checkbox-circle-line align-bottom me-2 text-danger"></i> Mark Sold
-                                                                </button>
-                                                            </li>
-                                                            <li>
-                                                                <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Available')">
-                                                                    <i class="ri-checkbox-circle-line align-bottom me-2 text-success"></i> Mark Available
                                                                 </button>
                                                             </li>
                                                             <li>

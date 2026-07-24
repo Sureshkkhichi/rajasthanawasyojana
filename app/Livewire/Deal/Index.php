@@ -237,12 +237,12 @@ class Index extends Component
             ]);
 
             $oldStatus = $unit->status;
-            $unit->update(['status' => 'Alloted']);
+            $unit->update(['status' => 'Sold']);
 
             \App\Models\InventoryHistory::create([
                 'inventory_id' => $unit->id,
                 'from_status' => $oldStatus,
-                'to_status' => 'Alloted',
+                'to_status' => 'Sold',
                 'changed_by' => auth()->user()->name,
                 'notes' => 'Unit allotted via Deal Action Allotment: ' . $deal->first_name . ' ' . $deal->last_name,
             ]);
