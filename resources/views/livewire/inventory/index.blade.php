@@ -763,10 +763,17 @@
                                     open: false,
                                     search: '',
                                     selectedId: @entangle('newDealForm.state_id').live,
+                                    items: {{ json_encode($states->map(fn($s) => ['id' => (string)$s->id, 'name' => (string)$s->name])) }},
                                     get selectedLabel() {
                                         if (!this.selectedId) return 'Select State';
-                                        let found = Array.from($refs.stateSelectOptions?.children || []).find(el => el.dataset.id == this.selectedId);
-                                        return found ? found.dataset.name : 'Select State';
+                                        let found = (this.items || []).find(i => i.id == this.selectedId);
+                                        return found ? found.name : 'Select State';
+                                    },
+                                    get filteredItems() {
+                                        let list = this.items || [];
+                                        if (!this.search || !this.search.trim()) return list;
+                                        let q = this.search.toLowerCase().trim();
+                                        return list.filter(i => (i.name || '').toLowerCase().includes(q));
                                     }
                                 }">
                                     <label class="form-label fw-semibold text-muted mb-1">State <span class="text-danger">*</span></label>
@@ -797,20 +804,21 @@
                                                 <button type="button" class="btn btn-light border-start-0" x-show="search" @click="search = ''"><i class="ri-close-line"></i></button>
                                             </div>
                                             
-                                            <div x-ref="stateSelectOptions" class="d-flex flex-column gap-1">
-                                                @foreach($states as $st)
-                                                    <div data-id="{{ $st->id }}" data-name="{{ $st->name }}"
-                                                        x-show="!search || '{{ strtolower(addslashes($st->name)) }}'.includes(search.toLowerCase())"
-                                                        class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
-                                                        :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $st->id }}' }"
-                                                        @click="selectedId = '{{ $st->id }}'; open = false; search = '';"
+                                            <div class="d-flex flex-column gap-1">
+                                                <template x-for="st in filteredItems" :key="st.id">
+                                                    <div class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
+                                                        :class="{ 'bg-primary text-white fw-bold': selectedId == st.id }"
+                                                        @click="selectedId = st.id; open = false; search = '';"
                                                         style="cursor: pointer;">
-                                                        <span>{{ $st->name }}</span>
-                                                        <template x-if="selectedId == '{{ $st->id }}'">
+                                                        <span x-text="st.name"></span>
+                                                        <template x-if="selectedId == st.id">
                                                             <i class="ri-check-line"></i>
                                                         </template>
                                                     </div>
-                                                @endforeach
+                                                </template>
+                                                <div x-show="filteredItems.length === 0" class="text-muted fs-12 text-center py-2">
+                                                    No state found
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -822,10 +830,19 @@
                                     open: false,
                                     search: '',
                                     selectedId: @entangle('newDealForm.city_id'),
+                                    get items() {
+                                        return $wire.cities || [];
+                                    },
                                     get selectedLabel() {
                                         if (!this.selectedId) return 'Select City';
-                                        let found = Array.from($refs.citySelectOptions?.children || []).find(el => el.dataset.id == this.selectedId);
-                                        return found ? found.dataset.name : 'Select City';
+                                        let found = (this.items || []).find(i => i.id == this.selectedId);
+                                        return found ? found.name : 'Select City';
+                                    },
+                                    get filteredItems() {
+                                        let list = this.items || [];
+                                        if (!this.search || !this.search.trim()) return list;
+                                        let q = this.search.toLowerCase().trim();
+                                        return list.filter(i => (i.name || '').toLowerCase().includes(q));
                                     }
                                 }">
                                     <label class="form-label fw-semibold text-muted mb-1">City <span class="text-danger">*</span></label>
@@ -856,20 +873,21 @@
                                                 <button type="button" class="btn btn-light border-start-0" x-show="search" @click="search = ''"><i class="ri-close-line"></i></button>
                                             </div>
                                             
-                                            <div x-ref="citySelectOptions" class="d-flex flex-column gap-1">
-                                                @foreach($cities as $ct)
-                                                    <div data-id="{{ $ct->id }}" data-name="{{ $ct->name }}"
-                                                        x-show="!search || '{{ strtolower(addslashes($ct->name)) }}'.includes(search.toLowerCase())"
-                                                        class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
-                                                        :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $ct->id }}' }"
-                                                        @click="selectedId = '{{ $ct->id }}'; open = false; search = '';"
+                                            <div class="d-flex flex-column gap-1">
+                                                <template x-for="ct in filteredItems" :key="ct.id">
+                                                    <div class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
+                                                        :class="{ 'bg-primary text-white fw-bold': selectedId == ct.id }"
+                                                        @click="selectedId = ct.id; open = false; search = '';"
                                                         style="cursor: pointer;">
-                                                        <span>{{ $ct->name }}</span>
-                                                        <template x-if="selectedId == '{{ $ct->id }}'">
+                                                        <span x-text="ct.name"></span>
+                                                        <template x-if="selectedId == ct.id">
                                                             <i class="ri-check-line"></i>
                                                         </template>
                                                     </div>
-                                                @endforeach
+                                                </template>
+                                                <div x-show="filteredItems.length === 0" class="text-muted fs-12 text-center py-2">
+                                                    No city found
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
