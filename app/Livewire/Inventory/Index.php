@@ -94,17 +94,6 @@ class Index extends Component
             403
         );
 
-        if (!$this->selectedProjectId) {
-            $firstProject = Project::query()
-                ->where('status', 'active')
-                ->where('is_active', 'active')
-                ->first();
-
-            if ($firstProject) {
-                $this->selectedProjectId = $firstProject->id;
-            }
-        }
-
         if ($this->statusFilter && $this->activeTab === 'all') {
             $this->activeTab = $this->statusFilter;
         }
@@ -199,20 +188,12 @@ class Index extends Component
     public function resetFilters(): void
     {
         $this->reset([
+            'selectedProjectId',
             'statusFilter',
             'facingFilter',
             'searchPlot',
             'activeTab',
         ]);
-
-        $firstProject = Project::query()
-            ->where('status', 'active')
-            ->where('is_active', 'active')
-            ->first();
-
-        if ($firstProject) {
-            $this->selectedProjectId = $firstProject->id;
-        }
 
         $this->updateInventoryType();
         $this->resetPage();
