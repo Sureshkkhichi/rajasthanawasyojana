@@ -571,7 +571,7 @@
     </div>
 
     {{-- Mark Sold & Allot Deal Modal --}}
-    <div id="soldModalContainer" class="modal fade @if($soldModalOpen) show d-block @endif" tabindex="-1"
+    <div id="soldModalContainer" class="modal fade @if($soldModalOpen) show d-block @endif"
         style="background-color: rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-dialog-centered @if($createNewDealMode) modal-lg @endif">
             <div class="modal-content shadow-lg border-0 rounded-4">
@@ -1042,6 +1042,10 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.addEventListener('livewire:init', () => {
+                if (window.jQuery && $.fn.modal && $.fn.modal.Constructor && $.fn.modal.Constructor.prototype) {
+                    $.fn.modal.Constructor.prototype._enforceFocus = function() {};
+                }
+
                 Livewire.on('swal:alert', (event) => {
                     const data = event[0];
                     Swal.fire({
@@ -1053,8 +1057,6 @@
                     });
                 });
 
-                let isUpdatingState = false;
-
                 const initSoldSelect2 = () => {
                     if ($('#sold_state_id').length && typeof $.fn.select2 !== 'undefined') {
                         if (!$('#sold_state_id').hasClass('select2-hidden-accessible')) {
@@ -1062,10 +1064,10 @@
                                 dropdownParent: $('#soldModalContainer'),
                                 placeholder: 'Select State',
                                 allowClear: true
-                            }).on('change', function(e) {
-                                if (!isUpdatingState) {
-                                    @this.set('newDealForm.state_id', e.target.value);
-                                }
+                            }).on('select2:select', function(e) {
+                                @this.set('newDealForm.state_id', e.params.data.id);
+                            }).on('select2:clear', function() {
+                                @this.set('newDealForm.state_id', '');
                             });
                         }
                     }
@@ -1076,10 +1078,10 @@
                                 dropdownParent: $('#soldModalContainer'),
                                 placeholder: 'Select City',
                                 allowClear: true
-                            }).on('change', function(e) {
-                                if (!isUpdatingState) {
-                                    @this.set('newDealForm.city_id', e.target.value);
-                                }
+                            }).on('select2:select', function(e) {
+                                @this.set('newDealForm.city_id', e.params.data.id);
+                            }).on('select2:clear', function() {
+                                @this.set('newDealForm.city_id', '');
                             });
                         }
                     }
@@ -1087,7 +1089,6 @@
 
                 // Listen for Sold Modal Opened
                 Livewire.on('sold-modal-opened', (eventData) => {
-                    isUpdatingState = true;
                     setTimeout(() => {
                         initSoldSelect2();
                         let payload = (Array.isArray(eventData) ? eventData[0] : eventData) || {};
@@ -1105,13 +1106,11 @@
                             });
                         }
                         citySelect.val(payload.city_id || '').trigger('change.select2');
-                        isUpdatingState = false;
                     }, 100);
                 });
 
                 // Listen for State change and Cities update
                 Livewire.on('sold-cities-updated', (eventData) => {
-                    isUpdatingState = true;
                     let payload = (Array.isArray(eventData) ? eventData[0] : eventData) || {};
                     let citiesList = payload.cities || [];
                     let citySelect = $('#sold_city_id');
@@ -1122,7 +1121,6 @@
                         });
                     }
                     citySelect.val('').trigger('change.select2');
-                    isUpdatingState = false;
                 });
 
                 setTimeout(initSoldSelect2, 150);
