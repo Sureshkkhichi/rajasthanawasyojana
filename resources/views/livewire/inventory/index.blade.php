@@ -761,7 +761,6 @@
                                 <!-- State -->
                                 <div class="col-md-4" x-data="{
                                     open: false,
-                                    search: '',
                                     selectedId: @entangle('newDealForm.state_id').live,
                                     get selectedLabel() {
                                         if (!this.selectedId) return 'Select State';
@@ -771,19 +770,24 @@
                                     selectState(id) {
                                         this.selectedId = id;
                                         this.open = false;
-                                        this.search = '';
                                         $wire.selectStateId(id);
-                                    },
-                                    matches(name) {
-                                        if (!this.search || !this.search.trim()) return true;
-                                        return name.toLowerCase().includes(this.search.toLowerCase().trim());
                                     }
                                 }">
                                     <label class="form-label fw-semibold text-muted mb-1">State <span class="text-danger">*</span></label>
                                     <div class="position-relative">
                                         <button type="button" 
                                             class="form-select border-2 text-start d-flex align-items-center justify-content-between bg-white shadow-none"
-                                            @click="open = !open; if(open) $nextTick(() => $refs.stateSearchInput.focus())"
+                                            @click="
+                                                open = !open; 
+                                                if(open) { 
+                                                    $nextTick(() => { 
+                                                        let inp = $refs.stateSearchInput; 
+                                                        if(inp) { inp.value = ''; inp.focus(); }
+                                                        let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
+                                                        items.forEach(el => el.style.display = 'flex'); 
+                                                    }); 
+                                                }
+                                            "
                                             style="height: 42px;">
                                             <span x-text="selectedLabel" :class="{ 'text-muted': !selectedId }" class="text-truncate">Select State</span>
                                         </button>
@@ -799,12 +803,27 @@
                                             <div class="input-group input-group-sm mb-2">
                                                 <span class="input-group-text bg-light border-end-0"><i class="ri-search-line text-muted"></i></span>
                                                 <input type="text" 
-                                                    x-model="search" 
                                                     class="form-control border-start-0 shadow-none" 
                                                     placeholder="Search state..."
                                                     @click.stop
-                                                    x-ref="stateSearchInput">
-                                                <button type="button" class="btn btn-light border-start-0" x-show="search" @click="search = ''"><i class="ri-close-line"></i></button>
+                                                    x-ref="stateSearchInput"
+                                                    oninput="
+                                                        let q = this.value.toLowerCase().trim();
+                                                        let items = this.closest('.position-relative').querySelectorAll('.state-item-option');
+                                                        items.forEach(el => {
+                                                            let name = (el.getAttribute('data-name') || '').toLowerCase();
+                                                            el.style.display = (!q || name.includes(q)) ? 'flex' : 'none';
+                                                        });
+                                                    ">
+                                                <button type="button" class="btn btn-light border-start-0" 
+                                                    @click="
+                                                        $refs.stateSearchInput.value = ''; 
+                                                        let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
+                                                        items.forEach(el => el.style.display = 'flex');
+                                                        $refs.stateSearchInput.focus();
+                                                    ">
+                                                    <i class="ri-close-line"></i>
+                                                </button>
                                             </div>
                                             
                                             <div class="d-flex flex-column gap-1">
@@ -812,8 +831,7 @@
                                                     <div id="state-option-{{ $st->id }}"
                                                         data-id="{{ $st->id }}" 
                                                         data-name="{{ $st->name }}"
-                                                        x-show="matches(@js($st->name))"
-                                                        class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
+                                                        class="state-item-option px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
                                                         :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $st->id }}' }"
                                                         @click="selectState('{{ $st->id }}')"
                                                         style="cursor: pointer;">
@@ -832,7 +850,6 @@
                                 <!-- City -->
                                 <div class="col-md-4" x-data="{
                                     open: false,
-                                    search: '',
                                     selectedId: @entangle('newDealForm.city_id'),
                                     get selectedLabel() {
                                         if (!this.selectedId) return 'Select City';
@@ -842,19 +859,24 @@
                                     selectCity(id) {
                                         this.selectedId = id;
                                         this.open = false;
-                                        this.search = '';
                                         $wire.set('newDealForm.city_id', id);
-                                    },
-                                    matches(name) {
-                                        if (!this.search || !this.search.trim()) return true;
-                                        return name.toLowerCase().includes(this.search.toLowerCase().trim());
                                     }
                                 }">
                                     <label class="form-label fw-semibold text-muted mb-1">City <span class="text-danger">*</span></label>
                                     <div class="position-relative">
                                         <button type="button" 
                                             class="form-select border-2 text-start d-flex align-items-center justify-content-between bg-white shadow-none"
-                                            @click="open = !open; if(open) $nextTick(() => $refs.citySearchInput.focus())"
+                                            @click="
+                                                open = !open; 
+                                                if(open) { 
+                                                    $nextTick(() => { 
+                                                        let inp = $refs.citySearchInput; 
+                                                        if(inp) { inp.value = ''; inp.focus(); }
+                                                        let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
+                                                        items.forEach(el => el.style.display = 'flex'); 
+                                                    }); 
+                                                }
+                                            "
                                             style="height: 42px;">
                                             <span x-text="selectedLabel" :class="{ 'text-muted': !selectedId }" class="text-truncate">Select City</span>
                                         </button>
@@ -870,12 +892,27 @@
                                             <div class="input-group input-group-sm mb-2">
                                                 <span class="input-group-text bg-light border-end-0"><i class="ri-search-line text-muted"></i></span>
                                                 <input type="text" 
-                                                    x-model="search" 
                                                     class="form-control border-start-0 shadow-none" 
                                                     placeholder="Search city..."
                                                     @click.stop
-                                                    x-ref="citySearchInput">
-                                                <button type="button" class="btn btn-light border-start-0" x-show="search" @click="search = ''"><i class="ri-close-line"></i></button>
+                                                    x-ref="citySearchInput"
+                                                    oninput="
+                                                        let q = this.value.toLowerCase().trim();
+                                                        let items = this.closest('.position-relative').querySelectorAll('.city-item-option');
+                                                        items.forEach(el => {
+                                                            let name = (el.getAttribute('data-name') || '').toLowerCase();
+                                                            el.style.display = (!q || name.includes(q)) ? 'flex' : 'none';
+                                                        });
+                                                    ">
+                                                <button type="button" class="btn btn-light border-start-0" 
+                                                    @click="
+                                                        $refs.citySearchInput.value = ''; 
+                                                        let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
+                                                        items.forEach(el => el.style.display = 'flex');
+                                                        $refs.citySearchInput.focus();
+                                                    ">
+                                                    <i class="ri-close-line"></i>
+                                                </button>
                                             </div>
                                             
                                             <div class="d-flex flex-column gap-1">
@@ -883,8 +920,7 @@
                                                     <div id="city-option-{{ $ct->id }}"
                                                         data-id="{{ $ct->id }}" 
                                                         data-name="{{ $ct->name }}"
-                                                        x-show="matches(@js($ct->name))"
-                                                        class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
+                                                        class="city-item-option px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
                                                         :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $ct->id }}' }"
                                                         @click="selectCity('{{ $ct->id }}')"
                                                         style="cursor: pointer;">
