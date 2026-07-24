@@ -337,7 +337,7 @@ class Index extends Component
             $this->selectedDealDetails = [];
             $this->createNewDealMode = false;
 
-            $flatSize = $unit->inventory_type === 'flat' ? $unit->unit_type : $unit->area_sq_yards;
+            $flatSize = (string) ($unit->inventory_type === 'flat' ? $unit->unit_type : $unit->area_sq_yards);
 
             $this->newDealForm = [
                 'first_name' => '',
@@ -413,6 +413,8 @@ class Index extends Component
         }
 
         if ($this->createNewDealMode) {
+            $this->newDealForm['flat_size'] = (string) $this->newDealForm['flat_size'];
+
             $this->validate([
                 'newDealForm.first_name' => 'required|string|max:255',
                 'newDealForm.last_name' => 'required|string|max:255',
@@ -420,22 +422,39 @@ class Index extends Component
                 'newDealForm.pan_number' => ['required', 'string', 'max:10'],
                 'newDealForm.gender' => 'required',
                 'newDealForm.email' => 'required|email|max:255',
-                'newDealForm.phone' => ['required', 'string', 'regex:/^[6-9][0-9]{9}$/'],
+                'newDealForm.phone' => ['required', 'numeric', 'digits:10'],
                 'newDealForm.date_of_birth' => ['required', 'date', 'before_or_equal:' . now()->subYears(18)->format('Y-m-d')],
                 'newDealForm.occupation' => 'required',
                 'newDealForm.address' => 'required|string',
                 'newDealForm.state_id' => 'required',
                 'newDealForm.city_id' => 'required',
                 'newDealForm.co_applicant_name' => 'nullable|string|max:255',
-                'newDealForm.flat_size' => 'required|string',
-                'newDealForm.waiver_code' => ['nullable', 'numeric', 'digits:8'],
+                'newDealForm.flat_size' => 'required',
+                'newDealForm.waiver_code' => ['nullable', 'numeric', 'digits_between:3,5'],
                 'newDealForm.booking_amount' => 'required|numeric|min:0',
                 'newDealForm.total_amount' => 'required|numeric|min:0',
             ], [
+                'newDealForm.first_name.required' => 'First Name is required.',
+                'newDealForm.last_name.required' => 'Last Name is required.',
+                'newDealForm.pan_number.required' => 'PAN Number is required.',
+                'newDealForm.pan_number.max' => 'PAN Number cannot exceed 10 characters.',
+                'newDealForm.gender.required' => 'Gender is required.',
+                'newDealForm.date_of_birth.required' => 'Date of Birth is required.',
                 'newDealForm.date_of_birth.before_or_equal' => 'Age must be 18 years or older.',
-                'newDealForm.phone.regex' => 'Phone must be a valid 10-digit mobile number.',
-                'newDealForm.waiver_code.numeric' => 'Waiver Code must contain only numbers.',
-                'newDealForm.waiver_code.digits' => 'Waiver Code must be exactly 8 digits.',
+                'newDealForm.occupation.required' => 'Occupation is required.',
+                'newDealForm.phone.required' => 'Mobile Number is required.',
+                'newDealForm.phone.numeric' => 'Mobile Number must contain digits only.',
+                'newDealForm.phone.digits' => 'Mobile Number must be exactly 10 digits.',
+                'newDealForm.email.required' => 'Email Address is required.',
+                'newDealForm.email.email' => 'Please enter a valid email address.',
+                'newDealForm.state_id.required' => 'State is required.',
+                'newDealForm.city_id.required' => 'City is required.',
+                'newDealForm.flat_size.required' => 'Flat Size / Area is required.',
+                'newDealForm.address.required' => 'Permanent Address is required.',
+                'newDealForm.waiver_code.numeric' => 'Waiver Code must contain numeric digits only.',
+                'newDealForm.waiver_code.digits_between' => 'Waiver Code must be between 3 and 5 numeric digits.',
+                'newDealForm.booking_amount.required' => 'Booking Amount is required.',
+                'newDealForm.total_amount.required' => 'Total Price is required.',
             ]);
 
             $state = State::find($this->newDealForm['state_id']);

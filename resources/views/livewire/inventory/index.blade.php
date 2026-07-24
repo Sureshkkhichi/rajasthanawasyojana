@@ -4,16 +4,22 @@
             {{-- Page Header --}}
             <div class="row">
                 <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent pb-3">
+                    <div
+                        class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent pb-3">
                         <h4 class="mb-sm-0 fw-bold text-primary">Inventory Management</h4>
                         <div class="d-flex align-items-center gap-2">
-                            <button type="button" class="btn btn-soft-success btn-sm d-flex align-items-center gap-1 px-3" wire:click="openImportModal">
+                            <button type="button"
+                                class="btn btn-soft-success btn-sm d-flex align-items-center gap-1 px-3"
+                                wire:click="openImportModal">
                                 <i class="ri-upload-2-line align-middle"></i> Import Units
                             </button>
-                            <button type="button" class="btn btn-soft-secondary btn-sm d-flex align-items-center gap-1 px-3" wire:click="exportUnits">
+                            <button type="button"
+                                class="btn btn-soft-secondary btn-sm d-flex align-items-center gap-1 px-3"
+                                wire:click="exportUnits">
                                 <i class="ri-download-2-line align-middle"></i> Export Units
                             </button>
-                            <a href="{{ route('inventories.create', array_filter(['selectedProjectId' => $selectedProjectId, 'statusFilter' => $statusFilter, 'facingFilter' => $facingFilter, 'searchPlot' => $searchPlot, 'activeTab' => $activeTab])) }}" class="btn btn-primary btn-sm d-flex align-items-center gap-1 px-3">
+                            <a href="{{ route('inventories.create', array_filter(['selectedProjectId' => $selectedProjectId, 'statusFilter' => $statusFilter, 'facingFilter' => $facingFilter, 'searchPlot' => $searchPlot, 'activeTab' => $activeTab])) }}"
+                                class="btn btn-primary btn-sm d-flex align-items-center gap-1 px-3">
                                 <i class="ri-add-line align-middle"></i> Add Unit
                             </a>
                         </div>
@@ -26,22 +32,30 @@
                 <div class="card-body p-3">
                     <div class="row g-3 align-items-end">
                         <div class="{{ $inventory_type === 'Flat Project' ? 'col-md-3' : 'col-md-4' }}">
-                            <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-building-4-line me-1"></i>Select Project <span class="text-danger">*</span></label>
+                            <label class="form-label text-muted fw-bold mb-1.5"><i
+                                    class="ri-building-4-line me-1"></i>Select Project <span
+                                    class="text-danger">*</span></label>
                             <div class="d-flex gap-2">
-                                <select class="form-select border-light-subtle shadow-sm" wire:model.live="selectedProjectId">
+                                <select class="form-select border-light-subtle shadow-sm"
+                                    wire:model.live="selectedProjectId">
                                     <option value="">Select Project</option>
                                     @foreach($projects as $p)
-                                        <option value="{{ $p->id }}">{{ $p->name }} ({{ $p->inventory_type === 'flat' ? 'Flat' : 'Plot' }}) - {{ $p->registration_status === 'open' ? 'Reg. Open' : 'Reg. Closed' }}</option>
+                                        <option value="{{ $p->id }}">{{ $p->name }}
+                                            ({{ $p->inventory_type === 'flat' ? 'Flat' : 'Plot' }}) -
+                                            {{ $p->registration_status === 'open' ? 'Reg. Open' : 'Reg. Closed' }}
+                                        </option>
                                     @endforeach
                                 </select>
-                                <span class="badge {{ $inventory_type === 'Flat Project' ? 'bg-info-subtle text-info border border-info-subtle' : 'bg-success-subtle text-success border border-success-subtle' }} d-flex align-items-center px-3 py-2 text-nowrap rounded-3">
+                                <span
+                                    class="badge {{ $inventory_type === 'Flat Project' ? 'bg-info-subtle text-info border border-info-subtle' : 'bg-success-subtle text-success border border-success-subtle' }} d-flex align-items-center px-3 py-2 text-nowrap rounded-3">
                                     {{ $inventory_type }}
                                 </span>
                             </div>
                         </div>
 
                         <div class="{{ $inventory_type === 'Flat Project' ? 'col-md-2' : 'col-md-2' }}">
-                            <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-filter-2-line me-1"></i>Status</label>
+                            <label class="form-label text-muted fw-bold mb-1.5"><i
+                                    class="ri-filter-2-line me-1"></i>Status</label>
                             <select class="form-select border-light-subtle shadow-sm" wire:model.live="statusFilter">
                                 <option value="">All Statuses</option>
                                 <option value="Available">Available</option>
@@ -52,7 +66,8 @@
 
                         @if ($inventory_type === 'Flat Project')
                             <div class="col-md-2">
-                                <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-layout-grid-line me-1"></i>Unit Type</label>
+                                <label class="form-label text-muted fw-bold mb-1.5"><i
+                                        class="ri-layout-grid-line me-1"></i>Unit Type</label>
                                 <select class="form-select border-light-subtle shadow-sm" wire:model.live="facingFilter">
                                     <option value="">All Unit Types</option>
                                     @foreach($facingTypes as $facing)
@@ -63,15 +78,21 @@
                         @endif
 
                         <div class="{{ $inventory_type === 'Flat Project' ? 'col-md-3' : 'col-md-4' }}">
-                            <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-search-line me-1"></i>Search Unit</label>
+                            <label class="form-label text-muted fw-bold mb-1.5"><i
+                                    class="ri-search-line me-1"></i>Search Unit</label>
                             <div class="input-group shadow-sm">
-                                <input type="text" class="form-control border-light-subtle" placeholder="{{ $inventory_type === 'Flat Project' ? 'Search Flat No...' : 'Search Plot No...' }}" wire:model.live.debounce.300ms="searchPlot">
-                                <span class="input-group-text bg-light border-light-subtle text-muted"><i class="ri-search-line"></i></span>
+                                <input type="text" class="form-control border-light-subtle"
+                                    placeholder="{{ $inventory_type === 'Flat Project' ? 'Search Flat No...' : 'Search Plot No...' }}"
+                                    wire:model.live.debounce.300ms="searchPlot">
+                                <span class="input-group-text bg-light border-light-subtle text-muted"><i
+                                        class="ri-search-line"></i></span>
                             </div>
                         </div>
 
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-soft-danger w-100 d-flex align-items-center justify-content-center gap-1 shadow-sm" wire:click="resetFilters">
+                            <button type="button"
+                                class="btn btn-soft-danger w-100 d-flex align-items-center justify-content-center gap-1 shadow-sm"
+                                wire:click="resetFilters">
                                 <i class="ri-refresh-line"></i> Reset Filters
                             </button>
                         </div>
@@ -87,7 +108,8 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-primary-subtle text-primary rounded-circle fs-3 shadow-none">
+                                    <span
+                                        class="avatar-title bg-primary-subtle text-primary rounded-circle fs-3 shadow-none">
                                         <i class="ri-building-line align-middle"></i>
                                     </span>
                                 </div>
@@ -95,7 +117,8 @@
                                     <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
                                         {{ $inventory_type === 'Flat Project' ? 'Total Flats' : 'Total Plots' }}
                                     </p>
-                                    <h4 class="mb-0 fw-bold"><span class="counter-value" data-target="{{ $counts['total'] }}">{{ $counts['total'] }}</span></h4>
+                                    <h4 class="mb-0 fw-bold"><span class="counter-value"
+                                            data-target="{{ $counts['total'] }}">{{ $counts['total'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
@@ -108,7 +131,8 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-success-subtle text-success rounded-circle fs-3 shadow-none">
+                                    <span
+                                        class="avatar-title bg-success-subtle text-success rounded-circle fs-3 shadow-none">
                                         <i class="ri-checkbox-circle-line align-middle"></i>
                                     </span>
                                 </div>
@@ -116,7 +140,9 @@
                                     <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
                                         {{ $inventory_type === 'Flat Project' ? 'Available Flats' : 'Available Plots' }}
                                     </p>
-                                    <h4 class="mb-0 fw-bold"><span class="counter-value" data-target="{{ $counts['available'] }}">{{ $counts['available'] }}</span></h4>
+                                    <h4 class="mb-0 fw-bold"><span class="counter-value"
+                                            data-target="{{ $counts['available'] }}">{{ $counts['available'] }}</span>
+                                    </h4>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +155,8 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-warning-subtle text-warning rounded-circle fs-3 shadow-none">
+                                    <span
+                                        class="avatar-title bg-warning-subtle text-warning rounded-circle fs-3 shadow-none">
                                         <i class="ri-time-line align-middle"></i>
                                     </span>
                                 </div>
@@ -137,7 +164,8 @@
                                     <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
                                         {{ $inventory_type === 'Flat Project' ? 'Hold Flats' : 'Hold Plots' }}
                                     </p>
-                                    <h4 class="mb-0 fw-bold"><span class="counter-value" data-target="{{ $counts['hold'] }}">{{ $counts['hold'] }}</span></h4>
+                                    <h4 class="mb-0 fw-bold"><span class="counter-value"
+                                            data-target="{{ $counts['hold'] }}">{{ $counts['hold'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +178,8 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-danger-subtle text-danger rounded-circle fs-3 shadow-none">
+                                    <span
+                                        class="avatar-title bg-danger-subtle text-danger rounded-circle fs-3 shadow-none">
                                         <i class="ri-calendar-todo-line align-middle"></i>
                                     </span>
                                 </div>
@@ -158,7 +187,8 @@
                                     <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
                                         {{ $inventory_type === 'Flat Project' ? 'Sold Flats' : 'Sold Plots' }}
                                     </p>
-                                    <h4 class="mb-0 fw-bold"><span class="counter-value" data-target="{{ $counts['sold'] }}">{{ $counts['sold'] }}</span></h4>
+                                    <h4 class="mb-0 fw-bold"><span class="counter-value"
+                                            data-target="{{ $counts['sold'] }}">{{ $counts['sold'] }}</span></h4>
                                 </div>
                             </div>
                         </div>
@@ -177,27 +207,35 @@
                                 {{-- Status Tabs --}}
                                 <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link {{ $activeTab === 'all' ? 'active text-primary' : 'text-muted' }} fw-bold" href="javascript:void(0);" wire:click="setTab('all')">
+                                        <a class="nav-link {{ $activeTab === 'all' ? 'active text-primary' : 'text-muted' }} fw-bold"
+                                            href="javascript:void(0);" wire:click="setTab('all')">
                                             All Units
-                                            <span class="badge bg-primary-subtle text-primary ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['total'] }}</span>
+                                            <span
+                                                class="badge bg-primary-subtle text-primary ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['total'] }}</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link {{ $activeTab === 'Available' ? 'active text-success' : 'text-muted' }} fw-bold" href="javascript:void(0);" wire:click="setTab('Available')">
+                                        <a class="nav-link {{ $activeTab === 'Available' ? 'active text-success' : 'text-muted' }} fw-bold"
+                                            href="javascript:void(0);" wire:click="setTab('Available')">
                                             Available
-                                            <span class="badge bg-success-subtle text-success ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['available'] }}</span>
+                                            <span
+                                                class="badge bg-success-subtle text-success ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['available'] }}</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link {{ $activeTab === 'Hold' ? 'active text-warning' : 'text-muted' }} fw-bold" href="javascript:void(0);" wire:click="setTab('Hold')">
+                                        <a class="nav-link {{ $activeTab === 'Hold' ? 'active text-warning' : 'text-muted' }} fw-bold"
+                                            href="javascript:void(0);" wire:click="setTab('Hold')">
                                             Hold
-                                            <span class="badge bg-warning-subtle text-warning ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['hold'] }}</span>
+                                            <span
+                                                class="badge bg-warning-subtle text-warning ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['hold'] }}</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link {{ $activeTab === 'Sold' ? 'active text-danger' : 'text-muted' }} fw-bold" href="javascript:void(0);" wire:click="setTab('Sold')">
+                                        <a class="nav-link {{ $activeTab === 'Sold' ? 'active text-danger' : 'text-muted' }} fw-bold"
+                                            href="javascript:void(0);" wire:click="setTab('Sold')">
                                             Sold
-                                            <span class="badge bg-danger-subtle text-danger ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['sold'] }}</span>
+                                            <span
+                                                class="badge bg-danger-subtle text-danger ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['sold'] }}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -206,14 +244,26 @@
                                     {{-- Bulk Actions --}}
                                     @if(count($selectedInventories) > 0)
                                         <div class="dropdown">
-                                            <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
                                                 Bulk Actions ({{ count($selectedInventories) }})
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                                <li><a class="dropdown-item" href="javascript:void(0);" wire:click="bulkChangeStatus('Available')"><i class="ri-checkbox-circle-line text-success me-2 align-middle"></i>Change Status: Available</a></li>
-                                                <li><a class="dropdown-item" href="javascript:void(0);" wire:click="bulkChangeStatus('Hold')"><i class="ri-time-line text-warning me-2 align-middle"></i>Change Status: Hold</a></li>
-                                                <li><hr class="dropdown-divider"></li>
-                                                <li><a class="dropdown-item text-danger" href="javascript:void(0);" wire:click="bulkDelete"><i class="ri-delete-bin-line me-2 align-middle"></i>Delete Selected</a></li>
+                                                <li><a class="dropdown-item" href="javascript:void(0);"
+                                                        wire:click="bulkChangeStatus('Available')"><i
+                                                            class="ri-checkbox-circle-line text-success me-2 align-middle"></i>Change
+                                                        Status: Available</a></li>
+                                                <li><a class="dropdown-item" href="javascript:void(0);"
+                                                        wire:click="bulkChangeStatus('Hold')"><i
+                                                            class="ri-time-line text-warning me-2 align-middle"></i>Change
+                                                        Status: Hold</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item text-danger" href="javascript:void(0);"
+                                                        wire:click="bulkDelete"><i
+                                                            class="ri-delete-bin-line me-2 align-middle"></i>Delete
+                                                        Selected</a></li>
                                             </ul>
                                         </div>
                                     @endif
@@ -224,11 +274,13 @@
                         <div class="card-body">
                             {{-- Table --}}
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle mb-0 text-center text-nowrap table-borderless">
+                                <table
+                                    class="table table-hover align-middle mb-0 text-center text-nowrap table-borderless">
                                     <thead class="text-muted table-light uppercase fs-11">
                                         <tr>
                                             <th width="40">
-                                                <input type="checkbox" class="form-check-input" wire:model.live="selectAll">
+                                                <input type="checkbox" class="form-check-input"
+                                                    wire:model.live="selectAll">
                                             </th>
                                             @if ($inventory_type === 'Flat Project')
                                                 <th>Floor</th>
@@ -252,12 +304,15 @@
                                         @forelse($units as $unit)
                                             <tr wire:key="unit-row-{{ $unit->id }}">
                                                 <td onclick="event.stopPropagation();">
-                                                    <input type="checkbox" class="form-check-input" value="{{ $unit->id }}" wire:model.live="selectedInventories">
+                                                    <input type="checkbox" class="form-check-input" value="{{ $unit->id }}"
+                                                        wire:model.live="selectedInventories">
                                                 </td>
                                                 @if ($inventory_type === 'Flat Project')
                                                     <td>{{ $unit->floor }}</td>
                                                     <td class="fw-bold text-dark">{{ $unit->flat_no }}</td>
-                                                    <td><span class="badge bg-light text-secondary border border-light-subtle rounded px-2 py-1 fs-11">{{ $unit->unit_type_label }}</span></td>
+                                                    <td><span
+                                                            class="badge bg-light text-secondary border border-light-subtle rounded px-2 py-1 fs-11">{{ $unit->unit_type_label }}</span>
+                                                    </td>
                                                     <td>{{ number_format($unit->area_sbup, 2) }}</td>
                                                     <td>{{ number_format($unit->carpet_area, 2) }}</td>
                                                     <td>{{ number_format($unit->super_buildup_area, 2) }}</td>
@@ -265,25 +320,36 @@
                                                     <td class="fw-bold text-dark">{{ $unit->plot_no }}</td>
                                                     <td>{{ number_format($unit->area_sq_yards, 2) }}</td>
                                                     <td>{{ $unit->road_size }}</td>
-                                                    <td>{{ $unit->plc_percentage !== null ? $unit->plc_percentage . '%' : '-' }}</td>
+                                                    <td>{{ $unit->plc_percentage !== null ? $unit->plc_percentage . '%' : '-' }}
+                                                    </td>
                                                 @endif
-                                                <td class="text-end fw-semibold text-dark">₹ {{ number_format($unit->price, 0) }}</td>
+                                                <td class="text-end fw-semibold text-dark">₹
+                                                    {{ number_format($unit->price, 0) }}
+                                                </td>
                                                 <td>
                                                     @if($unit->status === 'Available')
-                                                        <span class="badge bg-success-subtle text-success rounded-pill px-2.5 py-1 fs-11">Available</span>
+                                                        <span
+                                                            class="badge bg-success-subtle text-success rounded-pill px-2.5 py-1 fs-11">Available</span>
                                                     @elseif($unit->status === 'Hold')
-                                                        <span class="badge bg-warning-subtle text-warning rounded-pill px-2.5 py-1 fs-11">Hold</span>
+                                                        <span
+                                                            class="badge bg-warning-subtle text-warning rounded-pill px-2.5 py-1 fs-11">Hold</span>
                                                     @elseif($unit->status === 'Sold' || $unit->status === 'Alloted')
-                                                        <span class="badge bg-danger-subtle text-danger rounded-pill px-2.5 py-1 fs-11">Sold</span>
+                                                        <span
+                                                            class="badge bg-danger-subtle text-danger rounded-pill px-2.5 py-1 fs-11">Sold</span>
                                                     @else
-                                                        <span class="badge bg-dark-subtle text-dark rounded-pill px-2.5 py-1 fs-11">{{ $unit->status }}</span>
+                                                        <span
+                                                            class="badge bg-dark-subtle text-dark rounded-pill px-2.5 py-1 fs-11">{{ $unit->status }}</span>
                                                     @endif
 
                                                     @if($unit->deal)
-                                                        <div class="mt-2 p-2 bg-light rounded border border-light-subtle d-inline-block text-start shadow-none" style="min-width: 140px; margin: 0 auto; display: block !important;">
+                                                        <div class="mt-2 p-2 bg-light rounded border border-light-subtle d-inline-block text-start shadow-none"
+                                                            style="min-width: 140px; margin: 0 auto; display: block !important;">
                                                             <div class="d-flex align-items-center gap-1 mb-1">
                                                                 <i class="ri-user-line text-muted fs-11"></i>
-                                                                <a href="{{ route('deals.show', $unit->deal->id) }}" class="text-primary fw-semibold fs-11 text-truncate d-inline-block" style="max-width: 110px;" title="{{ $unit->deal->first_name }} {{ $unit->deal->last_name }}">
+                                                                <a href="{{ route('deals.show', $unit->deal->id) }}"
+                                                                    class="text-primary fw-semibold fs-11 text-truncate d-inline-block"
+                                                                    style="max-width: 110px;"
+                                                                    title="{{ $unit->deal->first_name }} {{ $unit->deal->last_name }}">
                                                                     {{ $unit->deal->first_name }} {{ $unit->deal->last_name }}
                                                                 </a>
                                                             </div>
@@ -296,48 +362,75 @@
                                                 </td>
                                                 <td onclick="event.stopPropagation();">
                                                     <div class="dropdown">
-                                                        <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false">
+                                                        <button class="btn btn-soft-secondary btn-sm dropdown-toggle"
+                                                            type="button" data-bs-toggle="dropdown"
+                                                            data-bs-boundary="viewport"
+                                                            data-bs-popper-config='{"strategy":"fixed"}'
+                                                            aria-expanded="false">
                                                             Action
                                                         </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end shadow border-light-subtle">
+                                                        <ul
+                                                            class="dropdown-menu dropdown-menu-end shadow border-light-subtle">
                                                             @if($unit->status === 'Sold' || $unit->status === 'Alloted')
                                                                 <li>
-                                                                    <button class="dropdown-item py-2" type="button" wire:click="openViewModal('{{ $unit->id }}')">
-                                                                        <i class="ri-eye-line align-bottom me-2 text-info"></i> View Inventory
+                                                                    <button class="dropdown-item py-2" type="button"
+                                                                        wire:click="openViewModal('{{ $unit->id }}')">
+                                                                        <i class="ri-eye-line align-bottom me-2 text-info"></i>
+                                                                        View Inventory
                                                                     </button>
                                                                 </li>
                                                                 @if($unit->deal)
                                                                     <li>
-                                                                        <a class="dropdown-item py-2" href="{{ route('deals.show', $unit->deal->id) }}">
-                                                                            <i class="ri-user-search-line align-bottom me-2 text-primary"></i> View Deal
+                                                                        <a class="dropdown-item py-2"
+                                                                            href="{{ route('deals.show', $unit->deal->id) }}"
+                                                                            target="_blank">
+                                                                            <i
+                                                                                class="ri-user-search-line align-bottom me-2 text-primary"></i>
+                                                                            View Deal
                                                                         </a>
                                                                     </li>
                                                                 @endif
-                                                                <li><hr class="dropdown-divider"></li>
                                                                 <li>
-                                                                    <button class="dropdown-item py-2 text-danger" type="button" wire:click="vacateUnit('{{ $unit->id }}')" wire:confirm="Are you sure you want to vacate this unit? This will cancel any active allotments for this unit.">
-                                                                        <i class="ri-close-circle-line align-bottom me-2"></i> Vacate
+                                                                    <hr class="dropdown-divider">
+                                                                </li>
+                                                                <li>
+                                                                    <button class="dropdown-item py-2 text-danger" type="button"
+                                                                        wire:click="vacateUnit('{{ $unit->id }}')"
+                                                                        wire:confirm="Are you sure you want to vacate this unit? This will cancel any active allotments for this unit.">
+                                                                        <i class="ri-close-circle-line align-bottom me-2"></i>
+                                                                        Vacate
                                                                     </button>
                                                                 </li>
                                                             @else
                                                                 <li>
-                                                                    <button class="dropdown-item py-2" type="button" wire:click="openViewModal('{{ $unit->id }}')">
-                                                                        <i class="ri-eye-line align-bottom me-2 text-info"></i> View Inventory
+                                                                    <button class="dropdown-item py-2" type="button"
+                                                                        wire:click="openViewModal('{{ $unit->id }}')">
+                                                                        <i class="ri-eye-line align-bottom me-2 text-info"></i>
+                                                                        View Inventory
                                                                     </button>
                                                                 </li>
                                                                 <li>
-                                                                    <a class="dropdown-item py-2" href="{{ route('inventories.edit', array_filter(['inventory' => $unit->id, 'selectedProjectId' => $selectedProjectId, 'statusFilter' => $statusFilter, 'facingFilter' => $facingFilter, 'searchPlot' => $searchPlot, 'activeTab' => $activeTab])) }}">
-                                                                        <i class="ri-edit-line align-bottom me-2 text-primary"></i> Edit Unit
+                                                                    <a class="dropdown-item py-2" target="_blank"
+                                                                        href="{{ route('inventories.edit', array_filter(['inventory' => $unit->id, 'selectedProjectId' => $selectedProjectId, 'statusFilter' => $statusFilter, 'facingFilter' => $facingFilter, 'searchPlot' => $searchPlot, 'activeTab' => $activeTab])) }}">
+                                                                        <i
+                                                                            class="ri-edit-line align-bottom me-2 text-primary"></i>
+                                                                        Edit Unit
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <button class="dropdown-item py-2" type="button" wire:click="openSoldModal('{{ $unit->id }}')">
-                                                                        <i class="ri-checkbox-circle-line align-bottom me-2 text-danger"></i> Mark Sold
+                                                                    <button class="dropdown-item py-2" type="button"
+                                                                        wire:click="openSoldModal('{{ $unit->id }}')">
+                                                                        <i
+                                                                            class="ri-checkbox-circle-line align-bottom me-2 text-danger"></i>
+                                                                        Mark Sold
                                                                     </button>
                                                                 </li>
                                                                 <li>
-                                                                    <button class="dropdown-item py-2" type="button" wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Hold')">
-                                                                        <i class="ri-checkbox-circle-line align-bottom me-2 text-warning"></i> Mark Hold
+                                                                    <button class="dropdown-item py-2" type="button"
+                                                                        wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Hold')">
+                                                                        <i
+                                                                            class="ri-checkbox-circle-line align-bottom me-2 text-warning"></i>
+                                                                        Mark Hold
                                                                     </button>
                                                                 </li>
                                                             @endif
@@ -347,7 +440,8 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="10" class="text-center py-4 text-muted">No units found. Select a project or add units to begin.</td>
+                                                <td colspan="10" class="text-center py-4 text-muted">No units found. Select
+                                                    a project or add units to begin.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -367,14 +461,16 @@
     {{-- Modals --}}
 
     {{-- Import Units CSV Modal --}}
-    <div class="modal fade @if($importModalOpen) show d-block @endif" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal fade @if($importModalOpen) show d-block @endif" tabindex="-1"
+        style="background-color: rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4">
                 <div class="modal-header bg-success text-white py-3 rounded-top-4">
                     <h5 class="modal-title text-white fw-bold d-flex align-items-center">
                         <i class="ri-upload-2-line me-2"></i> Import Units via CSV
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" wire:click="$set('importModalOpen', false)"></button>
+                    <button type="button" class="btn-close btn-close-white"
+                        wire:click="$set('importModalOpen', false)"></button>
                 </div>
                 <form wire:submit="importUnits">
                     <div class="modal-body p-4">
@@ -393,7 +489,8 @@
                         </div>
                     </div>
                     <div class="modal-footer bg-light py-3 rounded-bottom-4">
-                        <button type="button" class="btn btn-light border" wire:click="$set('importModalOpen', false)">Close</button>
+                        <button type="button" class="btn btn-light border"
+                            wire:click="$set('importModalOpen', false)">Close</button>
                         <button type="submit" class="btn btn-success px-4">Import Data</button>
                     </div>
                 </form>
@@ -402,25 +499,29 @@
     </div>
 
     {{-- Update Price Modal --}}
-    <div class="modal fade @if($priceModalOpen) show d-block @endif" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal fade @if($priceModalOpen) show d-block @endif" tabindex="-1"
+        style="background-color: rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4">
                 <div class="modal-header bg-primary text-white py-3 rounded-top-4">
                     <h5 class="modal-title text-white fw-bold d-flex align-items-center">
                         <i class="ri-money-dollar-circle-line me-2"></i> Update Unit Price
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" wire:click="$set('priceModalOpen', false)"></button>
+                    <button type="button" class="btn-close btn-close-white"
+                        wire:click="$set('priceModalOpen', false)"></button>
                 </div>
                 <form wire:submit="updatePrice">
                     <div class="modal-body p-4">
                         <div class="mb-3">
                             <label class="form-label fw-semibold text-muted">New Price (₹)</label>
-                            <input type="number" step="0.01" class="form-control border-2" wire:model="tempPrice" placeholder="Enter new price">
+                            <input type="number" step="0.01" class="form-control border-2" wire:model="tempPrice"
+                                placeholder="Enter new price">
                             @error('tempPrice') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="modal-footer bg-light py-3 rounded-bottom-4">
-                        <button type="button" class="btn btn-light border" wire:click="$set('priceModalOpen', false)">Close</button>
+                        <button type="button" class="btn btn-light border"
+                            wire:click="$set('priceModalOpen', false)">Close</button>
                         <button type="submit" class="btn btn-primary px-4">Save Price</button>
                     </div>
                 </form>
@@ -429,7 +530,8 @@
     </div>
 
     {{-- Change Status / Hold Modal --}}
-    <div class="modal fade @if($statusModalOpen) show d-block @endif" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal fade @if($statusModalOpen) show d-block @endif" tabindex="-1"
+        style="background-color: rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg rounded-4">
                 <div class="modal-header bg-warning text-dark py-3 rounded-top-4">
@@ -454,11 +556,13 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold text-muted">Remarks / Change Description</label>
-                            <textarea class="form-control border-2" rows="3" wire:model="tempRemarks" placeholder="Enter remarks..."></textarea>
+                            <textarea class="form-control border-2" rows="3" wire:model="tempRemarks"
+                                placeholder="Enter remarks..."></textarea>
                         </div>
                     </div>
                     <div class="modal-footer bg-light py-3 rounded-bottom-4">
-                        <button type="button" class="btn btn-light border" wire:click="$set('statusModalOpen', false)">Close</button>
+                        <button type="button" class="btn btn-light border"
+                            wire:click="$set('statusModalOpen', false)">Close</button>
                         <button type="submit" class="btn btn-warning px-4 text-dark fw-bold">Update Status</button>
                     </div>
                 </form>
@@ -467,24 +571,30 @@
     </div>
 
     {{-- Mark Sold & Allot Deal Modal --}}
-    <div class="modal fade @if($soldModalOpen) show d-block @endif" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div id="soldModalContainer" class="modal fade @if($soldModalOpen) show d-block @endif" tabindex="-1"
+        style="background-color: rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-dialog-centered @if($createNewDealMode) modal-lg @endif">
             <div class="modal-content shadow-lg border-0 rounded-4">
                 <div class="modal-header bg-danger text-white py-3 rounded-top-4">
                     <h5 class="modal-title text-white fw-bold d-flex align-items-center">
                         <i class="ri-checkbox-circle-line me-2"></i> Allot Unit & Mark Sold
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" wire:click="$set('soldModalOpen', false)"></button>
+                    <button type="button" class="btn-close btn-close-white"
+                        wire:click="$set('soldModalOpen', false)"></button>
                 </div>
                 <form wire:submit="submitSoldAllotment">
                     <div class="modal-body p-4">
                         {{-- Mode Selector Toggle --}}
                         <div class="d-flex justify-content-center mb-4">
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-outline-danger @if(!$createNewDealMode) active @endif" wire:click="$set('createNewDealMode', false)">
+                                <button type="button"
+                                    class="btn btn-outline-danger @if(!$createNewDealMode) active @endif"
+                                    wire:click="$set('createNewDealMode', false)">
                                     <i class="ri-user-search-line align-middle me-1"></i> Select Existing Deal
                                 </button>
-                                <button type="button" class="btn btn-outline-danger @if($createNewDealMode) active @endif" wire:click="$set('createNewDealMode', true)">
+                                <button type="button"
+                                    class="btn btn-outline-danger @if($createNewDealMode) active @endif"
+                                    wire:click="$set('createNewDealMode', true)">
                                     <i class="ri-user-add-line align-middle me-1"></i> Create New Deal
                                 </button>
                             </div>
@@ -507,7 +617,8 @@
 
                             @if($selectedDealDetails)
                                 {{-- Deal Details card --}}
-                                <div class="card border border-2 border-dashed border-success bg-success-subtle mb-0 mt-3 rounded-3">
+                                <div
+                                    class="card border border-2 border-dashed border-success bg-success-subtle mb-0 mt-3 rounded-3">
                                     <div class="card-body p-3">
                                         <h6 class="fw-semibold text-success mb-2 d-flex align-items-center">
                                             <i class="ri-user-line me-1"></i> Selected Customer Details
@@ -539,7 +650,8 @@
                             @elseif(count($unallottedDeals) === 0)
                                 <div class="alert alert-warning mb-0 mt-2 d-flex align-items-center">
                                     <i class="ri-error-warning-line fs-20 me-2 text-warning"></i>
-                                    <div>No unallotted deals found for this project. Choose "Create New Deal" to register one!</div>
+                                    <div>No unallotted deals found for this project. Choose "Create New Deal" to register one!
+                                    </div>
                                 </div>
                             @endif
 
@@ -548,50 +660,71 @@
                             <div class="row g-3">
                                 <!-- First Name -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">First Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control border-2" placeholder="Enter first name" wire:model="newDealForm.first_name">
-                                    @error('newDealForm.first_name') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <label class="form-label fw-semibold text-muted mb-1">First Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control border-2 text-capitalize" placeholder="Enter first name"
+                                        wire:model="newDealForm.first_name" style="text-transform: capitalize;"
+                                        oninput="this.value = this.value.replace(/\b\w/g, l => l.toUpperCase())">
+                                    @error('newDealForm.first_name') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <!-- Last Name -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">Last Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control border-2" placeholder="Enter last name" wire:model="newDealForm.last_name">
-                                    @error('newDealForm.last_name') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <label class="form-label fw-semibold text-muted mb-1">Last Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control border-2 text-capitalize" placeholder="Enter last name"
+                                        wire:model="newDealForm.last_name" style="text-transform: capitalize;"
+                                        oninput="this.value = this.value.replace(/\b\w/g, l => l.toUpperCase())">
+                                    @error('newDealForm.last_name') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <!-- Father / Husband Name -->
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Father / Husband Name</label>
-                                    <input type="text" class="form-control border-2" placeholder="Enter father name" wire:model="newDealForm.father_husband_name">
-                                    @error('newDealForm.father_husband_name') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <input type="text" class="form-control border-2 text-capitalize" placeholder="Enter father name"
+                                        wire:model="newDealForm.father_husband_name" style="text-transform: capitalize;"
+                                        oninput="this.value = this.value.replace(/\b\w/g, l => l.toUpperCase())">
+                                    @error('newDealForm.father_husband_name') <span
+                                    class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
 
                                 <!-- PAN Number -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">PAN Number <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control border-2" placeholder="Enter PAN number" wire:model="newDealForm.pan_number" maxlength="10">
-                                    @error('newDealForm.pan_number') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <label class="form-label fw-semibold text-muted mb-1">PAN Number <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control border-2 text-uppercase" placeholder="Enter PAN number"
+                                        wire:model="newDealForm.pan_number" maxlength="10" style="text-transform: uppercase;"
+                                        oninput="this.value = this.value.toUpperCase()">
+                                    @error('newDealForm.pan_number') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <!-- Gender -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">Gender <span class="text-danger">*</span></label>
+                                    <label class="form-label fw-semibold text-muted mb-1">Gender <span
+                                            class="text-danger">*</span></label>
                                     <select class="form-select border-2" wire:model="newDealForm.gender">
                                         <option value="">Select Gender</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                         <option value="other">Other</option>
                                     </select>
-                                    @error('newDealForm.gender') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    @error('newDealForm.gender') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <!-- Date of Birth -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">Date of Birth <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control border-2" wire:model="newDealForm.date_of_birth" max="{{ now()->subYears(18)->format('Y-m-d') }}">
-                                    @error('newDealForm.date_of_birth') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <label class="form-label fw-semibold text-muted mb-1">Date of Birth <span
+                                            class="text-danger">*</span></label>
+                                    <input type="date" class="form-control border-2" wire:model="newDealForm.date_of_birth"
+                                        max="{{ now()->subYears(18)->format('Y-m-d') }}">
+                                    @error('newDealForm.date_of_birth') <span
+                                    class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
 
                                 <!-- Occupation -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">Occupation <span class="text-danger">*</span></label>
+                                    <label class="form-label fw-semibold text-muted mb-1">Occupation <span
+                                            class="text-danger">*</span></label>
                                     <select class="form-select border-2" wire:model="newDealForm.occupation">
                                         <option value="">Select Occupation</option>
                                         <option value="Salaried">Salaried</option>
@@ -602,81 +735,109 @@
                                         <option value="House Wife">House Wife</option>
                                         <option value="Student">Student</option>
                                     </select>
-                                    @error('newDealForm.occupation') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    @error('newDealForm.occupation') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <!-- Mobile Number -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">Mobile Number <span class="text-danger">*</span></label>
-                                    <input type="tel" class="form-control border-2" placeholder="Enter mobile number" wire:model="newDealForm.phone">
-                                    @error('newDealForm.phone') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <label class="form-label fw-semibold text-muted mb-1">Mobile Number <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control border-2" placeholder="Enter 10-digit mobile number"
+                                        wire:model="newDealForm.phone" maxlength="10"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)">
+                                    @error('newDealForm.phone') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <!-- Email Address -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">Email Address <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control border-2" placeholder="Enter email address" wire:model="newDealForm.email">
-                                    @error('newDealForm.email') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <label class="form-label fw-semibold text-muted mb-1">Email Address <span
+                                            class="text-danger">*</span></label>
+                                    <input type="email" class="form-control border-2" placeholder="Enter email address"
+                                        wire:model="newDealForm.email">
+                                    @error('newDealForm.email') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <!-- State -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">State <span class="text-danger">*</span></label>
-                                    <select class="form-select border-2" wire:model.live="newDealForm.state_id">
+                                    <label class="form-label fw-semibold text-muted mb-1">State <span
+                                            class="text-danger">*</span></label>
+                                    <select id="sold_state_id" class="form-select border-2 select2-sold" wire:model.live="newDealForm.state_id">
                                         <option value="">Select State</option>
                                         @foreach($states as $st)
                                             <option value="{{ $st->id }}">{{ $st->name }}</option>
                                         @endforeach
                                     </select>
-                                    @error('newDealForm.state_id') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    @error('newDealForm.state_id') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <!-- City -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">City <span class="text-danger">*</span></label>
-                                    <select class="form-select border-2" wire:model="newDealForm.city_id">
+                                    <label class="form-label fw-semibold text-muted mb-1">City <span
+                                            class="text-danger">*</span></label>
+                                    <select id="sold_city_id" class="form-select border-2 select2-sold" wire:model="newDealForm.city_id">
                                         <option value="">Select City</option>
                                         @foreach($cities as $ct)
                                             <option value="{{ $ct->id }}">{{ $ct->name }}</option>
                                         @endforeach
                                     </select>
-                                    @error('newDealForm.city_id') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    @error('newDealForm.city_id') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <!-- Flat Size -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">Flat Size / Area <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control border-2 bg-light text-muted" wire:model="newDealForm.flat_size" readonly>
-                                    @error('newDealForm.flat_size') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <label class="form-label fw-semibold text-muted mb-1">Flat Size / Area <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control border-2 bg-light text-muted"
+                                        wire:model="newDealForm.flat_size" readonly>
+                                    @error('newDealForm.flat_size') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <!-- Permanent Address -->
                                 <div class="col-12">
-                                    <label class="form-label fw-semibold text-muted mb-1">Permanent Address <span class="text-danger">*</span></label>
-                                    <textarea class="form-control border-2" rows="2" placeholder="Enter permanent address" wire:model="newDealForm.address"></textarea>
-                                    @error('newDealForm.address') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <label class="form-label fw-semibold text-muted mb-1">Permanent Address <span
+                                            class="text-danger">*</span></label>
+                                    <textarea class="form-control border-2 text-capitalize" rows="2" placeholder="Enter permanent address"
+                                        wire:model="newDealForm.address" style="text-transform: capitalize;"></textarea>
+                                    @error('newDealForm.address') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <!-- Co-Applicant Name -->
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Co-Applicant Name</label>
-                                    <input type="text" class="form-control border-2" placeholder="Enter co-applicant name" wire:model="newDealForm.co_applicant_name">
-                                    @error('newDealForm.co_applicant_name') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <input type="text" class="form-control border-2 text-capitalize" placeholder="Enter co-applicant name"
+                                        wire:model="newDealForm.co_applicant_name" style="text-transform: capitalize;"
+                                        oninput="this.value = this.value.replace(/\b\w/g, l => l.toUpperCase())">
+                                    @error('newDealForm.co_applicant_name') <span
+                                    class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
                                 <!-- Waiver Code -->
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Waiver Code</label>
-                                    <input type="text" class="form-control border-2" placeholder="Enter waiver code" wire:model="newDealForm.waiver_code">
-                                    @error('newDealForm.waiver_code') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control border-2" placeholder="Enter waiver code (3-5 digits)"
+                                        wire:model="newDealForm.waiver_code" maxlength="5"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)">
+                                    @error('newDealForm.waiver_code') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <!-- Booking Amount Paid -->
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Booking Amount Paid (₹) *</label>
-                                    <input type="number" step="0.01" class="form-control border-2" placeholder="Enter booking amount" wire:model="newDealForm.booking_amount">
-                                    @error('newDealForm.booking_amount') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <input type="number" step="0.01" class="form-control border-2"
+                                        placeholder="Enter booking amount" wire:model="newDealForm.booking_amount">
+                                    @error('newDealForm.booking_amount') <span
+                                    class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
 
                                 <!-- Total Price -->
                                 <div class="col-md-4 offset-md-8">
                                     <label class="form-label fw-semibold text-muted mb-1">Total Price (₹) *</label>
-                                    <input type="number" step="0.01" class="form-control border-2" placeholder="Enter total price" wire:model="newDealForm.total_amount">
-                                    @error('newDealForm.total_amount') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    <input type="number" step="0.01" class="form-control border-2"
+                                        placeholder="Enter total price" wire:model="newDealForm.total_amount">
+                                    @error('newDealForm.total_amount') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                         @endif
@@ -690,7 +851,8 @@
                                 <i class="ri-checkbox-circle-line align-middle me-1"></i> Allot & Mark Sold
                             </span>
                             <span wire:loading wire:target="submitSoldAllotment">
-                                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                <span class="spinner-border spinner-border-sm me-1" role="status"
+                                    aria-hidden="true"></span>
                                 Processing...
                             </span>
                         </button>
@@ -702,144 +864,177 @@
 
     {{-- View Inventory Details Modal Popup --}}
     @if($viewModalOpen && $viewUnitModel)
-    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5); z-index: 1055;" wire:key="view-modal-{{ $viewUnitModel->id }}">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                <div class="modal-header bg-primary text-white py-3">
-                    <h5 class="modal-title text-white fw-bold d-flex align-items-center gap-2">
-                        <i class="ri-building-line"></i>
-                        @if($viewUnitModel->inventory_type === 'flat')
-                            Flat {{ $viewUnitModel->flat_no }} Details
-                        @else
-                            Plot {{ $viewUnitModel->plot_no }} Details
-                        @endif
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" wire:click="closeViewModal"></button>
-                </div>
-                <div class="modal-body p-4" style="max-height: 75vh; overflow-y: auto;">
-                    {{-- Status Banner --}}
-                    <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3 mb-4 border">
-                        <div>
-                            <span class="text-muted fs-12 text-uppercase fw-semibold d-block">Project Name</span>
-                            <span class="fs-15 fw-bold text-dark">{{ $viewUnitModel->project?->name ?: '-' }}</span>
-                        </div>
-                        <div>
-                            <span class="text-muted fs-12 text-uppercase fw-semibold d-block">Inventory Status</span>
-                            @if($viewUnitModel->status === 'Available')
-                                <span class="badge bg-success-subtle text-success fs-12 px-3 py-1.5 rounded-pill">Available</span>
-                            @elseif($viewUnitModel->status === 'Hold')
-                                <span class="badge bg-warning-subtle text-warning fs-12 px-3 py-1.5 rounded-pill">Hold</span>
-                            @elseif($viewUnitModel->status === 'Sold' || $viewUnitModel->status === 'Alloted')
-                                <span class="badge bg-danger-subtle text-danger fs-12 px-3 py-1.5 rounded-pill">Sold</span>
+        <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5); z-index: 1055;"
+            wire:key="view-modal-{{ $viewUnitModel->id }}">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                    <div class="modal-header bg-primary text-white py-3">
+                        <h5 class="modal-title text-white fw-bold d-flex align-items-center gap-2">
+                            <i class="ri-building-line"></i>
+                            @if($viewUnitModel->inventory_type === 'flat')
+                                Flat {{ $viewUnitModel->flat_no }} Details
                             @else
-                                <span class="badge bg-dark-subtle text-dark fs-12 px-3 py-1.5 rounded-pill">{{ $viewUnitModel->status }}</span>
+                                Plot {{ $viewUnitModel->plot_no }} Details
+                            @endif
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" wire:click="closeViewModal"></button>
+                    </div>
+                    <div class="modal-body p-4" style="max-height: 75vh; overflow-y: auto;">
+                        {{-- Status Banner --}}
+                        <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3 mb-4 border">
+                            <div>
+                                <span class="text-muted fs-12 text-uppercase fw-semibold d-block">Project Name</span>
+                                <span class="fs-15 fw-bold text-dark">{{ $viewUnitModel->project?->name ?: '-' }}</span>
+                            </div>
+                            <div>
+                                <span class="text-muted fs-12 text-uppercase fw-semibold d-block">Inventory Status</span>
+                                @if($viewUnitModel->status === 'Available')
+                                    <span
+                                        class="badge bg-success-subtle text-success fs-12 px-3 py-1.5 rounded-pill">Available</span>
+                                @elseif($viewUnitModel->status === 'Hold')
+                                    <span
+                                        class="badge bg-warning-subtle text-warning fs-12 px-3 py-1.5 rounded-pill">Hold</span>
+                                @elseif($viewUnitModel->status === 'Sold' || $viewUnitModel->status === 'Alloted')
+                                    <span class="badge bg-danger-subtle text-danger fs-12 px-3 py-1.5 rounded-pill">Sold</span>
+                                @else
+                                    <span
+                                        class="badge bg-dark-subtle text-dark fs-12 px-3 py-1.5 rounded-pill">{{ $viewUnitModel->status }}</span>
+                                @endif
+                            </div>
+                            <div>
+                                <span class="text-muted fs-12 text-uppercase fw-semibold d-block">Total Price</span>
+                                <span class="fs-16 fw-bold text-success">₹
+                                    {{ number_format($viewUnitModel->price, 0) }}</span>
+                            </div>
+                        </div>
+
+                        {{-- Specifications --}}
+                        <h6 class="fw-bold text-uppercase fs-12 text-muted mb-3 border-bottom pb-2">
+                            <i class="ri-list-check me-1"></i> Property Specifications
+                        </h6>
+                        <div class="row g-3 mb-4">
+                            @if($viewUnitModel->inventory_type === 'flat')
+                                <div class="col-sm-4">
+                                    <span class="text-muted fs-12 d-block">Floor</span>
+                                    <span class="fw-semibold text-dark">{{ $viewUnitModel->floor ?: '-' }}</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <span class="text-muted fs-12 d-block">Flat Number</span>
+                                    <span class="fw-semibold text-dark">{{ $viewUnitModel->flat_no ?: '-' }}</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <span class="text-muted fs-12 d-block">Unit Type</span>
+                                    <span class="fw-semibold text-dark">{{ $viewUnitModel->unit_type_label ?: '-' }}</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <span class="text-muted fs-12 d-block">Area (SBUP)</span>
+                                    <span
+                                        class="fw-semibold text-dark">{{ $viewUnitModel->area_sbup ? number_format($viewUnitModel->area_sbup, 2) . ' Sq. Ft.' : '-' }}</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <span class="text-muted fs-12 d-block">Carpet Area</span>
+                                    <span
+                                        class="fw-semibold text-dark">{{ $viewUnitModel->carpet_area ? number_format($viewUnitModel->carpet_area, 2) . ' Sq. Ft.' : '-' }}</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <span class="text-muted fs-12 d-block">Super Buildup Area</span>
+                                    <span
+                                        class="fw-semibold text-dark">{{ $viewUnitModel->super_buildup_area ? number_format($viewUnitModel->super_buildup_area, 2) . ' Sq. Ft.' : '-' }}</span>
+                                </div>
+                            @else
+                                <div class="col-sm-3">
+                                    <span class="text-muted fs-12 d-block">Plot Number</span>
+                                    <span class="fw-semibold text-dark">{{ $viewUnitModel->plot_no ?: '-' }}</span>
+                                </div>
+                                <div class="col-sm-3">
+                                    <span class="text-muted fs-12 d-block">Area (Sq. Yards)</span>
+                                    <span
+                                        class="fw-semibold text-dark">{{ $viewUnitModel->area_sq_yards ? number_format($viewUnitModel->area_sq_yards, 2) : '-' }}</span>
+                                </div>
+                                <div class="col-sm-3">
+                                    <span class="text-muted fs-12 d-block">Road Size</span>
+                                    <span class="fw-semibold text-dark">{{ $viewUnitModel->road_size ?: '-' }}</span>
+                                </div>
+                                <div class="col-sm-3">
+                                    <span class="text-muted fs-12 d-block">PLC %</span>
+                                    <span
+                                        class="fw-semibold text-dark">{{ $viewUnitModel->plc_percentage !== null ? $viewUnitModel->plc_percentage . '%' : '-' }}</span>
+                                </div>
                             @endif
                         </div>
-                        <div>
-                            <span class="text-muted fs-12 text-uppercase fw-semibold d-block">Total Price</span>
-                            <span class="fs-16 fw-bold text-success">₹ {{ number_format($viewUnitModel->price, 0) }}</span>
-                        </div>
-                    </div>
 
-                    {{-- Specifications --}}
-                    <h6 class="fw-bold text-uppercase fs-12 text-muted mb-3 border-bottom pb-2">
-                        <i class="ri-list-check me-1"></i> Property Specifications
-                    </h6>
-                    <div class="row g-3 mb-4">
-                        @if($viewUnitModel->inventory_type === 'flat')
-                            <div class="col-sm-4">
-                                <span class="text-muted fs-12 d-block">Floor</span>
-                                <span class="fw-semibold text-dark">{{ $viewUnitModel->floor ?: '-' }}</span>
-                            </div>
-                            <div class="col-sm-4">
-                                <span class="text-muted fs-12 d-block">Flat Number</span>
-                                <span class="fw-semibold text-dark">{{ $viewUnitModel->flat_no ?: '-' }}</span>
-                            </div>
-                            <div class="col-sm-4">
-                                <span class="text-muted fs-12 d-block">Unit Type</span>
-                                <span class="fw-semibold text-dark">{{ $viewUnitModel->unit_type_label ?: '-' }}</span>
-                            </div>
-                            <div class="col-sm-4">
-                                <span class="text-muted fs-12 d-block">Area (SBUP)</span>
-                                <span class="fw-semibold text-dark">{{ $viewUnitModel->area_sbup ? number_format($viewUnitModel->area_sbup, 2) . ' Sq. Ft.' : '-' }}</span>
-                            </div>
-                            <div class="col-sm-4">
-                                <span class="text-muted fs-12 d-block">Carpet Area</span>
-                                <span class="fw-semibold text-dark">{{ $viewUnitModel->carpet_area ? number_format($viewUnitModel->carpet_area, 2) . ' Sq. Ft.' : '-' }}</span>
-                            </div>
-                            <div class="col-sm-4">
-                                <span class="text-muted fs-12 d-block">Super Buildup Area</span>
-                                <span class="fw-semibold text-dark">{{ $viewUnitModel->super_buildup_area ? number_format($viewUnitModel->super_buildup_area, 2) . ' Sq. Ft.' : '-' }}</span>
-                            </div>
-                        @else
-                            <div class="col-sm-3">
-                                <span class="text-muted fs-12 d-block">Plot Number</span>
-                                <span class="fw-semibold text-dark">{{ $viewUnitModel->plot_no ?: '-' }}</span>
-                            </div>
-                            <div class="col-sm-3">
-                                <span class="text-muted fs-12 d-block">Area (Sq. Yards)</span>
-                                <span class="fw-semibold text-dark">{{ $viewUnitModel->area_sq_yards ? number_format($viewUnitModel->area_sq_yards, 2) : '-' }}</span>
-                            </div>
-                            <div class="col-sm-3">
-                                <span class="text-muted fs-12 d-block">Road Size</span>
-                                <span class="fw-semibold text-dark">{{ $viewUnitModel->road_size ?: '-' }}</span>
-                            </div>
-                            <div class="col-sm-3">
-                                <span class="text-muted fs-12 d-block">PLC %</span>
-                                <span class="fw-semibold text-dark">{{ $viewUnitModel->plc_percentage !== null ? $viewUnitModel->plc_percentage . '%' : '-' }}</span>
+                        {{-- Customer / Allotment Info if Sold --}}
+                        @if($viewUnitModel->deal)
+                            <h6 class="fw-bold text-uppercase fs-12 text-muted mb-3 border-bottom pb-2">
+                                <i class="ri-user-line me-1"></i> Customer & Deal Information
+                            </h6>
+                            <div class="p-3 bg-primary-subtle text-primary rounded-3 mb-4">
+                                <div class="row g-3">
+                                    <div class="col-sm-4">
+                                        <span class="text-muted fs-12 d-block">Customer Name</span>
+                                        <span class="fw-bold text-dark fs-14">{{ $viewUnitModel->deal->first_name }}
+                                            {{ $viewUnitModel->deal->last_name }}</span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <span class="text-muted fs-12 d-block">Mobile Number</span>
+                                        <span class="fw-semibold text-dark">{{ $viewUnitModel->deal->phone ?: '-' }}</span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <span class="text-muted fs-12 d-block">Email</span>
+                                        <span class="fw-semibold text-dark">{{ $viewUnitModel->deal->email ?: '-' }}</span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <span class="text-muted fs-12 d-block">Booking Date</span>
+                                        <span
+                                            class="fw-semibold text-dark">{{ $viewUnitModel->deal->booking_date ? $viewUnitModel->deal->booking_date->format('Y-m-d H:i:s') : '-' }}</span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <span class="text-muted fs-12 d-block">Deal Status</span>
+                                        <span
+                                            class="badge bg-success text-white px-2 py-1 fs-11">{{ $viewUnitModel->deal->deal_status ?: $viewUnitModel->deal->status }}</span>
+                                    </div>
+                                    <div class="col-sm-4 d-flex align-items-end">
+                                        <a href="{{ route('deals.show', $viewUnitModel->deal->id) }}" target="_blank"
+                                            class="btn btn-primary btn-sm w-100">
+                                            <i class="ri-external-link-line me-1"></i> View Full Deal Form
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         @endif
                     </div>
-
-                    {{-- Customer / Allotment Info if Sold --}}
-                    @if($viewUnitModel->deal)
-                        <h6 class="fw-bold text-uppercase fs-12 text-muted mb-3 border-bottom pb-2">
-                            <i class="ri-user-line me-1"></i> Customer & Deal Information
-                        </h6>
-                        <div class="p-3 bg-primary-subtle text-primary rounded-3 mb-4">
-                            <div class="row g-3">
-                                <div class="col-sm-4">
-                                    <span class="text-muted fs-12 d-block">Customer Name</span>
-                                    <span class="fw-bold text-dark fs-14">{{ $viewUnitModel->deal->first_name }} {{ $viewUnitModel->deal->last_name }}</span>
-                                </div>
-                                <div class="col-sm-4">
-                                    <span class="text-muted fs-12 d-block">Mobile Number</span>
-                                    <span class="fw-semibold text-dark">{{ $viewUnitModel->deal->phone ?: '-' }}</span>
-                                </div>
-                                <div class="col-sm-4">
-                                    <span class="text-muted fs-12 d-block">Email</span>
-                                    <span class="fw-semibold text-dark">{{ $viewUnitModel->deal->email ?: '-' }}</span>
-                                </div>
-                                <div class="col-sm-4">
-                                    <span class="text-muted fs-12 d-block">Booking Date</span>
-                                    <span class="fw-semibold text-dark">{{ $viewUnitModel->deal->booking_date ? $viewUnitModel->deal->booking_date->format('Y-m-d H:i:s') : '-' }}</span>
-                                </div>
-                                <div class="col-sm-4">
-                                    <span class="text-muted fs-12 d-block">Deal Status</span>
-                                    <span class="badge bg-success text-white px-2 py-1 fs-11">{{ $viewUnitModel->deal->deal_status ?: $viewUnitModel->deal->status }}</span>
-                                </div>
-                                <div class="col-sm-4 d-flex align-items-end">
-                                    <a href="{{ route('deals.show', $viewUnitModel->deal->id) }}" target="_blank" class="btn btn-primary btn-sm w-100">
-                                        <i class="ri-external-link-line me-1"></i> View Full Deal Form
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-                <div class="modal-footer bg-light py-2 px-4">
-                    <button type="button" class="btn btn-secondary px-4" wire:click="closeViewModal">Close</button>
+                    <div class="modal-footer bg-light py-2 px-4">
+                        <button type="button" class="btn btn-secondary px-4" wire:click="closeViewModal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     @endif
 
     @push('styles')
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <style>
+            .select2-container--default .select2-selection--single {
+                height: 42px !important;
+                border: 2px solid #ced4da !important;
+                border-radius: 0.375rem !important;
+                padding: 6px 12px !important;
+                display: flex;
+                align-items: center;
+            }
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 40px !important;
+            }
+            .select2-dropdown {
+                z-index: 1060 !important;
+            }
+        </style>
     @endpush
 
     @push('scripts')
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.addEventListener('livewire:init', () => {
@@ -851,6 +1046,36 @@
                         icon: data.icon,
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#405189'
+                    });
+                });
+
+                const initSoldSelect2 = () => {
+                    if ($('#sold_state_id').length && typeof $.fn.select2 !== 'undefined') {
+                        $('#sold_state_id').select2({
+                            dropdownParent: $('#soldModalContainer'),
+                            placeholder: 'Select State',
+                            allowClear: true
+                        }).off('change').on('change', function(e) {
+                            @this.set('newDealForm.state_id', e.target.value);
+                        });
+                    }
+
+                    if ($('#sold_city_id').length && typeof $.fn.select2 !== 'undefined') {
+                        $('#sold_city_id').select2({
+                            dropdownParent: $('#soldModalContainer'),
+                            placeholder: 'Select City',
+                            allowClear: true
+                        }).off('change').on('change', function(e) {
+                            @this.set('newDealForm.city_id', e.target.value);
+                        });
+                    }
+                };
+
+                setTimeout(initSoldSelect2, 150);
+
+                Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
+                    succeed(() => {
+                        setTimeout(initSoldSelect2, 150);
                     });
                 });
             });
