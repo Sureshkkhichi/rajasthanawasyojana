@@ -4,6 +4,8 @@ use App\Models\Lead;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use App\Services\ActivityLogger;
+
 #[Layout('layouts.app')]
 #[Title('Lead Details')]
 class Show extends Component
@@ -23,6 +25,9 @@ class Show extends Component
     }
     public function sendMail(): void
     {
+        ActivityLogger::logLead($this->lead, 'email_sent', 'Email Sent', "Sent email notification to {$this->lead->email}", ['recipient' => $this->lead->email]);
+        $this->dispatch('activityLogged');
+
         $this->dispatch('swal:alert', [
             'title' => 'Mail Sent!',
             'text' => 'Mail successfully sent to ' . $this->lead->email,
@@ -32,6 +37,9 @@ class Show extends Component
 
     public function sendSMS(): void
     {
+        ActivityLogger::logLead($this->lead, 'sms_sent', 'SMS Sent', "Sent SMS notification to {$this->lead->phone}", ['phone' => $this->lead->phone]);
+        $this->dispatch('activityLogged');
+
         $this->dispatch('swal:alert', [
             'title' => 'SMS Sent!',
             'text' => 'SMS successfully sent to ' . $this->lead->phone,

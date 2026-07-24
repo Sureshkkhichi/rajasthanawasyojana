@@ -7,6 +7,8 @@ use App\Models\FrontendSetting;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Response;
 
+use App\Services\ActivityLogger;
+
 class DealDocumentController extends Controller
 {
     public function allotmentLetter(Deal $deal)
@@ -19,6 +21,8 @@ class DealDocumentController extends Controller
         if (!$inventory) {
             abort(404, 'No allotted unit found for this deal.');
         }
+
+        ActivityLogger::logDeal($deal, 'allotment_pdf_downloaded', 'Allotment Letter Downloaded', "Downloaded Allotment Letter PDF for Deal #{$deal->id}");
 
         $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
 
@@ -40,6 +44,8 @@ class DealDocumentController extends Controller
         if (!$inventory) {
             abort(404, 'No allotted unit found for this deal.');
         }
+
+        ActivityLogger::logDeal($deal, 'demand_pdf_downloaded', 'Demand Letter Downloaded', "Downloaded Demand Letter PDF for Deal #{$deal->id}");
 
         $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
 
@@ -64,6 +70,8 @@ class DealDocumentController extends Controller
 
         $deal->load(['project', 'agent']);
 
+        ActivityLogger::logDeal($deal, 'pdf_downloaded', 'Deal Summary PDF Downloaded', "Downloaded summary PDF for Deal #{$deal->id}");
+
         $html = view('emails.deal-pdf', [
             'deal' => $deal,
         ])->render();
@@ -78,6 +86,8 @@ class DealDocumentController extends Controller
         abort_unless(auth()->user()->can('leads.view'), 403);
 
         $lead->load(['project', 'agent']);
+
+        ActivityLogger::logLead($lead, 'pdf_downloaded', 'Lead Application PDF Downloaded', "Downloaded application PDF for Lead #{$lead->id}");
 
         $html = view('emails.lead-pdf', [
             'lead' => $lead,

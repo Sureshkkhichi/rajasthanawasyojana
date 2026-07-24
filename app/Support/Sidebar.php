@@ -170,6 +170,12 @@ class Sidebar
                         'icon' => 'ri-funds-line',
                         'permission' => 'reports.profit',
                     ],
+                    [
+                        'title' => 'Activity Logs',
+                        'route' => 'activity-logs.index',
+                        'is_route' => true,
+                        'icon' => 'ri-history-line',
+                    ],
                 ],
             ],
         ];

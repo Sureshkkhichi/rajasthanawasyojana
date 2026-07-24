@@ -240,6 +240,17 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Activity Timeline --}}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <livewire:components.activity-timeline :leadId="$lead->id" :wire:key="'lead-timeline-' . $lead->id" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

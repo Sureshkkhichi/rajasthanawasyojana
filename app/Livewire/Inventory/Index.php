@@ -7,6 +7,7 @@ use App\Models\Inventory;
 use App\Models\InventoryHistory;
 use App\Models\State;
 use App\Models\City;
+use App\Services\ActivityLogger;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -525,6 +526,9 @@ class Index extends Component
                 'changed_by' => auth()->user()->name,
                 'notes' => 'Unit sold via new Deal creation: ' . $deal->first_name . ' ' . $deal->last_name,
             ]);
+
+            ActivityLogger::logDeal($deal, 'marked_sold', 'Unit Allotted & Marked Sold', "Unit #{$unit->unit_name} allotted to {$deal->first_name} {$deal->last_name} and marked Sold", ['unit' => $unit->unit_name, 'old_status' => $oldStatus, 'new_status' => 'Sold']);
+            ActivityLogger::logInventory($unit, 'marked_sold', 'Unit Marked Sold', "Unit marked Sold and allotted to Deal #{$deal->id} ({$deal->first_name} {$deal->last_name})", ['deal_id' => $deal->id, 'old_status' => $oldStatus, 'new_status' => 'Sold']);
         } else {
             $this->validate([
                 'selectedDealId' => 'required|exists:deals,id',
@@ -544,6 +548,9 @@ class Index extends Component
                     'changed_by' => auth()->user()->name,
                     'notes' => 'Unit sold and allotted to existing Deal: ' . $deal->first_name . ' ' . $deal->last_name,
                 ]);
+
+                ActivityLogger::logDeal($deal, 'marked_sold', 'Unit Allotted & Marked Sold', "Unit #{$unit->unit_name} allotted to Deal #{$deal->id} and marked Sold", ['unit' => $unit->unit_name, 'old_status' => $oldStatus, 'new_status' => 'Sold']);
+                ActivityLogger::logInventory($unit, 'marked_sold', 'Unit Marked Sold', "Unit marked Sold and allotted to Deal #{$deal->id}", ['deal_id' => $deal->id, 'old_status' => $oldStatus, 'new_status' => 'Sold']);
             }
         }
 
@@ -571,6 +578,8 @@ class Index extends Component
             // Clear active allotments
             \App\Models\Deal::where('allotted_inventory_id', $unit->id)
                 ->update(['allotted_inventory_id' => null]);
+
+            ActivityLogger::logInventory($unit, 'status_changed', 'Unit Vacated', "Unit #{$unit->unit_name} status changed from {$oldStatus} to Available", ['old_status' => $oldStatus, 'new_status' => 'Available']);
 
             // Log history
             InventoryHistory::create([

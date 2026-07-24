@@ -5,6 +5,7 @@ use App\Models\Lead;
 use App\Models\Project;
 use App\Models\State;
 use App\Models\City;
+use App\Services\ActivityLogger;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -226,11 +227,13 @@ class Form extends Component
 
         if ($this->lead->exists) {
             $this->lead->update($data);
+            ActivityLogger::logLead($this->lead, 'updated', 'Lead Information Updated', "Lead details updated for {$this->lead->first_name} {$this->lead->last_name}");
             session()->flash('success', 'Lead updated successfully.');
         } else {
             $data['created_by'] = auth()->id();
             $data['is_submitted'] = true;
             $this->lead = Lead::create($data);
+            ActivityLogger::logLead($this->lead, 'created', 'Lead Created', "New lead created for {$this->lead->first_name} {$this->lead->last_name} ({$this->lead->phone})");
             session()->flash('success', 'Lead created successfully.');
             return redirect()->route('leads.index');
         }

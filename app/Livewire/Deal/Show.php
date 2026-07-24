@@ -4,6 +4,7 @@ namespace App\Livewire\Deal;
 
 use App\Models\Deal;
 use App\Models\Inventory;
+use App\Services\ActivityLogger;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -106,6 +107,9 @@ class Show extends Component
                     $demandPdf
                 ));
 
+            ActivityLogger::logDeal($this->deal, 'email_sent', 'Allotment & Demand Email Sent', "Sent email with PDF attachments to {$this->email_recipient}", ['recipient' => $this->email_recipient]);
+            $this->dispatch('activityLogged');
+
             $this->showEmailModal = false;
 
             $this->dispatch('swal:alert', [
@@ -125,6 +129,9 @@ class Show extends Component
 
     public function sendSms(): void
     {
+        ActivityLogger::logDeal($this->deal, 'sms_sent', 'SMS Triggered', "Triggered SMS notification for Deal #{$this->deal->id}");
+        $this->dispatch('activityLogged');
+
         $this->dispatch('swal:alert', [
             'title' => 'SMS Notification',
             'text' => 'SMS functionality is triggered (service integration pending).',

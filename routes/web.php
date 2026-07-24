@@ -142,6 +142,9 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/pages', StaticPageIndex::class)
         ->name('pages.index');
 
+    Route::get('/activity-logs', \App\Livewire\ActivityLog\Index::class)
+        ->name('activity-logs.index');
+
     Route::view('profile', 'profile')->middleware(['auth'])->name('profile');
 });
 Route::get('/', Home::class)->name('front');
