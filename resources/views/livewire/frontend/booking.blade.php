@@ -537,14 +537,14 @@
                                             @endif
                                         </label>
                                         <select class="form-select @error('flat_size') is-invalid @enderror"
-                                            wire:model="flat_size">
+                                            wire:model.live="flat_size">
                                             <option value="">Select Option</option>
                                             @foreach($sizes as $size)
                                                 @php
                                                     $sizeLabel = match($size) {
                                                         'EWS' => 'EWS (1BHK)',
                                                         'LIG' => 'LIG (2BHK)',
-                                                        default => $size,
+                                                        default => $project->inventory_type === 'plot' ? $size . ' Sq. Yards' : $size,
                                                     };
                                                 @endphp
                                                 <option value="{{ $size }}">{{ $sizeLabel }}</option>
@@ -579,8 +579,12 @@
                         <!-- PRICE CARD -->
                         <div class="row">
                             <div class="col-sm-12 form-group">
-                                <label>Total Flat value </label>
-                                <h2 id="total" style=" border-bottom:2px dotted #000;"></h2>
+                                <label>Total {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }} value</label>
+                                <h2 id="total" style="border-bottom: 2px dotted #000; min-height: 42px; display: flex; align-items: center;">
+                                    @if($this->total_value)
+                                        ₹ {{ indianCurrency($this->total_value) }}
+                                    @endif
+                                </h2>
                                 <h3 class="" style="font-weight: 500;">Registration Amount Rs. {{ number_format(\App\Models\FrontendSetting::getVal('booking_amount', 21100)) }}</h3>
                             </div>
                         </div>

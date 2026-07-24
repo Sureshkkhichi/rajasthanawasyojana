@@ -103,6 +103,52 @@ class Booking extends Component
                 ->toArray();
         }
     }
+
+    public function getTotalValueProperty(): ?float
+    {
+        if (empty($this->flat_size)) {
+            return null;
+        }
+
+        if ($this->project->inventory_type === 'plot') {
+            // Check inventory table for exact plot size match first
+            $inventory = \App\Models\Inventory::query()
+                ->where('project_id', $this->project->id)
+                ->where('inventory_type', 'plot')
+                ->where('area_sq_yards', $this->flat_size)
+                ->whereNotNull('price')
+                ->where('price', '>', 0)
+                ->first();
+
+            if ($inventory && (float)$inventory->price > 0) {
+                return (float) $inventory->price;
+            }
+
+            // Fallback: Project Rate (per sq. yd) * Selected Area (Sq. Yards)
+            if (is_numeric($this->flat_size) && (float)$this->flat_size > 0 && is_numeric($this->project->price)) {
+                return (float)$this->project->price * (float)$this->flat_size;
+            }
+        } else {
+            // Flat project: Check inventory table for unit_type match
+            $inventory = \App\Models\Inventory::query()
+                ->where('project_id', $this->project->id)
+                ->where('inventory_type', 'flat')
+                ->where('unit_type', $this->flat_size)
+                ->whereNotNull('price')
+                ->where('price', '>', 0)
+                ->first();
+
+            if ($inventory && (float)$inventory->price > 0) {
+                return (float) $inventory->price;
+            }
+
+            if (is_numeric($this->project->price) && (float)$this->project->price > 0) {
+                return (float) $this->project->price;
+            }
+        }
+
+        return null;
+    }
     public function updated($property): void
     {
         if (
