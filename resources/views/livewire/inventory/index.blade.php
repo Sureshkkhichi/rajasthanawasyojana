@@ -784,7 +784,7 @@
                                                         let inp = $refs.stateSearchInput; 
                                                         if(inp) { inp.value = ''; inp.focus(); }
                                                         let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
-                                                        items.forEach(el => el.style.display = 'flex'); 
+                                                        items.forEach(el => el.classList.remove('d-none')); 
                                                     }); 
                                                 }
                                             "
@@ -812,14 +812,15 @@
                                                         let items = this.closest('.position-relative').querySelectorAll('.state-item-option');
                                                         items.forEach(el => {
                                                             let name = (el.getAttribute('data-name') || '').toLowerCase();
-                                                            el.style.display = (!q || name.includes(q)) ? 'flex' : 'none';
+                                                            let isMatch = !q || name.includes(q);
+                                                            if (isMatch) { el.classList.remove('d-none'); } else { el.classList.add('d-none'); }
                                                         });
                                                     ">
                                                 <button type="button" class="btn btn-light border-start-0" 
                                                     @click="
                                                         $refs.stateSearchInput.value = ''; 
                                                         let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
-                                                        items.forEach(el => el.style.display = 'flex');
+                                                        items.forEach(el => el.classList.remove('d-none'));
                                                         $refs.stateSearchInput.focus();
                                                     ">
                                                     <i class="ri-close-line"></i>
@@ -873,7 +874,7 @@
                                                         let inp = $refs.citySearchInput; 
                                                         if(inp) { inp.value = ''; inp.focus(); }
                                                         let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
-                                                        items.forEach(el => el.style.display = 'flex'); 
+                                                        items.forEach(el => el.classList.remove('d-none')); 
                                                     }); 
                                                 }
                                             "
@@ -901,14 +902,15 @@
                                                         let items = this.closest('.position-relative').querySelectorAll('.city-item-option');
                                                         items.forEach(el => {
                                                             let name = (el.getAttribute('data-name') || '').toLowerCase();
-                                                            el.style.display = (!q || name.includes(q)) ? 'flex' : 'none';
+                                                            let isMatch = !q || name.includes(q);
+                                                            if (isMatch) { el.classList.remove('d-none'); } else { el.classList.add('d-none'); }
                                                         });
                                                     ">
                                                 <button type="button" class="btn btn-light border-start-0" 
                                                     @click="
                                                         $refs.citySearchInput.value = ''; 
                                                         let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
-                                                        items.forEach(el => el.style.display = 'flex');
+                                                        items.forEach(el => el.classList.remove('d-none'));
                                                         $refs.citySearchInput.focus();
                                                     ">
                                                     <i class="ri-close-line"></i>
