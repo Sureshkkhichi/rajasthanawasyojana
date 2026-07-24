@@ -440,14 +440,14 @@ class Index extends Component
             ]);
 
             $oldStatus = $unit->status;
-            $unit->update(['status' => 'Alloted']);
+            $unit->update(['status' => 'Sold']);
 
             InventoryHistory::create([
                 'inventory_id' => $unit->id,
                 'from_status' => $oldStatus,
-                'to_status' => 'Alloted',
+                'to_status' => 'Sold',
                 'changed_by' => auth()->user()->name,
-                'notes' => 'Unit allotted via new Deal creation: ' . $deal->first_name . ' ' . $deal->last_name,
+                'notes' => 'Unit sold via new Deal creation: ' . $deal->first_name . ' ' . $deal->last_name,
             ]);
         } else {
             $this->validate([
@@ -459,14 +459,14 @@ class Index extends Component
                 $deal->update(['allotted_inventory_id' => $unit->id]);
 
                 $oldStatus = $unit->status;
-                $unit->update(['status' => 'Alloted']);
+                $unit->update(['status' => 'Sold']);
 
                 InventoryHistory::create([
                     'inventory_id' => $unit->id,
                     'from_status' => $oldStatus,
-                    'to_status' => 'Alloted',
+                    'to_status' => 'Sold',
                     'changed_by' => auth()->user()->name,
-                    'notes' => 'Unit allotted to existing Deal: ' . $deal->first_name . ' ' . $deal->last_name,
+                    'notes' => 'Unit sold and allotted to existing Deal: ' . $deal->first_name . ' ' . $deal->last_name,
                 ]);
             }
         }
@@ -474,8 +474,8 @@ class Index extends Component
         $this->soldModalOpen = false;
 
         $this->dispatch('swal:alert', [
-            'title' => 'Allotment Successful!',
-            'text' => 'Unit has been successfully allotted and marked as Alloted.',
+            'title' => 'Marked Sold!',
+            'text' => 'Unit has been successfully marked as Sold.',
             'icon' => 'success'
         ]);
     }

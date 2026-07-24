@@ -268,10 +268,8 @@
                                                         <span class="badge bg-success-subtle text-success rounded-pill px-2.5 py-1 fs-11">Available</span>
                                                     @elseif($unit->status === 'Hold')
                                                         <span class="badge bg-warning-subtle text-warning rounded-pill px-2.5 py-1 fs-11">Hold</span>
-                                                    @elseif($unit->status === 'Sold')
+                                                    @elseif($unit->status === 'Sold' || $unit->status === 'Alloted')
                                                         <span class="badge bg-danger-subtle text-danger rounded-pill px-2.5 py-1 fs-11">Sold</span>
-                                                    @elseif($unit->status === 'Alloted')
-                                                        <span class="badge bg-info-subtle text-info rounded-pill px-2.5 py-1 fs-11">Alloted</span>
                                                     @else
                                                         <span class="badge bg-dark-subtle text-dark rounded-pill px-2.5 py-1 fs-11">{{ $unit->status }}</span>
                                                     @endif
