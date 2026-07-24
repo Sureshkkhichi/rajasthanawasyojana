@@ -774,6 +774,12 @@
                                         if (!this.search || !this.search.trim()) return list;
                                         let q = this.search.toLowerCase().trim();
                                         return list.filter(i => (i.name || '').toLowerCase().includes(q));
+                                    },
+                                    selectState(id) {
+                                        this.selectedId = id;
+                                        this.open = false;
+                                        this.search = '';
+                                        $wire.set('newDealForm.state_id', id);
                                     }
                                 }">
                                     <label class="form-label fw-semibold text-muted mb-1">State <span class="text-danger">*</span></label>
@@ -808,7 +814,7 @@
                                                 <template x-for="st in filteredItems" :key="st.id">
                                                     <div class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
                                                         :class="{ 'bg-primary text-white fw-bold': selectedId == st.id }"
-                                                        @click="selectedId = st.id; open = false; search = '';"
+                                                        @click="selectState(st.id)"
                                                         style="cursor: pointer;">
                                                         <span x-text="st.name"></span>
                                                         <template x-if="selectedId == st.id">
@@ -843,6 +849,12 @@
                                         if (!this.search || !this.search.trim()) return list;
                                         let q = this.search.toLowerCase().trim();
                                         return list.filter(i => (i.name || '').toLowerCase().includes(q));
+                                    },
+                                    selectCity(id) {
+                                        this.selectedId = id;
+                                        this.open = false;
+                                        this.search = '';
+                                        $wire.set('newDealForm.city_id', id);
                                     }
                                 }">
                                     <label class="form-label fw-semibold text-muted mb-1">City <span class="text-danger">*</span></label>
@@ -877,7 +889,7 @@
                                                 <template x-for="ct in filteredItems" :key="ct.id">
                                                     <div class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
                                                         :class="{ 'bg-primary text-white fw-bold': selectedId == ct.id }"
-                                                        @click="selectedId = ct.id; open = false; search = '';"
+                                                        @click="selectCity(ct.id)"
                                                         style="cursor: pointer;">
                                                         <span x-text="ct.name"></span>
                                                         <template x-if="selectedId == ct.id">
