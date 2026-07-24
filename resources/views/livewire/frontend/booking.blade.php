@@ -577,14 +577,14 @@
                             </div>
                         </div>
                         <!-- PRICE CARD -->
-                        <div class="row">
+                        <div class="row mb-3">
                             <div class="col-sm-12 form-group">
-                                <label>Total {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }} value</label>
-                                <h2 id="total" style="border-bottom: 2px dotted #000; min-height: 42px; display: flex; align-items: center;">
-                                    @if($this->total_value)
+                                @if(!empty($flat_size) && $this->total_value)
+                                    <label>Total {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }} value</label>
+                                    <h2 id="total" style="border-bottom: 2px dotted #000; min-height: 42px; display: flex; align-items: center;" class="text-success fw-bold">
                                         ₹ {{ indianCurrency($this->total_value) }}
-                                    @endif
-                                </h2>
+                                    </h2>
+                                @endif
                                 <h3 class="" style="font-weight: 500;">Registration Amount Rs. {{ number_format(\App\Models\FrontendSetting::getVal('booking_amount', 21100)) }}</h3>
                             </div>
                         </div>
