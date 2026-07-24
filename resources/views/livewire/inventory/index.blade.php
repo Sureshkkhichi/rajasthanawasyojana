@@ -983,8 +983,8 @@
                                 <!-- Booking Amount Paid -->
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Booking Amount Paid (₹) *</label>
-                                    <input type="number" step="0.01" class="form-control border-2"
-                                        placeholder="Enter booking amount" wire:model="newDealForm.booking_amount">
+                                    <input type="number" step="0.01" class="form-control border-2 bg-light text-muted"
+                                        placeholder="Enter booking amount" wire:model="newDealForm.booking_amount" readonly style="background-color: #e9ecef !important; cursor: not-allowed;">
                                     @error('newDealForm.booking_amount') <span
                                     class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
@@ -992,8 +992,8 @@
                                 <!-- Total Price -->
                                 <div class="col-md-4 offset-md-8">
                                     <label class="form-label fw-semibold text-muted mb-1">Total Price (₹) *</label>
-                                    <input type="number" step="0.01" class="form-control border-2"
-                                        placeholder="Enter total price" wire:model="newDealForm.total_amount">
+                                    <input type="number" step="0.01" class="form-control border-2 bg-light text-muted"
+                                        placeholder="Enter total price" wire:model="newDealForm.total_amount" readonly style="background-color: #e9ecef !important; cursor: not-allowed;">
                                     @error('newDealForm.total_amount') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
                                 </div>
