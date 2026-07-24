@@ -762,12 +762,14 @@
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">State <span
                                             class="text-danger">*</span></label>
-                                    <select id="sold_state_id" class="form-select border-2 select2-sold" wire:model.live="newDealForm.state_id">
-                                        <option value="">Select State</option>
-                                        @foreach($states as $st)
-                                            <option value="{{ $st->id }}">{{ $st->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div wire:ignore>
+                                        <select id="sold_state_id" class="form-select border-2">
+                                            <option value="">Select State</option>
+                                            @foreach($states as $st)
+                                                <option value="{{ $st->id }}">{{ $st->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     @error('newDealForm.state_id') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -775,12 +777,14 @@
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">City <span
                                             class="text-danger">*</span></label>
-                                    <select id="sold_city_id" class="form-select border-2 select2-sold" wire:model="newDealForm.city_id">
-                                        <option value="">Select City</option>
-                                        @foreach($cities as $ct)
-                                            <option value="{{ $ct->id }}">{{ $ct->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div wire:ignore>
+                                        <select id="sold_city_id" class="form-select border-2">
+                                            <option value="">Select City</option>
+                                            @foreach($cities as $ct)
+                                                <option value="{{ $ct->id }}">{{ $ct->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     @error('newDealForm.city_id') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -1049,35 +1053,79 @@
                     });
                 });
 
+                let isUpdatingState = false;
+
                 const initSoldSelect2 = () => {
                     if ($('#sold_state_id').length && typeof $.fn.select2 !== 'undefined') {
-                        $('#sold_state_id').select2({
-                            dropdownParent: $('#soldModalContainer'),
-                            placeholder: 'Select State',
-                            allowClear: true
-                        }).off('change').on('change', function(e) {
-                            @this.set('newDealForm.state_id', e.target.value);
-                        });
+                        if (!$('#sold_state_id').hasClass('select2-hidden-accessible')) {
+                            $('#sold_state_id').select2({
+                                dropdownParent: $('#soldModalContainer'),
+                                placeholder: 'Select State',
+                                allowClear: true
+                            }).on('change', function(e) {
+                                if (!isUpdatingState) {
+                                    @this.set('newDealForm.state_id', e.target.value);
+                                }
+                            });
+                        }
                     }
 
                     if ($('#sold_city_id').length && typeof $.fn.select2 !== 'undefined') {
-                        $('#sold_city_id').select2({
-                            dropdownParent: $('#soldModalContainer'),
-                            placeholder: 'Select City',
-                            allowClear: true
-                        }).off('change').on('change', function(e) {
-                            @this.set('newDealForm.city_id', e.target.value);
-                        });
+                        if (!$('#sold_city_id').hasClass('select2-hidden-accessible')) {
+                            $('#sold_city_id').select2({
+                                dropdownParent: $('#soldModalContainer'),
+                                placeholder: 'Select City',
+                                allowClear: true
+                            }).on('change', function(e) {
+                                if (!isUpdatingState) {
+                                    @this.set('newDealForm.city_id', e.target.value);
+                                }
+                            });
+                        }
                     }
                 };
 
-                setTimeout(initSoldSelect2, 150);
+                // Listen for Sold Modal Opened
+                Livewire.on('sold-modal-opened', (eventData) => {
+                    isUpdatingState = true;
+                    setTimeout(() => {
+                        initSoldSelect2();
+                        let payload = (Array.isArray(eventData) ? eventData[0] : eventData) || {};
+                        if (payload.state_id) {
+                            $('#sold_state_id').val(payload.state_id).trigger('change.select2');
+                        } else {
+                            $('#sold_state_id').val('').trigger('change.select2');
+                        }
 
-                Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
-                    succeed(() => {
-                        setTimeout(initSoldSelect2, 150);
-                    });
+                        let citySelect = $('#sold_city_id');
+                        citySelect.empty().append('<option value="">Select City</option>');
+                        if (payload.cities && payload.cities.length > 0) {
+                            payload.cities.forEach(city => {
+                                citySelect.append(new Option(city.name, city.id, false, city.id == payload.city_id));
+                            });
+                        }
+                        citySelect.val(payload.city_id || '').trigger('change.select2');
+                        isUpdatingState = false;
+                    }, 100);
                 });
+
+                // Listen for State change and Cities update
+                Livewire.on('sold-cities-updated', (eventData) => {
+                    isUpdatingState = true;
+                    let payload = (Array.isArray(eventData) ? eventData[0] : eventData) || {};
+                    let citiesList = payload.cities || [];
+                    let citySelect = $('#sold_city_id');
+                    citySelect.empty().append('<option value="">Select City</option>');
+                    if (citiesList.length > 0) {
+                        citiesList.forEach(city => {
+                            citySelect.append(new Option(city.name, city.id, false, false));
+                        });
+                    }
+                    citySelect.val('').trigger('change.select2');
+                    isUpdatingState = false;
+                });
+
+                setTimeout(initSoldSelect2, 150);
             });
         </script>
     @endpush

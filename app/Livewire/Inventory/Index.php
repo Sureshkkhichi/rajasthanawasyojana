@@ -152,6 +152,7 @@ class Index extends Component
                 $this->cities = [];
             }
             $this->newDealForm['city_id'] = '';
+            $this->dispatch('sold-cities-updated', cities: $this->cities->toArray());
         }
     }
 
@@ -383,6 +384,12 @@ class Index extends Component
                 ->get();
 
             $this->soldModalOpen = true;
+
+            $this->dispatch('sold-modal-opened', [
+                'state_id' => $this->newDealForm['state_id'],
+                'city_id' => $this->newDealForm['city_id'],
+                'cities' => $this->cities->toArray(),
+            ]);
         }
     }
 
