@@ -837,7 +837,7 @@
                                     search: '',
                                     selectedId: @entangle('newDealForm.city_id'),
                                     get items() {
-                                        return $wire.cities || [];
+                                        return {{ json_encode(collect($cities)->map(fn($c) => ['id' => (string)(is_array($c) ? $c['id'] : $c->id), 'name' => (string)(is_array($c) ? $c['name'] : $c->name)])) }};
                                     },
                                     get selectedLabel() {
                                         if (!this.selectedId) return 'Select City';
