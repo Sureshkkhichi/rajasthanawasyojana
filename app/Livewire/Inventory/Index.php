@@ -678,7 +678,11 @@ class Index extends Component
             ->where('project_id', $this->selectedProjectId);
 
         if ($this->statusFilter) {
-            $query->where('status', $this->statusFilter);
+            if ($this->statusFilter === 'Sold') {
+                $query->whereIn('status', ['Sold', 'Alloted']);
+            } else {
+                $query->where('status', $this->statusFilter);
+            }
         }
         if ($this->facingFilter) {
             if ($inventoryType === 'flat') {
@@ -785,7 +789,11 @@ class Index extends Component
             ->where('project_id', $this->selectedProjectId);
 
         if ($this->statusFilter) {
-            $unitsQuery->where('status', $this->statusFilter);
+            if ($this->statusFilter === 'Sold') {
+                $unitsQuery->whereIn('status', ['Sold', 'Alloted']);
+            } else {
+                $unitsQuery->where('status', $this->statusFilter);
+            }
         }
         if ($this->facingFilter) {
             if ($selectedProject && $selectedProject->inventory_type === 'flat') {
