@@ -18,10 +18,20 @@
                 </div>
             </div>
 
+            @php
+                $backParams = array_filter([
+                    'selectedProjectId' => $selectedProjectId ?: ($project_id ?: null),
+                    'statusFilter' => $statusFilter ?: null,
+                    'facingFilter' => $facingFilter ?: null,
+                    'searchPlot' => $searchPlot ?: null,
+                    'activeTab' => $activeTab ?: null,
+                ]);
+                $backUrl = route('inventories.index', $backParams);
+            @endphp
             {{-- Back Button --}}
             <div class="row mb-3">
                 <div class="col-12">
-                    <a href="{{ route('inventories.index') }}" class="btn btn-soft-secondary btn-sm">
+                    <a href="{{ $backUrl }}" onclick="if(document.referrer && document.referrer.includes('inventories')) { history.back(); return false; }" class="btn btn-soft-secondary btn-sm">
                         <i class="ri-arrow-left-line align-middle me-1"></i> Back to Inventory
                     </a>
                 </div>

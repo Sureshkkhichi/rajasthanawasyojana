@@ -13,7 +13,7 @@
                             <button type="button" class="btn btn-soft-secondary btn-sm d-flex align-items-center gap-1 px-3" wire:click="exportUnits">
                                 <i class="ri-download-2-line align-middle"></i> Export Units
                             </button>
-                            <a href="{{ route('inventories.create') }}" class="btn btn-primary btn-sm d-flex align-items-center gap-1 px-3">
+                            <a href="{{ route('inventories.create', array_filter(['selectedProjectId' => $selectedProjectId, 'statusFilter' => $statusFilter, 'facingFilter' => $facingFilter, 'searchPlot' => $searchPlot, 'activeTab' => $activeTab])) }}" class="btn btn-primary btn-sm d-flex align-items-center gap-1 px-3">
                                 <i class="ri-add-line align-middle"></i> Add Unit
                             </a>
                         </div>
@@ -326,7 +326,7 @@
                                                                     </button>
                                                                 </li>
                                                                 <li>
-                                                                    <a class="dropdown-item py-2" href="{{ route('inventories.edit', $unit->id) }}">
+                                                                    <a class="dropdown-item py-2" href="{{ route('inventories.edit', array_filter(['inventory' => $unit->id, 'selectedProjectId' => $selectedProjectId, 'statusFilter' => $statusFilter, 'facingFilter' => $facingFilter, 'searchPlot' => $searchPlot, 'activeTab' => $activeTab])) }}">
                                                                         <i class="ri-edit-line align-bottom me-2 text-primary"></i> Edit Unit
                                                                     </a>
                                                                 </li>

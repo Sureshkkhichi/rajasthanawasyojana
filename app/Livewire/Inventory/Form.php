@@ -37,6 +37,21 @@ class Form extends Component
     public string $carpet_area = '';
     public string $super_buildup_area = '';
 
+    // Redirect / Filter preservation properties
+    public string $selectedProjectId = '';
+    public string $statusFilter = '';
+    public string $facingFilter = '';
+    public string $searchPlot = '';
+    public string $activeTab = '';
+
+    protected $queryString = [
+        'selectedProjectId' => ['except' => ''],
+        'statusFilter' => ['except' => ''],
+        'facingFilter' => ['except' => ''],
+        'searchPlot' => ['except' => ''],
+        'activeTab' => ['except' => ''],
+    ];
+
     public function mount(?Inventory $inventory = null): void
     {
         abort_unless(
@@ -224,7 +239,15 @@ class Form extends Component
             session()->flash('success', 'Unit created successfully.');
         }
 
-        return redirect()->route('inventories.index');
+        $redirectParams = array_filter([
+            'selectedProjectId' => $this->selectedProjectId ?: ($this->project_id ?: null),
+            'statusFilter' => $this->statusFilter ?: null,
+            'facingFilter' => $this->facingFilter ?: null,
+            'searchPlot' => $this->searchPlot ?: null,
+            'activeTab' => $this->activeTab ?: null,
+        ]);
+
+        return redirect()->route('inventories.index', $redirectParams);
     }
 
     public function render()
