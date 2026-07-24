@@ -19,6 +19,7 @@ class Form extends Component
     public string $project_id = '';
     public string $inventory_type = 'plot'; // plot, flat
     public string $price = '';
+    public float $project_rate = 0.0;
     public string $status = 'Available'; // Available, Hold, Sold, Alloted, Blocked, Cancelled
     public string $remarks = '';
 
@@ -64,6 +65,13 @@ class Form extends Component
             $this->area_sbup = $inventory->area_sbup ? (string)$inventory->area_sbup : '';
             $this->carpet_area = $inventory->carpet_area ? (string)$inventory->carpet_area : '';
             $this->super_buildup_area = $inventory->super_buildup_area ? (string)$inventory->super_buildup_area : '';
+
+            if ($this->project_id) {
+                $project = Project::find($this->project_id);
+                if ($project) {
+                    $this->project_rate = (float)($project->price ?: 0);
+                }
+            }
         } else {
             // Set default project to first active project
             $firstProj = Project::query()
@@ -73,8 +81,11 @@ class Form extends Component
             if ($firstProj) {
                 $this->project_id = $firstProj->id;
                 $this->inventory_type = $firstProj->inventory_type;
+                $this->project_rate = (float)($firstProj->price ?: 0);
             }
         }
+
+        $this->calculatePrice();
     }
 
     public function updatedProjectId($value): void
@@ -85,8 +96,41 @@ class Form extends Component
         $project = Project::find($value);
         if ($project) {
             $this->inventory_type = $project->inventory_type;
+            $this->project_rate = (float)($project->price ?: 0);
         } else {
             $this->inventory_type = 'plot';
+            $this->project_rate = 0.0;
+        }
+
+        $this->calculatePrice();
+    }
+
+    public function updatedAreaSqYards(): void
+    {
+        $this->calculatePrice();
+    }
+
+    public function updatedPlcPercentage(): void
+    {
+        $this->calculatePrice();
+    }
+
+    public function calculatePrice(): void
+    {
+        if ($this->inventory_type === 'plot' && !empty($this->project_id)) {
+            $project = Project::find($this->project_id);
+            if ($project) {
+                $this->project_rate = (float)($project->price ?: 0);
+                if (is_numeric($this->area_sq_yards) && (float)$this->area_sq_yards > 0) {
+                    $basePrice = $this->project_rate * (float)$this->area_sq_yards;
+                    if ($this->plc_percentage !== '' && is_numeric($this->plc_percentage) && (float)$this->plc_percentage > 0) {
+                        $plcAmount = $basePrice * ((float)$this->plc_percentage / 100);
+                        $this->price = (string)round($basePrice + $plcAmount, 2);
+                    } else {
+                        $this->price = (string)round($basePrice, 2);
+                    }
+                }
+            }
         }
     }
 

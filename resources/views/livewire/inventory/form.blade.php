@@ -84,7 +84,7 @@
                                                     class="text-danger">*</span></label>
                                             <input type="number" step="0.01"
                                                 class="form-control @error('area_sq_yards') is-invalid @enderror"
-                                                wire:model="area_sq_yards" placeholder="e.g., 357.77">
+                                                wire:model.live="area_sq_yards" placeholder="e.g., 357.77">
                                             @error('area_sq_yards') <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -101,7 +101,7 @@
                                             <div class="input-group">
                                                 <input type="number" step="0.01"
                                                     class="form-control @error('plc_percentage') is-invalid @enderror"
-                                                    wire:model="plc_percentage" placeholder="e.g., 10">
+                                                    wire:model.live="plc_percentage" placeholder="e.g., 10">
                                                 <span class="input-group-text">%</span>
                                             </div>
                                             @error('plc_percentage') <div class="text-danger fs-12 mt-1">{{ $message }}
@@ -193,13 +193,27 @@
 
                                     {{-- Price --}}
                                     <div class="col-md-6">
-                                        <label class="form-label">Price (₹) <span class="text-danger">*</span></label>
+                                        <label class="form-label">
+                                            Price (₹) <span class="text-danger">*</span>
+                                            @if($inventory_type === 'plot')
+                                                <span class="badge bg-secondary-subtle text-secondary ms-1 fs-11">Auto-Calculated (Read-Only)</span>
+                                            @endif
+                                        </label>
                                         <div class="input-group">
                                             <span class="input-group-text">₹</span>
-                                            <input type="number"
+                                            <input type="number" step="0.01"
                                                 class="form-control @error('price') is-invalid @enderror"
-                                                wire:model="price" placeholder="e.g., 3500000">
+                                                wire:model="price" placeholder="{{ $inventory_type === 'plot' ? 'Auto-calculated from area & rate' : 'e.g., 3500000' }}"
+                                                @if($inventory_type === 'plot') readonly @endif>
                                         </div>
+                                        @if($inventory_type === 'plot')
+                                            <small class="text-muted fs-11 mt-1 d-block">
+                                                <i class="ri-calculator-line text-primary me-1"></i>Project Rate: <strong>₹{{ number_format((float)($project_rate ?? 0), 2) }} / sq.yd</strong> × Area (<strong>{{ $area_sq_yards ?: '0' }} sq.yd</strong>)
+                                                @if(!empty($plc_percentage) && (float)$plc_percentage > 0)
+                                                    + <strong>{{ $plc_percentage }}% PLC</strong>
+                                                @endif
+                                            </small>
+                                        @endif
                                         @error('price') <div class="text-danger fs-12 mt-1">{{ $message }}</div>
                                         @enderror
                                     </div>

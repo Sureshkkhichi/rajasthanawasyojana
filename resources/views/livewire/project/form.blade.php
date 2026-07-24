@@ -128,7 +128,7 @@
                                                 <label class="form-label">
                                                     Inventory Type <span class="text-danger">*</span>
                                                 </label>
-                                                <select class="form-select rounded-pill @error('inventory_type') is-invalid @enderror" wire:model="inventory_type">
+                                                <select class="form-select rounded-pill @error('inventory_type') is-invalid @enderror" wire:model.live="inventory_type">
                                                     <option value="plot">Plotting (Plots)</option>
                                                     <option value="flat">Flats (Apartments)</option>
                                                 </select>
@@ -146,11 +146,12 @@
                                             </div>
                                             {{-- Price --}}
                                             <div class="col-xl-3 col-md-6">
-                                                <label class="form-label">Price <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="number"
+                                                <label class="form-label">
+                                                    Price (₹) {{ $inventory_type === 'plot' ? '(Per Sq. Yard)' : '' }} <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="number" step="0.01"
                                                     class="form-control rounded-pill @error('price') is-invalid @enderror"
-                                                    wire:model="price" placeholder="Enter price (numeric only)">
+                                                    wire:model="price" placeholder="{{ $inventory_type === 'plot' ? 'e.g., 18000 (Per Sq. Yd Rate)' : 'Enter price' }}">
                                                 @error('price')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
