@@ -17,10 +17,11 @@ return new class extends Migration
             $table->id();
             $table->uuid('user_id')->nullable()->index();
             $table->string('log_type')->default('system'); // lead, deal, inventory, system
-            $table->unsignedBigInteger('lead_id')->nullable()->index();
-            $table->unsignedBigInteger('deal_id')->nullable()->index();
-            $table->unsignedBigInteger('inventory_id')->nullable()->index();
-            $table->nullableMorphs('subject'); // subject_type, subject_id
+            $table->uuid('lead_id')->nullable()->index();
+            $table->uuid('deal_id')->nullable()->index();
+            $table->uuid('inventory_id')->nullable()->index();
+            $table->string('subject_type')->nullable();
+            $table->string('subject_id')->nullable();
             
             $table->string('title');
             $table->string('event')->nullable()->index(); // e.g. sms_sent, email_sent, pdf_downloaded, status_changed, unit_allotted, marked_sold, marked_refund, marked_cancel, marked_not_alloted
@@ -33,6 +34,7 @@ return new class extends Migration
             $table->index(['lead_id', 'created_at']);
             $table->index(['deal_id', 'created_at']);
             $table->index(['inventory_id', 'created_at']);
+            $table->index(['subject_type', 'subject_id']);
         });
     }
 
