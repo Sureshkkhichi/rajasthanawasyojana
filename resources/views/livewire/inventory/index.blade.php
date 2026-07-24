@@ -763,17 +763,10 @@
                                     open: false,
                                     search: '',
                                     selectedId: @entangle('newDealForm.state_id').live,
-                                    items: {{ json_encode($states->map(fn($s) => ['id' => (string)$s->id, 'name' => (string)$s->name])) }},
                                     get selectedLabel() {
                                         if (!this.selectedId) return 'Select State';
-                                        let found = (this.items || []).find(i => i.id == this.selectedId);
-                                        return found ? found.name : 'Select State';
-                                    },
-                                    get filteredItems() {
-                                        let list = this.items || [];
-                                        if (!this.search || !this.search.trim()) return list;
-                                        let q = this.search.toLowerCase().trim();
-                                        return list.filter(i => (i.name || '').toLowerCase().includes(q));
+                                        let el = document.querySelector('#state-option-' + this.selectedId);
+                                        return el ? el.getAttribute('data-name') : 'Select State';
                                     },
                                     selectState(id) {
                                         this.selectedId = id;
@@ -811,20 +804,21 @@
                                             </div>
                                             
                                             <div class="d-flex flex-column gap-1">
-                                                <template x-for="st in filteredItems" :key="st.id">
-                                                    <div class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
-                                                        :class="{ 'bg-primary text-white fw-bold': selectedId == st.id }"
-                                                        @click="selectState(st.id)"
+                                                @foreach($states as $st)
+                                                    <div id="state-option-{{ $st->id }}"
+                                                        data-id="{{ $st->id }}" 
+                                                        data-name="{{ $st->name }}"
+                                                        x-show="!search || {{ json_encode(strtolower($st->name)) }}.includes(search.toLowerCase().trim())"
+                                                        class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
+                                                        :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $st->id }}' }"
+                                                        @click="selectState('{{ $st->id }}')"
                                                         style="cursor: pointer;">
-                                                        <span x-text="st.name"></span>
-                                                        <template x-if="selectedId == st.id">
+                                                        <span>{{ $st->name }}</span>
+                                                        <template x-if="selectedId == '{{ $st->id }}'">
                                                             <i class="ri-check-line"></i>
                                                         </template>
                                                     </div>
-                                                </template>
-                                                <div x-show="filteredItems.length === 0" class="text-muted fs-12 text-center py-2">
-                                                    No state found
-                                                </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -836,19 +830,10 @@
                                     open: false,
                                     search: '',
                                     selectedId: @entangle('newDealForm.city_id'),
-                                    get items() {
-                                        return {{ json_encode(collect($cities)->map(fn($c) => ['id' => (string)(is_array($c) ? $c['id'] : $c->id), 'name' => (string)(is_array($c) ? $c['name'] : $c->name)])) }};
-                                    },
                                     get selectedLabel() {
                                         if (!this.selectedId) return 'Select City';
-                                        let found = (this.items || []).find(i => i.id == this.selectedId);
-                                        return found ? found.name : 'Select City';
-                                    },
-                                    get filteredItems() {
-                                        let list = this.items || [];
-                                        if (!this.search || !this.search.trim()) return list;
-                                        let q = this.search.toLowerCase().trim();
-                                        return list.filter(i => (i.name || '').toLowerCase().includes(q));
+                                        let el = document.querySelector('#city-option-' + this.selectedId);
+                                        return el ? el.getAttribute('data-name') : 'Select City';
                                     },
                                     selectCity(id) {
                                         this.selectedId = id;
@@ -886,20 +871,26 @@
                                             </div>
                                             
                                             <div class="d-flex flex-column gap-1">
-                                                <template x-for="ct in filteredItems" :key="ct.id">
-                                                    <div class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
-                                                        :class="{ 'bg-primary text-white fw-bold': selectedId == ct.id }"
-                                                        @click="selectCity(ct.id)"
+                                                @foreach($cities as $ct)
+                                                    <div id="city-option-{{ $ct->id }}"
+                                                        data-id="{{ $ct->id }}" 
+                                                        data-name="{{ $ct->name }}"
+                                                        x-show="!search || {{ json_encode(strtolower($ct->name)) }}.includes(search.toLowerCase().trim())"
+                                                        class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
+                                                        :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $ct->id }}' }"
+                                                        @click="selectCity('{{ $ct->id }}')"
                                                         style="cursor: pointer;">
-                                                        <span x-text="ct.name"></span>
-                                                        <template x-if="selectedId == ct.id">
+                                                        <span>{{ $ct->name }}</span>
+                                                        <template x-if="selectedId == '{{ $ct->id }}'">
                                                             <i class="ri-check-line"></i>
                                                         </template>
                                                     </div>
-                                                </template>
-                                                <div x-show="filteredItems.length === 0" class="text-muted fs-12 text-center py-2">
-                                                    No city found
-                                                </div>
+                                                @endforeach
+                                                @if(count($cities) === 0)
+                                                    <div class="text-muted fs-12 text-center py-2">
+                                                        No city found
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
