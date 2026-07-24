@@ -4,6 +4,7 @@ namespace App\Livewire\Deal;
 
 use App\Models\Project;
 use App\Models\Deal;
+use App\Services\ActivityLogger;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
@@ -113,6 +114,11 @@ class Index extends Component
 
     public function sendSMS(string $id): void
     {
+        $deal = Deal::find($id);
+        if ($deal) {
+            ActivityLogger::logDeal($deal, 'sms_sent', 'SMS Sent', "Sent SMS notification for Deal #{$deal->id} ({$deal->phone})");
+        }
+
         $this->dispatch('swal:alert', [
             'title' => 'SMS Sent!',
             'text' => 'SMS notification sent successfully for Deal ID ' . $id,
@@ -122,6 +128,11 @@ class Index extends Component
 
     public function sendEmail(string $id): void
     {
+        $deal = Deal::find($id);
+        if ($deal) {
+            ActivityLogger::logDeal($deal, 'email_sent', 'Email Sent', "Sent email notification for Deal #{$deal->id} ({$deal->email})");
+        }
+
         $this->dispatch('swal:alert', [
             'title' => 'Email Sent!',
             'text' => 'Email notification sent successfully for Deal ID ' . $id,
@@ -142,6 +153,8 @@ class Index extends Component
     {
         $deal = Deal::find($dealId);
         if ($deal) {
+            $oldDealStatus = $deal->status ?: $deal->deal_status;
+
             if ($newStatus === 'Not Alloted' && $deal->allotted_inventory_id) {
                 $unit = \App\Models\Inventory::find($deal->allotted_inventory_id);
                 if ($unit) {
@@ -155,6 +168,8 @@ class Index extends Component
                         'changed_by' => auth()->user()->name,
                         'notes' => 'Unit vacated because Deal was marked Not Alloted.',
                     ]);
+
+                    ActivityLogger::logInventory($unit, 'status_changed', 'Unit Vacated (Not Allotted)', "Unit #{$unit->unit_name} status changed from {$oldStatus} to Available because Deal #{$deal->id} was marked Not Alloted", ['old_status' => $oldStatus, 'new_status' => 'Available', 'deal_id' => $deal->id]);
                 }
                 $deal->update([
                     'deal_status' => $newStatus,
@@ -168,6 +183,34 @@ class Index extends Component
                     'status'      => $newStatus,
                 ]);
             }
+
+            $eventKey = match($newStatus) {
+                'Sold' => 'marked_sold',
+                'Refund' => 'marked_refund',
+                'Cancel' => 'marked_cancel',
+                'Not Alloted' => 'marked_not_alloted',
+                default => 'status_changed',
+            };
+
+            $eventTitle = match($newStatus) {
+                'Sold' => 'Deal Marked Sold',
+                'Refund' => 'Deal Marked Refund',
+                'Cancel' => 'Deal Marked Cancelled',
+                'Not Alloted' => 'Deal Marked Not Allotted',
+                default => 'Deal Status Updated',
+            };
+
+            ActivityLogger::logDeal(
+                $deal,
+                $eventKey,
+                $eventTitle,
+                "Deal #{$deal->id} ({$deal->first_name} {$deal->last_name}) status changed from '{$oldDealStatus}' to '{$newStatus}'",
+                [
+                    'old_status' => $oldDealStatus,
+                    'new_status' => $newStatus,
+                    'customer_name' => $deal->first_name . ' ' . $deal->last_name,
+                ]
+            );
 
             $this->dispatch('swal:alert', [
                 'title' => 'Status Updated!',
@@ -246,6 +289,9 @@ class Index extends Component
                 'changed_by' => auth()->user()->name,
                 'notes' => 'Unit allotted via Deal Action Allotment: ' . $deal->first_name . ' ' . $deal->last_name,
             ]);
+
+            ActivityLogger::logDeal($deal, 'unit_allotted', 'Unit Allotted', "Unit #{$unit->unit_name} allotted to Deal #{$deal->id}", ['unit' => $unit->unit_name, 'unit_id' => $unit->id]);
+            ActivityLogger::logInventory($unit, 'unit_allotted', 'Unit Allotted to Deal', "Unit allotted to Deal #{$deal->id} ({$deal->first_name} {$deal->last_name})", ['deal_id' => $deal->id]);
 
             $this->allotModalOpen = false;
 
