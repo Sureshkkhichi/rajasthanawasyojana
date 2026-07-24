@@ -25,7 +25,7 @@
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body p-3">
                     <div class="row g-3 align-items-end">
-                        <div class="{{ $inventory_type === 'Flat Project' ? 'col-md-4' : 'col-md-5' }}">
+                        <div class="{{ $inventory_type === 'Flat Project' ? 'col-md-3' : 'col-md-4' }}">
                             <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-building-4-line me-1"></i>Select Project <span class="text-danger">*</span></label>
                             <div class="d-flex gap-2">
                                 <select class="form-select border-light-subtle shadow-sm" wire:model.live="selectedProjectId">
@@ -40,7 +40,7 @@
                             </div>
                         </div>
 
-                        <div class="{{ $inventory_type === 'Flat Project' ? 'col-md-2' : 'col-md-3' }}">
+                        <div class="{{ $inventory_type === 'Flat Project' ? 'col-md-2' : 'col-md-2' }}">
                             <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-filter-2-line me-1"></i>Status</label>
                             <select class="form-select border-light-subtle shadow-sm" wire:model.live="statusFilter">
                                 <option value="">All Statuses</option>
@@ -51,7 +51,7 @@
                         </div>
 
                         @if ($inventory_type === 'Flat Project')
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label class="form-label text-muted fw-bold mb-1.5"><i class="ri-layout-grid-line me-1"></i>Unit Type</label>
                                 <select class="form-select border-light-subtle shadow-sm" wire:model.live="facingFilter">
                                     <option value="">All Unit Types</option>
@@ -68,6 +68,12 @@
                                 <input type="text" class="form-control border-light-subtle" placeholder="{{ $inventory_type === 'Flat Project' ? 'Search Flat No...' : 'Search Plot No...' }}" wire:model.live.debounce.300ms="searchPlot">
                                 <span class="input-group-text bg-light border-light-subtle text-muted"><i class="ri-search-line"></i></span>
                             </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-soft-danger w-100 d-flex align-items-center justify-content-center gap-1 shadow-sm" wire:click="resetFilters">
+                                <i class="ri-refresh-line"></i> Reset Filters
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -296,9 +302,9 @@
                                                         <ul class="dropdown-menu dropdown-menu-end shadow border-light-subtle">
                                                             @if($unit->status === 'Sold' || $unit->status === 'Alloted')
                                                                 <li>
-                                                                    <a class="dropdown-item py-2" href="{{ route('inventories.edit', $unit->id) }}">
+                                                                    <button class="dropdown-item py-2" type="button" wire:click="openViewModal('{{ $unit->id }}')">
                                                                         <i class="ri-eye-line align-bottom me-2 text-info"></i> View Inventory
-                                                                    </a>
+                                                                    </button>
                                                                 </li>
                                                                 @if($unit->deal)
                                                                     <li>
@@ -315,9 +321,9 @@
                                                                 </li>
                                                             @else
                                                                 <li>
-                                                                    <a class="dropdown-item py-2" href="{{ route('inventories.edit', $unit->id) }}">
+                                                                    <button class="dropdown-item py-2" type="button" wire:click="openViewModal('{{ $unit->id }}')">
                                                                         <i class="ri-eye-line align-bottom me-2 text-info"></i> View Inventory
-                                                                    </a>
+                                                                    </button>
                                                                 </li>
                                                                 <li>
                                                                     <a class="dropdown-item py-2" href="{{ route('inventories.edit', $unit->id) }}">
@@ -693,6 +699,141 @@
             </div>
         </div>
     </div>
+
+    {{-- View Inventory Details Modal Popup --}}
+    @if($viewModalOpen && $viewUnitModel)
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5); z-index: 1055;" wire:key="view-modal-{{ $viewUnitModel->id }}">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header bg-primary text-white py-3">
+                    <h5 class="modal-title text-white fw-bold d-flex align-items-center gap-2">
+                        <i class="ri-building-line"></i>
+                        @if($viewUnitModel->inventory_type === 'flat')
+                            Flat {{ $viewUnitModel->flat_no }} Details
+                        @else
+                            Plot {{ $viewUnitModel->plot_no }} Details
+                        @endif
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" wire:click="closeViewModal"></button>
+                </div>
+                <div class="modal-body p-4" style="max-height: 75vh; overflow-y: auto;">
+                    {{-- Status Banner --}}
+                    <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3 mb-4 border">
+                        <div>
+                            <span class="text-muted fs-12 text-uppercase fw-semibold d-block">Project Name</span>
+                            <span class="fs-15 fw-bold text-dark">{{ $viewUnitModel->project?->name ?: '-' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-muted fs-12 text-uppercase fw-semibold d-block">Inventory Status</span>
+                            @if($viewUnitModel->status === 'Available')
+                                <span class="badge bg-success-subtle text-success fs-12 px-3 py-1.5 rounded-pill">Available</span>
+                            @elseif($viewUnitModel->status === 'Hold')
+                                <span class="badge bg-warning-subtle text-warning fs-12 px-3 py-1.5 rounded-pill">Hold</span>
+                            @elseif($viewUnitModel->status === 'Sold' || $viewUnitModel->status === 'Alloted')
+                                <span class="badge bg-danger-subtle text-danger fs-12 px-3 py-1.5 rounded-pill">Sold</span>
+                            @else
+                                <span class="badge bg-dark-subtle text-dark fs-12 px-3 py-1.5 rounded-pill">{{ $viewUnitModel->status }}</span>
+                            @endif
+                        </div>
+                        <div>
+                            <span class="text-muted fs-12 text-uppercase fw-semibold d-block">Total Price</span>
+                            <span class="fs-16 fw-bold text-success">₹ {{ number_format($viewUnitModel->price, 0) }}</span>
+                        </div>
+                    </div>
+
+                    {{-- Specifications --}}
+                    <h6 class="fw-bold text-uppercase fs-12 text-muted mb-3 border-bottom pb-2">
+                        <i class="ri-list-check me-1"></i> Property Specifications
+                    </h6>
+                    <div class="row g-3 mb-4">
+                        @if($viewUnitModel->inventory_type === 'flat')
+                            <div class="col-sm-4">
+                                <span class="text-muted fs-12 d-block">Floor</span>
+                                <span class="fw-semibold text-dark">{{ $viewUnitModel->floor ?: '-' }}</span>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="text-muted fs-12 d-block">Flat Number</span>
+                                <span class="fw-semibold text-dark">{{ $viewUnitModel->flat_no ?: '-' }}</span>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="text-muted fs-12 d-block">Unit Type</span>
+                                <span class="fw-semibold text-dark">{{ $viewUnitModel->unit_type_label ?: '-' }}</span>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="text-muted fs-12 d-block">Area (SBUP)</span>
+                                <span class="fw-semibold text-dark">{{ $viewUnitModel->area_sbup ? number_format($viewUnitModel->area_sbup, 2) . ' Sq. Ft.' : '-' }}</span>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="text-muted fs-12 d-block">Carpet Area</span>
+                                <span class="fw-semibold text-dark">{{ $viewUnitModel->carpet_area ? number_format($viewUnitModel->carpet_area, 2) . ' Sq. Ft.' : '-' }}</span>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="text-muted fs-12 d-block">Super Buildup Area</span>
+                                <span class="fw-semibold text-dark">{{ $viewUnitModel->super_buildup_area ? number_format($viewUnitModel->super_buildup_area, 2) . ' Sq. Ft.' : '-' }}</span>
+                            </div>
+                        @else
+                            <div class="col-sm-3">
+                                <span class="text-muted fs-12 d-block">Plot Number</span>
+                                <span class="fw-semibold text-dark">{{ $viewUnitModel->plot_no ?: '-' }}</span>
+                            </div>
+                            <div class="col-sm-3">
+                                <span class="text-muted fs-12 d-block">Area (Sq. Yards)</span>
+                                <span class="fw-semibold text-dark">{{ $viewUnitModel->area_sq_yards ? number_format($viewUnitModel->area_sq_yards, 2) : '-' }}</span>
+                            </div>
+                            <div class="col-sm-3">
+                                <span class="text-muted fs-12 d-block">Road Size</span>
+                                <span class="fw-semibold text-dark">{{ $viewUnitModel->road_size ?: '-' }}</span>
+                            </div>
+                            <div class="col-sm-3">
+                                <span class="text-muted fs-12 d-block">PLC %</span>
+                                <span class="fw-semibold text-dark">{{ $viewUnitModel->plc_percentage !== null ? $viewUnitModel->plc_percentage . '%' : '-' }}</span>
+                            </div>
+                        @endif
+                    </div>
+
+                    {{-- Customer / Allotment Info if Sold --}}
+                    @if($viewUnitModel->deal)
+                        <h6 class="fw-bold text-uppercase fs-12 text-muted mb-3 border-bottom pb-2">
+                            <i class="ri-user-line me-1"></i> Customer & Deal Information
+                        </h6>
+                        <div class="p-3 bg-primary-subtle text-primary rounded-3 mb-4">
+                            <div class="row g-3">
+                                <div class="col-sm-4">
+                                    <span class="text-muted fs-12 d-block">Customer Name</span>
+                                    <span class="fw-bold text-dark fs-14">{{ $viewUnitModel->deal->first_name }} {{ $viewUnitModel->deal->last_name }}</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <span class="text-muted fs-12 d-block">Mobile Number</span>
+                                    <span class="fw-semibold text-dark">{{ $viewUnitModel->deal->phone ?: '-' }}</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <span class="text-muted fs-12 d-block">Email</span>
+                                    <span class="fw-semibold text-dark">{{ $viewUnitModel->deal->email ?: '-' }}</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <span class="text-muted fs-12 d-block">Booking Date</span>
+                                    <span class="fw-semibold text-dark">{{ $viewUnitModel->deal->booking_date ? $viewUnitModel->deal->booking_date->format('Y-m-d H:i:s') : '-' }}</span>
+                                </div>
+                                <div class="col-sm-4">
+                                    <span class="text-muted fs-12 d-block">Deal Status</span>
+                                    <span class="badge bg-success text-white px-2 py-1 fs-11">{{ $viewUnitModel->deal->deal_status ?: $viewUnitModel->deal->status }}</span>
+                                </div>
+                                <div class="col-sm-4 d-flex align-items-end">
+                                    <a href="{{ route('deals.show', $viewUnitModel->deal->id) }}" target="_blank" class="btn btn-primary btn-sm w-100">
+                                        <i class="ri-external-link-line me-1"></i> View Full Deal Form
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+                <div class="modal-footer bg-light py-2 px-4">
+                    <button type="button" class="btn btn-secondary px-4" wire:click="closeViewModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 
     @push('styles')
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">

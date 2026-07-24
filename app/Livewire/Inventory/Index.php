@@ -75,6 +75,10 @@ class Index extends Component
     public $states = [];
     public $cities = [];
 
+    // View Inventory Details Modal
+    public bool $viewModalOpen = false;
+    public ?Inventory $viewUnitModel = null;
+
     protected $queryString = [
         'selectedProjectId' => ['except' => ''],
         'statusFilter' => ['except' => ''],
@@ -90,16 +94,22 @@ class Index extends Component
             403
         );
 
-        // Set default project to first active project
-        $firstProject = Project::query()
-            ->where('status', 'active')
-            ->where('is_active', 'active')
-            ->first();
+        if (!$this->selectedProjectId) {
+            $firstProject = Project::query()
+                ->where('status', 'active')
+                ->where('is_active', 'active')
+                ->first();
 
-        if ($firstProject) {
-            $this->selectedProjectId = $firstProject->id;
-            $this->updateInventoryType();
+            if ($firstProject) {
+                $this->selectedProjectId = $firstProject->id;
+            }
         }
+
+        if ($this->statusFilter && $this->activeTab === 'all') {
+            $this->activeTab = $this->statusFilter;
+        }
+
+        $this->updateInventoryType();
     }
 
     public function updateInventoryType(): void
@@ -184,6 +194,43 @@ class Index extends Component
     public function setSidebarTab(string $tab): void
     {
         $this->sidebarTab = $tab;
+    }
+
+    public function resetFilters(): void
+    {
+        $this->reset([
+            'statusFilter',
+            'facingFilter',
+            'searchPlot',
+            'activeTab',
+        ]);
+
+        $firstProject = Project::query()
+            ->where('status', 'active')
+            ->where('is_active', 'active')
+            ->first();
+
+        if ($firstProject) {
+            $this->selectedProjectId = $firstProject->id;
+        }
+
+        $this->updateInventoryType();
+        $this->resetPage();
+    }
+
+    public function openViewModal(string $unitId): void
+    {
+        $unit = Inventory::with(['project', 'deal'])->find($unitId);
+        if ($unit) {
+            $this->viewUnitModel = $unit;
+            $this->viewModalOpen = true;
+        }
+    }
+
+    public function closeViewModal(): void
+    {
+        $this->viewModalOpen = false;
+        $this->viewUnitModel = null;
     }
 
     // Modal Actions
