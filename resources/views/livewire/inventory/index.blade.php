@@ -47,7 +47,6 @@
                                 <option value="Available">Available</option>
                                 <option value="Hold">Hold</option>
                                 <option value="Sold">Sold</option>
-                                <option value="Cancelled">Cancelled</option>
                             </select>
                         </div>
 
