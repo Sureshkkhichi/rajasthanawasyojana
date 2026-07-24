@@ -759,30 +759,121 @@
                                 </div>
 
                                 <!-- State -->
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">State <span
-                                            class="text-danger">*</span></label>
-                                    <select id="sold_state_id" class="form-select border-2" wire:model.live="newDealForm.state_id">
-                                        <option value="">Select State</option>
-                                        @foreach($states as $st)
-                                            <option value="{{ $st->id }}">{{ $st->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('newDealForm.state_id') <span class="text-danger fs-12">{{ $message }}</span>
-                                    @enderror
+                                <div class="col-md-4" x-data="{
+                                    open: false,
+                                    search: '',
+                                    selectedId: @entangle('newDealForm.state_id').live,
+                                    get selectedLabel() {
+                                        if (!this.selectedId) return 'Select State';
+                                        let found = Array.from($refs.stateSelectOptions?.children || []).find(el => el.dataset.id == this.selectedId);
+                                        return found ? found.dataset.name : 'Select State';
+                                    }
+                                }">
+                                    <label class="form-label fw-semibold text-muted mb-1">State <span class="text-danger">*</span></label>
+                                    <div class="position-relative">
+                                        <button type="button" 
+                                            class="form-select border-2 text-start d-flex align-items-center justify-content-between bg-white shadow-none"
+                                            @click="open = !open; if(open) $nextTick(() => $refs.stateSearchInput.focus())"
+                                            style="height: 42px;">
+                                            <span x-text="selectedLabel" :class="{ 'text-muted': !selectedId }" class="text-truncate">Select State</span>
+                                        </button>
+
+                                        <div x-show="open" 
+                                            @click.away="open = false" 
+                                            x-transition:enter="transition ease-out duration-100"
+                                            x-transition:enter-start="opacity-0 scale-95"
+                                            x-transition:enter-end="opacity-100 scale-100"
+                                            class="position-absolute start-0 end-0 bg-white border border-2 shadow-lg rounded-3 p-2 mt-1" 
+                                            style="z-index: 1060; max-height: 250px; overflow-y: auto;"
+                                            x-cloak>
+                                            <div class="input-group input-group-sm mb-2">
+                                                <span class="input-group-text bg-light border-end-0"><i class="ri-search-line text-muted"></i></span>
+                                                <input type="text" 
+                                                    x-model="search" 
+                                                    class="form-control border-start-0 shadow-none" 
+                                                    placeholder="Search state..."
+                                                    @click.stop
+                                                    x-ref="stateSearchInput">
+                                                <button type="button" class="btn btn-light border-start-0" x-show="search" @click="search = ''"><i class="ri-close-line"></i></button>
+                                            </div>
+                                            
+                                            <div x-ref="stateSelectOptions" class="d-flex flex-column gap-1">
+                                                @foreach($states as $st)
+                                                    <div data-id="{{ $st->id }}" data-name="{{ $st->name }}"
+                                                        x-show="!search || '{{ strtolower(addslashes($st->name)) }}'.includes(search.toLowerCase())"
+                                                        class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
+                                                        :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $st->id }}' }"
+                                                        @click="selectedId = '{{ $st->id }}'; open = false; search = '';"
+                                                        style="cursor: pointer;">
+                                                        <span>{{ $st->name }}</span>
+                                                        <template x-if="selectedId == '{{ $st->id }}'">
+                                                            <i class="ri-check-line"></i>
+                                                        </template>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @error('newDealForm.state_id') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
+
                                 <!-- City -->
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-muted mb-1">City <span
-                                            class="text-danger">*</span></label>
-                                    <select id="sold_city_id" class="form-select border-2" wire:model="newDealForm.city_id">
-                                        <option value="">Select City</option>
-                                        @foreach($cities as $ct)
-                                            <option value="{{ $ct->id }}">{{ $ct->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('newDealForm.city_id') <span class="text-danger fs-12">{{ $message }}</span>
-                                    @enderror
+                                <div class="col-md-4" x-data="{
+                                    open: false,
+                                    search: '',
+                                    selectedId: @entangle('newDealForm.city_id'),
+                                    get selectedLabel() {
+                                        if (!this.selectedId) return 'Select City';
+                                        let found = Array.from($refs.citySelectOptions?.children || []).find(el => el.dataset.id == this.selectedId);
+                                        return found ? found.dataset.name : 'Select City';
+                                    }
+                                }">
+                                    <label class="form-label fw-semibold text-muted mb-1">City <span class="text-danger">*</span></label>
+                                    <div class="position-relative">
+                                        <button type="button" 
+                                            class="form-select border-2 text-start d-flex align-items-center justify-content-between bg-white shadow-none"
+                                            @click="open = !open; if(open) $nextTick(() => $refs.citySearchInput.focus())"
+                                            style="height: 42px;">
+                                            <span x-text="selectedLabel" :class="{ 'text-muted': !selectedId }" class="text-truncate">Select City</span>
+                                        </button>
+
+                                        <div x-show="open" 
+                                            @click.away="open = false" 
+                                            x-transition:enter="transition ease-out duration-100"
+                                            x-transition:enter-start="opacity-0 scale-95"
+                                            x-transition:enter-end="opacity-100 scale-100"
+                                            class="position-absolute start-0 end-0 bg-white border border-2 shadow-lg rounded-3 p-2 mt-1" 
+                                            style="z-index: 1060; max-height: 250px; overflow-y: auto;"
+                                            x-cloak>
+                                            <div class="input-group input-group-sm mb-2">
+                                                <span class="input-group-text bg-light border-end-0"><i class="ri-search-line text-muted"></i></span>
+                                                <input type="text" 
+                                                    x-model="search" 
+                                                    class="form-control border-start-0 shadow-none" 
+                                                    placeholder="Search city..."
+                                                    @click.stop
+                                                    x-ref="citySearchInput">
+                                                <button type="button" class="btn btn-light border-start-0" x-show="search" @click="search = ''"><i class="ri-close-line"></i></button>
+                                            </div>
+                                            
+                                            <div x-ref="citySelectOptions" class="d-flex flex-column gap-1">
+                                                @foreach($cities as $ct)
+                                                    <div data-id="{{ $ct->id }}" data-name="{{ $ct->name }}"
+                                                        x-show="!search || '{{ strtolower(addslashes($ct->name)) }}'.includes(search.toLowerCase())"
+                                                        class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
+                                                        :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $ct->id }}' }"
+                                                        @click="selectedId = '{{ $ct->id }}'; open = false; search = '';"
+                                                        style="cursor: pointer;">
+                                                        <span>{{ $ct->name }}</span>
+                                                        <template x-if="selectedId == '{{ $ct->id }}'">
+                                                            <i class="ri-check-line"></i>
+                                                        </template>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @error('newDealForm.city_id') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
                                 <!-- Flat Size -->
                                 <div class="col-md-4">
@@ -1013,84 +1104,18 @@
 
     @push('styles')
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <style>
-            .select2-container--default .select2-selection--single {
-                height: 42px !important;
-                border: 2px solid #ced4da !important;
-                border-radius: 0.375rem !important;
-                padding: 6px 12px !important;
-                display: flex;
-                align-items: center;
+            .hover-bg-light:hover {
+                background-color: #f3f6f9 !important;
             }
-            .select2-container--default .select2-selection--single .select2-selection__arrow {
-                height: 40px !important;
-            }
-            .select2-dropdown {
-                z-index: 1060 !important;
-            }
+            [x-cloak] { display: none !important; }
         </style>
     @endpush
 
     @push('scripts')
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-            function initSoldSelect2() {
-                const stateSelect = $('#sold_state_id');
-                if (stateSelect.length && typeof $.fn.select2 !== 'undefined') {
-                    if (stateSelect.hasClass("select2-hidden-accessible")) {
-                        stateSelect.select2('destroy');
-                    }
-                    stateSelect.select2({
-                        dropdownParent: $('#soldModalContainer'),
-                        placeholder: "Select State",
-                        allowClear: false
-                    }).off('change').on('change', function (e) {
-                        let val = $(this).val();
-                        if (String(val || '') !== String(@this.newDealForm['state_id'] || '')) {
-                            @this.set('newDealForm.state_id', val);
-                        }
-                    });
-                }
-
-                const citySelect = $('#sold_city_id');
-                if (citySelect.length && typeof $.fn.select2 !== 'undefined') {
-                    if (citySelect.hasClass("select2-hidden-accessible")) {
-                        citySelect.select2('destroy');
-                    }
-                    citySelect.select2({
-                        dropdownParent: $('#soldModalContainer'),
-                        placeholder: "Select City",
-                        allowClear: false
-                    }).off('change').on('change', function (e) {
-                        let val = $(this).val();
-                        if (String(val || '') !== String(@this.newDealForm['city_id'] || '')) {
-                            @this.set('newDealForm.city_id', val);
-                        }
-                    });
-                }
-            }
-
-            $(document).ready(function () {
-                initSoldSelect2();
-
-                $(document).on('select2:open', () => {
-                    setTimeout(() => {
-                        const searchField = document.querySelector('.select2-search__field');
-                        if (searchField) {
-                            searchField.focus();
-                        }
-                    }, 50);
-                });
-            });
-
             document.addEventListener('livewire:init', () => {
-                if (window.jQuery && $.fn.modal && $.fn.modal.Constructor && $.fn.modal.Constructor.prototype) {
-                    $.fn.modal.Constructor.prototype._enforceFocus = function() {};
-                }
-
                 Livewire.on('swal:alert', (event) => {
                     const data = event[0];
                     Swal.fire({
@@ -1099,14 +1124,6 @@
                         icon: data.icon,
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#405189'
-                    });
-                });
-
-                Livewire.hook('request', ({ fail, respond, succeed }) => {
-                    succeed(({ status, response }) => {
-                        setTimeout(() => {
-                            initSoldSelect2();
-                        }, 50);
                     });
                 });
             });
