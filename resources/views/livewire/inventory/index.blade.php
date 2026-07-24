@@ -779,7 +779,7 @@
                                         this.selectedId = id;
                                         this.open = false;
                                         this.search = '';
-                                        $wire.set('newDealForm.state_id', id);
+                                        $wire.selectStateId(id);
                                     }
                                 }">
                                     <label class="form-label fw-semibold text-muted mb-1">State <span class="text-danger">*</span></label>

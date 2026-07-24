@@ -140,20 +140,42 @@ class Index extends Component
         $this->resetPage();
     }
 
+    public function selectStateId($stateId): void
+    {
+        $this->newDealForm['state_id'] = $stateId;
+        $this->loadCitiesForState($stateId);
+    }
+
+    public function updatedNewDealFormStateId($value): void
+    {
+        $this->loadCitiesForState($value);
+    }
+
+    public function updatedNewDealForm($value, $key): void
+    {
+        if ($key === 'state_id') {
+            $this->loadCitiesForState($value);
+        }
+    }
+
     public function updated($property, $value): void
     {
         if ($property === 'newDealForm.state_id') {
-            if ($value) {
-                $this->cities = City::query()
-                    ->where('state_id', $value)
-                    ->orderBy('name')
-                    ->get();
-            } else {
-                $this->cities = [];
-            }
-            $this->newDealForm['city_id'] = '';
-            $this->dispatch('sold-cities-updated', cities: $this->cities->toArray());
+            $this->loadCitiesForState($value);
         }
+    }
+
+    private function loadCitiesForState($stateId): void
+    {
+        if ($stateId) {
+            $this->cities = City::query()
+                ->where('state_id', $stateId)
+                ->orderBy('name')
+                ->get();
+        } else {
+            $this->cities = [];
+        }
+        $this->newDealForm['city_id'] = '';
     }
 
     public function setTab(string $tab): void
