@@ -773,6 +773,10 @@
                                         this.open = false;
                                         this.search = '';
                                         $wire.selectStateId(id);
+                                    },
+                                    matches(name) {
+                                        if (!this.search || !this.search.trim()) return true;
+                                        return name.toLowerCase().includes(this.search.toLowerCase().trim());
                                     }
                                 }">
                                     <label class="form-label fw-semibold text-muted mb-1">State <span class="text-danger">*</span></label>
@@ -808,7 +812,7 @@
                                                     <div id="state-option-{{ $st->id }}"
                                                         data-id="{{ $st->id }}" 
                                                         data-name="{{ $st->name }}"
-                                                        x-show="!search || $el.getAttribute('data-name').toLowerCase().includes(search.toLowerCase().trim())"
+                                                        x-show="matches(@js($st->name))"
                                                         class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
                                                         :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $st->id }}' }"
                                                         @click="selectState('{{ $st->id }}')"
@@ -840,6 +844,10 @@
                                         this.open = false;
                                         this.search = '';
                                         $wire.set('newDealForm.city_id', id);
+                                    },
+                                    matches(name) {
+                                        if (!this.search || !this.search.trim()) return true;
+                                        return name.toLowerCase().includes(this.search.toLowerCase().trim());
                                     }
                                 }">
                                     <label class="form-label fw-semibold text-muted mb-1">City <span class="text-danger">*</span></label>
@@ -875,7 +883,7 @@
                                                     <div id="city-option-{{ $ct->id }}"
                                                         data-id="{{ $ct->id }}" 
                                                         data-name="{{ $ct->name }}"
-                                                        x-show="!search || $el.getAttribute('data-name').toLowerCase().includes(search.toLowerCase().trim())"
+                                                        x-show="matches(@js($ct->name))"
                                                         class="px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
                                                         :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $ct->id }}' }"
                                                         @click="selectCity('{{ $ct->id }}')"
