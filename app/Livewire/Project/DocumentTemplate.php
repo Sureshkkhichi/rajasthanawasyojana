@@ -96,6 +96,8 @@ class DocumentTemplate extends Component
 
         session()->flash('success', 'PDF Document template content updated successfully for the selected project.');
 
+        $this->dispatch('scroll-to-top');
+
         $this->dispatch('swal:alert', [
             'title' => 'Settings Saved!',
             'text' => 'PDF Document template content updated successfully for the selected project.',
