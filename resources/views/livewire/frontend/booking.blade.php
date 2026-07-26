@@ -570,7 +570,7 @@
                                         @if(!empty($waiver_code))
                                             @if($this->isValidWaiverCode)
                                                 <small class="text-success fw-semibold d-block mt-1">✓ Valid Code! ₹{{ number_format($this->waiverDiscountAmount) }} Discount Applied</small>
-                                            @else
+                                            @elseif(!$errors->has('waiver_code'))
                                                 <small class="text-danger d-block mt-1">Invalid Waiver Code</small>
                                             @endif
                                         @endif
