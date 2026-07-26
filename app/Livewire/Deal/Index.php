@@ -151,7 +151,7 @@ class Index extends Component
         if ($deal) {
             $oldDealStatus = $deal->status ?: $deal->deal_status;
 
-            if ($newStatus === 'Not Alloted' && $deal->allotted_inventory_id) {
+            if (in_array($newStatus, ['Not Alloted', 'Cancel', 'Refund']) && $deal->allotted_inventory_id) {
                 $unit = \App\Models\Inventory::find($deal->allotted_inventory_id);
                 if ($unit) {
                     $oldStatus = $unit->status;
@@ -161,11 +161,11 @@ class Index extends Component
                         'inventory_id' => $unit->id,
                         'from_status' => $oldStatus,
                         'to_status' => 'Available',
-                        'changed_by' => auth()->user()->name,
-                        'notes' => 'Unit vacated because Deal was marked Not Alloted.',
+                        'changed_by' => auth()->user()?->name ?? 'Admin',
+                        'notes' => "Unit vacated because Deal was marked {$newStatus}.",
                     ]);
 
-                    ActivityLogger::logInventory($unit, 'status_changed', 'Unit Vacated (Not Allotted)', "Unit #{$unit->unit_name} status changed from {$oldStatus} to Available because Deal #{$deal->id} was marked Not Alloted", ['old_status' => $oldStatus, 'new_status' => 'Available', 'deal_id' => $deal->id]);
+                    ActivityLogger::logInventory($unit, 'status_changed', "Unit Vacated ({$newStatus})", "Unit #{$unit->unit_name} status changed from {$oldStatus} to Available because Deal #{$deal->id} was marked {$newStatus}", ['old_status' => $oldStatus, 'new_status' => 'Available', 'deal_id' => $deal->id]);
                 }
                 $deal->update([
                     'deal_status' => $newStatus,
