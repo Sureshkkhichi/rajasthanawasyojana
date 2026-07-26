@@ -662,8 +662,9 @@
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">First Name <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control border-2 text-capitalize" placeholder="Enter first name"
-                                        wire:model="newDealForm.first_name" style="text-transform: capitalize;"
+                                    <input type="text" class="form-control border-2 text-capitalize"
+                                        placeholder="Enter first name" wire:model="newDealForm.first_name"
+                                        style="text-transform: capitalize;"
                                         oninput="this.value = this.value.replace(/\b\w/g, l => l.toUpperCase())">
                                     @error('newDealForm.first_name') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
@@ -672,8 +673,9 @@
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Last Name <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control border-2 text-capitalize" placeholder="Enter last name"
-                                        wire:model="newDealForm.last_name" style="text-transform: capitalize;"
+                                    <input type="text" class="form-control border-2 text-capitalize"
+                                        placeholder="Enter last name" wire:model="newDealForm.last_name"
+                                        style="text-transform: capitalize;"
                                         oninput="this.value = this.value.replace(/\b\w/g, l => l.toUpperCase())">
                                     @error('newDealForm.last_name') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
@@ -681,8 +683,9 @@
                                 <!-- Father / Husband Name -->
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Father / Husband Name</label>
-                                    <input type="text" class="form-control border-2 text-capitalize" placeholder="Enter father name"
-                                        wire:model="newDealForm.father_husband_name" style="text-transform: capitalize;"
+                                    <input type="text" class="form-control border-2 text-capitalize"
+                                        placeholder="Enter father name" wire:model="newDealForm.father_husband_name"
+                                        style="text-transform: capitalize;"
                                         oninput="this.value = this.value.replace(/\b\w/g, l => l.toUpperCase())">
                                     @error('newDealForm.father_husband_name') <span
                                     class="text-danger fs-12">{{ $message }}</span> @enderror
@@ -692,9 +695,9 @@
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">PAN Number <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control border-2 text-uppercase" placeholder="Enter PAN number"
-                                        wire:model="newDealForm.pan_number" maxlength="10" style="text-transform: uppercase;"
-                                        oninput="this.value = this.value.toUpperCase()">
+                                    <input type="text" class="form-control border-2 text-uppercase @error('newDealForm.pan_number') is-invalid @enderror" id="pan_number"
+                                        placeholder="e.g. ABCDE1234F" wire:model="newDealForm.pan_number" maxlength="10"
+                                        style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')">
                                     @error('newDealForm.pan_number') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -742,8 +745,9 @@
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Mobile Number <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control border-2" placeholder="Enter 10-digit mobile number"
-                                        wire:model="newDealForm.phone" maxlength="10"
+                                    <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control border-2"
+                                        placeholder="Enter 10-digit mobile number" wire:model="newDealForm.phone"
+                                        maxlength="10"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)">
                                     @error('newDealForm.phone') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
@@ -760,82 +764,76 @@
 
                                 <!-- State -->
                                 <div class="col-md-4" x-data="{
-                                    open: false,
-                                    selectedId: @entangle('newDealForm.state_id').live,
-                                    get selectedLabel() {
-                                        if (!this.selectedId) return 'Select State';
-                                        let el = document.querySelector('#state-option-' + this.selectedId);
-                                        return el ? el.getAttribute('data-name') : 'Select State';
-                                    },
-                                    selectState(id) {
-                                        this.selectedId = id;
-                                        this.open = false;
-                                        $wire.selectStateId(id);
-                                    }
-                                }">
-                                    <label class="form-label fw-semibold text-muted mb-1">State <span class="text-danger">*</span></label>
+                                            open: false,
+                                            selectedId: @entangle('newDealForm.state_id').live,
+                                            get selectedLabel() {
+                                                if (!this.selectedId) return 'Select State';
+                                                let el = document.querySelector('#state-option-' + this.selectedId);
+                                                return el ? el.getAttribute('data-name') : 'Select State';
+                                            },
+                                            selectState(id) {
+                                                this.selectedId = id;
+                                                this.open = false;
+                                                $wire.selectStateId(id);
+                                            }
+                                        }">
+                                    <label class="form-label fw-semibold text-muted mb-1">State <span
+                                            class="text-danger">*</span></label>
                                     <div class="position-relative">
-                                        <button type="button" 
+                                        <button type="button"
                                             class="form-select border-2 text-start d-flex align-items-center justify-content-between bg-white shadow-none"
                                             @click="
-                                                open = !open; 
-                                                if(open) { 
-                                                    $nextTick(() => { 
-                                                        let inp = $refs.stateSearchInput; 
-                                                        if(inp) { inp.value = ''; inp.focus(); }
-                                                        let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
-                                                        items.forEach(el => el.classList.remove('d-none')); 
-                                                    }); 
-                                                }
-                                            "
-                                            style="height: 42px;">
-                                            <span x-text="selectedLabel" :class="{ 'text-muted': !selectedId }" class="text-truncate">Select State</span>
+                                                        open = !open; 
+                                                        if(open) { 
+                                                            $nextTick(() => { 
+                                                                let inp = $refs.stateSearchInput; 
+                                                                if(inp) { inp.value = ''; inp.focus(); }
+                                                                let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
+                                                                items.forEach(el => el.classList.remove('d-none')); 
+                                                            }); 
+                                                        }
+                                                    " style="height: 42px;">
+                                            <span x-text="selectedLabel" :class="{ 'text-muted': !selectedId }"
+                                                class="text-truncate">Select State</span>
                                         </button>
 
-                                        <div x-show="open" 
-                                            @click.away="open = false" 
+                                        <div x-show="open" @click.away="open = false"
                                             x-transition:enter="transition ease-out duration-100"
                                             x-transition:enter-start="opacity-0 scale-95"
                                             x-transition:enter-end="opacity-100 scale-100"
-                                            class="position-absolute start-0 end-0 bg-white border border-2 shadow-lg rounded-3 p-2 mt-1" 
-                                            style="z-index: 1060; max-height: 250px; overflow-y: auto;"
-                                            x-cloak>
+                                            class="position-absolute start-0 end-0 bg-white border border-2 shadow-lg rounded-3 p-2 mt-1"
+                                            style="z-index: 1060; max-height: 250px; overflow-y: auto;" x-cloak>
                                             <div class="input-group input-group-sm mb-2">
-                                                <span class="input-group-text bg-light border-end-0"><i class="ri-search-line text-muted"></i></span>
-                                                <input type="text" 
-                                                    class="form-control border-start-0 shadow-none" 
-                                                    placeholder="Search state..."
-                                                    @click.stop
-                                                    x-ref="stateSearchInput"
+                                                <span class="input-group-text bg-light border-end-0"><i
+                                                        class="ri-search-line text-muted"></i></span>
+                                                <input type="text" class="form-control border-start-0 shadow-none"
+                                                    placeholder="Search state..." @click.stop x-ref="stateSearchInput"
                                                     oninput="
-                                                        let q = this.value.toLowerCase().trim();
-                                                        let items = this.closest('.position-relative').querySelectorAll('.state-item-option');
-                                                        items.forEach(el => {
-                                                            let name = (el.getAttribute('data-name') || '').toLowerCase();
-                                                            let isMatch = !q || name.includes(q);
-                                                            if (isMatch) { el.classList.remove('d-none'); } else { el.classList.add('d-none'); }
-                                                        });
-                                                    ">
-                                                <button type="button" class="btn btn-light border-start-0" 
-                                                    @click="
-                                                        $refs.stateSearchInput.value = ''; 
-                                                        let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
-                                                        items.forEach(el => el.classList.remove('d-none'));
-                                                        $refs.stateSearchInput.focus();
-                                                    ">
+                                                                let q = this.value.toLowerCase().trim();
+                                                                let items = this.closest('.position-relative').querySelectorAll('.state-item-option');
+                                                                items.forEach(el => {
+                                                                    let name = (el.getAttribute('data-name') || '').toLowerCase();
+                                                                    let isMatch = !q || name.includes(q);
+                                                                    if (isMatch) { el.classList.remove('d-none'); } else { el.classList.add('d-none'); }
+                                                                });
+                                                            ">
+                                                <button type="button" class="btn btn-light border-start-0" @click="
+                                                                $refs.stateSearchInput.value = ''; 
+                                                                let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
+                                                                items.forEach(el => el.classList.remove('d-none'));
+                                                                $refs.stateSearchInput.focus();
+                                                            ">
                                                     <i class="ri-close-line"></i>
                                                 </button>
                                             </div>
-                                            
+
                                             <div class="d-flex flex-column gap-1">
                                                 @foreach($states as $st)
-                                                    <div id="state-option-{{ $st->id }}"
-                                                        data-id="{{ $st->id }}" 
+                                                    <div id="state-option-{{ $st->id }}" data-id="{{ $st->id }}"
                                                         data-name="{{ $st->name }}"
                                                         class="state-item-option px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
                                                         :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $st->id }}' }"
-                                                        @click="selectState('{{ $st->id }}')"
-                                                        style="cursor: pointer;">
+                                                        @click="selectState('{{ $st->id }}')" style="cursor: pointer;">
                                                         <span>{{ $st->name }}</span>
                                                         <template x-if="selectedId == '{{ $st->id }}'">
                                                             <i class="ri-check-line"></i>
@@ -845,87 +843,82 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @error('newDealForm.state_id') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    @error('newDealForm.state_id') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 <!-- City -->
                                 <div class="col-md-4" x-data="{
-                                    open: false,
-                                    selectedId: @entangle('newDealForm.city_id'),
-                                    get selectedLabel() {
-                                        if (!this.selectedId) return 'Select City';
-                                        let el = document.querySelector('#city-option-' + this.selectedId);
-                                        return el ? el.getAttribute('data-name') : 'Select City';
-                                    },
-                                    selectCity(id) {
-                                        this.selectedId = id;
-                                        this.open = false;
-                                        $wire.set('newDealForm.city_id', id);
-                                    }
-                                }">
-                                    <label class="form-label fw-semibold text-muted mb-1">City <span class="text-danger">*</span></label>
+                                            open: false,
+                                            selectedId: @entangle('newDealForm.city_id'),
+                                            get selectedLabel() {
+                                                if (!this.selectedId) return 'Select City';
+                                                let el = document.querySelector('#city-option-' + this.selectedId);
+                                                return el ? el.getAttribute('data-name') : 'Select City';
+                                            },
+                                            selectCity(id) {
+                                                this.selectedId = id;
+                                                this.open = false;
+                                                $wire.set('newDealForm.city_id', id);
+                                            }
+                                        }">
+                                    <label class="form-label fw-semibold text-muted mb-1">City <span
+                                            class="text-danger">*</span></label>
                                     <div class="position-relative">
-                                        <button type="button" 
+                                        <button type="button"
                                             class="form-select border-2 text-start d-flex align-items-center justify-content-between bg-white shadow-none"
                                             @click="
-                                                open = !open; 
-                                                if(open) { 
-                                                    $nextTick(() => { 
-                                                        let inp = $refs.citySearchInput; 
-                                                        if(inp) { inp.value = ''; inp.focus(); }
-                                                        let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
-                                                        items.forEach(el => el.classList.remove('d-none')); 
-                                                    }); 
-                                                }
-                                            "
-                                            style="height: 42px;">
-                                            <span x-text="selectedLabel" :class="{ 'text-muted': !selectedId }" class="text-truncate">Select City</span>
+                                                        open = !open; 
+                                                        if(open) { 
+                                                            $nextTick(() => { 
+                                                                let inp = $refs.citySearchInput; 
+                                                                if(inp) { inp.value = ''; inp.focus(); }
+                                                                let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
+                                                                items.forEach(el => el.classList.remove('d-none')); 
+                                                            }); 
+                                                        }
+                                                    " style="height: 42px;">
+                                            <span x-text="selectedLabel" :class="{ 'text-muted': !selectedId }"
+                                                class="text-truncate">Select City</span>
                                         </button>
 
-                                        <div x-show="open" 
-                                            @click.away="open = false" 
+                                        <div x-show="open" @click.away="open = false"
                                             x-transition:enter="transition ease-out duration-100"
                                             x-transition:enter-start="opacity-0 scale-95"
                                             x-transition:enter-end="opacity-100 scale-100"
-                                            class="position-absolute start-0 end-0 bg-white border border-2 shadow-lg rounded-3 p-2 mt-1" 
-                                            style="z-index: 1060; max-height: 250px; overflow-y: auto;"
-                                            x-cloak>
+                                            class="position-absolute start-0 end-0 bg-white border border-2 shadow-lg rounded-3 p-2 mt-1"
+                                            style="z-index: 1060; max-height: 250px; overflow-y: auto;" x-cloak>
                                             <div class="input-group input-group-sm mb-2">
-                                                <span class="input-group-text bg-light border-end-0"><i class="ri-search-line text-muted"></i></span>
-                                                <input type="text" 
-                                                    class="form-control border-start-0 shadow-none" 
-                                                    placeholder="Search city..."
-                                                    @click.stop
-                                                    x-ref="citySearchInput"
+                                                <span class="input-group-text bg-light border-end-0"><i
+                                                        class="ri-search-line text-muted"></i></span>
+                                                <input type="text" class="form-control border-start-0 shadow-none"
+                                                    placeholder="Search city..." @click.stop x-ref="citySearchInput"
                                                     oninput="
-                                                        let q = this.value.toLowerCase().trim();
-                                                        let items = this.closest('.position-relative').querySelectorAll('.city-item-option');
-                                                        items.forEach(el => {
-                                                            let name = (el.getAttribute('data-name') || '').toLowerCase();
-                                                            let isMatch = !q || name.includes(q);
-                                                            if (isMatch) { el.classList.remove('d-none'); } else { el.classList.add('d-none'); }
-                                                        });
-                                                    ">
-                                                <button type="button" class="btn btn-light border-start-0" 
-                                                    @click="
-                                                        $refs.citySearchInput.value = ''; 
-                                                        let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
-                                                        items.forEach(el => el.classList.remove('d-none'));
-                                                        $refs.citySearchInput.focus();
-                                                    ">
+                                                                let q = this.value.toLowerCase().trim();
+                                                                let items = this.closest('.position-relative').querySelectorAll('.city-item-option');
+                                                                items.forEach(el => {
+                                                                    let name = (el.getAttribute('data-name') || '').toLowerCase();
+                                                                    let isMatch = !q || name.includes(q);
+                                                                    if (isMatch) { el.classList.remove('d-none'); } else { el.classList.add('d-none'); }
+                                                                });
+                                                            ">
+                                                <button type="button" class="btn btn-light border-start-0" @click="
+                                                                $refs.citySearchInput.value = ''; 
+                                                                let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
+                                                                items.forEach(el => el.classList.remove('d-none'));
+                                                                $refs.citySearchInput.focus();
+                                                            ">
                                                     <i class="ri-close-line"></i>
                                                 </button>
                                             </div>
-                                            
+
                                             <div class="d-flex flex-column gap-1">
                                                 @foreach($cities as $ct)
-                                                    <div id="city-option-{{ $ct->id }}"
-                                                        data-id="{{ $ct->id }}" 
+                                                    <div id="city-option-{{ $ct->id }}" data-id="{{ $ct->id }}"
                                                         data-name="{{ $ct->name }}"
                                                         class="city-item-option px-2 py-1.5 rounded-2 fs-13 cursor-pointer text-dark hover-bg-light d-flex align-items-center justify-content-between"
                                                         :class="{ 'bg-primary text-white fw-bold': selectedId == '{{ $ct->id }}' }"
-                                                        @click="selectCity('{{ $ct->id }}')"
-                                                        style="cursor: pointer;">
+                                                        @click="selectCity('{{ $ct->id }}')" style="cursor: pointer;">
                                                         <span>{{ $ct->name }}</span>
                                                         <template x-if="selectedId == '{{ $ct->id }}'">
                                                             <i class="ri-check-line"></i>
@@ -940,7 +933,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @error('newDealForm.city_id') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                    @error('newDealForm.city_id') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <!-- Flat Size -->
                                 <div class="col-md-4">
@@ -956,8 +950,9 @@
                                 <div class="col-12">
                                     <label class="form-label fw-semibold text-muted mb-1">Permanent Address <span
                                             class="text-danger">*</span></label>
-                                    <textarea class="form-control border-2 text-capitalize" rows="2" placeholder="Enter permanent address"
-                                        wire:model="newDealForm.address" style="text-transform: capitalize;"></textarea>
+                                    <textarea class="form-control border-2 text-capitalize" rows="2"
+                                        placeholder="Enter permanent address" wire:model="newDealForm.address"
+                                        style="text-transform: capitalize;"></textarea>
                                     @error('newDealForm.address') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -965,8 +960,9 @@
                                 <!-- Co-Applicant Name -->
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Co-Applicant Name</label>
-                                    <input type="text" class="form-control border-2 text-capitalize" placeholder="Enter co-applicant name"
-                                        wire:model="newDealForm.co_applicant_name" style="text-transform: capitalize;"
+                                    <input type="text" class="form-control border-2 text-capitalize"
+                                        placeholder="Enter co-applicant name" wire:model="newDealForm.co_applicant_name"
+                                        style="text-transform: capitalize;"
                                         oninput="this.value = this.value.replace(/\b\w/g, l => l.toUpperCase())">
                                     @error('newDealForm.co_applicant_name') <span
                                     class="text-danger fs-12">{{ $message }}</span> @enderror
@@ -974,9 +970,9 @@
                                 <!-- Waiver Code -->
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Waiver Code</label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control border-2" placeholder="Enter waiver code (3-5 digits)"
-                                        wire:model="newDealForm.waiver_code" maxlength="5"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)">
+                                    <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control border-2"
+                                        placeholder="Enter waiver code (3-5 digits)" wire:model="newDealForm.waiver_code"
+                                        maxlength="5" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)">
                                     @error('newDealForm.waiver_code') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -984,7 +980,8 @@
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Booking Amount Paid (₹) *</label>
                                     <input type="number" step="0.01" class="form-control border-2 bg-light text-muted"
-                                        placeholder="Enter booking amount" wire:model="newDealForm.booking_amount" readonly style="background-color: #e9ecef !important; cursor: not-allowed;">
+                                        placeholder="Enter booking amount" wire:model="newDealForm.booking_amount" readonly
+                                        style="background-color: #e9ecef !important; cursor: not-allowed;">
                                     @error('newDealForm.booking_amount') <span
                                     class="text-danger fs-12">{{ $message }}</span> @enderror
                                 </div>
@@ -993,7 +990,8 @@
                                 <div class="col-md-4 offset-md-8">
                                     <label class="form-label fw-semibold text-muted mb-1">Total Price (₹) *</label>
                                     <input type="number" step="0.01" class="form-control border-2 bg-light text-muted"
-                                        placeholder="Enter total price" wire:model="newDealForm.total_amount" readonly style="background-color: #e9ecef !important; cursor: not-allowed;">
+                                        placeholder="Enter total price" wire:model="newDealForm.total_amount" readonly
+                                        style="background-color: #e9ecef !important; cursor: not-allowed;">
                                     @error('newDealForm.total_amount') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -1175,7 +1173,10 @@
             .hover-bg-light:hover {
                 background-color: #f3f6f9 !important;
             }
-            [x-cloak] { display: none !important; }
+
+            [x-cloak] {
+                display: none !important;
+            }
         </style>
     @endpush
 
@@ -1192,6 +1193,39 @@
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#405189'
                     });
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const panInput = document.getElementById('pan_number');
+                if (!panInput) {
+                    return;
+                }
+                panInput.addEventListener('input', function (e) {
+                    let value = e.target.value.toUpperCase();
+                    let result = '';
+                    for (let i = 0; i < value.length; i++) {
+                        let char = value[i];
+                        // First 5 characters = A-Z
+                        if (i < 5) {
+                            if (/[A-Z]/.test(char)) {
+                                result += char;
+                            }
+                        }
+                        // Next 4 characters = 0-9
+                        else if (i >= 5 && i <= 8) {
+                            if (/[0-9]/.test(char)) {
+                                result += char;
+                            }
+                        }
+                        // Last character = A-Z
+                        else if (i === 9) {
+                            if (/[A-Z]/.test(char)) {
+                                result += char;
+                            }
+                        }
+                    }
+                    e.target.value = result;
                 });
             });
         </script>
