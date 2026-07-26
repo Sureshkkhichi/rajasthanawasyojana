@@ -331,7 +331,16 @@ class Booking extends Component
             'city_id' => ['required'],
             'flat_size' => ['required'],
             'terms' => ['accepted'],
-            'waiver_code' => ['nullable', 'numeric', 'digits_between:3,5'],
+            'waiver_code' => [
+                'nullable',
+                'numeric',
+                'digits_between:3,5',
+                function ($attribute, $value, $fail) {
+                    if (!empty(trim($value)) && !\App\Models\Agent::where('code', trim($value))->exists()) {
+                        $fail('Invalid Waiver Code. Please enter a valid Agent Waiver Code or leave it blank.');
+                    }
+                },
+            ],
         ];
     }
     public function messages(): array
