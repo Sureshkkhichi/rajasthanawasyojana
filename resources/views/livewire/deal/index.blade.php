@@ -143,58 +143,109 @@
                                                          <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false">
                                                              Action
                                                          </button>
-                                                          <ul class="dropdown-menu shadow">
-                                                               <li>
-                                                                   <a class="dropdown-item py-2 text-primary" href="{{ route('deals.invoice', $deal->id) }}" target="_blank">
-                                                                       <i class="ri-file-text-line align-bottom me-2"></i> Generate Invoice
-                                                                   </a>
-                                                               </li>
-                                                               @if(empty($deal->allotted_inventory_id))
-                                                                   <li>
-                                                                       <button class="dropdown-item py-2 text-success" type="button" wire:click="openAllotModal('{{ $deal->id }}')">
-                                                                           <i class="ri-add-box-line align-bottom me-2"></i> Allot Unit
-                                                                       </button>
-                                                                   </li>
-                                                               @else
-                                                                   <li>
-                                                                       <a class="dropdown-item py-2 text-info" href="{{ route('deals.allotment-letter', $deal->id) }}" target="_blank">
-                                                                           <i class="ri-file-download-line align-bottom me-2"></i> Download Allotment Letter
-                                                                       </a>
-                                                                   </li>
-                                                                   <li>
-                                                                       <a class="dropdown-item py-2 text-info" href="{{ route('deals.demand-letter', $deal->id) }}" target="_blank">
-                                                                           <i class="ri-file-download-line align-bottom me-2"></i> Download Demand Letter
-                                                                       </a>
-                                                                   </li>
-                                                               @endif
-                                                              <li><hr class="dropdown-divider"></li>
-                                                              <li>
-                                                                  <button class="dropdown-item py-2" type="button" wire:click="changeDealStatus('{{ $deal->id }}', 'Sold')">
-                                                                      <i class="ri-checkbox-circle-line align-bottom me-2 text-success"></i> Mark Sold
-                                                                  </button>
-                                                              </li>
-                                                              <li>
-                                                                  <button class="dropdown-item py-2" type="button" wire:click="changeDealStatus('{{ $deal->id }}', 'Refund')">
-                                                                      <i class="ri-refund-line align-bottom me-2 text-danger"></i> Mark Refund
-                                                                  </button>
-                                                              </li>
-                                                              <li>
-                                                                  <button class="dropdown-item py-2" type="button" wire:click="changeDealStatus('{{ $deal->id }}', 'Cancel')">
-                                                                      <i class="ri-close-circle-line align-bottom me-2 text-secondary"></i> Mark Cancel
-                                                                  </button>
-                                                              </li>
-                                                              <li>
-                                                                  <button class="dropdown-item py-2" type="button" wire:click="changeDealStatus('{{ $deal->id }}', 'Not Alloted')">
-                                                                      <i class="ri-indeterminate-circle-line align-bottom me-2 text-dark"></i> Mark Not Alloted
-                                                                  </button>
-                                                              </li>
-                                                              <li><hr class="dropdown-divider"></li>
-                                                              <li>
-                                                                  <a class="dropdown-item py-2" href="{{ route('deals.show', $deal->id) }}">
-                                                                      <i class="ri-fullscreen-line align-bottom me-2 text-muted"></i> View Full Form
-                                                                  </a>
-                                                              </li>
-                                                          </ul>
+                                                           <ul class="dropdown-menu shadow">
+                                                                @php
+                                                                    $ds = $deal->deal_status ?? $deal->status;
+                                                                    $hasUnit = !empty($deal->allotted_inventory_id);
+                                                                @endphp
+
+                                                                {{-- Case 3: Sold --}}
+                                                                @if($ds === 'Sold')
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2 text-primary" href="{{ route('deals.invoice', $deal->id) }}" target="_blank">
+                                                                            <i class="ri-file-text-line align-bottom me-2"></i> Generate Invoice
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2 text-info" href="{{ route('deals.allotment-letter', $deal->id) }}" target="_blank">
+                                                                            <i class="ri-file-download-line align-bottom me-2"></i> Download Allotment Letter
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2 text-info" href="{{ route('deals.demand-letter', $deal->id) }}" target="_blank">
+                                                                            <i class="ri-file-download-line align-bottom me-2"></i> Download Demand Letter
+                                                                        </a>
+                                                                    </li>
+                                                                    <li><hr class="dropdown-divider"></li>
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2" href="{{ route('deals.show', $deal->id) }}">
+                                                                            <i class="ri-fullscreen-line align-bottom me-2 text-muted"></i> View Full Detail
+                                                                        </a>
+                                                                    </li>
+
+                                                                {{-- Case 4 & 5: Refund or Cancel --}}
+                                                                @elseif($ds === 'Refund' || $ds === 'Cancel')
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2 text-primary" href="{{ route('deals.invoice', $deal->id) }}" target="_blank">
+                                                                            <i class="ri-file-text-line align-bottom me-2"></i> Generate Invoice
+                                                                        </a>
+                                                                    </li>
+                                                                    <li><hr class="dropdown-divider"></li>
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2" href="{{ route('deals.show', $deal->id) }}">
+                                                                            <i class="ri-fullscreen-line align-bottom me-2 text-muted"></i> View Full Detail
+                                                                        </a>
+                                                                    </li>
+
+                                                                {{-- Case 2: Unit Allotted (and not Sold/Refund/Cancel) --}}
+                                                                @elseif($hasUnit)
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2 text-primary" href="{{ route('deals.invoice', $deal->id) }}" target="_blank">
+                                                                            <i class="ri-file-text-line align-bottom me-2"></i> Generate Invoice
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2 text-info" href="{{ route('deals.allotment-letter', $deal->id) }}" target="_blank">
+                                                                            <i class="ri-file-download-line align-bottom me-2"></i> Download Allotment Letter
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2 text-info" href="{{ route('deals.demand-letter', $deal->id) }}" target="_blank">
+                                                                            <i class="ri-file-download-line align-bottom me-2"></i> Download Demand Letter
+                                                                        </a>
+                                                                    </li>
+                                                                    <li><hr class="dropdown-divider"></li>
+                                                                    <li>
+                                                                        <button class="dropdown-item py-2" type="button" wire:click="changeDealStatus('{{ $deal->id }}', 'Sold')">
+                                                                            <i class="ri-checkbox-circle-line align-bottom me-2 text-success"></i> Mark Sold
+                                                                        </button>
+                                                                    </li>
+                                                                    <li>
+                                                                        <button class="dropdown-item py-2" type="button" wire:click="changeDealStatus('{{ $deal->id }}', 'Refund')">
+                                                                            <i class="ri-refund-line align-bottom me-2 text-danger"></i> Mark Refund
+                                                                        </button>
+                                                                    </li>
+                                                                    <li>
+                                                                        <button class="dropdown-item py-2" type="button" wire:click="changeDealStatus('{{ $deal->id }}', 'Cancel')">
+                                                                            <i class="ri-close-circle-line align-bottom me-2 text-secondary"></i> Mark Cancel
+                                                                        </button>
+                                                                    </li>
+                                                                    <li>
+                                                                        <button class="dropdown-item py-2" type="button" wire:click="changeDealStatus('{{ $deal->id }}', 'Not Alloted')">
+                                                                            <i class="ri-indeterminate-circle-line align-bottom me-2 text-dark"></i> Mark Not Alloted
+                                                                        </button>
+                                                                    </li>
+
+                                                                {{-- Case 1 & 6: Fresh Deal / Unallotted / Not Alloted --}}
+                                                                @else
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2 text-primary" href="{{ route('deals.invoice', $deal->id) }}" target="_blank">
+                                                                            <i class="ri-file-text-line align-bottom me-2"></i> Generate Invoice
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <button class="dropdown-item py-2 text-success" type="button" wire:click="openAllotModal('{{ $deal->id }}')">
+                                                                            <i class="ri-add-box-line align-bottom me-2"></i> Allot Unit
+                                                                        </button>
+                                                                    </li>
+                                                                    <li><hr class="dropdown-divider"></li>
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2" href="{{ route('deals.show', $deal->id) }}">
+                                                                            <i class="ri-fullscreen-line align-bottom me-2 text-muted"></i> View Full Detail
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
+                                                           </ul>
                                                       </div>
                                                   </td>
                                                   <td class="fw-semibold text-start text-nowrap">{{ $deal->first_name }} {{ $deal->last_name }}</td>
