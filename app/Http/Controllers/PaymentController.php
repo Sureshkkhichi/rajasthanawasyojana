@@ -209,7 +209,17 @@ class PaymentController extends Controller
                 'flat_size' => $lead->flat_size,
                 'waiver_code' => $lead->waiver_code,
                 'booking_date' => now(),
-                'booking_amount' => (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100.00),
+                'booking_amount' => (function() use ($lead) {
+                    $base = (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100.00);
+                    $discount = (float) \App\Models\FrontendSetting::getVal('waiver_discount_amount', 0.00);
+                    if (!empty($lead->waiver_code)) {
+                        $code = trim($lead->waiver_code);
+                        if (\App\Models\Agent::where('code', $code)->exists() || (is_numeric($code) && strlen($code) >= 3 && strlen($code) <= 8)) {
+                            return max(0.00, $base - $discount);
+                        }
+                    }
+                    return $base;
+                })(),
                 'total_amount' => $unitPrice,
                 'status' => 'Paid',
                 'remarks' => null,

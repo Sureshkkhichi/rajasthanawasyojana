@@ -527,67 +527,256 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-0">
-                                        <label class="form-label">
-                                            @if($project->inventory_type === 'flat')
-                                                Select Flat Size <span class="text-danger">*</span>
-                                            @else
-                                                Select Plot Size (Sq Yards) <span class="text-danger">*</span>
-                                            @endif
-                                        </label>
-                                        <select class="form-select @error('flat_size') is-invalid @enderror"
-                                            wire:model.live="flat_size">
-                                            <option value="">Select Option</option>
-                                            @foreach($sizes as $size)
-                                                @php
-                                                    $sizeLabel = match($size) {
-                                                        'EWS' => 'EWS (1BHK)',
-                                                        'LIG' => 'LIG (2BHK)',
-                                                        default => $project->inventory_type === 'plot' ? $size . ' Sq. Yards' : $size,
-                                                    };
-                                                @endphp
-                                                <option value="{{ $size }}">{{ $sizeLabel }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('flat_size')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-0">
-                                        <label class="form-label">
-                                            Waiver Code
-                                        </label>
-                                        <input type="text"
-                                            class="form-control @error('waiver_code') is-invalid @enderror"
-                                            wire:model.blur="waiver_code"
-                                            maxlength="5"
-                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                                        @error('waiver_code')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
+<div class="proj-stat-item">
+                        <div class="proj-stat-label">Registration Amount</div>
+                        <div class="proj-stat-value accent">
+                            @if($this->isValidWaiverCode && $this->waiverDiscountAmount > 0)
+                                <span class="text-decoration-line-through text-muted fs-14 me-1">₹ {{ number_format($this->baseBookingAmount) }}</span>
+                                ₹ {{ number_format($this->payableBookingAmount) }}
+                            @else
+                                ₹ {{ number_format($this->payableBookingAmount) }}
+                            @endif
                         </div>
-                        <!-- PRICE CARD -->
-                        <div class="row mb-3">
-                            <div class="col-sm-12 form-group">
-                                @if(!empty($flat_size) && $this->total_value)
-                                    <label>Total {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }} value</label>
-                                    <h2 id="total" style="border-bottom: 2px dotted #000; min-height: 42px; display: flex; align-items: center;" class="text-success fw-bold">
-                                        ₹ {{ indianCurrency($this->total_value) }}
-                                    </h2>
+                        <div class="proj-stat-sub">
+                            @if($this->isValidWaiverCode && $this->waiverDiscountAmount > 0)
+                                <span class="text-success font-weight-bold">₹{{ number_format($this->waiverDiscountAmount) }} Discount Applied</span>
+                            @else
+                                One-time, refundable
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Available Sizes --}}
+                @if(count($sizes) > 0)
+                <div class="proj-sizes-row">
+                    <span class="proj-sizes-label">
+                        @if($project->inventory_type === 'flat') Flat Sizes: @else Plot Sizes (Sq Yds): @endif
+                    </span>
+                    @foreach($sizes as $sz)
+                        @php
+                            $sizeLabel = $project->inventory_type === 'flat' ? $sz : $sz . ' Sq Yds';
+                        @endphp
+                        <span class="proj-size-badge">{{ $sizeLabel }}</span>
+                    @endforeach
+                </div>
+                @endif
+            </div>
+        </div>
+
+        {{-- MAIN REGISTRATION CARD --}}
+        <div class="reg-main-card mb-5">
+            <div class="reg-card-header text-center py-4">
+                <h3 class="mb-1 text-white fw-bold">ONLINE APPLICANT FORM</h3>
+                <p class="mb-0 text-white-50 fs-14">Provide your details to complete the registration</p>
+            </div>
+            <div class="reg-card-body p-4 p-md-5">
+
+                @if (session()->has('error'))
+                    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                        <i class="ri-error-warning-line me-2 fs-18 align-middle"></i>
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                <form wire:submit.prevent="submit">
+                    <!-- PERSONAL DETAILS -->
+                    <div class="form-section-title mb-4">
+                        <h5 class="fw-semibold text-primary mb-1">Personal Information</h5>
+                        <p class="text-muted fs-13 mb-0">Enter the primary applicant's identity information</p>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">First Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @error('first_name') is-invalid @enderror"
+                                wire:model.blur="first_name" placeholder="First Name">
+                            @error('first_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Last Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @error('last_name') is-invalid @enderror"
+                                wire:model.blur="last_name" placeholder="Last Name">
+                            @error('last_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Father / Husband Name</label>
+                            <input type="text" class="form-control @error('father_husband_name') is-invalid @enderror"
+                                wire:model.blur="father_husband_name" placeholder="Father or Husband Name">
+                            @error('father_husband_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">PAN Card Number <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @error('pan_number') is-invalid @enderror text-uppercase"
+                                wire:model.blur="pan_number" placeholder="e.g. ABCDE1234F" maxlength="10">
+                            @error('pan_number') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Gender <span class="text-danger">*</span></label>
+                            <select class="form-select @error('gender') is-invalid @enderror" wire:model.blur="gender">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                            @error('gender') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Date of Birth <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror"
+                                wire:model.blur="date_of_birth">
+                            @error('date_of_birth') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Occupation <span class="text-danger">*</span></label>
+                            <select class="form-select @error('occupation') is-invalid @enderror" wire:model.blur="occupation">
+                                <option value="">Select Occupation</option>
+                                @foreach(config('constants.occupations') as $key => $label)
+                                    <option value="{{ $key }}">{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            @error('occupation') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                wire:model.blur="email" placeholder="example@domain.com">
+                            @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Mobile Number <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @error('phone') is-invalid @enderror"
+                                wire:model.blur="phone" placeholder="10-digit mobile number" maxlength="10"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                            @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
+
+                    <!-- ADDRESS DETAILS -->
+                    <div class="form-section-title mb-4 pt-3 border-top">
+                        <h5 class="fw-semibold text-primary mb-1">Communication Address</h5>
+                        <p class="text-muted fs-13 mb-0">Provide permanent or current residential address</p>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Full Address <span class="text-danger">*</span></label>
+                            <textarea class="form-control @error('address') is-invalid @enderror" wire:model.blur="address"
+                                rows="2" placeholder="House No., Street Name, Locality..."></textarea>
+                            @error('address') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">State <span class="text-danger">*</span></label>
+                            <select class="form-select @error('state_id') is-invalid @enderror" wire:model.live="state_id">
+                                <option value="">Select State</option>
+                                @foreach($states as $st)
+                                    <option value="{{ $st->id }}">{{ $st->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('state_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">City <span class="text-danger">*</span></label>
+                            <select class="form-select @error('city_id') is-invalid @enderror" wire:model.live="city_id">
+                                <option value="">Select City</option>
+                                @foreach($cities as $ct)
+                                    <option value="{{ $ct->id }}">{{ $ct->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('city_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
+
+                    <!-- PROPERTY CHOICE -->
+                    <div class="form-section-title mb-4 pt-3 border-top">
+                        <h5 class="fw-semibold text-primary mb-1">Property Selection & Waiver</h5>
+                        <p class="text-muted fs-13 mb-0">Select your preferred unit size and enter waiver code if any</p>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Co-Applicant Name (Optional)</label>
+                            <input type="text" class="form-control @error('co_applicant_name') is-invalid @enderror"
+                                wire:model.blur="co_applicant_name" placeholder="Co-applicant full name">
+                            @error('co_applicant_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">
+                                @if($project->inventory_type === 'flat') Select Flat Size @else Select Plot Area (Sq Yds) @endif
+                                <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select @error('flat_size') is-invalid @enderror" wire:model.live="flat_size">
+                                <option value="">-- Select Size --</option>
+                                @foreach($sizes as $sz)
+                                    @php
+                                        $sizeLabel = $project->inventory_type === 'flat' ? $sz : $sz . ' Sq Yds';
+                                    @endphp
+                                    <option value="{{ $sz }}">{{ $sizeLabel }}</option>
+                                @endforeach
+                            </select>
+                            @error('flat_size') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Waiver Code</label>
+                            <input type="text"
+                                class="form-control @error('waiver_code') is-invalid @enderror @if(!empty($waiver_code) && $this->isValidWaiverCode) is-valid @endif"
+                                wire:model.live.debounce.300ms="waiver_code"
+                                maxlength="8"
+                                placeholder="Enter Waiver Code"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                            @if(!empty($waiver_code))
+                                @if($this->isValidWaiverCode)
+                                    <div class="text-success fs-12 mt-1 fw-semibold">
+                                        ✓ Valid Waiver Code! ₹{{ number_format($this->waiverDiscountAmount) }} Discount Applied.
+                                    </div>
+                                @else
+                                    <div class="text-danger fs-12 mt-1">
+                                        Invalid Waiver Code
+                                    </div>
                                 @endif
-                                <h3 class="" style="font-weight: 500;">Registration Amount Rs. {{ number_format(\App\Models\FrontendSetting::getVal('booking_amount', 21100)) }}</h3>
+                            @endif
+                            @error('waiver_code') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
+
+                    <!-- PRICE & PAYMENT SUMMARY CARD -->
+                    <div class="bg-light rounded-4 p-4 mb-4 border">
+                        @if(!empty($flat_size) && $this->total_value)
+                            <div class="d-flex justify-content-between align-items-center pb-3 border-bottom mb-3">
+                                <span class="fw-semibold text-dark">Total {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }} Value:</span>
+                                <span class="fs-18 fw-bold text-success">₹ {{ indianCurrency($this->total_value) }}</span>
+                            </div>
+                        @endif
+
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">
+                                    Registration Amount:
+                                    @if($this->isValidWaiverCode && $this->waiverDiscountAmount > 0)
+                                        <span class="text-decoration-line-through text-muted fs-15 me-2">Rs. {{ number_format($this->baseBookingAmount) }}</span>
+                                        <span class="text-success fs-20 fw-bold">Rs. {{ number_format($this->payableBookingAmount) }}</span>
+                                        <span class="badge bg-success text-white fs-12 ms-2">(₹{{ number_format($this->waiverDiscountAmount) }} Discount Applied)</span>
+                                    @else
+                                        <span>Rs. {{ number_format($this->payableBookingAmount) }}</span>
+                                    @endif
+                                </h5>
+                                <small class="text-muted">One-time registration fee payable online via UPI / Cards / NetBanking</small>
                             </div>
                         </div>
+                    </div>
                         <!-- TERMS -->
                         <div id="terms" class="mb-4">
                             <div class="form-check">

@@ -104,6 +104,43 @@ class Booking extends Component
         }
     }
 
+    public function getBaseBookingAmountProperty(): float
+    {
+        return (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100);
+    }
+
+    public function getWaiverDiscountAmountProperty(): float
+    {
+        return (float) \App\Models\FrontendSetting::getVal('waiver_discount_amount', 0);
+    }
+
+    public function getIsValidWaiverCodeProperty(): bool
+    {
+        $code = trim($this->waiver_code);
+        if (empty($code)) {
+            return false;
+        }
+
+        if (\App\Models\Agent::where('code', $code)->exists()) {
+            return true;
+        }
+
+        if (is_numeric($code) && strlen($code) >= 3 && strlen($code) <= 8) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getPayableBookingAmountProperty(): float
+    {
+        $base = $this->baseBookingAmount;
+        if ($this->isValidWaiverCode && $this->waiverDiscountAmount > 0) {
+            return max(0, $base - $this->waiverDiscountAmount);
+        }
+        return $base;
+    }
+
     public function getTotalValueProperty(): ?float
     {
         if (empty($this->flat_size)) {
@@ -374,7 +411,7 @@ class Booking extends Component
             'merchantId' => $merchantId,
             'merchantTransactionId' => $transactionId,
             'merchantUserId' => 'USR' . $this->lead->phone,
-            'amount' => (int) (((float) \App\Models\FrontendSetting::getVal('booking_amount', 21100)) * 100),
+            'amount' => (int) (round($this->payableBookingAmount, 2) * 100),
             'redirectUrl' => route('phonepe.redirect') . '?transactionId=' . $transactionId,
             'redirectMode' => 'GET',
             'callbackUrl' => route('phonepe.callback'),
