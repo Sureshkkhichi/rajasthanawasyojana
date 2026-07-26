@@ -121,15 +121,11 @@ class Booking extends Component
             return false;
         }
 
-        if (\App\Models\Agent::where('code', $code)->exists()) {
-            return true;
+        if (!is_numeric($code) || strlen($code) < 3 || strlen($code) > 5) {
+            return false;
         }
 
-        if (is_numeric($code) && strlen($code) >= 3 && strlen($code) <= 8) {
-            return true;
-        }
-
-        return false;
+        return \App\Models\Agent::where('code', $code)->exists();
     }
 
     public function getPayableBookingAmountProperty(): float

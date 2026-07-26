@@ -214,8 +214,10 @@ class PaymentController extends Controller
                     $discount = (float) \App\Models\FrontendSetting::getVal('waiver_discount_amount', 0.00);
                     if (!empty($lead->waiver_code)) {
                         $code = trim($lead->waiver_code);
-                        if (\App\Models\Agent::where('code', $code)->exists() || (is_numeric($code) && strlen($code) >= 3 && strlen($code) <= 8)) {
-                            return max(0.00, $base - $discount);
+                        if (is_numeric($code) && strlen($code) >= 3 && strlen($code) <= 5) {
+                            if (\App\Models\Agent::where('code', $code)->exists()) {
+                                return max(0.00, $base - $discount);
+                            }
                         }
                     }
                     return $base;

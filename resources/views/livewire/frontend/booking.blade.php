@@ -565,7 +565,7 @@
                                         <input type="text"
                                             class="form-control @error('waiver_code') is-invalid @enderror @if(!empty($waiver_code) && $this->isValidWaiverCode) is-valid @endif"
                                             wire:model.live.debounce.300ms="waiver_code"
-                                            maxlength="8"
+                                            maxlength="5"
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                         @if(!empty($waiver_code))
                                             @if($this->isValidWaiverCode)
