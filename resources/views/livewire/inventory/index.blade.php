@@ -970,10 +970,18 @@
                                 <!-- Waiver Code -->
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">Waiver Code</label>
-                                    <input type="text" inputmode="numeric" pattern="[0-9]*" class="form-control border-2"
-                                        placeholder="Enter waiver code (3-5 digits)" wire:model="newDealForm.waiver_code"
+                                    <input type="text" inputmode="numeric" pattern="[0-9]*"
+                                        class="form-control border-2 @error('newDealForm.waiver_code') is-invalid @enderror @if(!empty($newDealForm['waiver_code']) && $this->isValidNewDealWaiverCode) is-valid @endif"
+                                        placeholder="Enter waiver code (3-5 digits)" wire:model.live.debounce.300ms="newDealForm.waiver_code"
                                         maxlength="5" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)">
-                                    @error('newDealForm.waiver_code') <span class="text-danger fs-12">{{ $message }}</span>
+                                    @if(!empty($newDealForm['waiver_code']))
+                                        @if($this->isValidNewDealWaiverCode)
+                                            <small class="text-success fw-semibold d-block mt-1">✓ Valid Code! Discount Applied</small>
+                                        @elseif(!$errors->has('newDealForm.waiver_code'))
+                                            <small class="text-danger d-block mt-1">Invalid Waiver Code</small>
+                                        @endif
+                                    @endif
+                                    @error('newDealForm.waiver_code') <span class="text-danger fs-12 d-block mt-1">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <!-- Booking Amount Paid -->

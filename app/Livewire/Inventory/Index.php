@@ -147,6 +147,20 @@ class Index extends Component
         $this->loadCitiesForState($stateId);
     }
 
+    public function getIsValidNewDealWaiverCodeProperty(): bool
+    {
+        $code = trim($this->newDealForm['waiver_code'] ?? '');
+        if (empty($code)) {
+            return false;
+        }
+
+        if (!is_numeric($code) || strlen($code) < 3 || strlen($code) > 5) {
+            return false;
+        }
+
+        return \App\Models\Agent::where('code', $code)->exists();
+    }
+
     public function updatedNewDealFormStateId($value): void
     {
         $this->loadCitiesForState($value);
@@ -157,12 +171,31 @@ class Index extends Component
         if ($key === 'state_id') {
             $this->loadCitiesForState($value);
         }
+        if ($key === 'waiver_code') {
+            $this->recalculateNewDealBookingAmount($value);
+        }
     }
 
     public function updated($property, $value): void
     {
         if ($property === 'newDealForm.state_id') {
             $this->loadCitiesForState($value);
+        }
+        if ($property === 'newDealForm.waiver_code') {
+            $this->recalculateNewDealBookingAmount($value);
+        }
+    }
+
+    private function recalculateNewDealBookingAmount($waiverCode): void
+    {
+        $baseBookingAmount = (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100);
+        $waiverDiscountAmount = (float) \App\Models\FrontendSetting::getVal('waiver_discount_amount', 0);
+
+        $code = trim($waiverCode ?? '');
+        if (!empty($code) && is_numeric($code) && strlen($code) >= 3 && strlen($code) <= 5 && \App\Models\Agent::where('code', $code)->exists()) {
+            $this->newDealForm['booking_amount'] = max(0, $baseBookingAmount - $waiverDiscountAmount);
+        } else {
+            $this->newDealForm['booking_amount'] = $baseBookingAmount;
         }
     }
 
@@ -460,7 +493,16 @@ class Index extends Component
                 'newDealForm.city_id' => 'required',
                 'newDealForm.co_applicant_name' => 'nullable|string|max:255',
                 'newDealForm.flat_size' => 'required',
-                'newDealForm.waiver_code' => ['nullable', 'numeric', 'digits_between:3,5'],
+                'newDealForm.waiver_code' => [
+                    'nullable',
+                    'numeric',
+                    'digits_between:3,5',
+                    function ($attribute, $value, $fail) {
+                        if (!empty(trim($value)) && !\App\Models\Agent::where('code', trim($value))->exists()) {
+                            $fail('Invalid Waiver Code. Please enter a valid Agent Waiver Code or leave it blank.');
+                        }
+                    },
+                ],
                 'newDealForm.booking_amount' => 'required|numeric|min:0',
                 'newDealForm.total_amount' => 'required|numeric|min:0',
             ], [
