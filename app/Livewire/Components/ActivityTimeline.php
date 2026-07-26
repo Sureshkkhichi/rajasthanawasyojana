@@ -17,7 +17,7 @@ class ActivityTimeline extends Component
 
     public function render()
     {
-        $query = ActivityLog::with('user')->recent();
+        $query = ActivityLog::with(['user', 'deal', 'inventory', 'lead'])->recent();
 
         if ($this->leadId) {
             $query->where('lead_id', $this->leadId);

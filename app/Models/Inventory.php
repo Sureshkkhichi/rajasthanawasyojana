@@ -63,6 +63,14 @@ class Inventory extends Model
         };
     }
 
+    public function getUnitNameAttribute(): string
+    {
+        if ($this->inventory_type === 'flat') {
+            return "Flat {$this->flat_no}" . ($this->floor ? " ({$this->floor})" : '');
+        }
+        return "Plot {$this->plot_no}";
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Relationships

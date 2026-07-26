@@ -38,7 +38,7 @@
                                 </div>
 
                                 @if($log->description)
-                                    <p class="text-muted fs-12 mb-1">{{ $log->description }}</p>
+                                    <p class="text-muted fs-12 mb-1">{!! $log->formatted_description_html !!}</p>
                                 @endif
 
                                 <div class="d-flex align-items-center justify-content-between mt-1 pt-1 border-top border-light">

@@ -48,22 +48,16 @@ class AllotmentExpiryService
                 ActivityLogger::logInventory(
                     $unit,
                     'allotment_expired',
-                    "Allotment for unit #{$unit->unit_number} automatically cancelled after 7 days.",
-                    $oldStatus,
-                    'Available',
-                    $deal->id,
-                    $deal->lead_id
+                    'Allotment Expired',
+                    "Allotment for unit {$unit->unit_name} automatically cancelled after 7 days without being marked Sold."
                 );
             }
 
             ActivityLogger::logDeal(
                 $deal,
                 'allotment_expired',
-                "Unit allotment for deal #{$deal->id} automatically cancelled after 7 days without being marked Sold.",
-                [
-                    'unit_id' => $deal->allotted_inventory_id,
-                    'unit_number' => $unit?->unit_number,
-                ]
+                'Allotment Expired',
+                "Unit allotment for {$deal->first_name} {$deal->last_name} automatically cancelled after 7 days without being marked Sold."
             );
 
             $deal->update([

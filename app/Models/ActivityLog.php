@@ -98,6 +98,43 @@ class ActivityLog extends Model
         return $this->created_at ? $this->created_at->diffForHumans() : '';
     }
 
+    public function getFormattedDescriptionHtmlAttribute(): string
+    {
+        $desc = e($this->description ?? '');
+
+        $dealModel = $this->deal;
+        if (!$dealModel && $this->deal_id) {
+            $dealModel = Deal::find($this->deal_id);
+        }
+
+        if ($dealModel) {
+            $customerName = e($dealModel->first_name . ' ' . $dealModel->last_name);
+            $dealUrl = route('deals.show', $dealModel->id);
+            $dealLink = '<a href="' . $dealUrl . '" class="fw-semibold text-primary text-decoration-underline" title="View Deal">' . $customerName . '</a>';
+
+            $desc = preg_replace('/Deal\s*#[0-9a-f\-]{36}\s*\([^)]+\)/i', "Deal ({$dealLink})", $desc);
+            $desc = preg_replace('/Deal\s*#[0-9a-f\-]{36}/i', "Deal ({$dealLink})", $desc);
+        }
+
+        $inventoryModel = $this->inventory;
+        if (!$inventoryModel && $this->inventory_id) {
+            $inventoryModel = Inventory::find($this->inventory_id);
+        }
+
+        if ($inventoryModel) {
+            $unitName = e($inventoryModel->unit_name);
+            $invUrl = route('inventories.edit', $inventoryModel->id);
+            $unitLink = '<a href="' . $invUrl . '" class="fw-semibold text-info text-decoration-underline" target="_blank" title="View Inventory">' . $unitName . '</a>';
+
+            $desc = preg_replace('/Unit\s*#[0-9a-f\-]{36}/i', "Unit {$unitLink}", $desc);
+            $desc = preg_replace('/Unit\s*#/i', "Unit {$unitLink}", $desc);
+        }
+
+        $desc = preg_replace('/\s*#[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i', '', $desc);
+
+        return $desc;
+    }
+
     // Scopes
     public function scopeForLead($query, $leadId)
     {

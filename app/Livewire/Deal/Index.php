@@ -165,7 +165,7 @@ class Index extends Component
                         'notes' => "Unit vacated because Deal was marked {$newStatus}.",
                     ]);
 
-                    ActivityLogger::logInventory($unit, 'status_changed', "Unit Vacated ({$newStatus})", "Unit #{$unit->unit_name} status changed from {$oldStatus} to Available because Deal #{$deal->id} was marked {$newStatus}", ['old_status' => $oldStatus, 'new_status' => 'Available', 'deal_id' => $deal->id]);
+                    ActivityLogger::logInventory($unit, 'status_changed', "Unit Vacated ({$newStatus})", "{$unit->unit_name} status changed from {$oldStatus} to Available because deal for {$deal->first_name} {$deal->last_name} was marked {$newStatus}", ['old_status' => $oldStatus, 'new_status' => 'Available', 'deal_id' => $deal->id]);
                 }
                 $deal->update([
                     'deal_status' => $newStatus,
@@ -200,17 +200,16 @@ class Index extends Component
                 $deal,
                 $eventKey,
                 $eventTitle,
-                "Deal #{$deal->id} ({$deal->first_name} {$deal->last_name}) status changed from '{$oldDealStatus}' to '{$newStatus}'",
+                "Deal status for {$deal->first_name} {$deal->last_name} changed from '{$oldDealStatus}' to '{$newStatus}'",
                 [
                     'old_status' => $oldDealStatus,
                     'new_status' => $newStatus,
-                    'customer_name' => $deal->first_name . ' ' . $deal->last_name,
                 ]
             );
 
             $this->dispatch('swal:alert', [
                 'title' => 'Status Updated!',
-                'text' => 'Deal status updated to ' . $newStatus . ' successfully.',
+                'text' => "Deal status has been changed to '{$newStatus}'.",
                 'icon' => 'success'
             ]);
         }
@@ -221,9 +220,8 @@ class Index extends Component
         $deal = Deal::find($dealId);
         if ($deal) {
             $this->allotDealId = $dealId;
-            $this->selectedUnitId = null;
-            $this->selectedUnitDetails = [];
-            
+            $this->selectedUnitId = '';
+
             $this->availableUnits = \App\Models\Inventory::where('project_id', $deal->project_id)
                 ->where('status', 'Available')
                 ->get();

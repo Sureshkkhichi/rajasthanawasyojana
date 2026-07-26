@@ -22,7 +22,7 @@ class DealDocumentController extends Controller
             abort(404, 'No allotted unit found for this deal.');
         }
 
-        ActivityLogger::logDeal($deal, 'allotment_pdf_downloaded', 'Allotment Letter Downloaded', "Downloaded Allotment Letter PDF for Deal #{$deal->id}");
+        ActivityLogger::logDeal($deal, 'allotment_pdf_downloaded', 'Allotment Letter Downloaded', "Downloaded Allotment Letter PDF for {$deal->first_name} {$deal->last_name}");
 
         $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
 
@@ -45,7 +45,7 @@ class DealDocumentController extends Controller
             abort(404, 'No allotted unit found for this deal.');
         }
 
-        ActivityLogger::logDeal($deal, 'demand_pdf_downloaded', 'Demand Letter Downloaded', "Downloaded Demand Letter PDF for Deal #{$deal->id}");
+        ActivityLogger::logDeal($deal, 'demand_pdf_downloaded', 'Demand Letter Downloaded', "Downloaded Demand Letter PDF for {$deal->first_name} {$deal->last_name}");
 
         $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
 
@@ -70,7 +70,7 @@ class DealDocumentController extends Controller
 
         $deal->load(['project', 'agent']);
 
-        ActivityLogger::logDeal($deal, 'pdf_downloaded', 'Deal Summary PDF Downloaded', "Downloaded summary PDF for Deal #{$deal->id}");
+        ActivityLogger::logDeal($deal, 'pdf_downloaded', 'Deal Summary PDF Downloaded', "Downloaded summary PDF for {$deal->first_name} {$deal->last_name}");
 
         $html = view('emails.deal-pdf', [
             'deal' => $deal,
@@ -87,7 +87,7 @@ class DealDocumentController extends Controller
 
         $lead->load(['project', 'agent']);
 
-        ActivityLogger::logLead($lead, 'pdf_downloaded', 'Lead Application PDF Downloaded', "Downloaded application PDF for Lead #{$lead->id}");
+        ActivityLogger::logLead($lead, 'pdf_downloaded', 'Lead Application PDF Downloaded', "Downloaded application PDF for {$lead->first_name} {$lead->last_name}");
 
         $html = view('emails.lead-pdf', [
             'lead' => $lead,
@@ -104,7 +104,7 @@ class DealDocumentController extends Controller
 
         $deal->load(['project', 'allottedInventory']);
 
-        ActivityLogger::logDeal($deal, 'invoice_generated', 'Invoice Generated', "Generated and downloaded Payment Receipt / Invoice for Deal #{$deal->id}");
+        ActivityLogger::logDeal($deal, 'invoice_generated', 'Invoice Generated', "Generated Payment Receipt / Invoice for {$deal->first_name} {$deal->last_name}");
 
         $bookingDate = $deal->booking_date ? $deal->booking_date->format('d-m-Y') : date('d-m-Y');
         $numericId = preg_replace('/[^0-9]/', '', $deal->id);
