@@ -130,14 +130,6 @@
             margin-top: 45px;
         }
 
-        .footer-url {
-            position: absolute;
-            bottom: 10px;
-            left: 30px;
-            font-size: 11px;
-            color: #555;
-        }
-
         @media print {
             .receipt-box {
                 border: 1.5px solid #222 !important;
@@ -199,10 +191,6 @@
             <p class="org-name">Rajasthan Awas Yojana</p>
             <p class="sign-title">अधिकृत हस्ताक्षरकर्ता</p>
             <p class="org-name" style="margin-top: 5px;">JAIPUR</p>
-        </div>
-
-        <div class="footer-url">
-            https://rajasthanawasyojana.com/admin/admin/DealsPayments/printreceipt/{{ $print_id }}
         </div>
     </div>
 
