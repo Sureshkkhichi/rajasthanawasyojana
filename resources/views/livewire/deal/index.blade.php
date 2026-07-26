@@ -144,11 +144,11 @@
                                                              Action
                                                          </button>
                                                           <ul class="dropdown-menu shadow">
-                                                              <li>
-                                                                  <button class="dropdown-item py-2" type="button" wire:click="generateInvoice('{{ $deal->id }}')">
-                                                                      <i class="ri-file-text-line align-bottom me-2 text-muted"></i> Generate Invoice
-                                                                  </button>
-                                                              </li>
+                                                               <li>
+                                                                   <a class="dropdown-item py-2 text-primary" href="{{ route('deals.invoice', $deal->id) }}" target="_blank">
+                                                                       <i class="ri-file-text-line align-bottom me-2"></i> Generate Invoice
+                                                                   </a>
+                                                               </li>
                                                                @if(empty($deal->allotted_inventory_id))
                                                                    <li>
                                                                        <button class="dropdown-item py-2 text-success" type="button" wire:click="openAllotModal('{{ $deal->id }}')">

@@ -103,13 +103,9 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function generateInvoice(string $id): void
+    public function generateInvoice(string $id)
     {
-        $this->dispatch('swal:alert', [
-            'title' => 'Invoice Generated!',
-            'text' => 'Invoice has been successfully generated for Deal ID ' . $id,
-            'icon' => 'success'
-        ]);
+        return redirect()->route('deals.invoice', $id);
     }
 
     public function sendSMS(string $id): void
