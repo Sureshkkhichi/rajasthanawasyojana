@@ -17,8 +17,8 @@ class CheckExpiredAllotments
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Throttle expiry check using Cache lock for 5 minutes (300 seconds)
-        Cache::remember('system_allotment_expiry_check', 300, function () {
+        // Throttle expiry check using Cache lock (5 seconds for testing mode)
+        Cache::remember('system_allotment_expiry_check', 5, function () {
             try {
                 app(AllotmentExpiryService::class)->expireOldAllotments();
             } catch (\Throwable $e) {
