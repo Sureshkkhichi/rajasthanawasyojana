@@ -10,6 +10,7 @@ class DocumentTemplate extends Component
 {
     public $selectedProjectId = '';
     public $projects = [];
+    public $activeTab = 'allotmentTab';
 
     // Allotment Letter Fields
     public $allotment_subtitle = '';

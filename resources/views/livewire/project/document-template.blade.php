@@ -65,96 +65,94 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-white border-bottom p-0">
-                                <ul class="nav nav-tabs nav-tabs-custom nav-success card-header-tabs border-0" role="tablist">
+                            <div class="card-header border-bottom bg-light px-4 py-3">
+                                <ul class="nav nav-pills card-header-pills" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active py-3 px-4 fw-bold fs-14 d-flex align-items-center" data-bs-toggle="tab" href="#allotment-tab" role="tab">
-                                            <i class="ri-file-list-3-line me-2 fs-18"></i> Allotment Letter Content (आवंटन पत्र)
-                                        </a>
+                                        <button type="button" class="nav-link fw-bold px-4 py-2 {{ $activeTab === 'allotmentTab' ? 'active bg-primary text-white shadow-sm' : 'text-dark bg-white border' }}" 
+                                            wire:click="$set('activeTab', 'allotmentTab')">
+                                            <i class="ri-file-list-3-line me-1"></i> Allotment Letter Content (आवंटन पत्र)
+                                        </button>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link py-3 px-4 fw-bold fs-14 d-flex align-items-center" data-bs-toggle="tab" href="#demand-tab" role="tab">
-                                            <i class="ri-file-text-line me-2 fs-18"></i> Demand Letter Content (मांग पत्र)
-                                        </a>
+                                    <li class="nav-item ms-2">
+                                        <button type="button" class="nav-link fw-bold px-4 py-2 {{ $activeTab === 'demandTab' ? 'active bg-primary text-white shadow-sm' : 'text-dark bg-white border' }}" 
+                                            wire:click="$set('activeTab', 'demandTab')">
+                                            <i class="ri-file-text-line me-1"></i> Demand Letter Content (मांग पत्र)
+                                        </button>
                                     </li>
                                 </ul>
                             </div>
 
                             <div class="card-body p-4">
-                                <div class="tab-content text-muted">
+                                @if($activeTab === 'allotmentTab')
                                     <!-- Tab 1: Allotment Letter -->
-                                    <div class="tab-pane active" id="allotment-tab" role="tabpanel">
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-dark">Subtitle (उप-शीर्षक)</label>
-                                                <input type="text" class="form-control border-2 @error('allotment_subtitle') is-invalid @enderror" 
-                                                    wire:model="allotment_subtitle" placeholder="e.g. जयपुर विकास प्राधिकरण द्वारा अनुमोदित">
-                                                @error('allotment_subtitle') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                            </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-dark">Subtitle (उप-शीर्षक)</label>
+                                            <input type="text" class="form-control border-2 @error('allotment_subtitle') is-invalid @enderror" 
+                                                wire:model="allotment_subtitle" placeholder="e.g. जयपुर विकास प्राधिकरण द्वारा अनुमोदित">
+                                            @error('allotment_subtitle') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
 
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-dark">Subject (विषय)</label>
-                                                <input type="text" class="form-control border-2 @error('allotment_subject') is-invalid @enderror" 
-                                                    wire:model="allotment_subject" placeholder="e.g. विषय:- आवासीय भूखण्ड \ फ्लैट \ व्यवसायिक भूखण्ड आवंटन की सूचना बाबत !">
-                                                @error('allotment_subject') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                            </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-dark">Subject (विषय)</label>
+                                            <input type="text" class="form-control border-2 @error('allotment_subject') is-invalid @enderror" 
+                                                wire:model="allotment_subject" placeholder="e.g. विषय:- आवासीय भूखण्ड \ फ्लैट \ व्यवसायिक भूखण्ड आवंटन की सूचना बाबत !">
+                                            @error('allotment_subject') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
 
-                                            <div class="col-12">
-                                                <label class="form-label fw-semibold text-dark">Main Body Paragraph (मुख्य विवरण पाठ)</label>
-                                                <textarea class="form-control border-2 @error('allotment_body') is-invalid @enderror" rows="4" 
-                                                    wire:model="allotment_body" placeholder="Enter Hindi allotment body text..."></textarea>
-                                                @error('allotment_body') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                            </div>
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold text-dark">Main Body Paragraph (मुख्य विवरण पाठ)</label>
+                                            <textarea class="form-control border-2 @error('allotment_body') is-invalid @enderror" rows="4" 
+                                                wire:model="allotment_body" placeholder="Enter Hindi allotment body text..."></textarea>
+                                            @error('allotment_body') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
 
-                                            <div class="col-12">
-                                                <label class="form-label fw-semibold text-dark">Footer Note (फुटर टिप्पणी)</label>
-                                                <input type="text" class="form-control border-2 @error('allotment_footer_note') is-invalid @enderror" 
-                                                    wire:model="allotment_footer_note" placeholder="e.g. नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।">
-                                                @error('allotment_footer_note') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                            </div>
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold text-dark">Footer Note (फुटर टिप्पणी)</label>
+                                            <input type="text" class="form-control border-2 @error('allotment_footer_note') is-invalid @enderror" 
+                                                wire:model="allotment_footer_note" placeholder="e.g. नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।">
+                                            @error('allotment_footer_note') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
-
+                                @elseif($activeTab === 'demandTab')
                                     <!-- Tab 2: Demand Letter -->
-                                    <div class="tab-pane" id="demand-tab" role="tabpanel">
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-dark">Subtitle (उप-शीर्षक)</label>
-                                                <input type="text" class="form-control border-2 @error('demand_subtitle') is-invalid @enderror" 
-                                                    wire:model="demand_subtitle" placeholder="e.g. जयपुर विकास प्राधिकरण द्वारा अनुमोदित">
-                                                @error('demand_subtitle') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                            </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-dark">Subtitle (उप-शीर्षक)</label>
+                                            <input type="text" class="form-control border-2 @error('demand_subtitle') is-invalid @enderror" 
+                                                wire:model="demand_subtitle" placeholder="e.g. जयपुर विकास प्राधिकरण द्वारा अनुमोदित">
+                                            @error('demand_subtitle') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
 
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-semibold text-dark">Subject (विषय)</label>
-                                                <input type="text" class="form-control border-2 @error('demand_subject') is-invalid @enderror" 
-                                                    wire:model="demand_subject" placeholder="e.g. विषय: भूखण्ड संख्या {UNIT_NO} की बकाया राशि जमा कराने बाबत।">
-                                                @error('demand_subject') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                            </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-dark">Subject (विषय)</label>
+                                            <input type="text" class="form-control border-2 @error('demand_subject') is-invalid @enderror" 
+                                                wire:model="demand_subject" placeholder="e.g. विषय: भूखण्ड संख्या {UNIT_NO} की बकाया राशि जमा कराने बाबत।">
+                                            @error('demand_subject') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
 
-                                            <div class="col-12">
-                                                <label class="form-label fw-semibold text-dark">Main Body Paragraph (मुख्य विवरण पाठ)</label>
-                                                <textarea class="form-control border-2 @error('demand_body') is-invalid @enderror" rows="3" 
-                                                    wire:model="demand_body" placeholder="Enter Hindi demand letter body text..."></textarea>
-                                                @error('demand_body') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                            </div>
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold text-dark">Main Body Paragraph (मुख्य विवरण पाठ)</label>
+                                            <textarea class="form-control border-2 @error('demand_body') is-invalid @enderror" rows="3" 
+                                                wire:model="demand_body" placeholder="Enter Hindi demand letter body text..."></textarea>
+                                            @error('demand_body') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
 
-                                            <div class="col-12">
-                                                <label class="form-label fw-semibold text-dark">Footer Instructions & Terms Paragraph (मांग पत्र निर्देश व नियम शर्तें)</label>
-                                                <textarea class="form-control border-2 @error('demand_footer_para') is-invalid @enderror" rows="5" 
-                                                    wire:model="demand_footer_para" placeholder="Enter payment instructions and terms..."></textarea>
-                                                @error('demand_footer_para') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                            </div>
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold text-dark">Footer Instructions & Terms Paragraph (मांग पत्र निर्देश व नियम शर्तें)</label>
+                                            <textarea class="form-control border-2 @error('demand_footer_para') is-invalid @enderror" rows="5" 
+                                                wire:model="demand_footer_para" placeholder="Enter payment instructions and terms..."></textarea>
+                                            @error('demand_footer_para') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
 
-                                            <div class="col-12">
-                                                <label class="form-label fw-semibold text-dark">Footer Note (फुटर टिप्पणी)</label>
-                                                <input type="text" class="form-control border-2 @error('demand_footer_note') is-invalid @enderror" 
-                                                    wire:model="demand_footer_note" placeholder="e.g. नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।">
-                                                @error('demand_footer_note') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                            </div>
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold text-dark">Footer Note (फुटर टिप्पणी)</label>
+                                            <input type="text" class="form-control border-2 @error('demand_footer_note') is-invalid @enderror" 
+                                                wire:model="demand_footer_note" placeholder="e.g. नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।">
+                                            @error('demand_footer_note') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
-                                </div>
+                                @endif
                             </div>
 
                             <!-- Footer Action Buttons -->
