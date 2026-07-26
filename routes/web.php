@@ -64,6 +64,8 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::prefix('projects')->name('projects.')->group(function () {
         // Project Listing
         Route::get('/', ProjectIndex::class)->name('index');
+        // PDF Document Templates
+        Route::get('/document-templates', \App\Livewire\Project\DocumentTemplate::class)->name('document-templates');
         // Create Project
         Route::get('/create', ProjectForm::class)->name('create');
         // Edit Project

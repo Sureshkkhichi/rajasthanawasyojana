@@ -210,7 +210,7 @@
         <div class="content">
             <div class="header">
                 <div class="title">{{ $project->name }}</div>
-                <div class="subtitle">जयपुर विकास प्राधिकरण द्वारा अनुमोदित</div>
+                <div class="subtitle">{!! nl2br(e($allotment_subtitle ?? 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित')) !!}</div>
                 <div class="location">Jaipur</div>
                 <div class="badge-box">आवंटन पत्र</div>
             </div>
@@ -236,15 +236,13 @@
             <div class="divider"></div>
 
             <div class="subject">
-                विषय:- आवासीय भूखण्ड \ फ्लैट \ व्यवसायिक भूखण्ड आवंटन की सूचना बाबत !
+                {!! nl2br(e($allotment_subject ?? 'विषय:- आवासीय भूखण्ड \ फ्लैट \ व्यवसायिक भूखण्ड आवंटन की सूचना बाबत !')) !!}
             </div>
 
             <div class="salutation">महोदय / महोदया,</div>
 
             <div class="body-text">
-                हमें यह उद्घोषित करते हुए प्रसन्नता हो रही है कि हमारी योजना <strong>{{ $project->name }}</strong> में
-                आपका
-                भूखण्ड \ फ्लैट का आवंटित किया जाना प्रस्तावित है जिसका विवरण निम्न प्रकार से है:
+                {!! nl2br(e($allotment_body ?? "हमें यह उद्घोषित करते हुए प्रसन्नता हो रही है कि हमारी योजना {$project->name} में आपका भूखण्ड \ फ्लैट का आवंटित किया जाना प्रस्तावित है जिसका विवरण निम्न प्रकार से है:")) !!}
             </div>
 
             <table class="data-table">
@@ -264,7 +262,7 @@
             </table>
 
             <div class="footer-note">
-                नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।
+                {!! nl2br(e($allotment_footer_note ?? 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।')) !!}
             </div>
             <div class="computer-generated">
                 * यह एक कंप्यूटर जनित पत्र है इसलिए किसी भी हस्ताक्षर की आवश्यकता नहीं है।

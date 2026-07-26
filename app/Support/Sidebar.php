@@ -67,6 +67,15 @@ class Sidebar
                         'permission' => 'projects.view',
                     ],
                 ],
+                'document_templates' => [
+                    [
+                        'title' => 'PDF Templates',
+                        'route' => 'projects.document-templates',
+                        'is_route' => true,
+                        'icon' => 'ri-file-code-line',
+                        'permission' => 'projects.view',
+                    ],
+                ],
                 // 'bookings' => [
                 //     [
                 //         'title' => 'Bookings',
