@@ -12,6 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
 
+        $middleware->append(\App\Http\Middleware\CheckExpiredAllotments::class);
+
         $middleware->validateCsrfTokens(except: [
             'payment/phonepe/callback',
             'payment/phonepe/redirect',

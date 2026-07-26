@@ -378,38 +378,6 @@ class Index extends Component
 
     public static function expireOldAllotments(): void
     {
-        $expiredDeals = Deal::query()
-            ->whereNotNull('allotted_inventory_id')
-            ->where('status', '!=', 'Sold')
-            ->where(function($q) {
-                $q->where('allotted_at', '<=', now()->subDays(7))
-                  ->orWhere(function($sub) {
-                      $sub->whereNull('allotted_at')
-                          ->where('updated_at', '<=', now()->subDays(7));
-                  });
-            })
-            ->get();
-
-        foreach ($expiredDeals as $deal) {
-            $unit = \App\Models\Inventory::find($deal->allotted_inventory_id);
-            if ($unit) {
-                $oldStatus = $unit->status;
-                $unit->update(['status' => 'Available']);
-
-                \App\Models\InventoryHistory::create([
-                    'inventory_id' => $unit->id,
-                    'from_status' => $oldStatus,
-                    'to_status' => 'Available',
-                    'changed_by' => 'System (Auto-expiry)',
-                    'notes' => 'Unit allotment automatically cancelled after 7 days without being marked Sold.',
-                ]);
-            }
-
-            $deal->update([
-                'allotted_inventory_id' => null,
-                'allotted_at' => null,
-                'status' => 'Not Alloted',
-            ]);
-        }
+        app(\App\Services\AllotmentExpiryService::class)->expireOldAllotments();
     }
 }
