@@ -269,6 +269,8 @@ class Index extends Component
 
         if ($deal && $unit) {
             $deal->update([
+                'status' => 'Allotted',
+                'deal_status' => 'Allotted',
                 'allotted_inventory_id' => $unit->id,
                 'allotted_at' => now(),
             ]);

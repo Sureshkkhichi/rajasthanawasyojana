@@ -74,6 +74,8 @@ class Allot extends Component
 
         // Link unit to deal
         $this->deal->update([
+            'status' => 'Allotted',
+            'deal_status' => 'Allotted',
             'allotted_inventory_id' => $unit->id,
             'allotted_at' => now()
         ]);

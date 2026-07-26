@@ -316,6 +316,8 @@
                                                      @php $ds = $deal->deal_status ?? $deal->status; @endphp
                                                      @if($ds === 'Paid' || $ds === 'Sold')
                                                           <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fs-12">{{ $ds }}</span>
+                                                     @elseif($ds === 'Allotted')
+                                                          <span class="badge bg-info-subtle text-info border border-info-subtle px-2 py-1 fs-12">Allotted</span>
                                                      @elseif($ds === 'Partial')
                                                           <span class="badge bg-warning text-white px-2 py-1 fs-12">Partial</span>
                                                      @elseif($ds === 'Refund')

@@ -61,6 +61,8 @@ class AllotmentExpiryService
             );
 
             $deal->update([
+                'status' => 'Not Alloted',
+                'deal_status' => 'Not Alloted',
                 'allotted_inventory_id' => null,
                 'allotted_at' => null,
             ]);
