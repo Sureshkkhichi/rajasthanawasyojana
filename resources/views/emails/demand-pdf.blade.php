@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>मांग पत्र</title>
+    <title>Demand_{{ $deal->first_name . ' ' . $deal->last_name }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         @page {
@@ -19,7 +19,8 @@
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             font-family: 'Hind', Arial, sans-serif;
@@ -199,15 +200,21 @@
         }
 
         @media screen {
-            body { background: #e0e0e0; }
+            body {
+                background: #e0e0e0;
+            }
+
             .page-wrapper {
-                box-shadow: 0 0 20px rgba(0,0,0,0.3);
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
                 margin: 20px auto;
             }
         }
 
         @media print {
-            body { background: none !important; }
+            body {
+                background: none !important;
+            }
+
             .page-wrapper {
                 width: 100%;
                 min-height: 100vh;
@@ -243,7 +250,8 @@
 
             <!-- Subject -->
             <div class="subject">
-                <strong>विषय:</strong> भूखण्ड संख्या <strong>{{ $inventory->plot_no ?: $inventory->flat_no }}</strong> की बकाया राशि जमा कराने बाबत।
+                <strong>विषय:</strong> भूखण्ड संख्या <strong>{{ $inventory->plot_no ?: $inventory->flat_no }}</strong>
+                की बकाया राशि जमा कराने बाबत।
             </div>
 
             <!-- Salutation -->
@@ -253,7 +261,8 @@
             <div class="body-text">
                 <strong>{{ $project->name }}</strong> में आवेदन पत्र संख्या
                 <strong>RAJAWS-{{ $deal->created_at?->format('Y') ?: date('Y') }}-{{ substr($deal->id, 0, 8) }}</strong>
-                के द्वारा आपने भूखण्ड आवंटन किये जाने हेतु बुकिंग कराई थी, आपको आवंटित भूखण्ड एवं उसके विक्रय प्रतिफल के पेटे जमा कराई जाने वाली राशि का विवरण निम्न प्रकार है:-
+                के द्वारा आपने भूखण्ड आवंटन किये जाने हेतु बुकिंग कराई थी, आपको आवंटित भूखण्ड एवं उसके विक्रय प्रतिफल के
+                पेटे जमा कराई जाने वाली राशि का विवरण निम्न प्रकार है:-
             </div>
 
             <!-- Plot / Unit details + financial table -->
@@ -270,7 +279,8 @@
                 <tbody>
                     <tr>
                         <td><strong>{{ $inventory->plot_no ?: $inventory->flat_no }}</strong></td>
-                        <td><strong>{{ number_format($inventory->area_sq_yards ?: $inventory->area_sbup, 2) }}</strong></td>
+                        <td><strong>{{ number_format($inventory->area_sq_yards ?: $inventory->area_sbup, 2) }}</strong>
+                        </td>
                         <td>₹ {{ number_format($totalAmount, 2) }}</td>
                         <td>₹ {{ number_format($bookingAmount, 2) }}</td>
                         <td style="color: #c0392b; font-weight: bold;">₹ {{ number_format($balanceDue, 2) }}</td>
@@ -280,8 +290,12 @@
 
             <!-- Footer instruction paragraph -->
             <div class="footer-para">
-                अतः आपसे अनुरोध है कि इस मांग पत्र के जारी होने की दिनांक से उक्तानुसार राशि जमा करावे अथवा लोन के लिए बैंक एवं फर्म द्वारा मांगे गए दस्तावेज, <strong>{{ $project->address ?? '' }}</strong> स्थित कार्यालय में स्वयं उपस्थित होकर जमा करावे। यदि किसी भी कारण से आप द्वारा उक्त राशि निर्धारित समयावधि में जमा नहीं कराई गयी तो बकाया राशि पर 18 प्रतिशत वार्षिक ब्याज की दर से ब्याज जमा कराना होगा।<br><br>
-                राशि के चेक / आरटीजीएस / एनईएफटी / आईएमपीएस / ऑनलाइन <strong>{{ $project->name }}</strong> के नाम से देय होंगे।
+                अतः आपसे अनुरोध है कि इस मांग पत्र के जारी होने की दिनांक से उक्तानुसार राशि जमा करावे अथवा लोन के लिए
+                बैंक एवं फर्म द्वारा मांगे गए दस्तावेज, <strong>{{ $project->address ?? '' }}</strong> स्थित कार्यालय
+                में स्वयं उपस्थित होकर जमा करावे। यदि किसी भी कारण से आप द्वारा उक्त राशि निर्धारित समयावधि में जमा नहीं
+                कराई गयी तो बकाया राशि पर 18 प्रतिशत वार्षिक ब्याज की दर से ब्याज जमा कराना होगा।<br><br>
+                राशि के चेक / आरटीजीएस / एनईएफटी / आईएमपीएस / ऑनलाइन <strong>{{ $project->name }}</strong> के नाम से देय
+                होंगे।
             </div>
 
             <!-- Contact -->

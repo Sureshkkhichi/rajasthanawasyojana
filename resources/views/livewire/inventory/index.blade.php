@@ -577,7 +577,7 @@
             <div class="modal-content shadow-lg border-0 rounded-4">
                 <div class="modal-header bg-danger text-white py-3 rounded-top-4">
                     <h5 class="modal-title text-white fw-bold d-flex align-items-center">
-                        <i class="ri-checkbox-circle-line me-2"></i> Allot Unit & Mark Sold
+                        <i class="ri-checkbox-circle-line me-2"></i> Mark Sold & Block Inventory
                     </h5>
                     <button type="button" class="btn-close btn-close-white"
                         wire:click="$set('soldModalOpen', false)"></button>
@@ -695,9 +695,10 @@
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold text-muted mb-1">PAN Number <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control border-2 text-uppercase @error('newDealForm.pan_number') is-invalid @enderror" id="pan_number"
-                                        placeholder="e.g. ABCDE1234F" wire:model="newDealForm.pan_number" maxlength="10"
-                                        style="text-transform: uppercase;" oninput="formatPanInput(this)">
+                                    <input type="text"
+                                        class="form-control border-2 text-uppercase @error('newDealForm.pan_number') is-invalid @enderror"
+                                        id="pan_number" placeholder="e.g. ABCDE1234F" wire:model="newDealForm.pan_number"
+                                        maxlength="10" style="text-transform: uppercase;" oninput="formatPanInput(this)">
                                     @error('newDealForm.pan_number') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -764,35 +765,35 @@
 
                                 <!-- State -->
                                 <div class="col-md-4" x-data="{
-                                            open: false,
-                                            selectedId: @entangle('newDealForm.state_id').live,
-                                            get selectedLabel() {
-                                                if (!this.selectedId) return 'Select State';
-                                                let el = document.querySelector('#state-option-' + this.selectedId);
-                                                return el ? el.getAttribute('data-name') : 'Select State';
-                                            },
-                                            selectState(id) {
-                                                this.selectedId = id;
-                                                this.open = false;
-                                                $wire.selectStateId(id);
-                                            }
-                                        }">
+                                                open: false,
+                                                selectedId: @entangle('newDealForm.state_id').live,
+                                                get selectedLabel() {
+                                                    if (!this.selectedId) return 'Select State';
+                                                    let el = document.querySelector('#state-option-' + this.selectedId);
+                                                    return el ? el.getAttribute('data-name') : 'Select State';
+                                                },
+                                                selectState(id) {
+                                                    this.selectedId = id;
+                                                    this.open = false;
+                                                    $wire.selectStateId(id);
+                                                }
+                                            }">
                                     <label class="form-label fw-semibold text-muted mb-1">State <span
                                             class="text-danger">*</span></label>
                                     <div class="position-relative">
                                         <button type="button"
                                             class="form-select border-2 text-start d-flex align-items-center justify-content-between bg-white shadow-none"
                                             @click="
-                                                        open = !open; 
-                                                        if(open) { 
-                                                            $nextTick(() => { 
-                                                                let inp = $refs.stateSearchInput; 
-                                                                if(inp) { inp.value = ''; inp.focus(); }
-                                                                let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
-                                                                items.forEach(el => el.classList.remove('d-none')); 
-                                                            }); 
-                                                        }
-                                                    " style="height: 42px;">
+                                                            open = !open; 
+                                                            if(open) { 
+                                                                $nextTick(() => { 
+                                                                    let inp = $refs.stateSearchInput; 
+                                                                    if(inp) { inp.value = ''; inp.focus(); }
+                                                                    let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
+                                                                    items.forEach(el => el.classList.remove('d-none')); 
+                                                                }); 
+                                                            }
+                                                        " style="height: 42px;">
                                             <span x-text="selectedLabel" :class="{ 'text-muted': !selectedId }"
                                                 class="text-truncate">Select State</span>
                                         </button>
@@ -809,20 +810,20 @@
                                                 <input type="text" class="form-control border-start-0 shadow-none"
                                                     placeholder="Search state..." @click.stop x-ref="stateSearchInput"
                                                     oninput="
-                                                                let q = this.value.toLowerCase().trim();
-                                                                let items = this.closest('.position-relative').querySelectorAll('.state-item-option');
-                                                                items.forEach(el => {
-                                                                    let name = (el.getAttribute('data-name') || '').toLowerCase();
-                                                                    let isMatch = !q || name.includes(q);
-                                                                    if (isMatch) { el.classList.remove('d-none'); } else { el.classList.add('d-none'); }
-                                                                });
-                                                            ">
+                                                                    let q = this.value.toLowerCase().trim();
+                                                                    let items = this.closest('.position-relative').querySelectorAll('.state-item-option');
+                                                                    items.forEach(el => {
+                                                                        let name = (el.getAttribute('data-name') || '').toLowerCase();
+                                                                        let isMatch = !q || name.includes(q);
+                                                                        if (isMatch) { el.classList.remove('d-none'); } else { el.classList.add('d-none'); }
+                                                                    });
+                                                                ">
                                                 <button type="button" class="btn btn-light border-start-0" @click="
-                                                                $refs.stateSearchInput.value = ''; 
-                                                                let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
-                                                                items.forEach(el => el.classList.remove('d-none'));
-                                                                $refs.stateSearchInput.focus();
-                                                            ">
+                                                                    $refs.stateSearchInput.value = ''; 
+                                                                    let items = $el.closest('.position-relative').querySelectorAll('.state-item-option'); 
+                                                                    items.forEach(el => el.classList.remove('d-none'));
+                                                                    $refs.stateSearchInput.focus();
+                                                                ">
                                                     <i class="ri-close-line"></i>
                                                 </button>
                                             </div>
@@ -849,35 +850,35 @@
 
                                 <!-- City -->
                                 <div class="col-md-4" x-data="{
-                                            open: false,
-                                            selectedId: @entangle('newDealForm.city_id'),
-                                            get selectedLabel() {
-                                                if (!this.selectedId) return 'Select City';
-                                                let el = document.querySelector('#city-option-' + this.selectedId);
-                                                return el ? el.getAttribute('data-name') : 'Select City';
-                                            },
-                                            selectCity(id) {
-                                                this.selectedId = id;
-                                                this.open = false;
-                                                $wire.set('newDealForm.city_id', id);
-                                            }
-                                        }">
+                                                open: false,
+                                                selectedId: @entangle('newDealForm.city_id'),
+                                                get selectedLabel() {
+                                                    if (!this.selectedId) return 'Select City';
+                                                    let el = document.querySelector('#city-option-' + this.selectedId);
+                                                    return el ? el.getAttribute('data-name') : 'Select City';
+                                                },
+                                                selectCity(id) {
+                                                    this.selectedId = id;
+                                                    this.open = false;
+                                                    $wire.set('newDealForm.city_id', id);
+                                                }
+                                            }">
                                     <label class="form-label fw-semibold text-muted mb-1">City <span
                                             class="text-danger">*</span></label>
                                     <div class="position-relative">
                                         <button type="button"
                                             class="form-select border-2 text-start d-flex align-items-center justify-content-between bg-white shadow-none"
                                             @click="
-                                                        open = !open; 
-                                                        if(open) { 
-                                                            $nextTick(() => { 
-                                                                let inp = $refs.citySearchInput; 
-                                                                if(inp) { inp.value = ''; inp.focus(); }
-                                                                let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
-                                                                items.forEach(el => el.classList.remove('d-none')); 
-                                                            }); 
-                                                        }
-                                                    " style="height: 42px;">
+                                                            open = !open; 
+                                                            if(open) { 
+                                                                $nextTick(() => { 
+                                                                    let inp = $refs.citySearchInput; 
+                                                                    if(inp) { inp.value = ''; inp.focus(); }
+                                                                    let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
+                                                                    items.forEach(el => el.classList.remove('d-none')); 
+                                                                }); 
+                                                            }
+                                                        " style="height: 42px;">
                                             <span x-text="selectedLabel" :class="{ 'text-muted': !selectedId }"
                                                 class="text-truncate">Select City</span>
                                         </button>
@@ -894,20 +895,20 @@
                                                 <input type="text" class="form-control border-start-0 shadow-none"
                                                     placeholder="Search city..." @click.stop x-ref="citySearchInput"
                                                     oninput="
-                                                                let q = this.value.toLowerCase().trim();
-                                                                let items = this.closest('.position-relative').querySelectorAll('.city-item-option');
-                                                                items.forEach(el => {
-                                                                    let name = (el.getAttribute('data-name') || '').toLowerCase();
-                                                                    let isMatch = !q || name.includes(q);
-                                                                    if (isMatch) { el.classList.remove('d-none'); } else { el.classList.add('d-none'); }
-                                                                });
-                                                            ">
+                                                                    let q = this.value.toLowerCase().trim();
+                                                                    let items = this.closest('.position-relative').querySelectorAll('.city-item-option');
+                                                                    items.forEach(el => {
+                                                                        let name = (el.getAttribute('data-name') || '').toLowerCase();
+                                                                        let isMatch = !q || name.includes(q);
+                                                                        if (isMatch) { el.classList.remove('d-none'); } else { el.classList.add('d-none'); }
+                                                                    });
+                                                                ">
                                                 <button type="button" class="btn btn-light border-start-0" @click="
-                                                                $refs.citySearchInput.value = ''; 
-                                                                let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
-                                                                items.forEach(el => el.classList.remove('d-none'));
-                                                                $refs.citySearchInput.focus();
-                                                            ">
+                                                                    $refs.citySearchInput.value = ''; 
+                                                                    let items = $el.closest('.position-relative').querySelectorAll('.city-item-option'); 
+                                                                    items.forEach(el => el.classList.remove('d-none'));
+                                                                    $refs.citySearchInput.focus();
+                                                                ">
                                                     <i class="ri-close-line"></i>
                                                 </button>
                                             </div>
@@ -972,16 +973,19 @@
                                     <label class="form-label fw-semibold text-muted mb-1">Waiver Code</label>
                                     <input type="text" inputmode="numeric" pattern="[0-9]*"
                                         class="form-control border-2 @error('newDealForm.waiver_code') is-invalid @enderror @if(!empty($newDealForm['waiver_code']) && $this->isValidNewDealWaiverCode) is-valid @endif"
-                                        placeholder="Enter waiver code (3-5 digits)" wire:model.live.debounce.300ms="newDealForm.waiver_code"
-                                        maxlength="5" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)">
+                                        placeholder="Enter waiver code (3-5 digits)"
+                                        wire:model.live.debounce.300ms="newDealForm.waiver_code" maxlength="5"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)">
                                     @if(!empty($newDealForm['waiver_code']))
                                         @if($this->isValidNewDealWaiverCode)
-                                            <small class="text-success fw-semibold d-block mt-1">✓ Valid Code! Discount Applied</small>
+                                            <small class="text-success fw-semibold d-block mt-1">✓ Valid Code! Discount
+                                                Applied</small>
                                         @elseif(!$errors->has('newDealForm.waiver_code'))
                                             <small class="text-danger d-block mt-1">Invalid Waiver Code</small>
                                         @endif
                                     @endif
-                                    @error('newDealForm.waiver_code') <span class="text-danger fs-12 d-block mt-1">{{ $message }}</span>
+                                    @error('newDealForm.waiver_code') <span
+                                        class="text-danger fs-12 d-block mt-1">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <!-- Booking Amount Paid -->
