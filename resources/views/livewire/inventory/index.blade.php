@@ -697,7 +697,7 @@
                                             class="text-danger">*</span></label>
                                     <input type="text" class="form-control border-2 text-uppercase @error('newDealForm.pan_number') is-invalid @enderror" id="pan_number"
                                         placeholder="e.g. ABCDE1234F" wire:model="newDealForm.pan_number" maxlength="10"
-                                        style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '')">
+                                        style="text-transform: uppercase;" oninput="formatPanInput(this)">
                                     @error('newDealForm.pan_number') <span class="text-danger fs-12">{{ $message }}</span>
                                     @enderror
                                 </div>

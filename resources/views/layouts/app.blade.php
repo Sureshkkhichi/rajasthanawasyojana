@@ -140,6 +140,22 @@
     @livewireScripts
     <script src="{{ asset('assets/js/app.js') }}"></script>
     <script>
+        function formatPanInput(el) {
+            let val = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            let formatted = '';
+            for (let i = 0; i < val.length && i < 10; i++) {
+                let char = val[i];
+                if (i < 5) {
+                    if (/[A-Z]/.test(char)) formatted += char;
+                } else if (i < 9) {
+                    if (/[0-9]/.test(char)) formatted += char;
+                } else {
+                    if (/[A-Z]/.test(char)) formatted += char;
+                }
+            }
+            el.value = formatted;
+        }
+
         document.addEventListener('show.bs.dropdown', function (event) {
             var openDropdowns = document.querySelectorAll('.dropdown-toggle.show');
             openDropdowns.forEach(function (dropdownToggle) {
