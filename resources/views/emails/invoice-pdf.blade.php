@@ -139,10 +139,6 @@
         }
 
         @media print {
-            .no-print {
-                display: none !important;
-            }
-
             .receipt-box {
                 border: 1.5px solid #222 !important;
             }
@@ -151,15 +147,6 @@
 </head>
 
 <body>
-
-    <div class="no-print" style="background: #f8f9fa; padding: 12px; text-align: center; border-bottom: 1px solid #ddd; margin-bottom: 20px;">
-        <button onclick="window.print()" style="background: #0d6efd; color: #fff; border: none; padding: 8px 20px; font-size: 15px; font-weight: 600; border-radius: 4px; cursor: pointer; margin-right: 10px;">
-            🖨️ Print / Save as PDF
-        </button>
-        <a href="{{ route('deals.invoice', ['deal' => $deal->id, 'download' => 1]) }}" style="background: #198754; color: #fff; text-decoration: none; padding: 8px 20px; font-size: 15px; font-weight: 600; border-radius: 4px; display: inline-block;">
-            📥 Download PDF Directly
-        </a>
-    </div>
 
     <div class="receipt-box">
         <div class="header-title">
@@ -219,5 +206,11 @@
         </div>
     </div>
 
+    <script>
+        window.onload = function() {
+            window.print();
+        };
+    </script>
 </body>
+
 </html>
