@@ -40,6 +40,12 @@ class Sidebar
                         'icon' => 'ri-folder-2-line',
                         'permission' => 'projects.view',
                     ],
+                    [
+                        'title' => 'Settings',
+                        'route' => 'settings.index',
+                        'is_route' => true,
+                        'icon' => 'ri-settings-4-line',
+                    ],
                 ],
             ],
             'project_management' => [
