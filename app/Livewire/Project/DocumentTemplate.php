@@ -94,6 +94,8 @@ class DocumentTemplate extends Component
         FrontendSetting::setVal("project_{$pid}_demand_footer_para", $this->demand_footer_para);
         FrontendSetting::setVal("project_{$pid}_demand_footer_note", $this->demand_footer_note);
 
+        session()->flash('success', 'PDF Document template content updated successfully for the selected project.');
+
         $this->dispatch('swal:alert', [
             'title' => 'Settings Saved!',
             'text' => 'PDF Document template content updated successfully for the selected project.',

@@ -20,6 +20,15 @@
                 </div>
             </div>
 
+            <!-- Success Alert Banner -->
+            @if (session()->has('success'))
+                <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+                    <i class="ri-checkbox-circle-line me-2 fs-16 align-middle"></i>
+                    <strong>Success!</strong> {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             <!-- Target Project Selector -->
             <div class="row mb-4">
                 <div class="col-12">
@@ -158,11 +167,26 @@
                             <!-- Footer Action Buttons -->
                             <div class="card-footer bg-light p-3 d-flex align-items-center justify-content-between">
                                 <button type="button" class="btn btn-outline-secondary px-3" wire:click="resetToDefault" 
-                                    wire:confirm="Are you sure you want to reset template content to default for this project?">
-                                    <i class="ri-refresh-line me-1"></i> Reset to Default (डिफ़ॉल्ट रीसेट करें)
+                                    wire:confirm="Are you sure you want to reset template content to default for this project?"
+                                    wire:loading.attr="disabled" wire:target="resetToDefault">
+                                    <span wire:loading.remove wire:target="resetToDefault">
+                                        <i class="ri-refresh-line me-1"></i> Reset to Default (डिफ़ॉल्ट रीसेट करें)
+                                    </span>
+                                    <span wire:loading wire:target="resetToDefault">
+                                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                        Resetting...
+                                    </span>
                                 </button>
-                                <button type="submit" class="btn btn-success px-4 fw-bold">
-                                    <i class="ri-save-line me-1"></i> Save Settings (सेटिंग्स सुरक्षित करें)
+
+                                <button type="submit" class="btn btn-success px-4 fw-bold" 
+                                    wire:loading.attr="disabled" wire:target="saveSettings">
+                                    <span wire:loading.remove wire:target="saveSettings">
+                                        <i class="ri-save-line me-1"></i> Save Settings (सेटिंग्स सुरक्षित करें)
+                                    </span>
+                                    <span wire:loading wire:target="saveSettings">
+                                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                        Saving Settings... (सुरक्षित हो रहा है...)
+                                    </span>
                                 </button>
                             </div>
                         </div>
