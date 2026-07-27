@@ -139,8 +139,11 @@
                                 </p>
                                 <div class="mt-2">
                                     <div class="text-muted fs-12 fw-bold" style="line-height: 1.2;">Starting@</div>
-                                    <div style="font-size: 22px; color: #dc2626; font-weight: 800; line-height: 1.2;">
-                                        ₹ {{ indianCurrency($project->price) }}
+                                    <div style="font-size: 22px; color: #dc2626; font-weight: 800; line-height: 1.2;" class="d-flex align-items-baseline flex-wrap gap-1">
+                                        <span>₹ {{ indianCurrency($project->price) }}/-*</span>
+                                        @if($project->inventory_type === 'plot')
+                                            <span class="fs-13 fw-bold" style="color: #dc2626;">Sq. yards</span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
