@@ -137,8 +137,11 @@
                                     style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 36px;">
                                     <i class="ri-navigation-line me-1"></i>{{ $project->address }}
                                 </p>
-                                <div class="mt-2" style="font-size: 22px; color: #dc2626; font-weight: 800;">
-                                    ₹ {{ indianCurrency($project->price) }}
+                                <div class="mt-2">
+                                    <div class="text-muted fs-12 fw-bold" style="line-height: 1.2;">Starting@</div>
+                                    <div style="font-size: 22px; color: #dc2626; font-weight: 800; line-height: 1.2;">
+                                        ₹ {{ indianCurrency($project->price) }}
+                                    </div>
                                 </div>
                             </div>
                         </a>
