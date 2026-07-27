@@ -474,6 +474,49 @@
                                                                         Vacate
                                                                     </button>
                                                                 </li>
+                                                            @elseif($unit->status === 'Hold')
+                                                                <li>
+                                                                    <button class="dropdown-item py-2" type="button"
+                                                                        wire:click="openViewModal('{{ $unit->id }}')">
+                                                                        <i class="ri-eye-line align-bottom me-2 text-info"></i>
+                                                                        View Inventory
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <a class="dropdown-item py-2" target="_blank"
+                                                                        href="{{ route('inventories.edit', array_filter(['inventory' => $unit->id, 'selectedProjectId' => $selectedProjectId, 'statusFilter' => $statusFilter, 'facingFilter' => $facingFilter, 'searchPlot' => $searchPlot, 'activeTab' => $activeTab])) }}">
+                                                                        <i
+                                                                            class="ri-edit-line align-bottom me-2 text-primary"></i>
+                                                                        Edit Unit
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <hr class="dropdown-divider">
+                                                                </li>
+                                                                <li>
+                                                                    <button class="dropdown-item py-2 text-info" type="button"
+                                                                        wire:click="openSoldModal('{{ $unit->id }}')">
+                                                                        <i
+                                                                            class="ri-add-box-line align-bottom me-2"></i>
+                                                                        Mark Allotted
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <button class="dropdown-item py-2 text-success" type="button"
+                                                                        wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Sold')">
+                                                                        <i
+                                                                            class="ri-checkbox-circle-line align-bottom me-2"></i>
+                                                                        Mark Sold
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <button class="dropdown-item py-2 text-danger" type="button"
+                                                                        wire:click="vacateUnit('{{ $unit->id }}')"
+                                                                        wire:confirm="Are you sure you want to vacate this unit?">
+                                                                        <i class="ri-close-circle-line align-bottom me-2"></i>
+                                                                        Vacate
+                                                                    </button>
+                                                                </li>
                                                             @else
                                                                 <li>
                                                                     <button class="dropdown-item py-2" type="button"
