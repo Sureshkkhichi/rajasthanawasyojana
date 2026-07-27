@@ -11,8 +11,6 @@ class Agent extends Model
         'email',
         'phone',
         'code',
-        'commission_type',
-        'commission_value',
         'status',
     ];
 

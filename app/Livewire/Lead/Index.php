@@ -152,7 +152,7 @@ class Index extends Component
                 ->with([
                     'project:id,name',
                     'state:id,name',
-                    'agent:id,name,code,commission_type,commission_value',
+                    'agent:id,name,code',
                     'deal',
                 ])
                 ->when(
@@ -290,7 +290,7 @@ class Index extends Component
             ->with([
                 'project:id,name',
                 'state:id,name',
-                'agent:id,name,code,commission_type,commission_value',
+                'agent:id,name,code',
                 'deal',
             ])
             ->when(

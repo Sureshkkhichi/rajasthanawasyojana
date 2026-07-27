@@ -84,8 +84,6 @@
                                             <th>Email</th>
                                             <th>Phone</th>
                                             <th>Waiver Code</th>
-                                            <th>Commission Type</th>
-                                            <th>Commission Value</th>
                                             <th width="100">Status</th>
                                             <th width="120">Action</th>
                                         </tr>
@@ -108,18 +106,6 @@
                                                             <i class="ri-file-copy-line"></i>
                                                         </button>
                                                     </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-info-subtle text-info text-uppercase">
-                                                        {{ $agent->commission_type }}
-                                                    </span>
-                                                </td>
-                                                <td class="fw-bold">
-                                                    @if($agent->commission_type === 'percentage')
-                                                        {{ number_format($agent->commission_value, 2) }}%
-                                                    @else
-                                                        ₹{{ number_format($agent->commission_value, 2) }}
-                                                    @endif
                                                 </td>
                                                 <td>
                                                     <div class="form-check form-switch form-switch-md">

@@ -17,8 +17,6 @@ class Form extends Component
     public string $email = '';
     public string $phone = '';
     public string $code = '';
-    public string $commission_type = 'percentage';
-    public ?float $commission_value = null;
     public string $status = 'active';
 
     public function mount(?Agent $agent = null): void
@@ -34,27 +32,16 @@ class Form extends Component
             $this->email = $agent->email ?? '';
             $this->phone = $agent->phone ?? '';
             $this->code = $agent->code;
-            $this->commission_type = $agent->commission_type;
-            $this->commission_value = $agent->commission_value !== null ? (float)$agent->commission_value : null;
             $this->status = $agent->status;
         } else {
             $this->generateCode();
         }
     }
 
-    public function updatedCommissionType(): void
-    {
-        $this->commission_value = null;
-    }
-
     public function generateCode(): void
     {
-        $chars = '0123456789';
         do {
-            $newCode = '';
-            for ($i = 0; $i < 8; $i++) {
-                $newCode .= $chars[rand(0, strlen($chars) - 1)];
-            }
+            $newCode = (string) random_int(10000, 99999);
         } while (Agent::where('code', $newCode)->exists());
 
         $this->code = $newCode;
@@ -66,15 +53,13 @@ class Form extends Component
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|regex:/^[6-9][0-9]{9}$/',
-            'code' => 'required|string|size:8|numeric|unique:agents,code,' . ($this->agent->id ?? 'NULL'),
-            'commission_type' => 'required|in:percentage,fixed',
-            'commission_value' => 'required|numeric|min:0',
+            'code' => 'required|string|size:5|numeric|unique:agents,code,' . ($this->agent->id ?? 'NULL'),
             'status' => 'required|in:active,inactive',
         ];
 
         $validated = $this->validate($rules, [
             'phone.regex' => 'The mobile number must be a valid 10-digit number.',
-            'code.size' => 'The Waiver Code must be exactly 8 digits.',
+            'code.size' => 'The Waiver Code must be exactly 5 digits.',
             'code.numeric' => 'The Waiver Code must contain only numbers.',
             'code.unique' => 'This Waiver Code has already been taken.',
         ]);

@@ -64,12 +64,12 @@
                                         <label class="form-label">Waiver Code <span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <input type="text" class="form-control @error('code') is-invalid @enderror" 
-                                                placeholder="Enter 8-digit Waiver Code" wire:model="code" maxlength="8" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                                placeholder="Enter 5-digit Waiver Code" wire:model="code" maxlength="5" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                             <button class="btn btn-outline-secondary" type="button" wire:click="generateCode">
                                                 <i class="ri-refresh-line me-1"></i> Auto-generate
                                             </button>
                                         </div>
-                                        <small class="text-muted">An 8-digit unique numeric code to identify the agent on Booking / Lead forms.</small>
+                                        <small class="text-muted">A 5-digit unique numeric code to identify the agent on Booking / Lead forms.</small>
                                         @error('code') <div class="text-danger mt-1 fs-12">{{ $message }}</div> @enderror
                                     </div>
                                 </div>
@@ -77,39 +77,14 @@
                         </div>
                     </div>
 
-                    {{-- Commission & Status Sidebar --}}
+                    {{-- Settings Sidebar --}}
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title mb-0">Commission & Settings</h5>
+                                <h5 class="card-title mb-0">Settings</h5>
                             </div>
                             <div class="card-body">
                                 <div class="row g-3">
-                                    {{-- Commission Type --}}
-                                    <div class="col-md-12">
-                                        <label class="form-label">Commission Type <span class="text-danger">*</span></label>
-                                        <select class="form-select @error('commission_type') is-invalid @enderror" wire:model.live="commission_type">
-                                            <option value="percentage">Percentage (%)</option>
-                                            <option value="fixed">Fixed Amount (₹)</option>
-                                        </select>
-                                        @error('commission_type') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                                    </div>
-
-                                    {{-- Commission Value --}}
-                                    <div class="col-md-12">
-                                        <label class="form-label">Commission Value <span class="text-danger">*</span></label>
-                                        <div class="input-group">
-                                            @if($commission_type === 'percentage')
-                                                <span class="input-group-text">%</span>
-                                            @else
-                                                <span class="input-group-text">₹</span>
-                                            @endif
-                                            <input type="number" step="0.01" class="form-control @error('commission_value') is-invalid @enderror" 
-                                                placeholder="0.00" wire:model="commission_value">
-                                        </div>
-                                        @error('commission_value') <div class="text-danger mt-1 fs-12">{{ $message }}</div> @enderror
-                                    </div>
-
                                     {{-- Status --}}
                                     <div class="col-md-12">
                                         <label class="form-label">Status <span class="text-danger">*</span></label>
@@ -130,7 +105,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>div>
                 </div>
             </form>
         </div>
