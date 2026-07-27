@@ -225,6 +225,12 @@
                                                                             <i class="ri-indeterminate-circle-line align-bottom me-2 text-dark"></i> Mark Not Alloted
                                                                         </button>
                                                                     </li>
+                                                                    <li><hr class="dropdown-divider"></li>
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2" href="{{ route('deals.show', $deal->id) }}">
+                                                                            <i class="ri-fullscreen-line align-bottom me-2 text-muted"></i> View Full Detail
+                                                                        </a>
+                                                                    </li>
 
                                                                 {{-- Case 1 & 6: Fresh Deal / Unallotted / Not Alloted --}}
                                                                 @else
