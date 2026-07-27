@@ -33,7 +33,8 @@ class AllotmentExpiryService
         foreach ($expiredDeals as $deal) {
             $unit = Inventory::find($deal->allotted_inventory_id);
 
-            if ($unit) {
+            // Only expire if unit exists and its current status is Allotted / Alloted
+            if ($unit && in_array($unit->status, ['Allotted', 'Alloted'])) {
                 $oldStatus = $unit->status;
                 $unit->update(['status' => 'Available']);
 
@@ -51,23 +52,23 @@ class AllotmentExpiryService
                     'Allotment Expired',
                     "Allotment for unit {$unit->unit_name} automatically cancelled after 5 minutes without being marked Sold."
                 );
+
+                ActivityLogger::logDeal(
+                    $deal,
+                    'allotment_expired',
+                    'Allotment Expired',
+                    "Unit allotment for {$deal->first_name} {$deal->last_name} automatically cancelled after 5 minutes without being marked Sold."
+                );
+
+                $deal->update([
+                    'status' => 'Not Alloted',
+                    'deal_status' => 'Not Alloted',
+                    'allotted_inventory_id' => null,
+                    'allotted_at' => null,
+                ]);
+
+                $count++;
             }
-
-            ActivityLogger::logDeal(
-                $deal,
-                'allotment_expired',
-                'Allotment Expired',
-                "Unit allotment for {$deal->first_name} {$deal->last_name} automatically cancelled after 5 minutes without being marked Sold."
-            );
-
-            $deal->update([
-                'status' => 'Not Alloted',
-                'deal_status' => 'Not Alloted',
-                'allotted_inventory_id' => null,
-                'allotted_at' => null,
-            ]);
-
-            $count++;
         }
 
         if ($count > 0) {
