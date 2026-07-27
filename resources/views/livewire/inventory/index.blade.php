@@ -101,9 +101,10 @@
             </div>
 
             {{-- Summary Cards --}}
+            {{-- Summary Cards --}}
             <div class="row">
                 {{-- Card 1: Total Units --}}
-                <div class="col-lg-3 col-md-6 mb-3">
+                <div class="col-lg mb-3">
                     <div class="card card-animate h-100 shadow-sm border-0 border-start border-3 border-primary">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -126,7 +127,7 @@
                 </div>
 
                 {{-- Card 2: Available --}}
-                <div class="col-lg-3 col-md-6 mb-3">
+                <div class="col-lg mb-3">
                     <div class="card card-animate h-100 shadow-sm border-0 border-start border-3 border-success">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -150,7 +151,7 @@
                 </div>
 
                 {{-- Card 3: Hold --}}
-                <div class="col-lg-3 col-md-6 mb-3">
+                <div class="col-lg mb-3">
                     <div class="card card-animate h-100 shadow-sm border-0 border-start border-3 border-warning">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -172,8 +173,31 @@
                     </div>
                 </div>
 
-                {{-- Card 4: Sold --}}
-                <div class="col-lg-3 col-md-6 mb-3">
+                {{-- Card 4: Allotted --}}
+                <div class="col-lg mb-3">
+                    <div class="card card-animate h-100 shadow-sm border-0 border-start border-3 border-info">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span
+                                        class="avatar-title bg-info-subtle text-info rounded-circle fs-3 shadow-none">
+                                        <i class="ri-add-box-line align-middle"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="text-uppercase fw-semibold fs-12 text-muted mb-1">
+                                        {{ $inventory_type === 'Flat Project' ? 'Allotted Flats' : 'Allotted Plots' }}
+                                    </p>
+                                    <h4 class="mb-0 fw-bold"><span class="counter-value"
+                                            data-target="{{ $counts['allotted'] }}">{{ $counts['allotted'] }}</span></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Card 5: Sold --}}
+                <div class="col-lg mb-3">
                     <div class="card card-animate h-100 shadow-sm border-0 border-start border-3 border-danger">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -329,13 +353,16 @@
                                                 <td>
                                                     @if($unit->status === 'Available')
                                                         <span
-                                                            class="badge bg-success-subtle text-success rounded-pill px-2.5 py-1 fs-11">Available</span>
+                                                            class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fs-11">Available</span>
                                                     @elseif($unit->status === 'Hold')
                                                         <span
-                                                            class="badge bg-warning-subtle text-warning rounded-pill px-2.5 py-1 fs-11">Hold</span>
-                                                    @elseif($unit->status === 'Sold' || $unit->status === 'Alloted')
+                                                            class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-2.5 py-1 fs-11">Hold</span>
+                                                    @elseif($unit->status === 'Allotted' || $unit->status === 'Alloted')
                                                         <span
-                                                            class="badge bg-danger-subtle text-danger rounded-pill px-2.5 py-1 fs-11">Sold</span>
+                                                            class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-2.5 py-1 fs-11">Allotted</span>
+                                                    @elseif($unit->status === 'Sold')
+                                                        <span
+                                                            class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2.5 py-1 fs-11">Sold</span>
                                                     @else
                                                         <span
                                                             class="badge bg-dark-subtle text-dark rounded-pill px-2.5 py-1 fs-11">{{ $unit->status }}</span>
@@ -371,7 +398,7 @@
                                                         </button>
                                                         <ul
                                                             class="dropdown-menu dropdown-menu-end shadow border-light-subtle">
-                                                            @if($unit->status === 'Sold' || $unit->status === 'Alloted')
+                                                            @if($unit->status === 'Sold')
                                                                 <li>
                                                                     <button class="dropdown-item py-2" type="button"
                                                                         wire:click="openViewModal('{{ $unit->id }}')">
@@ -401,6 +428,43 @@
                                                                         Vacate
                                                                     </button>
                                                                 </li>
+                                                            @elseif($unit->status === 'Allotted' || $unit->status === 'Alloted')
+                                                                <li>
+                                                                    <button class="dropdown-item py-2" type="button"
+                                                                        wire:click="openViewModal('{{ $unit->id }}')">
+                                                                        <i class="ri-eye-line align-bottom me-2 text-info"></i>
+                                                                        View Inventory
+                                                                    </button>
+                                                                </li>
+                                                                @if($unit->deal)
+                                                                    <li>
+                                                                        <a class="dropdown-item py-2"
+                                                                            href="{{ route('deals.show', $unit->deal->id) }}"
+                                                                            target="_blank">
+                                                                            <i
+                                                                                class="ri-user-search-line align-bottom me-2 text-primary"></i>
+                                                                            View Deal
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
+                                                                <li>
+                                                                    <hr class="dropdown-divider">
+                                                                </li>
+                                                                <li>
+                                                                    <button class="dropdown-item py-2 text-success" type="button"
+                                                                        wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Sold')">
+                                                                        <i class="ri-checkbox-circle-line align-bottom me-2"></i>
+                                                                        Mark Sold
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <button class="dropdown-item py-2 text-danger" type="button"
+                                                                        wire:click="vacateUnit('{{ $unit->id }}')"
+                                                                        wire:confirm="Are you sure you want to vacate this unit? This will cancel any active allotments for this unit.">
+                                                                        <i class="ri-close-circle-line align-bottom me-2"></i>
+                                                                        Vacate
+                                                                    </button>
+                                                                </li>
                                                             @else
                                                                 <li>
                                                                     <button class="dropdown-item py-2" type="button"
@@ -418,18 +482,29 @@
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <button class="dropdown-item py-2" type="button"
+                                                                    <hr class="dropdown-divider">
+                                                                </li>
+                                                                <li>
+                                                                    <button class="dropdown-item py-2 text-info" type="button"
                                                                         wire:click="openSoldModal('{{ $unit->id }}')">
                                                                         <i
-                                                                            class="ri-checkbox-circle-line align-bottom me-2 text-danger"></i>
+                                                                            class="ri-add-box-line align-bottom me-2"></i>
+                                                                        Mark Allotted
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <button class="dropdown-item py-2 text-success" type="button"
+                                                                        wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Sold')">
+                                                                        <i
+                                                                            class="ri-checkbox-circle-line align-bottom me-2"></i>
                                                                         Mark Sold
                                                                     </button>
                                                                 </li>
                                                                 <li>
-                                                                    <button class="dropdown-item py-2" type="button"
+                                                                    <button class="dropdown-item py-2 text-warning" type="button"
                                                                         wire:click="changeSingleStatusDirectly('{{ $unit->id }}', 'Hold')">
                                                                         <i
-                                                                            class="ri-checkbox-circle-line align-bottom me-2 text-warning"></i>
+                                                                            class="ri-time-line align-bottom me-2"></i>
                                                                         Mark Hold
                                                                     </button>
                                                                 </li>
@@ -575,9 +650,9 @@
         style="background-color: rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-dialog-centered @if($createNewDealMode) modal-lg @endif">
             <div class="modal-content shadow-lg border-0 rounded-4">
-                <div class="modal-header bg-danger text-white py-3 rounded-top-4">
+                <div class="modal-header bg-primary text-white py-3 rounded-top-4">
                     <h5 class="modal-title text-white fw-bold d-flex align-items-center">
-                        <i class="ri-checkbox-circle-line me-2"></i> Mark Sold & Block Inventory
+                        <i class="ri-add-box-line me-2"></i> Mark Allotted & Link Deal
                     </h5>
                     <button type="button" class="btn-close btn-close-white"
                         wire:click="$set('soldModalOpen', false)"></button>
@@ -588,12 +663,12 @@
                         <div class="d-flex justify-content-center mb-4">
                             <div class="btn-group" role="group">
                                 <button type="button"
-                                    class="btn btn-outline-danger @if(!$createNewDealMode) active @endif"
+                                    class="btn btn-outline-primary @if(!$createNewDealMode) active @endif"
                                     wire:click="$set('createNewDealMode', false)">
                                     <i class="ri-user-search-line align-middle me-1"></i> Select Existing Deal
                                 </button>
                                 <button type="button"
-                                    class="btn btn-outline-danger @if($createNewDealMode) active @endif"
+                                    class="btn btn-outline-primary @if($createNewDealMode) active @endif"
                                     wire:click="$set('createNewDealMode', true)">
                                     <i class="ri-user-add-line align-middle me-1"></i> Create New Deal
                                 </button>
@@ -1014,14 +1089,14 @@
                         <button type="button" class="btn btn-light border" wire:click="$set('soldModalOpen', false)">
                             Cancel
                         </button>
-                        <button type="submit" class="btn btn-danger px-4">
+                        <button type="submit" class="btn btn-primary px-4">
                             <span wire:loading.remove wire:target="submitSoldAllotment">
-                                <i class="ri-checkbox-circle-line align-middle me-1"></i> Allot & Mark Sold
+                                <i class="ri-checkbox-circle-line align-middle me-1"></i> Allot Unit
                             </span>
                             <span wire:loading wire:target="submitSoldAllotment">
                                 <span class="spinner-border spinner-border-sm me-1" role="status"
                                     aria-hidden="true"></span>
-                                Processing...
+                                Allotting...
                             </span>
                         </button>
                     </div>

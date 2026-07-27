@@ -559,18 +559,18 @@ class Index extends Component
             ]);
 
             $oldStatus = $unit->status;
-            $unit->update(['status' => 'Sold']);
+            $unit->update(['status' => 'Allotted']);
 
             InventoryHistory::create([
                 'inventory_id' => $unit->id,
                 'from_status' => $oldStatus,
-                'to_status' => 'Sold',
+                'to_status' => 'Allotted',
                 'changed_by' => auth()->user()->name,
-                'notes' => 'Unit sold via new Deal creation: ' . $deal->first_name . ' ' . $deal->last_name,
+                'notes' => 'Unit allotted via new Deal creation: ' . $deal->first_name . ' ' . $deal->last_name,
             ]);
 
-            ActivityLogger::logDeal($deal, 'marked_sold', 'Unit Allotted & Marked Sold', "Unit #{$unit->unit_name} allotted to {$deal->first_name} {$deal->last_name} and marked Sold", ['unit' => $unit->unit_name, 'old_status' => $oldStatus, 'new_status' => 'Sold']);
-            ActivityLogger::logInventory($unit, 'marked_sold', 'Unit Marked Sold', "Unit marked Sold and allotted to Deal #{$deal->id} ({$deal->first_name} {$deal->last_name})", ['deal_id' => $deal->id, 'old_status' => $oldStatus, 'new_status' => 'Sold']);
+            ActivityLogger::logDeal($deal, 'marked_allotted', 'Unit Allotted', "Unit #{$unit->unit_name} allotted to {$deal->first_name} {$deal->last_name}", ['unit' => $unit->unit_name, 'old_status' => $oldStatus, 'new_status' => 'Allotted']);
+            ActivityLogger::logInventory($unit, 'marked_allotted', 'Unit Marked Allotted', "Unit marked Allotted and linked to Deal #{$deal->id} ({$deal->first_name} {$deal->last_name})", ['deal_id' => $deal->id, 'old_status' => $oldStatus, 'new_status' => 'Allotted']);
         } else {
             $this->validate([
                 'selectedDealId' => 'required|exists:deals,id',
@@ -578,29 +578,34 @@ class Index extends Component
 
             $deal = \App\Models\Deal::find($this->selectedDealId);
             if ($deal) {
-                $deal->update(['allotted_inventory_id' => $unit->id]);
+                $deal->update([
+                    'allotted_inventory_id' => $unit->id,
+                    'status' => 'Allotted',
+                    'deal_status' => 'Allotted',
+                    'allotted_at' => now(),
+                ]);
 
                 $oldStatus = $unit->status;
-                $unit->update(['status' => 'Sold']);
+                $unit->update(['status' => 'Allotted']);
 
                 InventoryHistory::create([
                     'inventory_id' => $unit->id,
                     'from_status' => $oldStatus,
-                    'to_status' => 'Sold',
+                    'to_status' => 'Allotted',
                     'changed_by' => auth()->user()->name,
-                    'notes' => 'Unit sold and allotted to existing Deal: ' . $deal->first_name . ' ' . $deal->last_name,
+                    'notes' => 'Unit allotted to existing Deal: ' . $deal->first_name . ' ' . $deal->last_name,
                 ]);
 
-                ActivityLogger::logDeal($deal, 'marked_sold', 'Unit Allotted & Marked Sold', "Unit #{$unit->unit_name} allotted to Deal #{$deal->id} and marked Sold", ['unit' => $unit->unit_name, 'old_status' => $oldStatus, 'new_status' => 'Sold']);
-                ActivityLogger::logInventory($unit, 'marked_sold', 'Unit Marked Sold', "Unit marked Sold and allotted to Deal #{$deal->id}", ['deal_id' => $deal->id, 'old_status' => $oldStatus, 'new_status' => 'Sold']);
+                ActivityLogger::logDeal($deal, 'marked_allotted', 'Unit Allotted', "Unit #{$unit->unit_name} allotted to Deal #{$deal->id}", ['unit' => $unit->unit_name, 'old_status' => $oldStatus, 'new_status' => 'Allotted']);
+                ActivityLogger::logInventory($unit, 'marked_allotted', 'Unit Marked Allotted', "Unit marked Allotted and linked to Deal #{$deal->id}", ['deal_id' => $deal->id, 'old_status' => $oldStatus, 'new_status' => 'Allotted']);
             }
         }
 
         $this->soldModalOpen = false;
 
         $this->dispatch('swal:alert', [
-            'title' => 'Marked Sold!',
-            'text' => 'Unit has been successfully marked as Sold.',
+            'title' => 'Unit Allotted!',
+            'text' => 'Unit has been successfully allotted.',
             'icon' => 'success'
         ]);
     }
@@ -883,6 +888,7 @@ class Index extends Component
             'total' => 0,
             'available' => 0,
             'hold' => 0,
+            'allotted' => 0,
             'sold' => 0,
             'blocked' => 0,
         ];
@@ -891,7 +897,8 @@ class Index extends Component
             $counts['total'] = Inventory::where('project_id', $this->selectedProjectId)->count();
             $counts['available'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Available')->count();
             $counts['hold'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Hold')->count();
-            $counts['sold'] = Inventory::where('project_id', $this->selectedProjectId)->whereIn('status', ['Sold', 'Alloted'])->count();
+            $counts['allotted'] = Inventory::where('project_id', $this->selectedProjectId)->whereIn('status', ['Allotted', 'Alloted'])->count();
+            $counts['sold'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Sold')->count();
             $counts['blocked'] = Inventory::where('project_id', $this->selectedProjectId)->where('status', 'Blocked')->count();
         }
 
@@ -916,8 +923,8 @@ class Index extends Component
             ->where('project_id', $this->selectedProjectId);
 
         if ($this->statusFilter) {
-            if ($this->statusFilter === 'Sold') {
-                $unitsQuery->whereIn('status', ['Sold', 'Alloted']);
+            if (in_array($this->statusFilter, ['Allotted', 'Alloted'])) {
+                $unitsQuery->whereIn('status', ['Allotted', 'Alloted']);
             } else {
                 $unitsQuery->where('status', $this->statusFilter);
             }
