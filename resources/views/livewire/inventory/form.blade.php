@@ -19,19 +19,20 @@
             </div>
 
             @php
+                $projId = request()->query('selectedProjectId') ?: ($selectedProjectId ?: ($project_id ?: null));
                 $backParams = array_filter([
-                    'selectedProjectId' => $selectedProjectId ?: ($project_id ?: null),
-                    'statusFilter' => $statusFilter ?: null,
-                    'facingFilter' => $facingFilter ?: null,
-                    'searchPlot' => $searchPlot ?: null,
-                    'activeTab' => $activeTab ?: null,
+                    'selectedProjectId' => $projId,
+                    'statusFilter' => request()->query('statusFilter') ?: ($statusFilter ?: null),
+                    'facingFilter' => request()->query('facingFilter') ?: ($facingFilter ?: null),
+                    'searchPlot' => request()->query('searchPlot') ?: ($searchPlot ?: null),
+                    'activeTab' => request()->query('activeTab') ?: ($activeTab ?: null),
                 ]);
                 $backUrl = route('inventories.index', $backParams);
             @endphp
             {{-- Back Button --}}
             <div class="row mb-3">
                 <div class="col-12">
-                    <a href="{{ $backUrl }}" onclick="if(document.referrer && document.referrer.includes('inventories')) { history.back(); return false; }" class="btn btn-soft-secondary btn-sm">
+                    <a href="{{ $backUrl }}" class="btn btn-soft-secondary btn-sm">
                         <i class="ri-arrow-left-line align-middle me-1"></i> Back to Inventory
                     </a>
                 </div>
