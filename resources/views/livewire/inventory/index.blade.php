@@ -60,6 +60,7 @@
                                 <option value="">All Statuses</option>
                                 <option value="Available">Available</option>
                                 <option value="Hold">Hold</option>
+                                <option value="Allotted">Allotted</option>
                                 <option value="Sold">Sold</option>
                             </select>
                         </div>
@@ -252,6 +253,14 @@
                                             Hold
                                             <span
                                                 class="badge bg-warning-subtle text-warning ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['hold'] }}</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ $activeTab === 'Allotted' ? 'active text-info' : 'text-muted' }} fw-bold"
+                                            href="javascript:void(0);" wire:click="setTab('Allotted')">
+                                            Allotted
+                                            <span
+                                                class="badge bg-info-subtle text-info ms-1.5 px-2 py-0.5 rounded-pill fs-11 align-middle">{{ $counts['allotted'] }}</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
