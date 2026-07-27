@@ -20,10 +20,10 @@ class AllotmentExpiryService
             ->whereNotNull('allotted_inventory_id')
             ->where('status', '!=', 'Sold')
             ->where(function ($q) {
-                $q->where('allotted_at', '<=', now()->subDays(7))
+                $q->where('allotted_at', '<=', now()->subMinutes(5))
                   ->orWhere(function ($sub) {
                       $sub->whereNull('allotted_at')
-                          ->where('updated_at', '<=', now()->subDays(7));
+                          ->where('updated_at', '<=', now()->subMinutes(5));
                   });
             })
             ->get();
@@ -42,14 +42,14 @@ class AllotmentExpiryService
                     'from_status' => $oldStatus,
                     'to_status' => 'Available',
                     'changed_by' => 'System (Auto-expiry)',
-                    'notes' => 'Unit allotment automatically cancelled after 7 days without being marked Sold.',
+                    'notes' => 'Unit allotment automatically cancelled after 5 minutes without being marked Sold.',
                 ]);
 
                 ActivityLogger::logInventory(
                     $unit,
                     'allotment_expired',
                     'Allotment Expired',
-                    "Allotment for unit {$unit->unit_name} automatically cancelled after 7 days without being marked Sold."
+                    "Allotment for unit {$unit->unit_name} automatically cancelled after 5 minutes without being marked Sold."
                 );
             }
 
@@ -57,7 +57,7 @@ class AllotmentExpiryService
                 $deal,
                 'allotment_expired',
                 'Allotment Expired',
-                "Unit allotment for {$deal->first_name} {$deal->last_name} automatically cancelled after 7 days without being marked Sold."
+                "Unit allotment for {$deal->first_name} {$deal->last_name} automatically cancelled after 5 minutes without being marked Sold."
             );
 
             $deal->update([
@@ -71,7 +71,7 @@ class AllotmentExpiryService
         }
 
         if ($count > 0) {
-            Log::info("AllotmentExpiryService: Expired {$count} unit allotment(s) older than 7 days.");
+            Log::info("AllotmentExpiryService: Expired {$count} unit allotment(s) older than 5 minutes.");
         }
 
         return $count;
