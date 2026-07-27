@@ -159,6 +159,11 @@ class Form extends Component
         unset($data['featured_image_file']);
         $data['featured_image'] = $this->featured_image;
 
+        if ($isUpdate && $this->project) {
+            $data['project_type_id'] = $this->project->project_type_id;
+            $data['inventory_type'] = $this->project->inventory_type;
+        }
+
         $project = Project::updateOrCreate(
             [
                 'id' => $this->projectId,

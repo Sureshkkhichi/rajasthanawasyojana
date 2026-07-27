@@ -107,7 +107,7 @@
                                                 </label>
                                                 <select
                                                     class="form-select rounded-pill @error('project_type_id') is-invalid @enderror"
-                                                    wire:model="project_type_id">
+                                                    wire:model="project_type_id" @disabled($projectId)>
                                                     <option value="">
                                                         Select Project Type
                                                     </option>
@@ -117,6 +117,11 @@
                                                     </option>
                                                     @endforeach
                                                 </select>
+                                                @if($projectId)
+                                                    <small class="text-muted d-block mt-1 fs-11">
+                                                        <i class="ri-lock-line me-1"></i>Set on project creation
+                                                    </small>
+                                                @endif
                                                 @error('project_type_id')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -128,10 +133,15 @@
                                                 <label class="form-label">
                                                     Inventory Type <span class="text-danger">*</span>
                                                 </label>
-                                                <select class="form-select rounded-pill @error('inventory_type') is-invalid @enderror" wire:model.live="inventory_type">
+                                                <select class="form-select rounded-pill @error('inventory_type') is-invalid @enderror" wire:model.live="inventory_type" @disabled($projectId)>
                                                     <option value="plot">Plotting (Plots)</option>
                                                     <option value="flat">Flats (Apartments)</option>
                                                 </select>
+                                                @if($projectId)
+                                                    <small class="text-muted d-block mt-1 fs-11">
+                                                        <i class="ri-lock-line me-1"></i>Set on project creation
+                                                    </small>
+                                                @endif
                                                 @error('inventory_type')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}

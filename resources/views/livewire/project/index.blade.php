@@ -140,15 +140,10 @@
                                                     <small class="text-muted"> {{ $project->slug }} </small>
                                                 </td>
                                                 <td> {{ $project->projectType?->name }} </td>
-                                                <td onclick="event.stopPropagation();">
-                                                    <div class="form-check form-switch d-flex align-items-center gap-2">
-                                                        <input class="form-check-input" type="checkbox" role="switch"
-                                                            wire:change="toggleInventoryType('{{ $project->id }}')"
-                                                            @checked($project->inventory_type === 'flat')>
-                                                        <span class="badge {{ $project->inventory_type === 'flat' ? 'bg-info-subtle text-info' : 'bg-success-subtle text-success' }} text-uppercase">
-                                                            {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }}
-                                                        </span>
-                                                    </div>
+                                                <td>
+                                                    <span class="badge {{ $project->inventory_type === 'flat' ? 'bg-info-subtle text-info border border-info-subtle' : 'bg-success-subtle text-success border border-success-subtle' }} text-uppercase px-2.5 py-1">
+                                                        {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }}
+                                                    </span>
                                                 </td>
                                                 <td> {{ $project->city }} </td>
                                                 <td>
