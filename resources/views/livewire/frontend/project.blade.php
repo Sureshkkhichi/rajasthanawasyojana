@@ -33,7 +33,7 @@
                 </a>
             @else
                 <div class="alert alert-danger d-inline-block px-4 py-2 fw-bold fs-16 rounded-pill mt-3 shadow-sm">
-                    <i class="ri-close-circle-fill align-middle me-1"></i> इस योजना के लिए रजिस्ट्रेशन बंद हो गए हैं।
+                    <i class="ri-close-circle-fill align-middle me-1"></i> इस योजना के लिए आवेदन बंद हो गए हैं।
                 </div>
             @endif
         </div>

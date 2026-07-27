@@ -231,57 +231,6 @@
                             <span class="dot"></span> Registration Open
                         </div>
                     </div>
-
-                    {{-- Stats Strip --}}
-                    <div class="proj-stats">
-                        <div class="proj-stat-item">
-                            <div class="proj-stat-label">Property Type</div>
-                            <div class="proj-stat-value">
-                                @if($project->inventory_type === 'flat') Flat @else Plot @endif
-                            </div>
-                        </div>
-                        @if($project->price)
-                            <div class="proj-stat-item">
-                                <div class="proj-stat-label">Base Price</div>
-                                <div class="proj-stat-value accent">₹ {{ number_format($project->price) }}</div>
-                                @if($project->inventory_type !== 'flat')
-                                    <div class="proj-stat-sub">per sq. yard</div>
-                                @endif
-                            </div>
-                        @endif
-                        <div class="proj-stat-item">
-                            <div class="proj-stat-label">Registration Amount</div>
-                            <div class="proj-stat-value accent">₹ {{ number_format($this->payableBookingAmount) }}</div>
-                            <div class="proj-stat-sub">One-time, refundable</div>
-                        </div>
-                    </div>
-
-                    {{-- Available Sizes --}}
-                    @if(count($sizes) > 0)
-                        <div class="proj-sizes-row">
-                            <span class="proj-sizes-label">
-                                @if($project->inventory_type === 'flat') Flat Sizes: @else Plot Sizes (Sq Yds): @endif
-                            </span>
-                            @foreach($sizes as $sz)
-                                @php
-                                    $szLabel = match ($sz) {
-                                        'EWS' => 'EWS (1BHK)',
-                                        'LIG' => 'LIG (2BHK)',
-                                        default => $sz,
-                                    };
-                                @endphp
-                                <span class="proj-size-chip">{{ $szLabel }}</span>
-                            @endforeach
-                        </div>
-                    @endif
-
-                    {{-- Address --}}
-                    @if($project->address)
-                        <div class="proj-address">
-                            <i class="ri-map-pin-line"></i>
-                            <span>{{ $project->address }}</span>
-                        </div>
-                    @endif
                 </div>
 
                 <div class="card border-0 p-0">
@@ -685,10 +634,10 @@
                                 <div class="mb-4">
                                     <i class="ri-error-warning-fill text-danger" style="font-size: 64px;"></i>
                                 </div>
-                                <h3 class="fw-bold text-dark mb-3">रजिस्ट्रेशन बंद हो गए हैं!</h3>
+                                <h3 class="fw-bold text-dark mb-3">आवेदन बंद हो गए हैं!</h3>
                                 <p class="text-muted fs-15 mb-4">
-                                    क्षमा करें, इस योजना (<strong>{{ $project->name }}</strong>) के लिए ऑनलाइन आवेदन /
-                                    रजिस्ट्रेशन की समय सीमा समाप्त हो चुकी है। अधिक जानकारी के लिए कृपया प्रशासनिक कार्यालय
+                                    क्षमा करें, इस योजना (<strong>{{ $project->name }}</strong>) के लिए ऑनलाइन 
+                                    आवेदन की समय सीमा समाप्त हो चुकी है। अधिक जानकारी के लिए कृपया प्रशासनिक कार्यालय
                                     से संपर्क करें.
                                 </p>
                                 <a href="{{ route('front') }}"
