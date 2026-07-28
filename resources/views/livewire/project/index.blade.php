@@ -122,7 +122,7 @@
                                     </thead>
                                     <tbody>
                                         @forelse($projects as $project)
-                                            <tr style="cursor:pointer"
+                                            <tr wire:key="project-row-{{ $project->id }}" style="cursor:pointer"
                                                 onclick="window.location='{{ route('projects.edit', $project->id) }}'">
                                                 <td> {{ $loop->iteration }} </td>
                                                 <td>
@@ -152,10 +152,11 @@
                                                 <td onclick="event.stopPropagation();">
                                                     <div class="form-check form-switch d-flex align-items-center gap-2">
                                                         <input class="form-check-input" type="checkbox" role="switch"
-                                                            wire:change="toggleStatus('{{ $project->id }}')"
-                                                            @checked($project->is_active === 'active')>
+                                                            wire:key="status-toggle-{{ $project->id }}-{{ $project->is_active }}"
+                                                            wire:click="toggleStatus('{{ $project->id }}')"
+                                                            @checked(strtolower($project->is_active ?? '') === 'active')>
                                                         <span
-                                                            class="badge {{ $project->is_active === 'active' ? 'bg-success' : 'bg-danger' }}">
+                                                            class="badge {{ strtolower($project->is_active ?? '') === 'active' ? 'bg-success' : 'bg-danger' }}">
                                                             {{ ucfirst($project->is_active) }}
                                                         </span>
                                                     </div>
@@ -163,11 +164,12 @@
                                                 <td onclick="event.stopPropagation();">
                                                     <div class="form-check form-switch d-flex align-items-center gap-2">
                                                         <input class="form-check-input" type="checkbox" role="switch"
-                                                            wire:change="toggleRegistrationStatus('{{ $project->id }}')"
-                                                            @checked($project->registration_status === 'open')>
+                                                            wire:key="reg-toggle-{{ $project->id }}-{{ $project->registration_status }}"
+                                                            wire:click="toggleRegistrationStatus('{{ $project->id }}')"
+                                                            @checked(strtolower($project->registration_status ?? '') === 'open')>
                                                         <span
-                                                            class="badge {{ $project->registration_status === 'open' ? 'bg-success' : 'bg-danger' }}">
-                                                            {{ $project->registration_status === 'open' ? 'Open' : 'Closed' }}
+                                                            class="badge {{ strtolower($project->registration_status ?? '') === 'open' ? 'bg-success' : 'bg-danger' }}">
+                                                            {{ strtolower($project->registration_status ?? '') === 'open' ? 'Open' : 'Closed' }}
                                                         </span>
                                                     </div>
                                                 </td>

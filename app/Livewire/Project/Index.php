@@ -60,12 +60,11 @@ class Index extends Component
             403
         );
         $project = Project::findOrFail($id);
-        $project->is_active =
-            $project->is_active === 'active'
-            ? 'inactive'
-            : 'active';
+        $currentActive = strtolower($project->is_active ?? 'inactive');
+        $project->is_active = ($currentActive === 'active') ? 'inactive' : 'active';
         $project->save();
     }
+
     public function toggleRegistrationStatus(string $id): void
     {
         abort_unless(
@@ -73,10 +72,8 @@ class Index extends Component
             403
         );
         $project = Project::findOrFail($id);
-        $project->registration_status =
-            $project->registration_status === 'open'
-            ? 'closed'
-            : 'open';
+        $currentStatus = strtolower($project->registration_status ?? 'closed');
+        $project->registration_status = ($currentStatus === 'open') ? 'closed' : 'open';
         $project->save();
     }
 
