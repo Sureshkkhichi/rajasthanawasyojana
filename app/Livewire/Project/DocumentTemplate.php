@@ -55,6 +55,10 @@ class DocumentTemplate extends Component
         // Allotment Letter Settings
         $this->allotment_subtitle = FrontendSetting::getVal("project_{$pid}_allotment_subtitle", 'हर परिवार का सपना, हमारा संकल्प');
         $this->allotment_subject = FrontendSetting::getVal("project_{$pid}_allotment_subject", 'आवंटन पत्र');
+        if (str_contains($this->allotment_subject, 'विषय:-')) {
+            $this->allotment_subject = 'आवंटन पत्र';
+            FrontendSetting::setVal("project_{$pid}_allotment_subject", 'आवंटन पत्र');
+        }
         $this->allotment_body = FrontendSetting::getVal("project_{$pid}_allotment_body", "हमें यह सूचित करते हुए हर्ष हो रहा है कि मुख्यमंत्री जन आवास योजना के अंतर्गत हमारी आवासीय परियोजना \"{PROJECT_NAME}\" ({BLOCK_TOWER}) में आपको निम्न विवरणानुसार आवासीय इकाई ({UNIT_TYPE}) का आवंटन किया गया है।");
         $this->allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा भुगतान सारणी के अनुसार आगामी किस्त जमा करें ।");
 
