@@ -4,11 +4,13 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{{ isset($Title) ? $Title . ' | ' . config('constants.site_name') : config('constants.site_name') }}</title>
+    <title>
+        {{ isset($Title) ? $Title . ' | ' . config('constants.site_name') : config('constants.site_name') . ' | ' . "Ghar Ka Sapna, Ab Hoga Apna" }}
+    </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="{{ config('constants.site_description') }}" name="description" />
     <meta content="{{ config('constants.site_author') }}" name="author" />
-    <link rel="shortcut icon" href="assets/images/favicon.ico" />
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}" />
     <!-- Sweet Alert css-->
     <link href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 
@@ -135,34 +137,35 @@
                         class="col-lg-8 col-12 d-flex flex-wrap align-items-center gap-2 order-1 justify-content-center justify-content-lg-start">
                         <a href="{{ route('front') }}" class="header-logo">
                             @php
-                            $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
+                                $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
                             @endphp
                             <img src="{{ $siteLogo ? asset($siteLogo) : asset('jda-logo.png') }}" class="img-fluid"
                                 alt="{{ config('constants.site_name') }}">
                         </a>
                         @php
-                        $reraNumber = \App\Models\FrontendSetting::getVal('rera_number');
+                            $reraNumber = \App\Models\FrontendSetting::getVal('rera_number');
                         @endphp
                         @if(!empty($reraNumber))
-                        <span class="header-rera fs-2">RERA No: {{ $reraNumber }}</span>
+                            <span class="header-rera fs-2" style="font-size: 12px !important;">RERA No:
+                                {{ $reraNumber }}</span>
                         @endif
                     </div>
                     {{-- Right Contact --}}
                     <div class="col-lg-4 col-12 order-2 mt-2 mt-lg-0">
                         <div class="header-contact justify-content-center justify-content-lg-end">
                             @php
-                            $mobile1 = \App\Models\FrontendSetting::getVal('mobile_number_1', '9876543210');
-                            $mobile2 = \App\Models\FrontendSetting::getVal('mobile_number_2', '9876543210');
+                                $mobile1 = \App\Models\FrontendSetting::getVal('mobile_number_1', '9876543210');
+                                $mobile2 = \App\Models\FrontendSetting::getVal('mobile_number_2', '9876543210');
                             @endphp
                             @if(!empty($mobile1))
-                            <a href="tel:+91{{ $mobile1 }}" class="fs-2">
-                                {{ $mobile1 }}
-                            </a>
+                                <a href="tel:+91{{ $mobile1 }}" class="fs-2">
+                                    {{ $mobile1 }}
+                                </a>
                             @endif
                             @if(!empty($mobile2))
-                            <a href="tel:+91{{ $mobile2 }}" class="fs-2">
-                                {{ $mobile2 }}
-                            </a>
+                                <a href="tel:+91{{ $mobile2 }}" class="fs-2">
+                                    {{ $mobile2 }}
+                                </a>
                             @endif
                         </div>
                     </div>
@@ -174,6 +177,75 @@
         @yield('content')
         <livewire:frontend.components.footer />
     </div>
+
+    @php
+        $floatPhone = \App\Models\FrontendSetting::getVal('mobile_number_1', '9587044244');
+        $cleanPhone = preg_replace('/[^0-9]/', '', $floatPhone);
+    @endphp
+    @if(!empty($cleanPhone))
+        <div class="floating-contact-buttons">
+            <a href="https://wa.me/91{{ $cleanPhone }}?text=Hello" target="_blank" class="floating-btn btn-whatsapp" title="Chat on WhatsApp" aria-label="WhatsApp">
+                <i class="ri-whatsapp-fill"></i>
+            </a>
+            <a href="tel:+91{{ $cleanPhone }}" class="floating-btn btn-phone" title="Call Us" aria-label="Call">
+                <i class="ri-phone-fill"></i>
+            </a>
+        </div>
+    @endif
+
+    <style>
+        .floating-contact-buttons {
+            position: fixed;
+            bottom: 80px;
+            right: 25px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .floating-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff !important;
+            font-size: 26px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none !important;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.12);
+            color: #fff !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+        }
+
+        .btn-phone {
+            background-color: #0d6efd;
+        }
+
+        @media (max-width: 576px) {
+            .floating-contact-buttons {
+                bottom: 75px;
+                right: 15px;
+                gap: 10px;
+            }
+
+            .floating-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
+        }
+    </style>
     <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
@@ -182,7 +254,7 @@
 
     <!-- Sweet Alerts js -->
     <script src="{{ asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-    
+
     <script src="{{ asset('assets/libs/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/landing.init.js') }}"></script>
 
