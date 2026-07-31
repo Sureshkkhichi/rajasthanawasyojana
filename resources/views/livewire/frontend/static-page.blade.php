@@ -13,8 +13,15 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10">
-                    <div class="text-center mb-4">
-                        <h1 class="mb-2">{{ $page->title }}</h1>
+                    <div class="row align-items-center mb-4 g-3">
+                        <div class="col-auto">
+                            <a href="{{ route('front') }}" class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1 shadow-sm">
+                                <i class="ri-arrow-left-line fs-16"></i> Back to Home
+                            </a>
+                        </div>
+                        <div class="col text-center me-md-5">
+                            <h1 class="mb-0">{{ $page->title }}</h1>
+                        </div>
                     </div>
                     <div class="bg-white border rounded p-4 p-md-5 static-page-content">
                         {!! $page->content ?: '<p>Content will be updated soon.</p>' !!}
