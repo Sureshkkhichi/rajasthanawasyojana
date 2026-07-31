@@ -232,18 +232,18 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="card border-0 p-0">
-                    <div class="card-body p-0 p-lg-0">
-                        @if(session()->has('success'))
-                            <div id="swal-success-message" data-message="{{ session('success') }}" style="display:none;"></div>
-                        @endif
-                        @if(session()->has('error'))
-                            <div id="swal-error-message" data-message="{{ session('error') }}" style="display:none;"></div>
-                        @endif
+                @if(session()->has('success') || session()->has('error'))
+                    <div class="card border-0 p-0">
+                        <div class="card-body p-0 p-lg-0">
+                            @if(session()->has('success'))
+                                <div id="swal-success-message" data-message="{{ session('success') }}" style="display:none;"></div>
+                            @endif
+                            @if(session()->has('error'))
+                                <div id="swal-error-message" data-message="{{ session('error') }}" style="display:none;"></div>
+                            @endif
+                        </div>
                     </div>
-                </div>
-
+                @endif
 
                 <div class="card shadow-lg border-0" style="background-color: #f8f9fa;">
                     <div class="card-body p-3 p-lg-3">
@@ -263,7 +263,7 @@
                                 </div>
                             </div>
                             <!-- PERSONAL DETAILS -->
-                            <div class="mb-4">
+                            <div class="mb-0">
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="mb-0">
@@ -312,7 +312,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-4">
+                            <div class="mb-0">
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="mb-0">
@@ -365,7 +365,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-4">
+                            <div class="mb-0">
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="mb-0">
@@ -424,7 +424,7 @@
                                 </div>
                             </div>
                             <!-- ADDRESS DETAILS -->
-                            <div class="mb-4">
+                            <div class="mb-0">
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="mb-3">
@@ -475,9 +475,9 @@
                                             <label class="form-label">
                                                 Permanent Address <span class="text-danger">*</span>
                                             </label>
-                                            <textarea
+                                            <input type="text"
                                                 class="form-control text-capitalize @error('address') is-invalid @enderror"
-                                                wire:model.blur="address" rows="2"></textarea>
+                                                wire:model.blur="address" placeholder="Enter Permanent Address">
                                             @error('address')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -488,7 +488,7 @@
                                 </div>
                             </div>
                             <!-- APPLICATION DETAIL -->
-                            <div class="mb-4">
+                            <div class="mb-0">
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="mb-0">
@@ -636,7 +636,7 @@
                                 </div>
                                 <h3 class="fw-bold text-dark mb-3">आवेदन बंद हो गए हैं!</h3>
                                 <p class="text-muted fs-15 mb-4">
-                                    क्षमा करें, इस योजना (<strong>{{ $project->name }}</strong>) के लिए ऑनलाइन 
+                                    क्षमा करें, इस योजना (<strong>{{ $project->name }}</strong>) के लिए ऑनलाइन
                                     आवेदन की समय सीमा समाप्त हो चुकी है। अधिक जानकारी के लिए कृपया प्रशासनिक कार्यालय
                                     से संपर्क करें.
                                 </p>
