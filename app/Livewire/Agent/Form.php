@@ -53,14 +53,13 @@ class Form extends Component
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|regex:/^[6-9][0-9]{9}$/',
-            'code' => 'required|string|size:5|numeric|unique:agents,code,' . ($this->agent->id ?? 'NULL'),
+            'code' => 'required|digits:5|unique:agents,code,' . ($this->agent->id ?? 'NULL'),
             'status' => 'required|in:active,inactive',
         ];
 
         $validated = $this->validate($rules, [
             'phone.regex' => 'The mobile number must be a valid 10-digit number.',
-            'code.size' => 'The Waiver Code must be exactly 5 digits.',
-            'code.numeric' => 'The Waiver Code must contain only numbers.',
+            'code.digits' => 'The Waiver Code must be exactly 5 digits.',
             'code.unique' => 'This Waiver Code has already been taken.',
         ]);
 
