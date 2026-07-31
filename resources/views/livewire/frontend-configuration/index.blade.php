@@ -137,16 +137,6 @@
                                                 @enderror
                                             </div>
 
-                                            <!-- Booking Amount -->
-                                            <div class="col-md-4">
-                                                <label for="booking_amount" class="form-label fw-medium">Booking Amount (₹)</label>
-                                                <input type="number" id="booking_amount" class="form-control"
-                                                    wire:model="booking_amount" placeholder="e.g. 21100">
-                                                @error('booking_amount')
-                                                <div class="text-danger mt-1">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-
                                             <!-- Email Notification Settings -->
                                             <div class="col-12 mt-4">
                                                 <div class="card bg-light border-0">
