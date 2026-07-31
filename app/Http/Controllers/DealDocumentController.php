@@ -24,23 +24,37 @@ class DealDocumentController extends Controller
 
         ActivityLogger::logDeal($deal, 'allotment_pdf_downloaded', 'Allotment Letter Downloaded', "Downloaded Allotment Letter PDF for {$deal->first_name} {$deal->last_name}");
 
-        $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
+        $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '9116111177');
         $pid = $deal->project_id;
         $projectName = $deal->project?->name ?? 'Project';
 
-        $allotment_subtitle = FrontendSetting::getVal("project_{$pid}_allotment_subtitle", 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित');
-        $allotment_subject = FrontendSetting::getVal("project_{$pid}_allotment_subject", 'विषय:- आवासीय भूखण्ड \ फ्लैट \ व्यवसायिक भूखण्ड आवंटन की सूचना बाबत !');
-        $allotment_body = FrontendSetting::getVal("project_{$pid}_allotment_body", "हमें यह उद्घोषित करते हुए प्रसन्नता हो रही है कि हमारी योजना {$projectName} में आपका भूखण्ड \ फ्लैट का आवंटित किया जाना प्रस्तावित है जिसका विवरण निम्न प्रकार से है:");
-        $allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।');
+        $allotted_date = $deal->allotted_at ? \Carbon\Carbon::parse($deal->allotted_at)->format('d/m/Y') : ($deal->booking_date ? \Carbon\Carbon::parse($deal->booking_date)->format('d/m/Y') : date('d/m/Y'));
+        $form_no = 'AR/REG/' . ($deal->created_at?->format('Y') ?: date('Y')) . '/' . sprintf('%06d', $deal->id);
+        $block_tower = $inventory->block ?: ($inventory->tower ?: 'B');
+        $floor_str = $inventory->floor ? $inventory->floor . ($inventory->floor == 1 ? 'st' : ($inventory->floor == 2 ? 'nd' : ($inventory->floor == 3 ? 'rd' : 'th'))) . ' FLOOR' : '-';
+        $unit_no = $inventory->flat_no ?: $inventory->plot_no;
+        $unit_type = $inventory->unit_type_label ?: ($deal->project?->inventory_type === 'flat' ? 'EWS (LIG)' : 'Residential Plot');
+        $carpet_area = number_format($inventory->area_sbup ?: $inventory->area_sq_yards, 2) . ' वर्गफूट (लगभग)';
+
+        $allotment_subtitle = FrontendSetting::getVal("project_{$pid}_allotment_subtitle", 'हर परिवार का सपना, हमारा संकल्प');
+        $allotment_subject = FrontendSetting::getVal("project_{$pid}_allotment_subject", 'आवंटन पत्र');
+        $allotment_body = FrontendSetting::getVal("project_{$pid}_allotment_body", "हमें यह सूचित करते हुए हर्ष हो रहा है कि मुख्यमंत्री जन आवास योजना के अंतर्गत हमारी आवासीय परियोजना \"{PROJECT_NAME}\" ({BLOCK_TOWER}) में आपको निम्न विवरणानुसार आवासीय इकाई ({UNIT_TYPE}) का आवंटन किया गया है।");
+        $allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा भुगतान सारणी के अनुसार आगामी किस्त जमा करें ।");
 
         $replacements = [
             '{PROJECT_NAME}' => $projectName,
             '{PROJECT_ADDRESS}' => $deal->project?->address ?? '',
             '{CUSTOMER_NAME}' => strtoupper($deal->first_name . ' ' . $deal->last_name),
-            '{UNIT_NO}' => $inventory->plot_no ?: $inventory->flat_no,
-            '{FORM_NO}' => 'RAJAWS-' . ($deal->created_at?->format('Y') ?: date('Y')) . '-' . substr($deal->id, 0, 8),
-            '{BOOKING_DATE}' => $deal->booking_date ? \Carbon\Carbon::parse($deal->booking_date)->format('d-m-Y') : date('d-m-Y'),
+            '{UNIT_NO}' => $unit_no,
+            '{FORM_NO}' => $form_no,
+            '{REGISTRATION_NO}' => $form_no,
+            '{BOOKING_DATE}' => $allotted_date,
+            '{ALLOTTED_DATE}' => $allotted_date,
             '{CONTACT_PHONE}' => $project_contact_phone,
+            '{BLOCK_TOWER}' => $block_tower,
+            '{FLOOR}' => $floor_str,
+            '{UNIT_TYPE}' => $unit_type,
+            '{CARPET_AREA}' => $carpet_area,
         ];
 
         return view('emails.allotment-pdf', [
@@ -48,6 +62,13 @@ class DealDocumentController extends Controller
             'deal' => $deal,
             'inventory' => $inventory,
             'project_contact_phone' => $project_contact_phone,
+            'form_no' => $form_no,
+            'allotted_date' => $allotted_date,
+            'block_tower' => $block_tower,
+            'floor_str' => $floor_str,
+            'unit_no' => $unit_no,
+            'unit_type' => $unit_type,
+            'carpet_area' => $carpet_area,
             'allotment_subtitle' => strtr($allotment_subtitle, $replacements),
             'allotment_subject' => strtr($allotment_subject, $replacements),
             'allotment_body' => strtr($allotment_body, $replacements),

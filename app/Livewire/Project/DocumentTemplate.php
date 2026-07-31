@@ -53,10 +53,10 @@ class DocumentTemplate extends Component
         $projectName = $project ? $project->name : '{PROJECT_NAME}';
 
         // Allotment Letter Settings
-        $this->allotment_subtitle = FrontendSetting::getVal("project_{$pid}_allotment_subtitle", 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित');
-        $this->allotment_subject = FrontendSetting::getVal("project_{$pid}_allotment_subject", 'विषय:- आवासीय भूखण्ड \ फ्लैट \ व्यवसायिक भूखण्ड आवंटन की सूचना बाबत !');
-        $this->allotment_body = FrontendSetting::getVal("project_{$pid}_allotment_body", "हमें यह उद्घोषित करते हुए प्रसन्नता हो रही है कि हमारी योजना {$projectName} में आपका भूखण्ड \ फ्लैट का आवंटित किया जाना प्रस्तावित है जिसका विवरण निम्न प्रकार से है:");
-        $this->allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।');
+        $this->allotment_subtitle = FrontendSetting::getVal("project_{$pid}_allotment_subtitle", 'हर परिवार का सपना, हमारा संकल्प');
+        $this->allotment_subject = FrontendSetting::getVal("project_{$pid}_allotment_subject", 'आवंटन पत्र');
+        $this->allotment_body = FrontendSetting::getVal("project_{$pid}_allotment_body", "हमें यह सूचित करते हुए हर्ष हो रहा है कि मुख्यमंत्री जन आवास योजना के अंतर्गत हमारी आवासीय परियोजना \"{PROJECT_NAME}\" ({BLOCK_TOWER}) में आपको निम्न विवरणानुसार आवासीय इकाई ({UNIT_TYPE}) का आवंटन किया गया है।");
+        $this->allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा भुगतान सारणी के अनुसार आगामी किस्त जमा करें ।");
 
         // Demand Letter Settings
         $this->demand_subtitle = FrontendSetting::getVal("project_{$pid}_demand_subtitle", 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित');
@@ -115,10 +115,10 @@ class DocumentTemplate extends Component
         $project = Project::find($pid);
         $projectName = $project ? $project->name : '{PROJECT_NAME}';
 
-        $this->allotment_subtitle = 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित';
-        $this->allotment_subject = 'विषय:- आवासीय भूखण्ड \ फ्लैट \ व्यवसायिक भूखण्ड आवंटन की सूचना बाबत !';
-        $this->allotment_body = "हमें यह उद्घोषित करते हुए प्रसन्नता हो रही है कि हमारी योजना {$projectName} में आपका भूखण्ड \ फ्लैट का आवंटित किया जाना प्रस्तावित है जिसका विवरण निम्न प्रकार से है:";
-        $this->allotment_footer_note = 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।';
+        $this->allotment_subtitle = 'हर परिवार का सपना, हमारा संकल्प';
+        $this->allotment_subject = 'आवंटन पत्र';
+        $this->allotment_body = "हमें यह सूचित करते हुए हर्ष हो रहा है कि मुख्यमंत्री जन आवास योजना के अंतर्गत हमारी आवासीय परियोजना \"{PROJECT_NAME}\" ({BLOCK_TOWER}) में आपको निम्न विवरणानुसार आवासीय इकाई ({UNIT_TYPE}) का आवंटन किया गया है।";
+        $this->allotment_footer_note = "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा भुगतान सारणी के अनुसार आगामी किस्त जमा करें ।";
 
         $this->demand_subtitle = 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित';
         $this->demand_subject = 'विषय: भूखण्ड संख्या {UNIT_NO} की बकाया राशि जमा कराने बाबत।';

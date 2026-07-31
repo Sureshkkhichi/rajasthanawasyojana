@@ -56,10 +56,13 @@
                                             <span class="badge bg-white text-dark border"><code>{PROJECT_NAME}</code> Project</span>
                                             <span class="badge bg-white text-dark border"><code>{PROJECT_ADDRESS}</code> Address</span>
                                             <span class="badge bg-white text-dark border"><code>{CUSTOMER_NAME}</code> Customer</span>
-                                            <span class="badge bg-white text-dark border"><code>{UNIT_NO}</code> Plot/Flat</span>
-                                            <span class="badge bg-white text-dark border"><code>{FORM_NO}</code> Form No</span>
-                                            <span class="badge bg-white text-dark border"><code>{BOOKING_DATE}</code> Date</span>
-                                            <span class="badge bg-white text-dark border"><code>{CONTACT_PHONE}</code> Phone</span>
+                                            <span class="badge bg-white text-dark border"><code>{UNIT_NO}</code> Unit</span>
+                                            <span class="badge bg-white text-dark border"><code>{BLOCK_TOWER}</code> Tower/Block</span>
+                                            <span class="badge bg-white text-dark border"><code>{FLOOR}</code> Floor</span>
+                                            <span class="badge bg-white text-dark border"><code>{UNIT_TYPE}</code> Type</span>
+                                            <span class="badge bg-white text-dark border"><code>{CARPET_AREA}</code> Area</span>
+                                            <span class="badge bg-white text-dark border"><code>{FORM_NO}</code> Reg. No</span>
+                                            <span class="badge bg-white text-dark border"><code>{ALLOTTED_DATE}</code> Date</span>
                                         </div>
                                     </div>
                                 </div>
