@@ -151,6 +151,21 @@
                                         </div>
 
                                         <div class="col-md-4">
+                                            <label class="form-label">Block <span class="text-muted fs-11">(Optional)</span></label>
+                                            <select class="form-select @error('block') is-invalid @enderror"
+                                                wire:model="block">
+                                                <option value="">Select Block</option>
+                                                <option value="A">Block A</option>
+                                                <option value="B">Block B</option>
+                                                <option value="C">Block C</option>
+                                                <option value="D">Block D</option>
+                                                <option value="E">Block E</option>
+                                                <option value="F">Block F</option>
+                                            </select>
+                                            @error('block') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                        </div>
+
+                                        <div class="col-md-4">
                                             <label class="form-label">Flat No. <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control @error('flat_no') is-invalid @enderror"
                                                 wire:model="flat_no" placeholder="e.g., 101">

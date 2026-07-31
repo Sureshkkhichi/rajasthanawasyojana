@@ -28,6 +28,7 @@ class Inventory extends Model
         // Flat specific fields
         'floor',
         'flat_no',
+        'block',
         'unit_type',
         'area_sbup',
         'carpet_area',

@@ -32,6 +32,7 @@ class Form extends Component
     // Flat Specific Fields
     public string $floor = '';
     public string $flat_no = '';
+    public string $block = '';
     public string $unit_type = ''; // EWS, LIG, MIG, HIG, etc.
     public string $area_sbup = '';
     public string $carpet_area = '';
@@ -76,6 +77,7 @@ class Form extends Component
             // Flats
             $this->floor = $inventory->floor ?? '';
             $this->flat_no = $inventory->flat_no ?? '';
+            $this->block = $inventory->block ?? '';
             $this->unit_type = $inventory->unit_type ?? '';
             $this->area_sbup = $inventory->area_sbup ? (string)$inventory->area_sbup : '';
             $this->carpet_area = $inventory->carpet_area ? (string)$inventory->carpet_area : '';
@@ -166,6 +168,7 @@ class Form extends Component
         } else {
             $rules['floor'] = 'required|string|max:255';
             $rules['flat_no'] = 'required|string|max:255';
+            $rules['block'] = 'nullable|string|max:10';
             $rules['unit_type'] = 'required|string|max:255';
             $rules['area_sbup'] = 'required|numeric|min:0';
             $rules['carpet_area'] = 'required|numeric|min:0';
@@ -198,6 +201,7 @@ class Form extends Component
         } else {
             $data['floor'] = $this->floor;
             $data['flat_no'] = $this->flat_no;
+            $data['block'] = $this->block ?: null;
             $data['unit_type'] = $this->unit_type;
             $data['area_sbup'] = $this->area_sbup;
             $data['carpet_area'] = $this->carpet_area;
