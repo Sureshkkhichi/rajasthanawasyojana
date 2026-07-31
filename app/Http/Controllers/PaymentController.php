@@ -227,11 +227,13 @@ class PaymentController extends Controller
                 'remarks' => null,
             ]);
 
-            // Send Confirmation Mail
-            try {
-                Mail::to($lead->email)->cc('suresh5313@gmail.com')->send(new PaymentConfirmationMail($lead, $deal));
-            } catch (\Exception $e) {
-                Log::error('Failed to send payment confirmation email for lead ' . $lead->id . ': ' . $e->getMessage());
+            // Send Confirmation Mail (if enabled in settings)
+            if (\App\Models\FrontendSetting::getVal('enable_payment_confirmation_email', false)) {
+                try {
+                    Mail::to($lead->email)->cc('suresh5313@gmail.com')->send(new PaymentConfirmationMail($lead, $deal));
+                } catch (\Exception $e) {
+                    Log::error('Failed to send payment confirmation email for lead ' . $lead->id . ': ' . $e->getMessage());
+                }
             }
         });
     }

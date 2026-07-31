@@ -147,6 +147,40 @@
                                                 @enderror
                                             </div>
 
+                                            <!-- Email Notification Settings -->
+                                            <div class="col-12 mt-4">
+                                                <div class="card bg-light border-0">
+                                                    <div class="card-body">
+                                                        <h6 class="fs-15 fw-semibold text-dark mb-1">
+                                                            <i class="ri-mail-send-line me-1 text-primary"></i> Email Notification Settings
+                                                        </h6>
+                                                        <p class="text-muted fs-13 mb-3">Control whether emails are automatically sent during registration form submission and payment confirmation.</p>
+                                                        
+                                                        <div class="row g-3">
+                                                            <div class="col-md-6">
+                                                                <div class="form-check form-switch form-switch-md">
+                                                                    <input class="form-check-input" type="checkbox" id="enable_lead_submitted_email" wire:model="enable_lead_submitted_email">
+                                                                    <label class="form-check-label fw-medium ms-2" for="enable_lead_submitted_email">
+                                                                        Send Email on Form Submission
+                                                                    </label>
+                                                                </div>
+                                                                <small class="text-muted d-block ms-4 mt-1">Triggers LeadSubmittedMail when applicant submits registration form.</small>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <div class="form-check form-switch form-switch-md">
+                                                                    <input class="form-check-input" type="checkbox" id="enable_payment_confirmation_email" wire:model="enable_payment_confirmation_email">
+                                                                    <label class="form-check-label fw-medium ms-2" for="enable_payment_confirmation_email">
+                                                                        Send Email on Payment Success
+                                                                    </label>
+                                                                </div>
+                                                                <small class="text-muted d-block ms-4 mt-1">Triggers PaymentConfirmationMail when PhonePe payment is successful.</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="col-12 text-end">
                                                 <button type="submit" class="btn btn-success"
                                                     wire:loading.attr="disabled" wire:target="saveGeneral">

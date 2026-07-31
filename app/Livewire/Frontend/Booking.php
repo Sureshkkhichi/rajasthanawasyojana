@@ -399,11 +399,13 @@ class Booking extends Component
             'transaction_id' => $transactionId,
         ]);
 
-        // Send submission confirmation email
-        try {
-            Mail::to($this->lead->email)->cc('suresh5313@gmail.com')->send(new LeadSubmittedMail($this->lead));
-        } catch (\Exception $e) {
-            \Log::error('Failed to send lead submitted mail: ' . $e->getMessage());
+        // Send submission confirmation email (if enabled in settings)
+        if (\App\Models\FrontendSetting::getVal('enable_lead_submitted_email', false)) {
+            try {
+                Mail::to($this->lead->email)->cc('suresh5313@gmail.com')->send(new LeadSubmittedMail($this->lead));
+            } catch (\Exception $e) {
+                \Log::error('Failed to send lead submitted mail: ' . $e->getMessage());
+            }
         }
 
         // Call PhonePe Payment API
