@@ -322,7 +322,7 @@
                                             <input type="text" id="pan_number"
                                                 class="form-control text-uppercase @error('pan_number') is-invalid @enderror"
                                                 wire:model.blur="pan_number" maxlength="10" placeholder="e.g. ABCDE1234F"
-                                                oninput="formatPanInput(this)">
+                                                oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/gi, '').slice(0, 10)">
                                             @error('pan_number')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -739,30 +739,7 @@
                     return;
                 }
                 panInput.addEventListener('input', function (e) {
-                    let value = e.target.value.toUpperCase();
-                    let result = '';
-                    for (let i = 0; i < value.length; i++) {
-                        let char = value[i];
-                        // First 5 characters = A-Z
-                        if (i < 5) {
-                            if (/[A-Z]/.test(char)) {
-                                result += char;
-                            }
-                        }
-                        // Next 4 characters = 0-9
-                        else if (i >= 5 && i <= 8) {
-                            if (/[0-9]/.test(char)) {
-                                result += char;
-                            }
-                        }
-                        // Last character = A-Z
-                        else if (i === 9) {
-                            if (/[A-Z]/.test(char)) {
-                                result += char;
-                            }
-                        }
-                    }
-                    e.target.value = result;
+                    e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/gi, '').slice(0, 10);
                 });
             });
         </script>

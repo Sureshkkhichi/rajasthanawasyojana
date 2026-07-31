@@ -320,7 +320,7 @@ class Booking extends Component
         return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'pan_number' => ['required', 'string', 'regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i'],
+            'pan_number' => ['required', 'string', 'max:10'],
             'gender' => ['required'],
             'email' => ['required', 'email'],
             'phone' => ['required', 'string', 'regex:/^[6-9][0-9]{9}$/'],
@@ -346,7 +346,6 @@ class Booking extends Component
     public function messages(): array
     {
         return [
-            'pan_number.regex' => 'Please enter a valid 10-character PAN number (e.g. ABCDE1234F).',
             'date_of_birth.before_or_equal' => 'Age must be 18 years or older.',
             'phone.regex' => 'Phone must be a valid 10-digit mobile number.',
             'waiver_code.numeric' => 'Waiver Code must contain only numbers.',
