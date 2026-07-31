@@ -1,20 +1,38 @@
 <div>
     <!-- Start footer -->
+    @php
+        use App\Models\StaticPage;
+        $footerPages = StaticPage::whereIn('slug', [
+            'terms-and-conditions',
+            'privacy-policy',
+            'cancellation-refund-policy',
+        ])->where('status', 'active')->get()->keyBy('slug');
+    @endphp
+
     <footer class="text-center text-lg-start bg-light text-muted">
         <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
             <div class="me-5 d-none d-lg-block">
-                <span>Rajasthan Awas Realty Group | Apka Sath Sabka Vikas </span>
+                <span>{{ config('constants.site_name') }} | {{ "घर का सपना, अब होगा अपना" }}</span>
             </div>
             <div>
-                <a href="{{ route('pages.terms') }}" class="me-4 text-reset">
-                    Term and Condition
-                </a>
-                <a href="{{ route('pages.privacy') }}" class="me-4 text-reset">
-                    Privacy policy
-                </a>
-                <a href="{{ route('pages.refund-policy') }}" class="me-4 text-reset">
-                    Cancellation Refund policy
-                </a>
+                @if(isset($footerPages['terms-and-conditions']))
+                    <a href="{{ route('pages.terms') }}" class="me-4 text-reset">
+                        Term and Condition
+                    </a>
+                @endif
+
+                @if(isset($footerPages['privacy-policy']))
+                    <a href="{{ route('pages.privacy') }}" class="me-4 text-reset">
+                        Privacy policy
+                    </a>
+                @endif
+
+                @if(isset($footerPages['cancellation-refund-policy']))
+                    <a href="{{ route('pages.refund-policy') }}" class="me-4 text-reset">
+                        Cancellation Refund policy
+                    </a>
+                @endif
+
                 <a href="#" class="me-4 text-reset">
                     Contact Us
                 </a>
