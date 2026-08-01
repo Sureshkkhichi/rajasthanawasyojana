@@ -6,7 +6,7 @@ use App\Models\Deal;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
-#[Layout('components.layouts.frontend')]
+#[Layout('layouts.front')]
 class CheckAllotment extends Component
 {
     public $mobile = '';
