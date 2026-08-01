@@ -77,10 +77,13 @@
 
     /* ─── MOBILE HEADER (786px and below) ─── */
     @media (max-width: 786px) {
-        .custom-header {
+        .custom-header,
+        nav.custom-header,
+        .navbar.custom-header,
+        .navbar.fixed-top.custom-header {
             background: #fffdf6 !important;
             background-color: #fffdf6 !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .12) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .15) !important;
             z-index: 9999 !important;
             height: auto !important;
             padding: 6px 0 !important;
@@ -91,6 +94,8 @@
             width: 100% !important;
             opacity: 1 !important;
             backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-bottom: 1px solid rgba(0,0,0,0.06) !important;
         }
 
         .header-logo img {
@@ -137,6 +142,13 @@
 
     .custom-header .container {
         max-width: 1400px;
+    }
+
+    /* Mobile: push body content below the fixed header */
+    @media (max-width: 786px) {
+        body .layout-wrapper.landing {
+            padding-top: 62px !important;
+        }
     }
     </style>
 </head>
