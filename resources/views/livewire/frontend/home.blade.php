@@ -47,27 +47,24 @@
             .project-card {
                 overflow: hidden;
                 transition: .35s;
+                border-radius: 12px;
             }
 
-            .project-label {
-                position: absolute;
-                top: 18px;
-                left: 18px;
-                z-index: 99;
-                background: #dc2626;
-                color: #fff;
-                padding: 8px 18px;
-                border-radius: 30px;
-                font-size: 12px;
-                font-weight: 700;
-                text-transform: uppercase;
-            }
-
-            .project-card img {
-                max-height: 255px;
-                height: 220px;
-                object-fit: cover;
+            .project-card .project-image-area {
                 width: 100%;
+                background: #f8f9fa;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 180px;
+            }
+
+            .project-card .project-image-area img {
+                width: 100%;
+                height: auto;
+                max-height: 260px;
+                object-fit: contain;
+                display: block;
             }
         </style>
     @endpush
@@ -142,7 +139,7 @@
             <div class="row g-4">
                 @foreach($projects as $project)
                     <div class="col-sm-6 col-xl-3">
-                        <div class="card project-card">
+                        <div class="card project-card shadow-sm h-100">
                             <a href="{{ route('project.show', $project->slug) }}" class="text-decoration-none">
                                 <div class="project-image-area">
                                     @if($project->featured_image)
@@ -192,13 +189,9 @@
                             </a>
                             @if($project->registration_status === 'open')
                                 <a href="{{ route('booking', $project->id) }}" class="text-decoration-none">
-                                    <div class="card-footer d-flex"
-                                        style="flex-direction: row;justify-content: space-between;align-items: center;padding: 0;margin: 0;">
-                                        <span class="float-end">
-                                            <img src="{{ asset('dummy/AVEDAN-KAREN-GIFF.gif') }}" class="apply-gif" alt="Apply"
-                                                style="width: 50%; height: auto;">
-                                        </span>
-
+                                    <div class="card-footer text-center p-2 bg-white border-top-0 d-flex align-items-center justify-content-center">
+                                        <img src="{{ asset('dummy/AVEDAN-KAREN-GIFF.gif') }}" class="apply-gif" alt="Apply"
+                                            style="max-height: 48px; width: auto; max-width: 90%; object-fit: contain; margin: 0 auto;">
                                     </div>
                                 </a>
                             @else
