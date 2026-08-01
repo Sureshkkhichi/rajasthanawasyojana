@@ -4,25 +4,37 @@
             .announcement-bar {
                 background: #dc2626;
                 color: #ffffff;
-                padding: 6px 10px;
-                font-size: 14px;
-                font-weight: 600;
-                line-height: 1.4;
+                padding: 4px 0;
+                width: 100%;
+                overflow: hidden;
+                box-sizing: border-box;
             }
-            .announcement-bar marquee, .announcement-bar span {
-                font-size: 14px;
+            .announcement-bar .container-fluid,
+            .announcement-bar .row,
+            .announcement-bar .col-12 {
+                margin: 0 !important;
+                padding: 0 8px !important;
+            }
+            .announcement-bar marquee,
+            .announcement-bar span {
+                font-size: 13.5px;
                 font-weight: 600;
-                line-height: 1.4;
+                line-height: 1.2;
+                margin: 0;
+                padding: 2px 0;
                 display: block;
+                height: 22px;
             }
             @media (max-width: 576px) {
                 .announcement-bar {
-                    padding: 5px 8px;
-                    font-size: 13px;
+                    padding: 3px 0;
                 }
-                .announcement-bar marquee, .announcement-bar span {
-                    font-size: 13px;
-                    line-height: 1.3;
+                .announcement-bar marquee,
+                .announcement-bar span {
+                    font-size: 12px;
+                    line-height: 1.2;
+                    height: 18px;
+                    padding: 1px 0;
                 }
             }
             .home-slider img, .info-image-block img {
