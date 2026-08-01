@@ -1,6 +1,30 @@
 <div>
     @push('styles')
         <style>
+            .announcement-bar {
+                background: #dc2626;
+                color: #ffffff;
+                padding: 6px 10px;
+                font-size: 14px;
+                font-weight: 600;
+                line-height: 1.4;
+            }
+            .announcement-bar marquee, .announcement-bar span {
+                font-size: 14px;
+                font-weight: 600;
+                line-height: 1.4;
+                display: block;
+            }
+            @media (max-width: 576px) {
+                .announcement-bar {
+                    padding: 5px 8px;
+                    font-size: 13px;
+                }
+                .announcement-bar marquee, .announcement-bar span {
+                    font-size: 13px;
+                    line-height: 1.3;
+                }
+            }
             .home-slider img, .info-image-block img {
                 width: 100%;
                 height: auto;
@@ -37,11 +61,10 @@
     @endpush
     {{-- Top Bar Section --}}
     @if ($top_bar_show && !empty($top_bar_text))
-        <section class=""
-            style="background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center;">
+        <section class="announcement-bar">
             <div class="container-fluid">
                 <div class="row justify-content-center">
-                    <div class="col-12 text-center fs-15">
+                    <div class="col-12 text-center">
                         @if ($top_bar_marquee)
                             <marquee width="100%" direction="left" scrollamount="5">
                                 {{ $top_bar_text }}
@@ -78,11 +101,10 @@
     </section>
     {{-- Bottom Bar Section --}}
     @if ($bottom_bar_show && !empty($bottom_bar_text))
-        <section class=""
-            style="background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center; margin-top: 0px; margin-bottom: 0px;">
+        <section class="announcement-bar">
             <div class="container-fluid">
                 <div class="row justify-content-center">
-                    <div class="col-12 text-center fs-15">
+                    <div class="col-12 text-center">
                         @if ($bottom_bar_marquee)
                             <marquee width="100%" direction="left" scrollamount="5">
                                 {{ $bottom_bar_text }}
