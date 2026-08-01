@@ -315,7 +315,11 @@
                     <!-- Sign-off Block -->
                     <table class="footer-sign-table">
                         <tr>
-                            <td width="60%"></td>
+                            <td width="60%" style="vertical-align: top;">
+                                @if(file_exists(public_path('rera.png')))
+                                    <img src="{{ asset('rera.png') }}" style="max-height: 85px; width: auto; display: block;" alt="RERA">
+                                @endif
+                            </td>
                             <td width="40%" align="center" style="font-size: 13.5px; color: #2c1a0e; vertical-align: top;">
                                 <strong>भवदीय,</strong>
                                 <div style="height: 40px;"></div>
