@@ -1,74 +1,43 @@
 <div>
     @push('styles')
         <style>
-            .announcement-bar {
-                background: #dc2626;
-                color: #ffffff;
-                padding: 4px 0;
-                width: 100%;
-                overflow: hidden;
-                box-sizing: border-box;
-            }
-            .announcement-bar .container-fluid,
-            .announcement-bar .row,
-            .announcement-bar .col-12 {
-                margin: 0 !important;
-                padding: 0 8px !important;
-            }
-            .announcement-bar marquee,
-            .announcement-bar span {
-                font-size: 13.5px;
-                font-weight: 600;
-                line-height: 1.2;
-                margin: 0;
-                padding: 2px 0;
-                display: block;
-                height: 22px;
-            }
-            @media (max-width: 576px) {
-                .announcement-bar {
-                    padding: 3px 0;
-                }
-                .announcement-bar marquee,
-                .announcement-bar span {
-                    font-size: 12px;
-                    line-height: 1.2;
-                    height: 18px;
-                    padding: 1px 0;
-                }
-            }
-            .home-slider img, .info-image-block img {
-                width: 100%;
-                height: auto;
-                max-width: 100%;
-                object-fit: contain;
-                display: block;
-            }
             .project-card {
                 overflow: hidden;
                 transition: .35s;
-                border-radius: 12px;
             }
 
-            .project-card .project-image-area {
-                width: 100%;
-                background: #f8f9fa;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                min-height: 180px;
+            .project-label {
+                position: absolute;
+                top: 18px;
+                left: 18px;
+                z-index: 99;
+                background: #dc2626;
+                color: #fff;
+                padding: 8px 18px;
+                border-radius: 30px;
+                font-size: 12px;
+                font-weight: 700;
+                text-transform: uppercase;
             }
 
-            .project-card .project-image-area img {
-                width: 100%;
+            .project-card img {
+                max-height: 255px;
                 height: 255px;
-                object-fit: cover;
-                display: block;
             }
+
             @media (max-width: 576px) {
-                .project-card .project-image-area img {
+                .announcement-bar-text {
+                    font-size: 13px !important;
+                    line-height: 1.3 !important;
+                }
+                .project-card img {
                     height: auto;
                     max-height: 260px;
+                    object-fit: contain;
+                }
+                .info-image-block img {
+                    width: 100%;
+                    height: auto;
                     object-fit: contain;
                 }
             }
@@ -76,10 +45,11 @@
     @endpush
     {{-- Top Bar Section --}}
     @if ($top_bar_show && !empty($top_bar_text))
-        <section class="announcement-bar">
+        <section class=""
+            style="margin-top: 89px; background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center;">
             <div class="container-fluid">
                 <div class="row justify-content-center">
-                    <div class="col-12 text-center">
+                    <div class="col-12 text-center fs-15 announcement-bar-text">
                         @if ($top_bar_marquee)
                             <marquee width="100%" direction="left" scrollamount="5">
                                 {{ $top_bar_text }}
@@ -91,6 +61,8 @@
                 </div>
             </div>
         </section>
+    @else
+        <div style="padding-top: 72px;"></div>
     @endif
     {{-- Banner / Slider Section --}}
     <section>
@@ -116,10 +88,11 @@
     </section>
     {{-- Bottom Bar Section --}}
     @if ($bottom_bar_show && !empty($bottom_bar_text))
-        <section class="announcement-bar">
+        <section class=""
+            style="background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center; margin-top: 0px; margin-bottom: 0px;">
             <div class="container-fluid">
                 <div class="row justify-content-center">
-                    <div class="col-12 text-center">
+                    <div class="col-12 text-center fs-15 announcement-bar-text">
                         @if ($bottom_bar_marquee)
                             <marquee width="100%" direction="left" scrollamount="5">
                                 {{ $bottom_bar_text }}
@@ -145,7 +118,7 @@
             <div class="row g-4">
                 @foreach($projects as $project)
                     <div class="col-sm-6 col-xl-3">
-                        <div class="card project-card shadow-sm h-100">
+                        <div class="card project-card">
                             <a href="{{ route('project.show', $project->slug) }}" class="text-decoration-none">
                                 <div class="project-image-area">
                                     @if($project->featured_image)
@@ -195,9 +168,13 @@
                             </a>
                             @if($project->registration_status === 'open')
                                 <a href="{{ route('booking', $project->id) }}" class="text-decoration-none">
-                                    <div class="card-footer text-center p-2 bg-white border-top-0 d-flex align-items-center justify-content-center">
-                                        <img src="{{ asset('dummy/AVEDAN-KAREN-GIFF.gif') }}" class="apply-gif" alt="Apply"
-                                            style="max-height: 48px; width: auto; max-width: 90%; object-fit: contain; margin: 0 auto;">
+                                    <div class="card-footer d-flex"
+                                        style="flex-direction: row;justify-content: space-between;align-items: center;padding: 0;margin: 0;">
+                                        <span class="float-end">
+                                            <img src="{{ asset('dummy/AVEDAN-KAREN-GIFF.gif') }}" class="apply-gif" alt="Apply"
+                                                style="width: 50%; height: auto;">
+                                        </span>
+
                                     </div>
                                 </a>
                             @else
@@ -219,7 +196,7 @@
         @foreach ($information_images as $info_img)
             <div class="col-lg-12 info-image-block">
                 <a href="#">
-                    <img src="{{ asset($info_img->image_path) }}" alt="Information Image" class="w-100 d-block img-fluid">
+                    <img src="{{ asset($info_img->image_path) }}" alt="Information Image" class="w-100 d-block">
                 </a>
             </div>
         @endforeach

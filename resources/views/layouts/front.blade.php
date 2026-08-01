@@ -24,126 +24,118 @@
     @livewireStyles
     @stack('styles')
     <style>
-        .custom-header,
-        .custom-header.is-sticky,
-        nav.custom-header {
-            background-color: #ffffff !important;
-            background: #ffffff !important;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, .12) !important;
-            z-index: 99999 !important;
-            padding: 8px 0;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            opacity: 1 !important;
+        .custom-header {
+            background: #fffdf6 !important;
+            background-color: #fffdf6 !important;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
+            z-index: 999;
+            height: auto;
         }
 
         .custom-header .container {
             max-width: 1400px;
         }
 
-        /* Desktop Styles */
-        @media (min-width: 992px) {
-            .header-logo img {
-                height: 72px;
-                width: auto;
-            }
-            .header-contact {
-                gap: 50px;
-            }
-            .header-contact a {
-                font-size: 46px;
-                font-weight: 700;
-            }
-            .header-rera {
-                font-size: 13px !important;
-                padding: 4px 12px;
-            }
+        .header-logo img {
+            height: 72px;
+            width: auto;
         }
 
-        .header-logo img {
-            height: 52px;
+        .digital-logo {
+            height: 58px;
             width: auto;
-            max-width: 100%;
-            object-fit: contain;
         }
 
         .header-rera {
-            padding: 3px 8px;
+            padding: 4px 14px;
             white-space: nowrap;
             display: inline-block;
             color: #4a2100;
             font-weight: 700;
-            font-size: 11px !important;
-            line-height: 1.2;
-            background: #fdf6ea;
-            border: 1px solid #f3e5d0;
-            border-radius: 4px;
+            text-decoration: none;
+            transition: .3s;
+            line-height: 1;
         }
 
         .header-contact {
             display: flex;
-            align-items: center;
             justify-content: flex-end;
-            gap: 20px;
+            align-items: center;
+            gap: 50px;
         }
 
         .header-contact a {
             color: #4a2100;
-            font-size: 26px;
-            font-weight: 800;
+            font-size: 46px;
+            font-weight: 700;
             text-decoration: none;
             transition: .3s;
             line-height: 1;
-            white-space: nowrap;
         }
 
         .header-contact a:hover {
-            color: #dc2626;
+            color: #d62939;
         }
 
-        @media (max-width: 991px) {
-            .header-logo img {
-                height: 44px;
+        @media(max-width:991px) {
+            .custom-header {
+                height: 88px;
             }
+
+            .header-logo img {
+                height: 54px;
+            }
+
+            .header-contact {
+                gap: 15px;
+                justify-content: flex-end;
+            }
+
             .header-contact a {
                 font-size: 18px;
             }
-            .header-contact {
-                gap: 12px;
+
+            .header-rera {
+                font-size: 16px;
+                margin-left: 10px;
+                padding: 2px 8px;
             }
         }
 
-        @media (max-width: 576px) {
+        @media(max-width:576px) {
             .custom-header {
-                padding: 6px 0;
+                height: auto;
+                padding: 8px 0;
             }
+
             .header-logo img {
-                height: 38px;
+                height: 42px;
             }
-            .header-rera {
-                font-size: 10px !important;
-                padding: 2px 5px;
-            }
+
             .header-contact {
                 flex-direction: column;
                 align-items: flex-end;
                 gap: 2px;
             }
+
             .header-contact a {
-                font-size: 14px;
-                font-weight: 800;
+                font-size: 15px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="layout-wrapper landing" style="padding-top: 68px;">
-        <nav class="navbar fixed-top custom-header">
+    <div class="layout-wrapper landing">
+        <nav class="navbar navbar-expand-lg fixed-top custom-header">
             <div class="container">
-                <div class="d-flex align-items-center justify-content-between w-100">
-                    <!-- Left Logo & RERA -->
-                    <div class="d-flex align-items-center gap-2">
+                <div class="row w-100 align-items-center">
+                    <div
+                        class="col-lg-8 col-12 d-flex flex-wrap align-items-center gap-2 order-1 justify-content-center justify-content-lg-start">
                         <a href="{{ route('front') }}" class="header-logo">
                             @php
                                 $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
@@ -155,25 +147,28 @@
                             $reraNumber = \App\Models\FrontendSetting::getVal('rera_number');
                         @endphp
                         @if(!empty($reraNumber))
-                            <span class="header-rera">RERA No: {{ $reraNumber }}</span>
+                            <span class="header-rera fs-2" style="font-size: 12px !important;">RERA No:
+                                {{ $reraNumber }}</span>
                         @endif
                     </div>
-                    <!-- Right Contact Phone Numbers -->
-                    <div class="header-contact">
-                        @php
-                            $mobile1 = \App\Models\FrontendSetting::getVal('mobile_number_1', '9876543210');
-                            $mobile2 = \App\Models\FrontendSetting::getVal('mobile_number_2', '9876543210');
-                        @endphp
-                        @if(!empty($mobile1))
-                            <a href="tel:+91{{ $mobile1 }}">
-                                {{ $mobile1 }}
-                            </a>
-                        @endif
-                        @if(!empty($mobile2))
-                            <a href="tel:+91{{ $mobile2 }}">
-                                {{ $mobile2 }}
-                            </a>
-                        @endif
+                    {{-- Right Contact --}}
+                    <div class="col-lg-4 col-12 order-2 mt-2 mt-lg-0">
+                        <div class="header-contact justify-content-center justify-content-lg-end">
+                            @php
+                                $mobile1 = \App\Models\FrontendSetting::getVal('mobile_number_1', '9876543210');
+                                $mobile2 = \App\Models\FrontendSetting::getVal('mobile_number_2', '9876543210');
+                            @endphp
+                            @if(!empty($mobile1))
+                                <a href="tel:+91{{ $mobile1 }}" class="fs-2">
+                                    {{ $mobile1 }}
+                                </a>
+                            @endif
+                            @if(!empty($mobile2))
+                                <a href="tel:+91{{ $mobile2 }}" class="fs-2">
+                                    {{ $mobile2 }}
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -259,7 +254,7 @@
     <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
 
     <!-- Sweet Alerts js -->
-    <script src="{{ asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}"></script>
 
     <script src="{{ asset('assets/libs/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/landing.init.js') }}"></script>
