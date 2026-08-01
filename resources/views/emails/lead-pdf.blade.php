@@ -62,7 +62,7 @@
 
 <body>
     <div class="header">
-        <h2>{{ $lead->project?->name ?: 'Rajasthan Awas Yojana' }} (Lead Details)</h2>
+        <h2>{{ $lead->project?->name ?: config('constants.site_name') }} (Lead Details)</h2>
     </div>
 
     <div class="section-title">Personal Information</div>

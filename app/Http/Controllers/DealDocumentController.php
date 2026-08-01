@@ -246,9 +246,9 @@ class DealDocumentController extends Controller
         $transactionId = $lead?->transaction_id ?: ('JDAAPP' . (substr($numericId, 0, 9) ?: '705410470'));
 
         $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
-        $companyName = 'Rajasthan Awas Yojana';
+        $companyName = config('constants.site_name');
         $companyCity = 'Jaipur';
-        $customerProject = $deal->project?->name ?: 'Rajasthan Awas Yojana';
+        $customerProject = $deal->project?->name ?: config('constants.site_name');
         $customerCity = $deal->city ?: 'जयपुर';
         $waiverCode = $deal->waiver_code ?: '-';
 

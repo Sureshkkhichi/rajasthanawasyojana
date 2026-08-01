@@ -22,7 +22,7 @@ class PaymentConfirmationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Payment Confirmation & Booking Confirmation - ' . ($this->lead->project->name ?? 'Rajasthan Awas Yojana')
+            subject: 'Payment Confirmation & Booking Confirmation - ' . ($this->lead->project->name ?? config('constants.site_name'))
         );
     }
 

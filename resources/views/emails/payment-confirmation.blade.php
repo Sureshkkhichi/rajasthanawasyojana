@@ -72,7 +72,7 @@
 
     <p>
         Regards,<br>
-        Rajasthan Awas Yojana Team
+        {{ config('constants.site_name') }} Team
     </p>
 
 </body>
