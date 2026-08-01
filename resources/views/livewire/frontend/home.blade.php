@@ -1,6 +1,13 @@
 <div>
     @push('styles')
         <style>
+            .home-slider img, .info-image-block img {
+                width: 100%;
+                height: auto;
+                max-width: 100%;
+                object-fit: contain;
+                display: block;
+            }
             .project-card {
                 overflow: hidden;
                 transition: .35s;
@@ -22,14 +29,16 @@
 
             .project-card img {
                 max-height: 255px;
-                height: 255px;
+                height: 220px;
+                object-fit: cover;
+                width: 100%;
             }
         </style>
     @endpush
     {{-- Top Bar Section --}}
     @if ($top_bar_show && !empty($top_bar_text))
         <section class=""
-            style="margin-top: 89px; background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center;">
+            style="background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center;">
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-12 text-center fs-15">
@@ -44,8 +53,6 @@
                 </div>
             </div>
         </section>
-    @else
-        <div style="padding-top: 72px;"></div>
     @endif
     {{-- Banner / Slider Section --}}
     <section>
@@ -175,11 +182,11 @@
         </div>
     </section>
     {{-- Information Section --}}
-    <div class="row">
+    <div class="row g-0">
         @foreach ($information_images as $info_img)
-            <div class="col-lg-12">
+            <div class="col-lg-12 info-image-block">
                 <a href="#">
-                    <img src="{{ asset($info_img->image_path) }}" alt="Information Image" class="w-100 d-block">
+                    <img src="{{ asset($info_img->image_path) }}" alt="Information Image" class="w-100 d-block img-fluid">
                 </a>
             </div>
         @endforeach

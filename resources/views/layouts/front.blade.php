@@ -24,16 +24,12 @@
     @livewireStyles
     @stack('styles')
     <style>
+    <style>
         .custom-header {
             background: #fffdf6;
-            /* background-image: url('{{ asset("assets/images/header.jpg") }}'); */
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-            display: flex;
-            align-items: center;
             box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
-            z-index: 999;
-            height: auto;
+            z-index: 9999;
+            padding: 8px 0;
         }
 
         .custom-header .container {
@@ -41,100 +37,89 @@
         }
 
         .header-logo img {
-            height: 72px;
+            height: 52px;
             width: auto;
-        }
-
-        .digital-logo {
-            height: 58px;
-            width: auto;
+            max-width: 100%;
+            object-fit: contain;
         }
 
         .header-rera {
-            padding: 4px 14px;
+            padding: 3px 8px;
             white-space: nowrap;
             display: inline-block;
             color: #4a2100;
             font-weight: 700;
-            text-decoration: none;
-            transition: .3s;
-            line-height: 1;
+            font-size: 11px !important;
+            line-height: 1.2;
+            background: #fdf6ea;
+            border: 1px solid #f3e5d0;
+            border-radius: 4px;
         }
 
         .header-contact {
             display: flex;
-            justify-content: flex-end;
             align-items: center;
-            gap: 50px;
+            justify-content: flex-end;
+            gap: 20px;
         }
 
         .header-contact a {
             color: #4a2100;
-            font-size: 46px;
-            font-weight: 700;
+            font-size: 26px;
+            font-weight: 800;
             text-decoration: none;
             transition: .3s;
             line-height: 1;
+            white-space: nowrap;
         }
 
         .header-contact a:hover {
-            color: #d62939;
+            color: #dc2626;
         }
 
-        @media(max-width:991px) {
-            .custom-header {
-                height: 88px;
-            }
-
+        @media (max-width: 991px) {
             .header-logo img {
-                height: 54px;
+                height: 44px;
             }
-
-            .header-contact {
-                gap: 15px;
-                justify-content: flex-end;
-            }
-
             .header-contact a {
                 font-size: 18px;
             }
-
-            .header-rera {
-                font-size: 16px;
-                margin-left: 10px;
-                padding: 2px 8px;
+            .header-contact {
+                gap: 12px;
             }
         }
 
-        @media(max-width:576px) {
+        @media (max-width: 576px) {
             .custom-header {
-                height: 88px;
+                padding: 6px 0;
             }
-
             .header-logo img {
-                height: 46px;
+                height: 38px;
             }
-
+            .header-rera {
+                font-size: 10px !important;
+                padding: 2px 5px;
+            }
             .header-contact {
                 flex-direction: column;
                 align-items: flex-end;
                 gap: 2px;
             }
-
             .header-contact a {
-                font-size: 15px;
+                font-size: 14px;
+                font-weight: 800;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="layout-wrapper landing">
-        <nav class="navbar navbar-expand-lg fixed-top custom-header">
+    <div class="layout-wrapper landing" style="padding-top: 68px;">
+        <nav class="navbar fixed-top custom-header">
             <div class="container">
-                <div class="row w-100 align-items-center">
-                    <div
-                        class="col-lg-8 col-12 d-flex flex-wrap align-items-center gap-2 order-1 justify-content-center justify-content-lg-start">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <!-- Left Logo & RERA -->
+                    <div class="d-flex align-items-center gap-2">
                         <a href="{{ route('front') }}" class="header-logo">
                             @php
                                 $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
@@ -146,28 +131,25 @@
                             $reraNumber = \App\Models\FrontendSetting::getVal('rera_number');
                         @endphp
                         @if(!empty($reraNumber))
-                            <span class="header-rera fs-2" style="font-size: 12px !important;">RERA No:
-                                {{ $reraNumber }}</span>
+                            <span class="header-rera">RERA No: {{ $reraNumber }}</span>
                         @endif
                     </div>
-                    {{-- Right Contact --}}
-                    <div class="col-lg-4 col-12 order-2 mt-2 mt-lg-0">
-                        <div class="header-contact justify-content-center justify-content-lg-end">
-                            @php
-                                $mobile1 = \App\Models\FrontendSetting::getVal('mobile_number_1', '9876543210');
-                                $mobile2 = \App\Models\FrontendSetting::getVal('mobile_number_2', '9876543210');
-                            @endphp
-                            @if(!empty($mobile1))
-                                <a href="tel:+91{{ $mobile1 }}" class="fs-2">
-                                    {{ $mobile1 }}
-                                </a>
-                            @endif
-                            @if(!empty($mobile2))
-                                <a href="tel:+91{{ $mobile2 }}" class="fs-2">
-                                    {{ $mobile2 }}
-                                </a>
-                            @endif
-                        </div>
+                    <!-- Right Contact Phone Numbers -->
+                    <div class="header-contact">
+                        @php
+                            $mobile1 = \App\Models\FrontendSetting::getVal('mobile_number_1', '9876543210');
+                            $mobile2 = \App\Models\FrontendSetting::getVal('mobile_number_2', '9876543210');
+                        @endphp
+                        @if(!empty($mobile1))
+                            <a href="tel:+91{{ $mobile1 }}">
+                                {{ $mobile1 }}
+                            </a>
+                        @endif
+                        @if(!empty($mobile2))
+                            <a href="tel:+91{{ $mobile2 }}">
+                                {{ $mobile2 }}
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>
