@@ -26,31 +26,42 @@
             }
 
             @media (max-width: 786px) {
-                .announcement-bar-top {
-                    margin-top: 58px !important;
+                .announcement-bar-top,
+                .announcement-bar-bottom {
+                    margin-top: 0 !important;
                     min-height: unset !important;
                     height: auto !important;
-                    padding: 2px 6px !important;
-                    display: flex !important;
-                    align-items: center !important;
+                    padding: 0 !important;
+                    display: block !important;
                     overflow: hidden !important;
                 }
-                .announcement-bar-bottom {
-                    min-height: unset !important;
-                    height: auto !important;
-                    padding: 2px 6px !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    overflow: hidden !important;
+                .announcement-bar-top {
+                    margin-top: 58px !important;
+                }
+                .announcement-bar-top .container-fluid,
+                .announcement-bar-bottom .container-fluid {
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+                .announcement-bar-top .row,
+                .announcement-bar-bottom .row {
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                .announcement-bar-top .col-12,
+                .announcement-bar-bottom .col-12 {
+                    padding: 3px 6px !important;
+                    margin: 0 !important;
                 }
                 .announcement-bar-text,
                 .announcement-bar-text marquee,
                 .announcement-bar-text span {
                     font-size: 11px !important;
-                    line-height: 1 !important;
+                    line-height: 1.1 !important;
                     padding: 0 !important;
                     margin: 0 !important;
                     display: block !important;
+                    height: auto !important;
                 }
                 .project-card .project-image-area img,
                 .project-card img {
