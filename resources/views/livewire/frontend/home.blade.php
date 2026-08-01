@@ -26,26 +26,44 @@
             }
 
             @media (max-width: 576px) {
-                .announcement-bar-text {
-                    font-size: 13px !important;
-                    line-height: 1.3 !important;
+                .announcement-bar-top {
+                    margin-top: 62px !important;
+                    min-height: 32px !important;
                 }
+                .announcement-bar-bottom {
+                    min-height: 32px !important;
+                }
+                .announcement-bar-text {
+                    font-size: 12px !important;
+                    line-height: 1.25 !important;
+                }
+                .announcement-bar-text marquee,
+                .announcement-bar-text span {
+                    font-size: 12px !important;
+                    line-height: 1.25 !important;
+                }
+                .project-card .project-image-area img,
                 .project-card img {
-                    height: auto;
-                    max-height: 260px;
-                    object-fit: contain;
+                    height: auto !important;
+                    max-height: 260px !important;
+                    object-fit: contain !important;
                 }
                 .info-image-block img {
-                    width: 100%;
-                    height: auto;
-                    object-fit: contain;
+                    width: 100% !important;
+                    height: auto !important;
+                    object-fit: contain !important;
+                }
+                .apply-gif {
+                    max-height: 42px !important;
+                    width: auto !important;
+                    margin: 0 auto !important;
                 }
             }
         </style>
     @endpush
     {{-- Top Bar Section --}}
     @if ($top_bar_show && !empty($top_bar_text))
-        <section class=""
+        <section class="announcement-bar-top"
             style="margin-top: 89px; background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center;">
             <div class="container-fluid">
                 <div class="row justify-content-center">
@@ -88,7 +106,7 @@
     </section>
     {{-- Bottom Bar Section --}}
     @if ($bottom_bar_show && !empty($bottom_bar_text))
-        <section class=""
+        <section class="announcement-bar-bottom"
             style="background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center; margin-top: 0px; margin-bottom: 0px;">
             <div class="container-fluid">
                 <div class="row justify-content-center">

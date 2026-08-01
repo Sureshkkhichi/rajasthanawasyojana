@@ -109,21 +109,27 @@
         @media(max-width:576px) {
             .custom-header {
                 height: auto;
-                padding: 8px 0;
+                padding: 6px 0;
             }
 
             .header-logo img {
-                height: 42px;
+                height: 38px;
+            }
+
+            .header-rera {
+                font-size: 10px !important;
+                padding: 2px 6px;
             }
 
             .header-contact {
                 flex-direction: column;
                 align-items: flex-end;
-                gap: 2px;
+                gap: 0px;
             }
 
             .header-contact a {
-                font-size: 15px;
+                font-size: 13.5px;
+                line-height: 1.25;
             }
         }
     </style>
