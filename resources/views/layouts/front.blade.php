@@ -24,105 +24,114 @@
     @livewireStyles
     @stack('styles')
     <style>
-        /* ─── DESKTOP HEADER (787px and above) ─── */
-        @media (min-width: 787px) {
-            .custom-header {
-                background: #fffdf6 !important;
-                box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
-                z-index: 9999;
-                height: auto;
-            }
+    /* ─── DESKTOP HEADER (787px and above) ─── */
 
-            .header-logo img {
-                height: 72px;
-                width: auto;
-            }
+    .custom-header {
+        background: #fffdf6 !important;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
+        z-index: 9999;
+        height: auto;
+    }
 
-            .header-rera {
-                padding: 4px 14px;
-                white-space: nowrap;
-                display: inline-block;
-                color: #4a2100;
-                font-weight: 700;
-                font-size: 13px;
-                line-height: 1;
-            }
+    .header-logo img {
+        height: 72px;
+        width: auto;
+    }
 
-            .header-contact {
-                display: flex;
-                justify-content: flex-end;
-                align-items: center;
-                gap: 50px;
-            }
+    .header-rera {
+        padding: 4px 14px;
+        white-space: nowrap;
+        display: inline-block;
+        color: #4a2100;
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 1;
+    }
 
-            .header-contact a {
-                color: #4a2100;
-                font-size: 46px;
-                font-weight: 700;
-                text-decoration: none;
-                transition: .3s;
-                line-height: 1;
-            }
+    .header-contact {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 50px;
+    }
 
-            .header-contact a:hover {
-                color: #d62939;
-            }
+    .header-contact a {
+        color: #4a2100;
+        font-size: calc(var(--vz-font-base) * 2) !important;
+        font-weight: 700;
+        text-decoration: none;
+        transition: .3s;
+        line-height: 1;
+    }
+
+    .header-contact a:hover {
+        color: #d62939;
+    }
+
+
+    /* ─── MOBILE HEADER (786px and below) ─── */
+    @media (max-width: 786px) {
+        .custom-header {
+            background: #fffdf6 !important;
+            background-color: #fffdf6 !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .12) !important;
+            z-index: 9999 !important;
+            height: auto !important;
+            padding: 6px 0 !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            opacity: 1 !important;
+            backdrop-filter: none !important;
         }
 
-        /* ─── MOBILE HEADER (786px and below) ─── */
-        @media (max-width: 786px) {
-            .custom-header {
-                background: #fffdf6 !important;
-                background-color: #fffdf6 !important;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, .12) !important;
-                z-index: 9999 !important;
-                height: auto !important;
-                padding: 6px 0 !important;
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                width: 100% !important;
-                opacity: 1 !important;
-                backdrop-filter: none !important;
-            }
-
-            .header-logo img {
-                height: 40px !important;
-                width: auto !important;
-            }
-
-            .header-rera {
-                font-size: 10px !important;
-                padding: 2px 5px !important;
-                white-space: nowrap !important;
-                display: inline-block !important;
-                color: #4a2100 !important;
-                font-weight: 700 !important;
-                line-height: 1 !important;
-            }
-
-            .header-contact {
-                display: flex !important;
-                flex-direction: row !important;
-                align-items: center !important;
-                justify-content: flex-end !important;
-                gap: 10px !important;
-                margin-top: 2px !important;
-            }
-
-            .header-contact a {
-                color: #4a2100 !important;
-                font-size: 15px !important;
-                font-weight: 800 !important;
-                line-height: 1.2 !important;
-                text-decoration: none !important;
-            }
+        .header-logo img {
+            height: 40px !important;
+            width: auto !important;
         }
 
-        .custom-header .container {
-            max-width: 1400px;
+        .header-rera {
+            font-size: 10px !important;
+            padding: 2px 5px !important;
+            white-space: nowrap !important;
+            display: inline-block !important;
+            color: #4a2100 !important;
+            font-weight: 700 !important;
+            line-height: 1 !important;
         }
+
+        /* Mobile: left col — logo + rera side by side */
+        .col-mobile-left {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 6px !important;
+        }
+
+        /* Mobile: right col — phone numbers stacked vertically */
+        .header-contact {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-end !important;
+            justify-content: center !important;
+            gap: 1px !important;
+            margin-top: 0 !important;
+        }
+
+        .header-contact a {
+            color: #4a2100 !important;
+            font-size: 14px !important;
+            font-weight: 800 !important;
+            line-height: 1.3 !important;
+            text-decoration: none !important;
+        }
+    }
+
+    .custom-header .container {
+        max-width: 1400px;
+    }
     </style>
 </head>
 
@@ -130,43 +139,59 @@
     <div class="layout-wrapper landing">
         <nav class="navbar navbar-expand-lg fixed-top custom-header">
             <div class="container">
-                <div class="row w-100 align-items-center">
-                    <div
-                        class="col-lg-8 col-12 d-flex flex-wrap align-items-center gap-2 order-1 justify-content-center justify-content-lg-start">
+
+                {{-- DESKTOP layout (hidden on mobile ≤786px) --}}
+                <div class="row w-100 align-items-center d-none d-lg-flex">
+                    <div class="col-lg-8 d-flex flex-wrap align-items-center gap-2">
                         <a href="{{ route('front') }}" class="header-logo">
-                            @php
-                                $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
-                            @endphp
+                            @php $siteLogo = \App\Models\FrontendSetting::getVal('site_logo'); @endphp
                             <img src="{{ $siteLogo ? asset($siteLogo) : asset('jda-logo.png') }}" class="img-fluid"
                                 alt="{{ config('constants.site_name') }}">
                         </a>
-                        @php
-                            $reraNumber = \App\Models\FrontendSetting::getVal('rera_number');
-                        @endphp
+                        @php $reraNumber = \App\Models\FrontendSetting::getVal('rera_number'); @endphp
                         @if(!empty($reraNumber))
                             <span class="header-rera">RERA No: {{ $reraNumber }}</span>
                         @endif
                     </div>
-                    {{-- Right Contact --}}
-                    <div class="col-lg-4 col-12 order-2 mt-0 mt-lg-0">
-                        <div class="header-contact justify-content-center justify-content-lg-end">
+                    <div class="col-lg-4">
+                        <div class="header-contact justify-content-lg-end">
                             @php
                                 $mobile1 = \App\Models\FrontendSetting::getVal('mobile_number_1', '9876543210');
                                 $mobile2 = \App\Models\FrontendSetting::getVal('mobile_number_2', '9876543210');
                             @endphp
                             @if(!empty($mobile1))
-                                <a href="tel:+91{{ $mobile1 }}">
-                                    {{ $mobile1 }}
-                                </a>
+                                <a href="tel:+91{{ $mobile1 }}">{{ $mobile1 }}</a>
                             @endif
                             @if(!empty($mobile2))
-                                <a href="tel:+91{{ $mobile2 }}">
-                                    {{ $mobile2 }}
-                                </a>
+                                <a href="tel:+91{{ $mobile2 }}">{{ $mobile2 }}</a>
                             @endif
                         </div>
                     </div>
                 </div>
+
+                {{-- MOBILE layout (hidden on desktop >786px) --}}
+                <div class="d-flex d-lg-none w-100 align-items-center justify-content-between">
+                    {{-- Left: Logo + RERA --}}
+                    <div class="col-mobile-left">
+                        <a href="{{ route('front') }}" class="header-logo">
+                            <img src="{{ $siteLogo ? asset($siteLogo) : asset('jda-logo.png') }}" class="img-fluid"
+                                alt="{{ config('constants.site_name') }}">
+                        </a>
+                        @if(!empty($reraNumber))
+                            <span class="header-rera">RERA No: {{ $reraNumber }}</span>
+                        @endif
+                    </div>
+                    {{-- Right: Phone Numbers stacked vertically --}}
+                    <div class="header-contact">
+                        @if(!empty($mobile1))
+                            <a href="tel:+91{{ $mobile1 }}">{{ $mobile1 }}</a>
+                        @endif
+                        @if(!empty($mobile2))
+                            <a href="tel:+91{{ $mobile2 }}">{{ $mobile2 }}</a>
+                        @endif
+                    </div>
+                </div>
+
             </div>
         </nav>
         <div class="vertical-overlay" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent.show"></div>
@@ -176,73 +201,73 @@
     </div>
 
     @php
-        $floatPhone = \App\Models\FrontendSetting::getVal('mobile_number_1', '9587044244');
-        $cleanPhone = preg_replace('/[^0-9]/', '', $floatPhone);
+    $floatPhone = \App\Models\FrontendSetting::getVal('mobile_number_1', '9587044244');
+    $cleanPhone = preg_replace('/[^0-9]/', '', $floatPhone);
     @endphp
     @if(!empty($cleanPhone))
-        <div class="floating-contact-buttons">
-            <a href="https://wa.me/91{{ $cleanPhone }}?text=Hello" target="_blank" class="floating-btn btn-whatsapp"
-                title="Chat on WhatsApp" aria-label="WhatsApp">
-                <i class="ri-whatsapp-fill"></i>
-            </a>
-            <a href="tel:+91{{ $cleanPhone }}" class="floating-btn btn-phone" title="Call Us" aria-label="Call">
-                <i class="ri-phone-fill"></i>
-            </a>
-        </div>
+    <div class="floating-contact-buttons">
+        <a href="https://wa.me/91{{ $cleanPhone }}?text=Hello" target="_blank" class="floating-btn btn-whatsapp"
+            title="Chat on WhatsApp" aria-label="WhatsApp">
+            <i class="ri-whatsapp-fill"></i>
+        </a>
+        <a href="tel:+91{{ $cleanPhone }}" class="floating-btn btn-phone" title="Call Us" aria-label="Call">
+            <i class="ri-phone-fill"></i>
+        </a>
+    </div>
     @endif
 
     <style>
+    .floating-contact-buttons {
+        position: fixed;
+        bottom: 80px;
+        right: 25px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .floating-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff !important;
+        font-size: 26px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-decoration: none !important;
+    }
+
+    .floating-btn:hover {
+        transform: scale(1.12);
+        color: #fff !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn-whatsapp {
+        background-color: #25D366;
+    }
+
+    .btn-phone {
+        background-color: #0d6efd;
+    }
+
+    @media (max-width: 576px) {
         .floating-contact-buttons {
-            position: fixed;
-            bottom: 80px;
-            right: 25px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            bottom: 75px;
+            right: 15px;
+            gap: 10px;
         }
 
         .floating-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff !important;
-            font-size: 26px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-decoration: none !important;
+            width: 44px;
+            height: 44px;
+            font-size: 22px;
         }
-
-        .floating-btn:hover {
-            transform: scale(1.12);
-            color: #fff !important;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-        }
-
-        .btn-whatsapp {
-            background-color: #25D366;
-        }
-
-        .btn-phone {
-            background-color: #0d6efd;
-        }
-
-        @media (max-width: 576px) {
-            .floating-contact-buttons {
-                bottom: 75px;
-                right: 15px;
-                gap: 10px;
-            }
-
-            .floating-btn {
-                width: 44px;
-                height: 44px;
-                font-size: 22px;
-            }
-        }
+    }
     </style>
     <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
@@ -260,21 +285,21 @@
     @stack('scripts')
     @livewireScripts
     <script>
-        function formatPanInput(el) {
-            let val = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-            let formatted = '';
-            for (let i = 0; i < val.length && i < 10; i++) {
-                let char = val[i];
-                if (i < 5) {
-                    if (/[A-Z]/.test(char)) formatted += char;
-                } else if (i < 9) {
-                    if (/[0-9]/.test(char)) formatted += char;
-                } else {
-                    if (/[A-Z]/.test(char)) formatted += char;
-                }
+    function formatPanInput(el) {
+        let val = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        let formatted = '';
+        for (let i = 0; i < val.length && i < 10; i++) {
+            let char = val[i];
+            if (i < 5) {
+                if (/[A-Z]/.test(char)) formatted += char;
+            } else if (i < 9) {
+                if (/[0-9]/.test(char)) formatted += char;
+            } else {
+                if (/[A-Z]/.test(char)) formatted += char;
             }
-            el.value = formatted;
         }
+        el.value = formatted;
+    }
     </script>
 </body>
 
