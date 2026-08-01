@@ -24,116 +24,104 @@
     @livewireStyles
     @stack('styles')
     <style>
-        .custom-header {
-            background: #fffdf6 !important;
-            background-color: #fffdf6 !important;
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
-            z-index: 999;
-            height: auto;
-        }
-
-        .custom-header .container {
-            max-width: 1400px;
-        }
-
-        .header-logo img {
-            height: 72px;
-            width: auto;
-        }
-
-        .digital-logo {
-            height: 58px;
-            width: auto;
-        }
-
-        .header-rera {
-            padding: 4px 14px;
-            white-space: nowrap;
-            display: inline-block;
-            color: #4a2100;
-            font-weight: 700;
-            text-decoration: none;
-            transition: .3s;
-            line-height: 1;
-        }
-
-        .header-contact {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 50px;
-        }
-
-        .header-contact a {
-            color: #4a2100;
-            font-size: 46px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: .3s;
-            line-height: 1;
-        }
-
-        .header-contact a:hover {
-            color: #d62939;
-        }
-
-        @media(max-width:991px) {
+        /* ─── DESKTOP HEADER (787px and above) ─── */
+        @media (min-width: 787px) {
             .custom-header {
-                height: 88px;
+                background: #fffdf6 !important;
+                box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
+                z-index: 9999;
+                height: auto;
             }
 
             .header-logo img {
-                height: 54px;
-            }
-
-            .header-contact {
-                gap: 15px;
-                justify-content: flex-end;
-            }
-
-            .header-contact a {
-                font-size: 18px;
+                height: 72px;
+                width: auto;
             }
 
             .header-rera {
-                font-size: 16px;
-                margin-left: 10px;
-                padding: 2px 8px;
+                padding: 4px 14px;
+                white-space: nowrap;
+                display: inline-block;
+                color: #4a2100;
+                font-weight: 700;
+                font-size: 13px;
+                line-height: 1;
+            }
+
+            .header-contact {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 50px;
+            }
+
+            .header-contact a {
+                color: #4a2100;
+                font-size: 46px;
+                font-weight: 700;
+                text-decoration: none;
+                transition: .3s;
+                line-height: 1;
+            }
+
+            .header-contact a:hover {
+                color: #d62939;
             }
         }
 
-        @media(max-width:576px) {
+        /* ─── MOBILE HEADER (786px and below) ─── */
+        @media (max-width: 786px) {
             .custom-header {
+                background: #fffdf6 !important;
+                background-color: #fffdf6 !important;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, .12) !important;
+                z-index: 9999 !important;
                 height: auto !important;
                 padding: 6px 0 !important;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                opacity: 1 !important;
+                backdrop-filter: none !important;
             }
 
             .header-logo img {
                 height: 40px !important;
+                width: auto !important;
             }
 
             .header-rera {
-                font-size: 11px !important;
-                padding: 2px 6px !important;
+                font-size: 10px !important;
+                padding: 2px 5px !important;
+                white-space: nowrap !important;
+                display: inline-block !important;
+                color: #4a2100 !important;
+                font-weight: 700 !important;
+                line-height: 1 !important;
             }
 
             .header-contact {
+                display: flex !important;
                 flex-direction: row !important;
                 align-items: center !important;
                 justify-content: flex-end !important;
-                gap: 12px !important;
-                margin-top: 4px !important;
+                gap: 10px !important;
+                margin-top: 2px !important;
             }
 
             .header-contact a {
-                font-size: 16px !important;
+                color: #4a2100 !important;
+                font-size: 15px !important;
                 font-weight: 800 !important;
                 line-height: 1.2 !important;
+                text-decoration: none !important;
             }
+        }
+
+        .custom-header .container {
+            max-width: 1400px;
         }
     </style>
 </head>
@@ -193,7 +181,8 @@
     @endphp
     @if(!empty($cleanPhone))
         <div class="floating-contact-buttons">
-            <a href="https://wa.me/91{{ $cleanPhone }}?text=Hello" target="_blank" class="floating-btn btn-whatsapp" title="Chat on WhatsApp" aria-label="WhatsApp">
+            <a href="https://wa.me/91{{ $cleanPhone }}?text=Hello" target="_blank" class="floating-btn btn-whatsapp"
+                title="Chat on WhatsApp" aria-label="WhatsApp">
                 <i class="ri-whatsapp-fill"></i>
             </a>
             <a href="tel:+91{{ $cleanPhone }}" class="floating-btn btn-phone" title="Call Us" aria-label="Call">

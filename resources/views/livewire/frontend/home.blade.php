@@ -25,13 +25,13 @@
                 height: 255px;
             }
 
-            @media (max-width: 576px) {
+            @media (max-width: 786px) {
                 .announcement-bar-top {
-                    margin-top: 62px !important;
-                    min-height: 32px !important;
+                    margin-top: 58px !important;
+                    min-height: 30px !important;
                 }
                 .announcement-bar-bottom {
-                    min-height: 32px !important;
+                    min-height: 30px !important;
                 }
                 .announcement-bar-text {
                     font-size: 12px !important;
