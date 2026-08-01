@@ -30,8 +30,25 @@ class DealDocumentController extends Controller
 
         $allotted_date = $deal->allotted_at ? \Carbon\Carbon::parse($deal->allotted_at)->format('d/m/Y') : ($deal->booking_date ? \Carbon\Carbon::parse($deal->booking_date)->format('d/m/Y') : date('d/m/Y'));
         $form_no = 'AR/REG/' . ($deal->created_at?->format('Y') ?: date('Y')) . '/' . sprintf('%06d', $deal->id);
-        $block_tower = $inventory->block ?: ($inventory->tower ?: 'B');
-        $floor_str = $inventory->floor ? $inventory->floor . ($inventory->floor == 1 ? 'st' : ($inventory->floor == 2 ? 'nd' : ($inventory->floor == 3 ? 'rd' : 'th'))) . ' FLOOR' : '-';
+        $block_tower = $inventory->block ?: ($inventory->tower ?: '-');
+        
+        $rawFloor = trim($inventory->floor ?? '');
+        if ($rawFloor === '') {
+            $floor_str = '-';
+        } elseif (preg_match('/floor/i', $rawFloor)) {
+            $floor_str = $rawFloor;
+        } elseif (is_numeric($rawFloor)) {
+            $n = (int) $rawFloor;
+            $suffix = match ($n) {
+                1 => 'st',
+                2 => 'nd',
+                3 => 'rd',
+                default => 'th',
+            };
+            $floor_str = "{$n}{$suffix} Floor";
+        } else {
+            $floor_str = $rawFloor;
+        }
         $unit_no = $inventory->flat_no ?: $inventory->plot_no;
         $unit_type = $inventory->unit_type_label ?: ($deal->project?->inventory_type === 'flat' ? 'EWS (LIG)' : 'Residential Plot');
         $carpet_area = number_format($inventory->area_sbup ?: $inventory->area_sq_yards, 2) . ' वर्गफूट (लगभग)';
