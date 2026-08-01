@@ -26,6 +26,12 @@
     <style>
     /* ─── DESKTOP HEADER (787px and above) ─── */
 
+    /* Desktop: announcement bars normal height */
+    .announcement-bar-top,
+    .announcement-bar-bottom {
+        min-height: 40px;
+    }
+
     .custom-header {
         background: #fffdf6 !important;
         box-shadow: 0 2px 15px rgba(0, 0, 0, .08);

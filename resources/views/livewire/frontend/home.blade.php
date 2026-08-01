@@ -28,19 +28,31 @@
             @media (max-width: 786px) {
                 .announcement-bar-top {
                     margin-top: 58px !important;
-                    min-height: 30px !important;
+                    min-height: unset !important;
+                    height: auto !important;
+                    padding: 5px 8px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    overflow: hidden !important;
                 }
                 .announcement-bar-bottom {
-                    min-height: 30px !important;
+                    min-height: unset !important;
+                    height: auto !important;
+                    padding: 5px 8px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    overflow: hidden !important;
                 }
                 .announcement-bar-text {
                     font-size: 12px !important;
-                    line-height: 1.25 !important;
+                    line-height: 1.3 !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
                 }
                 .announcement-bar-text marquee,
                 .announcement-bar-text span {
                     font-size: 12px !important;
-                    line-height: 1.25 !important;
+                    line-height: 1.3 !important;
                 }
                 .project-card .project-image-area img,
                 .project-card img {
@@ -64,7 +76,7 @@
     {{-- Top Bar Section --}}
     @if ($top_bar_show && !empty($top_bar_text))
         <section class="announcement-bar-top"
-            style="margin-top: 89px; background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center;">
+            style="margin-top: 89px; background: #ff0000; color: #ffffff; display: flex; align-items: center;">
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-12 text-center fs-15 announcement-bar-text">
@@ -107,7 +119,7 @@
     {{-- Bottom Bar Section --}}
     @if ($bottom_bar_show && !empty($bottom_bar_text))
         <section class="announcement-bar-bottom"
-            style="background: #ff0000; color: #ffffff; min-height: 40px; display: flex; align-items: center; margin-top: 0px; margin-bottom: 0px;">
+            style="background: #ff0000; color: #ffffff; display: flex; align-items: center; margin-top: 0px; margin-bottom: 0px;">
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-12 text-center fs-15 announcement-bar-text">
