@@ -274,18 +274,27 @@
                             <tr>
                                 <th>ब्लॉक संख्या / भूखण्ड संख्या / फ्लैट संख्या</th>
                                 <th>क्षेत्रफल (वर्ग फीट में)</th>
-                                <th>कुल मूल्य (₹)</th>
-                                <th>बुकिंग राशि जमा (₹)</th>
-                                <th>बकाया राशि (₹)</th>
+                                <th>बकाया राशि (प्रतिशत में)</th>
+                                <th>राशि जमा कराने की अंतिम तिथि</th>
+                                <th>राशि (₹)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><strong>{{ $inventory->plot_no ?: $inventory->flat_no }}</strong></td>
-                                <td><strong>{{ number_format($inventory->area_sq_yards ?: $inventory->area_sbup, 2) }}</strong></td>
-                                <td>₹ {{ number_format($totalAmount, 2) }}</td>
-                                <td>₹ {{ number_format($bookingAmount, 2) }}</td>
-                                <td style="color: #c0392b; font-weight: bold;">₹ {{ number_format($balanceDue, 2) }}</td>
+                                <td rowspan="2" style="vertical-align: middle;">
+                                    <strong>{{ ($inventory->block ? $inventory->block . '-' : '') . ($inventory->flat_no ?: $inventory->plot_no) }}</strong>
+                                </td>
+                                <td rowspan="2" style="vertical-align: middle;">
+                                    <strong>{{ number_format($inventory->area_sq_yards ?: $inventory->area_sbup, 2) }}</strong>
+                                </td>
+                                <td>1 Installment 10%</td>
+                                <td>{{ $inst1DueDate }}</td>
+                                <td>{{ number_format($inst1Amount, 0, '.', '') }}</td>
+                            </tr>
+                            <tr>
+                                <td>2 Installment 90%</td>
+                                <td>{{ $inst2DueDate }}</td>
+                                <td>{{ number_format($inst2Amount, 0, '.', '') }}</td>
                             </tr>
                         </tbody>
                     </table>

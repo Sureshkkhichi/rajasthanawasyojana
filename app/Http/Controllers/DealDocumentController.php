@@ -139,17 +139,23 @@ class DealDocumentController extends Controller
             '{CONTACT_PHONE}' => $project_contact_phone,
         ];
 
-        $bookingAmount = (float) FrontendSetting::getVal('booking_amount', 21100.00);
-        $totalAmount = $deal->total_amount ?: ($inventory->price ?: 0.00);
-        $balanceDue = max(0.00, $totalAmount - $bookingAmount);
+        $allotDate = $deal->allotted_at ? \Carbon\Carbon::parse($deal->allotted_at) : ($deal->booking_date ? \Carbon\Carbon::parse($deal->booking_date) : ($deal->created_at ?: now()));
+        $inst1DueDate = $allotDate->copy()->addDays(7)->format('d,M,Y');
+        $inst2DueDate = $allotDate->copy()->addDays(7)->addMonth()->format('d,M,Y');
+
+        $totalAmount = (float) ($deal->total_amount ?: ($inventory->price ?: 0.00));
+        $inst1Amount = (float) round($totalAmount * 0.10);
+        $inst2Amount = (float) ($totalAmount - $inst1Amount);
 
         return view('emails.demand-pdf', [
             'project' => $deal->project,
             'deal' => $deal,
             'inventory' => $inventory,
-            'bookingAmount' => $bookingAmount,
             'totalAmount' => $totalAmount,
-            'balanceDue' => $balanceDue,
+            'inst1DueDate' => $inst1DueDate,
+            'inst2DueDate' => $inst2DueDate,
+            'inst1Amount' => $inst1Amount,
+            'inst2Amount' => $inst2Amount,
             'project_contact_phone' => $project_contact_phone,
             'demand_subtitle' => strtr($demand_subtitle, $replacements),
             'demand_subject' => strtr($demand_subject, $replacements),
