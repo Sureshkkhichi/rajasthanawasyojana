@@ -21,7 +21,8 @@
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             font-family: 'Hind', Arial, sans-serif;
@@ -236,8 +237,11 @@
                     <!-- Salutation Block -->
                     <div class="salutation-block">
                         <div><strong>प्रति,</strong></div>
-                        <div style="font-size: 14.5px;"><strong>श्री / श्रीमती {{ strtoupper($deal->first_name . ' ' . $deal->last_name) }}</strong></div>
-                        <div><strong>पता :</strong> {{ $deal->address ?: '-' }}, {{ $deal->city ?: 'जयपुर' }}, {{ $deal->state?->name ?: 'राजस्थान' }} - {{ $deal->pincode ?: '302021' }}</div>
+                        <div style="font-size: 14.5px;"><strong>श्री / श्रीमती
+                                {{ strtoupper($deal->first_name . ' ' . $deal->last_name) }}</strong></div>
+                        <div><strong>पता :</strong> {{ $deal->address ?: '-' }}, {{ $deal->city ?: 'जयपुर' }},
+                            {{ $deal->state?->name ?: 'राजस्थान' }} - {{ $deal->pincode ?: '302021' }}
+                        </div>
                         <div><strong>मोबाईल :</strong> {{ $deal->phone }}</div>
                     </div>
 
@@ -260,7 +264,8 @@
                             </tr>
                             <tr>
                                 <td class="label-col">आवेदक का नाम</td>
-                                <td class="value-col">श्री {{ strtoupper($deal->first_name . ' ' . $deal->last_name) }}</td>
+                                <td class="value-col">श्री {{ strtoupper($deal->first_name . ' ' . $deal->last_name) }}
+                                </td>
                             </tr>
                             <tr>
                                 <td class="label-col">परियोजना का नाम</td>
@@ -304,11 +309,15 @@
                     <!-- Sign-off Block -->
                     <table class="footer-sign-table">
                         <tr>
-                            <td width="60%"></td>
-                            <td width="40%" align="center" style="font-size: 13.5px; color: #2c1a0e; vertical-align: top;">
+                            <td width="60%" style="vertical-align: top;">
+                                @if(file_exists(public_path('rera.png')))
+                                    <img src="{{ asset('rera.png') }}" style="max-height: 85px; width: auto; display: block;" alt="RERA">
+                                @endif
+                            </td>
+                            <td width="40%" align="center"
+                                style="font-size: 13.5px; color: #2c1a0e; vertical-align: top;">
                                 <strong>भवदीय,</strong>
-                                <div style="height: 40px;"></div>
-                                <strong>( अधिकृत हस्ताक्षर )</strong><br>
+                                <div style="height: 50px;"></div>
                                 <strong>{{ strtoupper($project->name) }}</strong>
                             </td>
                         </tr>
@@ -317,8 +326,11 @@
 
                 <!-- Bottom Registered Office Box -->
                 <div class="footer-address-box">
-                    <div><strong>पंजीकृत कार्यालय :</strong> {{ $project->address ?: '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)' }}</div>
-                    <div><strong>मोबाईल :</strong> {{ $project_contact_phone }} &nbsp;|&nbsp; <strong>ईमेल :</strong> info@rajasthanawas.in &nbsp;|&nbsp; <strong>वेबसाइट :</strong> www.rajasthanawas.in</div>
+                    <div><strong>पंजीकृत कार्यालय :</strong>
+                        {{ $project->address ?: '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)' }}
+                    </div>
+                    <div><strong>मोबाईल :</strong> {{ $project_contact_phone }} &nbsp;|&nbsp; <strong>ईमेल :</strong>
+                        info@rajasthanawas.in &nbsp;|&nbsp; <strong>वेबसाइट :</strong> www.rajasthanawas.in</div>
                 </div>
             </div>
         </div>
