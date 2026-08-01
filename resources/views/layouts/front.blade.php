@@ -41,6 +41,25 @@
             max-width: 1400px;
         }
 
+        /* Desktop Styles */
+        @media (min-width: 992px) {
+            .header-logo img {
+                height: 72px;
+                width: auto;
+            }
+            .header-contact {
+                gap: 50px;
+            }
+            .header-contact a {
+                font-size: 46px;
+                font-weight: 700;
+            }
+            .header-rera {
+                font-size: 13px !important;
+                padding: 4px 12px;
+            }
+        }
+
         .header-logo img {
             height: 52px;
             width: auto;

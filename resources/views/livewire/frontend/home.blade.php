@@ -61,10 +61,16 @@
 
             .project-card .project-image-area img {
                 width: 100%;
-                height: auto;
-                max-height: 260px;
-                object-fit: contain;
+                height: 255px;
+                object-fit: cover;
                 display: block;
+            }
+            @media (max-width: 576px) {
+                .project-card .project-image-area img {
+                    height: auto;
+                    max-height: 260px;
+                    object-fit: contain;
+                }
             }
         </style>
     @endpush
