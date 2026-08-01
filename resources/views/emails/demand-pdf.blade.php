@@ -329,8 +329,7 @@
                             </td>
                             <td width="40%" align="center" style="font-size: 13.5px; color: #2c1a0e; vertical-align: top;">
                                 <strong>भवदीय,</strong>
-                                <div style="height: 40px;"></div>
-                                <strong>( अधिकृत हस्ताक्षर )</strong><br>
+                                <div style="height: 50px;"></div>
                                 <strong>{{ strtoupper($project->name) }}</strong>
                             </td>
                         </tr>
