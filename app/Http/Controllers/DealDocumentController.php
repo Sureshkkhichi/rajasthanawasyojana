@@ -245,13 +245,20 @@ class DealDocumentController extends Controller
 
         $transactionId = $lead?->transaction_id ?: ('JDAAPP' . (substr($numericId, 0, 9) ?: '705410470'));
 
+        $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
+        $companyName = 'Rajasthan Awas Yojana';
+        $companyCity = 'Jaipur';
+        $customerProject = $deal->project?->name ?: 'Rajasthan Awas Yojana';
+        $customerCity = $deal->city ?: 'जयपुर';
+        $waiverCode = $deal->waiver_code ?: '-';
+
         $unitType = 'Flat';
         if ($deal->allottedInventory && $deal->allottedInventory->inventory_type === 'plot') {
             $unitType = 'Plot';
         }
-        $descriptionText = "{$unitType}: {$deal->flat_size} Waver code->{$deal->waiver_code}";
+        $descriptionText = "{$unitType}: {$deal->flat_size} Waver code->{$waiverCode}";
 
-        $bookingAmount = $deal->booking_amount ?: 21100;
+        $bookingAmount = (float) ($deal->booking_amount ?: 21100.00);
         $amountInWords = numberToWords($bookingAmount);
 
         $data = [
@@ -262,6 +269,14 @@ class DealDocumentController extends Controller
             'amount_in_words' => $amountInWords,
             'transaction_id' => $transactionId,
             'print_id' => $shortId ?: '2128',
+            'project_contact_phone' => $project_contact_phone,
+            'company_name' => $companyName,
+            'company_city' => $companyCity,
+            'customer_project' => $customerProject,
+            'customer_city' => $customerCity,
+            'waiver_code' => $waiverCode,
+            'amount_paid' => $bookingAmount,
+            'unit_type' => $unitType,
         ];
 
         if (request()->has('download')) {
