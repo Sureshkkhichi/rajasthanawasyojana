@@ -60,16 +60,14 @@ class DealDocumentController extends Controller
             FrontendSetting::setVal("project_{$pid}_allotment_subject", 'आवंटन पत्र');
         }
         $allotment_body = FrontendSetting::getVal("project_{$pid}_allotment_body", "हमें यह सूचित करते हुए हर्ष हो रहा है कि मुख्यमंत्री जन आवास योजना के अंतर्गत हमारी आवासीय परियोजना \"{PROJECT_NAME}\" (टावर – {BLOCK_TOWER}) में आपको निम्न विवरणानुसार आवासीय इकाई ({UNIT_TYPE}) का आवंटन किया गया है।");
-        if (str_contains($allotment_body, 'उद्घोषित') || str_contains($allotment_body, 'प्रस्तावित')) {
-            $allotment_body = "हमें यह सूचित करते हुए हर्ष हो रहा है कि मुख्यमंत्री जन आवास योजना के अंतर्गत हमारी आवासीय परियोजना \"{PROJECT_NAME}\" (टावर – {BLOCK_TOWER}) में आपको निम्न विवरणानुसार आवासीय इकाई ({UNIT_TYPE}) का आवंटन किया गया है।";
-            FrontendSetting::setVal("project_{$pid}_allotment_body", $allotment_body);
-        }
-
-        $allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा भुगतान सारणी के अनुसार आगामी किस्त जमा करें ।");
+        $allotment_table_title = FrontendSetting::getVal("project_{$pid}_allotment_table_title", 'आवंटन विवरण');
+        $allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा आगामी किस्त जमा करें ।");
         if (str_contains($allotment_footer_note, 'पट्टा एवं रजिस्ट्री')) {
-            $allotment_footer_note = "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा भुगतान सारणी के अनुसार आगामी किस्त जमा करें ।";
+            $allotment_footer_note = "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा आगामी किस्त जमा करें ।";
             FrontendSetting::setVal("project_{$pid}_allotment_footer_note", $allotment_footer_note);
         }
+        $allotment_sign_off = FrontendSetting::getVal("project_{$pid}_allotment_sign_off", 'भवदीय,');
+        $allotment_registered_office = FrontendSetting::getVal("project_{$pid}_allotment_registered_office", '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)');
 
         $replacements = [
             '{PROJECT_NAME}' => $projectName,
@@ -102,7 +100,10 @@ class DealDocumentController extends Controller
             'allotment_subtitle' => strtr($allotment_subtitle, $replacements),
             'allotment_subject' => strtr($allotment_subject, $replacements),
             'allotment_body' => strtr($allotment_body, $replacements),
+            'allotment_table_title' => strtr($allotment_table_title, $replacements),
             'allotment_footer_note' => strtr($allotment_footer_note, $replacements),
+            'allotment_sign_off' => strtr($allotment_sign_off, $replacements),
+            'allotment_registered_office' => strtr($allotment_registered_office, $replacements),
         ]);
     }
 
@@ -125,12 +126,22 @@ class DealDocumentController extends Controller
 
         $demand_subtitle = FrontendSetting::getVal("project_{$pid}_demand_subtitle", 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित');
         $demand_subject = FrontendSetting::getVal("project_{$pid}_demand_subject", 'विषय: भूखण्ड संख्या {UNIT_NO} की बकाया राशि जमा कराने बाबत।');
+        $demand_salutation = FrontendSetting::getVal("project_{$pid}_demand_salutation", 'महोदय / महोदया,');
         $demand_body = FrontendSetting::getVal("project_{$pid}_demand_body", "{$projectName} में आवेदन पत्र संख्या {FORM_NO} के द्वारा आपने भूखण्ड आवंटन किये जाने हेतु बुकिंग कराई थी, आपको आवंटित भूखण्ड एवं उसके विक्रय प्रतिफल के पेटे जमा कराई जाने वाली राशि का विवरण निम्न प्रकार है:-");
+        $demand_inst1_label = FrontendSetting::getVal("project_{$pid}_demand_inst1_label", '1 Installment 10%');
+        $demand_inst2_label = FrontendSetting::getVal("project_{$pid}_demand_inst2_label", '2 Installment 90%');
         $demand_footer_para = FrontendSetting::getVal("project_{$pid}_demand_footer_para", "अतः आपसे अनुरोध है कि इस मांग पत्र के जारी होने की दिनांक से उक्तानुसार राशि जमा करावे अथवा लोन के लिए बैंक एवं फर्म द्वारा मांगे गए दस्तावेज, {PROJECT_ADDRESS} स्थित कार्यालय में स्वयं उपस्थित होकर जमा करावे। यदि किसी भी कारण से आप द्वारा उक्त राशि निर्धारित समयावधि में जमा नहीं कराई गयी तो बकाया राशि पर 18 प्रतिशत वार्षिक ब्याज की दर से ब्याज जमा कराना होगा。\n\nराशि के चेक / आरटीजीएस / एनईएफटी / आईएमपीएस / ऑनलाइन {PROJECT_NAME} के नाम से देय होंगे, बैंक का विवरण निम्न प्रकार है:-");
         if (str_contains($demand_footer_para, '18 प्रतिशत') && !str_contains($demand_footer_para, 'बैंक का विवरण')) {
             $demand_footer_para = "अतः आपसे अनुरोध है कि इस मांग पत्र के जारी होने की दिनांक से उक्तानुसार राशि जमा करावे अथवा लोन के लिए बैंक एवं फर्म द्वारा मांगे गए दस्तावेज, {PROJECT_ADDRESS} स्थित कार्यालय में स्वयं उपस्थित होकर जमा करावे। यदि किसी भी कारण से आप द्वारा उक्त राशि निर्धारित समयावधि में जमा नहीं कराई गयी तो बकाया राशि पर 18 प्रतिशत वार्षिक ब्याज की दर से ब्याज जमा कराना होगा。\n\nराशि के चेक / आरटीजीएस / एनईएफटी / आईएमपीएस / ऑनलाइन {PROJECT_NAME} के नाम से देय होंगे, बैंक का विवरण निम्न प्रकार है:-";
             FrontendSetting::setVal("project_{$pid}_demand_footer_para", $demand_footer_para);
         }
+        $demand_bank_account_holder = FrontendSetting::getVal("project_{$pid}_demand_bank_account_holder", 'ACL INFRATECH PRIVATE LIMITED LOVE HOME JOYPUR COLLECTION AC');
+        $demand_bank_name = FrontendSetting::getVal("project_{$pid}_demand_bank_name", 'STATE BANK OF INDIA');
+        $demand_bank_account_no = FrontendSetting::getVal("project_{$pid}_demand_bank_account_no", '43565607058');
+        $demand_bank_ifsc = FrontendSetting::getVal("project_{$pid}_demand_bank_ifsc", 'SBIN0004080');
+        $demand_bank_address = FrontendSetting::getVal("project_{$pid}_demand_bank_address", 'SME Branch Church Road, Jaipur');
+        $demand_sign_off = FrontendSetting::getVal("project_{$pid}_demand_sign_off", 'भवदीय,');
+        $demand_registered_office = FrontendSetting::getVal("project_{$pid}_demand_registered_office", '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)');
         $demand_footer_note = FrontendSetting::getVal("project_{$pid}_demand_footer_note", 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।');
 
         $replacements = [
@@ -163,8 +174,18 @@ class DealDocumentController extends Controller
             'project_contact_phone' => $project_contact_phone,
             'demand_subtitle' => strtr($demand_subtitle, $replacements),
             'demand_subject' => strtr($demand_subject, $replacements),
+            'demand_salutation' => strtr($demand_salutation, $replacements),
             'demand_body' => strtr($demand_body, $replacements),
+            'demand_inst1_label' => strtr($demand_inst1_label, $replacements),
+            'demand_inst2_label' => strtr($demand_inst2_label, $replacements),
             'demand_footer_para' => strtr($demand_footer_para, $replacements),
+            'demand_bank_account_holder' => strtr($demand_bank_account_holder, $replacements),
+            'demand_bank_name' => strtr($demand_bank_name, $replacements),
+            'demand_bank_account_no' => strtr($demand_bank_account_no, $replacements),
+            'demand_bank_ifsc' => strtr($demand_bank_ifsc, $replacements),
+            'demand_bank_address' => strtr($demand_bank_address, $replacements),
+            'demand_sign_off' => strtr($demand_sign_off, $replacements),
+            'demand_registered_office' => strtr($demand_registered_office, $replacements),
             'demand_footer_note' => strtr($demand_footer_note, $replacements),
         ]);
     }

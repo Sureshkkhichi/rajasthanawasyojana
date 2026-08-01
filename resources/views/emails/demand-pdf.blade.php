@@ -260,7 +260,7 @@
                     </div>
 
                     <div class="salutation-block" style="margin-bottom: 6px;">
-                        <strong>महोदय / महोदया,</strong>
+                        <strong>{{ $demand_salutation ?? 'महोदय / महोदया,' }}</strong>
                     </div>
 
                     <!-- Body Paragraph -->
@@ -287,12 +287,12 @@
                                 <td rowspan="2" style="vertical-align: middle;">
                                     <strong>{{ number_format($inventory->area_sq_yards ?: $inventory->area_sbup, 2) }}</strong>
                                 </td>
-                                <td>1 Installment 10%</td>
+                                <td>{{ $demand_inst1_label ?? '1 Installment 10%' }}</td>
                                 <td>{{ $inst1DueDate }}</td>
                                 <td>{{ number_format($inst1Amount, 0, '.', '') }}</td>
                             </tr>
                             <tr>
-                                <td>2 Installment 90%</td>
+                                <td>{{ $demand_inst2_label ?? '2 Installment 90%' }}</td>
                                 <td>{{ $inst2DueDate }}</td>
                                 <td>{{ number_format($inst2Amount, 0, '.', '') }}</td>
                             </tr>
@@ -306,9 +306,9 @@
 
                     <!-- Bank Details Box -->
                     <div style="margin-top: 4px; margin-bottom: 12px; padding: 8px 12px; background-color: #fdfaf5; border: 1px solid #7c4c2d; border-radius: 4px; font-size: 12.5px; line-height: 1.55; color: #2c1a0e;">
-                        <div><strong>Account Holder Name:</strong> ACL INFRATECH PRIVATE LIMITED LOVE HOME JOYPUR COLLECTION AC</div>
-                        <div><strong>Bank Name:</strong> STATE BANK OF INDIA &nbsp;|&nbsp; <strong>Account Number:</strong> 43565607058</div>
-                        <div><strong>IFSC Code:</strong> SBIN0004080 &nbsp;|&nbsp; <strong>Bank Address:</strong> SME Branch Church Road, Jaipur</div>
+                        <div><strong>Account Holder Name:</strong> {{ $demand_bank_account_holder ?? 'ACL INFRATECH PRIVATE LIMITED LOVE HOME JOYPUR COLLECTION AC' }}</div>
+                        <div><strong>Bank Name:</strong> {{ $demand_bank_name ?? 'STATE BANK OF INDIA' }} &nbsp;|&nbsp; <strong>Account Number:</strong> {{ $demand_bank_account_no ?? '43565607058' }}</div>
+                        <div><strong>IFSC Code:</strong> {{ $demand_bank_ifsc ?? 'SBIN0004080' }} &nbsp;|&nbsp; <strong>Bank Address:</strong> {{ $demand_bank_address ?? 'SME Branch Church Road, Jaipur' }}</div>
                     </div>
 
                     <div style="font-size: 13.5px; font-weight: 700; color: #2c1a0e; margin-bottom: 10px;">
@@ -328,7 +328,7 @@
                                 @endif
                             </td>
                             <td width="40%" align="center" style="font-size: 13.5px; color: #2c1a0e; vertical-align: top;">
-                                <strong>भवदीय,</strong>
+                                <strong>{{ $demand_sign_off ?? 'भवदीय,' }}</strong>
                                 <div style="height: 50px;"></div>
                                 <strong>{{ strtoupper($project->name) }}</strong>
                             </td>
@@ -339,7 +339,7 @@
                 <!-- Bottom Registered Office Box -->
                 <div>
                     <div class="footer-address-box">
-                        <div><strong>पंजीकृत कार्यालय :</strong> {{ $project->address ?: '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)' }}</div>
+                        <div><strong>पंजीकृत कार्यालय :</strong> {{ $demand_registered_office ?? ($project->address ?: '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)') }}</div>
                         <div><strong>मोबाईल :</strong> {{ $project_contact_phone }} &nbsp;|&nbsp; <strong>ईमेल :</strong> info@rajasthanawas.in &nbsp;|&nbsp; <strong>वेबसाइट :</strong> www.rajasthanawas.in</div>
                     </div>
 

@@ -112,6 +112,20 @@
                                             @error('allotment_subject') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                         </div>
 
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-dark">Table Title (विवरण सारणी शीर्षक)</label>
+                                            <input type="text" class="form-control border-2 @error('allotment_table_title') is-invalid @enderror" 
+                                                wire:model="allotment_table_title" placeholder="e.g. आवंटन विवरण">
+                                            @error('allotment_table_title') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-dark">Sign-off Title (हस्ताक्षर प्रेषक शीर्षक)</label>
+                                            <input type="text" class="form-control border-2 @error('allotment_sign_off') is-invalid @enderror" 
+                                                wire:model="allotment_sign_off" placeholder="e.g. भवदीय,">
+                                            @error('allotment_sign_off') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
+
                                         <div class="col-12">
                                             <label class="form-label fw-semibold text-dark">Main Body Paragraph (मुख्य विवरण पाठ)</label>
                                             <textarea class="form-control border-2 @error('allotment_body') is-invalid @enderror" rows="4" 
@@ -120,10 +134,17 @@
                                         </div>
 
                                         <div class="col-12">
-                                            <label class="form-label fw-semibold text-dark">Footer Note (फुटर टिप्पणी)</label>
-                                            <input type="text" class="form-control border-2 @error('allotment_footer_note') is-invalid @enderror" 
-                                                wire:model="allotment_footer_note" placeholder="e.g. नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।">
+                                            <label class="form-label fw-semibold text-dark">Footer Terms & Notes (फुटर नियम व शर्तें)</label>
+                                            <textarea class="form-control border-2 @error('allotment_footer_note') is-invalid @enderror" rows="3"
+                                                wire:model="allotment_footer_note" placeholder="Enter allotment terms..."></textarea>
                                             @error('allotment_footer_note') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold text-dark">Registered Office Address (पंजीकृत कार्यालय पता)</label>
+                                            <input type="text" class="form-control border-2 @error('allotment_registered_office') is-invalid @enderror" 
+                                                wire:model="allotment_registered_office" placeholder="e.g. 12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)">
+                                            @error('allotment_registered_office') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
                                 @elseif($activeTab === 'demandTab')
@@ -143,6 +164,34 @@
                                             @error('demand_subject') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                         </div>
 
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-dark">Salutation (संबोधन)</label>
+                                            <input type="text" class="form-control border-2 @error('demand_salutation') is-invalid @enderror" 
+                                                wire:model="demand_salutation" placeholder="e.g. महोदय / महोदया,">
+                                            @error('demand_salutation') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-dark">Sign-off Title (हस्ताक्षर प्रेषक शीर्षक)</label>
+                                            <input type="text" class="form-control border-2 @error('demand_sign_off') is-invalid @enderror" 
+                                                wire:model="demand_sign_off" placeholder="e.g. भवदीय,">
+                                            @error('demand_sign_off') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-dark">Installment 1 Label (किश्त 1 का लेबल)</label>
+                                            <input type="text" class="form-control border-2 @error('demand_inst1_label') is-invalid @enderror" 
+                                                wire:model="demand_inst1_label" placeholder="e.g. 1 Installment 10%">
+                                            @error('demand_inst1_label') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold text-dark">Installment 2 Label (किश्त 2 का लेबल)</label>
+                                            <input type="text" class="form-control border-2 @error('demand_inst2_label') is-invalid @enderror" 
+                                                wire:model="demand_inst2_label" placeholder="e.g. 2 Installment 90%">
+                                            @error('demand_inst2_label') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
+
                                         <div class="col-12">
                                             <label class="form-label fw-semibold text-dark">Main Body Paragraph (मुख्य विवरण पाठ)</label>
                                             <textarea class="form-control border-2 @error('demand_body') is-invalid @enderror" rows="3" 
@@ -152,9 +201,45 @@
 
                                         <div class="col-12">
                                             <label class="form-label fw-semibold text-dark">Footer Instructions & Terms Paragraph (मांग पत्र निर्देश व नियम शर्तें)</label>
-                                            <textarea class="form-control border-2 @error('demand_footer_para') is-invalid @enderror" rows="5" 
+                                            <textarea class="form-control border-2 @error('demand_footer_para') is-invalid @enderror" rows="4" 
                                                 wire:model="demand_footer_para" placeholder="Enter payment instructions and terms..."></textarea>
                                             @error('demand_footer_para') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <!-- Bank Account Details Section -->
+                                        <div class="col-12">
+                                            <div class="card border border-warning-subtle bg-warning-subtle p-3 rounded-3">
+                                                <h6 class="fw-bold text-dark mb-3"><i class="ri-bank-line me-1 text-warning"></i> Bank Account Details (बैंक खाता विवरण)</h6>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-semibold text-dark fs-13">Account Holder Name</label>
+                                                        <input type="text" class="form-control border-2 bg-white" wire:model="demand_bank_account_holder">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label fw-semibold text-dark fs-13">Bank Name</label>
+                                                        <input type="text" class="form-control border-2 bg-white" wire:model="demand_bank_name">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label fw-semibold text-dark fs-13">Account Number</label>
+                                                        <input type="text" class="form-control border-2 bg-white" wire:model="demand_bank_account_no">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label fw-semibold text-dark fs-13">IFSC Code</label>
+                                                        <input type="text" class="form-control border-2 bg-white" wire:model="demand_bank_ifsc">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label fw-semibold text-dark fs-13">Bank Branch Address</label>
+                                                        <input type="text" class="form-control border-2 bg-white" wire:model="demand_bank_address">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold text-dark">Registered Office Address (पंजीकृत कार्यालय पता)</label>
+                                            <input type="text" class="form-control border-2 @error('demand_registered_office') is-invalid @enderror" 
+                                                wire:model="demand_registered_office" placeholder="e.g. 12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)">
+                                            @error('demand_registered_office') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                         </div>
 
                                         <div class="col-12">

@@ -254,7 +254,7 @@
                     <table class="details-table">
                         <thead>
                             <tr>
-                                <th colspan="2">आवंटन विवरण</th>
+                                <th colspan="2">{{ $allotment_table_title ?? 'आवंटन विवरण' }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -316,7 +316,7 @@
                             </td>
                             <td width="40%" align="center"
                                 style="font-size: 13.5px; color: #2c1a0e; vertical-align: top;">
-                                <strong>भवदीय,</strong>
+                                <strong>{{ $allotment_sign_off ?? 'भवदीय,' }}</strong>
                                 <div style="height: 50px;"></div>
                                 <strong>{{ strtoupper($project->name) }}</strong>
                             </td>
@@ -327,7 +327,7 @@
                 <!-- Bottom Registered Office Box -->
                 <div class="footer-address-box">
                     <div><strong>पंजीकृत कार्यालय :</strong>
-                        {{ $project->address ?: '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)' }}
+                        {{ $allotment_registered_office ?? ($project->address ?: '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)') }}
                     </div>
                     <div><strong>मोबाईल :</strong> {{ $project_contact_phone }} &nbsp;|&nbsp; <strong>ईमेल :</strong>
                         info@rajasthanawas.in &nbsp;|&nbsp; <strong>वेबसाइट :</strong> www.rajasthanawas.in</div>
