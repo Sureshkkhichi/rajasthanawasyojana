@@ -24,12 +24,17 @@
     @livewireStyles
     @stack('styles')
     <style>
-    <style>
-        .custom-header {
-            background: #fffdf6;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
-            z-index: 9999;
+        .custom-header,
+        .custom-header.is-sticky,
+        nav.custom-header {
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, .12) !important;
+            z-index: 99999 !important;
             padding: 8px 0;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            opacity: 1 !important;
         }
 
         .custom-header .container {
