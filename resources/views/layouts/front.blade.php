@@ -108,28 +108,31 @@
 
         @media(max-width:576px) {
             .custom-header {
-                height: auto;
-                padding: 6px 0;
+                height: auto !important;
+                padding: 6px 0 !important;
             }
 
             .header-logo img {
-                height: 38px;
+                height: 40px !important;
             }
 
             .header-rera {
-                font-size: 10px !important;
-                padding: 2px 6px;
+                font-size: 11px !important;
+                padding: 2px 6px !important;
             }
 
             .header-contact {
-                flex-direction: column;
-                align-items: flex-end;
-                gap: 0px;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: flex-end !important;
+                gap: 12px !important;
+                margin-top: 4px !important;
             }
 
             .header-contact a {
-                font-size: 13.5px;
-                line-height: 1.25;
+                font-size: 16px !important;
+                font-weight: 800 !important;
+                line-height: 1.2 !important;
             }
         }
     </style>
@@ -153,24 +156,23 @@
                             $reraNumber = \App\Models\FrontendSetting::getVal('rera_number');
                         @endphp
                         @if(!empty($reraNumber))
-                            <span class="header-rera fs-2" style="font-size: 12px !important;">RERA No:
-                                {{ $reraNumber }}</span>
+                            <span class="header-rera">RERA No: {{ $reraNumber }}</span>
                         @endif
                     </div>
                     {{-- Right Contact --}}
-                    <div class="col-lg-4 col-12 order-2 mt-2 mt-lg-0">
+                    <div class="col-lg-4 col-12 order-2 mt-0 mt-lg-0">
                         <div class="header-contact justify-content-center justify-content-lg-end">
                             @php
                                 $mobile1 = \App\Models\FrontendSetting::getVal('mobile_number_1', '9876543210');
                                 $mobile2 = \App\Models\FrontendSetting::getVal('mobile_number_2', '9876543210');
                             @endphp
                             @if(!empty($mobile1))
-                                <a href="tel:+91{{ $mobile1 }}" class="fs-2">
+                                <a href="tel:+91{{ $mobile1 }}">
                                     {{ $mobile1 }}
                                 </a>
                             @endif
                             @if(!empty($mobile2))
-                                <a href="tel:+91{{ $mobile2 }}" class="fs-2">
+                                <a href="tel:+91{{ $mobile2 }}">
                                     {{ $mobile2 }}
                                 </a>
                             @endif
