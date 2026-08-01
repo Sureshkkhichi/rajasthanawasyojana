@@ -164,8 +164,10 @@ Route::get('/privacy-policy', FrontStaticPage::class)
 Route::get('/cancellation-refund-policy', FrontStaticPage::class)
     ->defaults('slug', 'cancellation-refund-policy')
     ->name('pages.refund-policy');
-Route::get('/projects/{slug}', FrontProject::class)->name('project.show');
-Route::get('/projects/{project}/registration', Booking::class)->name('booking');
+Route::get('/allotment-result', \App\Livewire\Frontend\CheckAllotment::class)->name('allotment-result');
+Route::get('/public/deals/{deal}/allotment-letter', [\App\Http\Controllers\DealDocumentController::class, 'publicAllotmentLetter'])->name('public.allotment-letter');
+Route::get('/public/deals/{deal}/demand-letter', [\App\Http\Controllers\DealDocumentController::class, 'publicDemandLetter'])->name('public.demand-letter');
+Route::get('/public/deals/{deal}/invoice', [\App\Http\Controllers\DealDocumentController::class, 'publicInvoice'])->name('public.invoice');
 
 // PhonePe Payment Routes
 use App\Http\Controllers\PaymentController;

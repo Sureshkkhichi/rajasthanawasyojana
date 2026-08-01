@@ -287,4 +287,153 @@ class DealDocumentController extends Controller
 
         return view('emails.invoice-pdf', $data);
     }
+
+    public function publicAllotmentLetter(Deal $deal)
+    {
+        $deal->load(['project', 'allottedInventory']);
+        $inventory = $deal->allottedInventory;
+
+        if (!$inventory) {
+            abort(404, 'No allotted unit found for this deal.');
+        }
+
+        $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '9116111177');
+        $pid = $deal->project_id;
+        $projectName = $deal->project?->name ?? 'Project';
+
+        $allotted_date = $deal->allotted_at ? \Carbon\Carbon::parse($deal->allotted_at)->format('d/m/Y') : ($deal->booking_date ? \Carbon\Carbon::parse($deal->booking_date)->format('d/m/Y') : date('d/m/Y'));
+        $form_no = 'AR/REG/' . ($deal->created_at?->format('Y') ?: date('Y')) . '/' . sprintf('%06d', $deal->id);
+        $block_tower = $inventory->block ?: ($inventory->tower ?: '-');
+        
+        $rawFloor = trim($inventory->floor ?? '');
+        if ($rawFloor === '') {
+            $floor_str = '-';
+        } elseif (preg_match('/floor/i', $rawFloor)) {
+            $floor_str = $rawFloor;
+        } elseif (is_numeric($rawFloor)) {
+            $n = (int) $rawFloor;
+            $suffix = match ($n) {
+                1 => 'st',
+                2 => 'nd',
+                3 => 'rd',
+                default => 'th',
+            };
+            $floor_str = "{$n}{$suffix} Floor";
+        } else {
+            $floor_str = $rawFloor;
+        }
+        $unit_no = $inventory->flat_no ?: $inventory->plot_no;
+        $unit_type = $inventory->unit_type_label ?: ($deal->project?->inventory_type === 'flat' ? 'EWS (LIG)' : 'Residential Plot');
+        $carpet_area = number_format($inventory->area_sbup ?: $inventory->area_sq_yards, 2) . ' वर्गफूट (लगभग)';
+
+        $allotment_subtitle = FrontendSetting::getVal("project_{$pid}_allotment_subtitle", 'हर परिवार का सपना, हमारा संकल्प');
+        $allotment_subject = FrontendSetting::getVal("project_{$pid}_allotment_subject", 'आवंटन पत्र');
+        $allotment_body = FrontendSetting::getVal("project_{$pid}_allotment_body", "हमें यह सूचित करते हुए हर्ष हो रहा है कि मुख्यमंत्री जन आवास योजना के अंतर्गत हमारी आवासीय परियोजना \"{PROJECT_NAME}\" (टावर – {BLOCK_TOWER}) में आपको निम्न विवरणानुसार आवासीय इकाई ({UNIT_TYPE}) का आवंटन किया गया है।");
+        $allotment_table_title = FrontendSetting::getVal("project_{$pid}_allotment_table_title", 'आवंटन विवरण');
+        $allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा आगामी किस्त जमा करें ।");
+        $allotment_sign_off = FrontendSetting::getVal("project_{$pid}_allotment_sign_off", 'भवदीय,');
+        $allotment_registered_office = FrontendSetting::getVal("project_{$pid}_allotment_registered_office", '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)');
+
+        $replacements = [
+            '{PROJECT_NAME}' => $projectName,
+            '{PROJECT_ADDRESS}' => $deal->project?->address ?? '',
+            '{CUSTOMER_NAME}' => strtoupper($deal->first_name . ' ' . $deal->last_name),
+            '{UNIT_NO}' => $unit_no,
+            '{FORM_NO}' => $form_no,
+            '{REGISTRATION_NO}' => $form_no,
+            '{BOOKING_DATE}' => $allotted_date,
+            '{ALLOTTED_DATE}' => $allotted_date,
+            '{CONTACT_PHONE}' => $project_contact_phone,
+            '{BLOCK_TOWER}' => $block_tower,
+            '{FLOOR}' => $floor_str,
+            '{UNIT_TYPE}' => $unit_type,
+            '{CARPET_AREA}' => $carpet_area,
+        ];
+
+        return view('emails.allotment-pdf', [
+            'project' => $deal->project,
+            'deal' => $deal,
+            'inventory' => $inventory,
+            'project_contact_phone' => $project_contact_phone,
+            'form_no' => $form_no,
+            'allotted_date' => $allotted_date,
+            'block_tower' => $block_tower,
+            'floor_str' => $floor_str,
+            'unit_no' => $unit_no,
+            'unit_type' => $unit_type,
+            'carpet_area' => $carpet_area,
+            'allotment_subtitle' => strtr($allotment_subtitle, $replacements),
+            'allotment_subject' => strtr($allotment_subject, $replacements),
+            'allotment_body' => strtr($allotment_body, $replacements),
+            'allotment_table_title' => strtr($allotment_table_title, $replacements),
+            'allotment_footer_note' => strtr($allotment_footer_note, $replacements),
+            'allotment_sign_off' => strtr($allotment_sign_off, $replacements),
+            'allotment_registered_office' => strtr($allotment_registered_office, $replacements),
+        ]);
+    }
+
+    public function publicDemandLetter(Deal $deal)
+    {
+        return $this->demandLetter($deal);
+    }
+
+    public function publicInvoice(Deal $deal)
+    {
+        $deal->load(['project', 'allottedInventory']);
+
+        $bookingDate = $deal->booking_date ? $deal->booking_date->format('d-m-Y') : date('d-m-Y');
+        $numericId = preg_replace('/[^0-9]/', '', $deal->id);
+        $shortId = substr($numericId, -4) ?: rand(1000, 9999);
+        $receiptYear = $deal->booking_date ? $deal->booking_date->format('Y') : date('Y');
+        $receiptNo = "RAJAWAS-{$receiptYear}-15471-{$shortId}";
+
+        $lead = \App\Models\Lead::where('pan_number', $deal->pan_number)
+            ->orWhere('phone', $deal->phone)
+            ->orWhere('email', $deal->email)
+            ->first();
+
+        $transactionId = $lead?->transaction_id ?: ('JDAAPP' . (substr($numericId, 0, 9) ?: '705410470'));
+
+        $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
+        $companyName = config('constants.site_name');
+        $companyCity = 'Jaipur';
+        $customerProject = $deal->project?->name ?: config('constants.site_name');
+        $customerCity = $deal->city ?: 'जयपुर';
+        $waiverCode = $deal->waiver_code ?: '-';
+
+        $unitType = 'Flat';
+        if ($deal->allottedInventory && $deal->allottedInventory->inventory_type === 'plot') {
+            $unitType = 'Plot';
+        }
+        $descriptionText = "{$unitType}: {$deal->flat_size} Waver code->{$waiverCode}";
+
+        $bookingAmount = (float) ($deal->booking_amount ?: 21100.00);
+        $amountInWords = numberToWords($bookingAmount);
+
+        $data = [
+            'deal' => $deal,
+            'receipt_date' => $bookingDate,
+            'receipt_no' => $receiptNo,
+            'description_text' => $descriptionText,
+            'amount_in_words' => $amountInWords,
+            'transaction_id' => $transactionId,
+            'print_id' => $shortId ?: '2128',
+            'project_contact_phone' => $project_contact_phone,
+            'company_name' => $companyName,
+            'company_city' => $companyCity,
+            'customer_project' => $customerProject,
+            'customer_city' => $customerCity,
+            'waiver_code' => $waiverCode,
+            'amount_paid' => $bookingAmount,
+            'unit_type' => $unitType,
+        ];
+
+        if (request()->has('download')) {
+            $html = view('emails.invoice-pdf', $data)->render();
+            $pdf = Pdf::loadHTML(reshapeDevanagari($html));
+            return $pdf->download("invoice-{$deal->id}.pdf");
+        }
+
+        return view('emails.invoice-pdf', $data);
+    }
 }
