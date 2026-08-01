@@ -301,7 +301,14 @@
 
                     <!-- Terms & Instructions -->
                     <div class="terms-block">
-                        {!! nl2br(e($demand_footer_para ?? "अतः आपसे अनुरोध है कि इस मांग पत्र के जारी होने की दिनांक से उक्तानुसार राशि जमा करावे अथवा लोन के लिए बैंक एवं फर्म द्वारा मांगे गए दस्तावेज, {$project->address} स्थित कार्यालय में स्वयं उपस्थित होकर जमा करावे। यदि किसी भी कारण से आप द्वारा उक्त राशि निर्धारित समयावधि में जमा नहीं कराई गयी तो बकाया राशि पर 18 प्रतिशत वार्षिक ब्याज की दर से ब्याज जमा कराना होगा。\n\nराशि के चेक / आरटीजीएस / एनईएफटी / आईएमपीएस / ऑनलाइन {$project->name} के नाम से देय होंगे।")) !!}
+                        {!! nl2br(e($demand_footer_para ?? "अतः आपसे अनुरोध है कि इस मांग पत्र के जारी होने की दिनांक से उक्तानुसार राशि जमा करावे अथवा लोन के लिए बैंक एवं फर्म द्वारा मांगे गए दस्तावेज, {$project->address} स्थित कार्यालय में स्वयं उपस्थित होकर जमा करावे। यदि किसी भी कारण से आप द्वारा उक्त राशि निर्धारित समयावधि में जमा नहीं कराई गयी तो बकाया राशि पर 18 प्रतिशत वार्षिक ब्याज की दर से ब्याज जमा कराना होगा。\n\nराशि के चेक / आरटीजीएस / एनईएफटी / आईएमपीएस / ऑनलाइन {$project->name} के नाम से देय होंगे, बैंक का विवरण निम्न प्रकार है:-")) !!}
+                    </div>
+
+                    <!-- Bank Details Box -->
+                    <div style="margin-top: 4px; margin-bottom: 12px; padding: 8px 12px; background-color: #fdfaf5; border: 1px solid #7c4c2d; border-radius: 4px; font-size: 12.5px; line-height: 1.55; color: #2c1a0e;">
+                        <div><strong>Account Holder Name:</strong> ACL INFRATECH PRIVATE LIMITED LOVE HOME JOYPUR COLLECTION AC</div>
+                        <div><strong>Bank Name:</strong> STATE BANK OF INDIA &nbsp;|&nbsp; <strong>Account Number:</strong> 43565607058</div>
+                        <div><strong>IFSC Code:</strong> SBIN0004080 &nbsp;|&nbsp; <strong>Bank Address:</strong> SME Branch Church Road, Jaipur</div>
                     </div>
 
                     <div style="font-size: 13.5px; font-weight: 700; color: #2c1a0e; margin-bottom: 10px;">
