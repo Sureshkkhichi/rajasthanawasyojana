@@ -30,7 +30,7 @@
                     margin-top: 58px !important;
                     min-height: unset !important;
                     height: auto !important;
-                    padding: 5px 8px !important;
+                    padding: 2px 6px !important;
                     display: flex !important;
                     align-items: center !important;
                     overflow: hidden !important;
@@ -38,21 +38,19 @@
                 .announcement-bar-bottom {
                     min-height: unset !important;
                     height: auto !important;
-                    padding: 5px 8px !important;
+                    padding: 2px 6px !important;
                     display: flex !important;
                     align-items: center !important;
                     overflow: hidden !important;
                 }
-                .announcement-bar-text {
-                    font-size: 12px !important;
-                    line-height: 1.3 !important;
-                    padding: 0 !important;
-                    margin: 0 !important;
-                }
+                .announcement-bar-text,
                 .announcement-bar-text marquee,
                 .announcement-bar-text span {
-                    font-size: 12px !important;
-                    line-height: 1.3 !important;
+                    font-size: 11px !important;
+                    line-height: 1 !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    display: block !important;
                 }
                 .project-card .project-image-area img,
                 .project-card img {
