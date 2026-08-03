@@ -97,7 +97,6 @@ class Show extends Component
 
             // Send Mail
             Mail::to($this->email_recipient)
-                ->cc('suresh5313@gmail.com')
                 ->send(new AllotmentMail(
                     $this->deal,
                     $this->deal->project,

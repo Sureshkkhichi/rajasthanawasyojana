@@ -181,8 +181,8 @@ class PaymentController extends Controller
             }
 
             if (!$unitPrice) {
-                if ($project->inventory_type === 'plot' && is_numeric($lead->flat_size) && (float)$lead->flat_size > 0 && is_numeric($project->price)) {
-                    $unitPrice = (float)$project->price * (float)$lead->flat_size;
+                if ($project->inventory_type === 'plot' && is_numeric($lead->flat_size) && (float) $lead->flat_size > 0 && is_numeric($project->price)) {
+                    $unitPrice = (float) $project->price * (float) $lead->flat_size;
                 } else {
                     $unitPrice = $project->price;
                 }
@@ -209,7 +209,7 @@ class PaymentController extends Controller
                 'flat_size' => $lead->flat_size,
                 'waiver_code' => $lead->waiver_code,
                 'booking_date' => now(),
-                'booking_amount' => (function() use ($lead) {
+                'booking_amount' => (function () use ($lead) {
                     $base = (float) \App\Models\FrontendSetting::getVal('booking_amount', 21100.00);
                     $discount = (float) \App\Models\FrontendSetting::getVal('waiver_discount_amount', 0.00);
                     if (!empty($lead->waiver_code)) {
@@ -230,7 +230,7 @@ class PaymentController extends Controller
             // Send Confirmation Mail (if enabled in settings)
             if (\App\Models\FrontendSetting::getVal('enable_payment_confirmation_email', false)) {
                 try {
-                    Mail::to($lead->email)->cc('suresh5313@gmail.com')->send(new PaymentConfirmationMail($lead, $deal));
+                    Mail::to($lead->email)->send(new PaymentConfirmationMail($lead, $deal));
                 } catch (\Exception $e) {
                     Log::error('Failed to send payment confirmation email for lead ' . $lead->id . ': ' . $e->getMessage());
                 }
