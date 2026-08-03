@@ -394,8 +394,8 @@ class Booking extends Component
             'city' => $this->city,
             'project_id' => $this->project->id,
             'is_submitted' => true,
-            'status' => 'unpaid',
-            'payment_status' => 'unpaid',
+            'status' => 'in_process',
+            'payment_status' => 'pending',
             'transaction_id' => $transactionId,
         ]);
 
@@ -419,7 +419,7 @@ class Booking extends Component
             'merchantTransactionId' => $transactionId,
             'merchantUserId' => 'USR' . $this->lead->phone,
             'amount' => (int) (round($this->payableBookingAmount, 2) * 100),
-            'redirectUrl' => route('phonepe.redirect') . '?transactionId=' . $transactionId,
+            'redirectUrl' => route('phonepe.redirect', ['transactionId' => $transactionId]),
             'redirectMode' => 'GET',
             'callbackUrl' => route('phonepe.callback'),
             'mobileNumber' => $this->lead->phone,

@@ -142,7 +142,10 @@ class PaymentController extends Controller
      */
     private function processSuccessfulPayment(Lead $lead): void
     {
-        DB::transaction(function () use ($lead) {
+        $shouldSendMail = false;
+        $deal = null;
+
+        DB::transaction(function () use ($lead, &$shouldSendMail, &$deal) {
             // Lock the lead record to prevent double processing
             $lead = Lead::where('id', $lead->id)->lockForUpdate()->first();
 
@@ -152,7 +155,7 @@ class PaymentController extends Controller
 
             // Update Lead
             $lead->update([
-                'status' => 'paid',
+                'status' => 'in_process',
                 'payment_status' => 'paid',
             ]);
 
@@ -227,15 +230,17 @@ class PaymentController extends Controller
                 'remarks' => null,
             ]);
 
-            // Send Confirmation Mail (if enabled in settings)
-            if (\App\Models\FrontendSetting::getVal('enable_payment_confirmation_email', false)) {
-                try {
-                    Mail::to($lead->email)->send(new PaymentConfirmationMail($lead, $deal));
-                } catch (\Exception $e) {
-                    Log::error('Failed to send payment confirmation email for lead ' . $lead->id . ': ' . $e->getMessage());
-                }
-            }
+            $shouldSendMail = true;
         });
+
+        // Send Confirmation Mail OUTSIDE DB transaction (safe: if DB committed, send mail)
+        if ($shouldSendMail && $deal && \App\Models\FrontendSetting::getVal('enable_payment_confirmation_email', false)) {
+            try {
+                Mail::to($lead->email)->send(new PaymentConfirmationMail($lead, $deal));
+            } catch (\Exception $e) {
+                Log::error('Failed to send payment confirmation email for lead ' . $lead->id . ': ' . $e->getMessage());
+            }
+        }
     }
 
     /**
@@ -245,7 +250,7 @@ class PaymentController extends Controller
     {
         if ($lead->payment_status !== 'paid') {
             $lead->update([
-                'status' => 'unpaid',
+                'status' => 'in_process',
                 'payment_status' => 'failed',
             ]);
         }
