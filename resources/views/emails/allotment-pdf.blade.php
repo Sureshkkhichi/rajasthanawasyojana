@@ -331,8 +331,9 @@
 
                 <!-- Bottom Registered Office Box -->
                 <div>
-                    <p style="font-size: 11.5px;color: #000;text-align: center;margin-top: 4px;">नोट - पटा एवं रजिस्ट्री
-                        शुल्क अतिरिक्त।</p>
+                    @if(!empty($allotment_footer_note_text))
+                        <p style="font-size: 11.5px;color: #000;text-align: center;margin-top: 4px;">{!! nl2br(e($allotment_footer_note_text)) !!}</p>
+                    @endif
                     <div class="footer-address-box">
                         <div><strong>मोबाईल / हेल्पलाईन :</strong> {{ $project_contact_phone }} &nbsp;|&nbsp;
                             <strong>ईमेल :</strong> support@janaawasyojana.com &nbsp;|&nbsp; <strong>वेबसाइट :</strong>

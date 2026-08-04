@@ -140,6 +140,12 @@
                                             @error('allotment_footer_note') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                         </div>
 
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold text-dark">Footer Note (फुटर टिप्पणी)</label>
+                                            <input type="text" class="form-control border-2 @error('allotment_footer_note_text') is-invalid @enderror" 
+                                                wire:model="allotment_footer_note_text" placeholder="e.g. नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।">
+                                            @error('allotment_footer_note_text') <span class="text-danger fs-12">{{ $message }}</span> @enderror
+                                        </div>
                                     </div>
                                 @elseif($activeTab === 'demandTab')
                                     <!-- Tab 2: Demand Letter -->

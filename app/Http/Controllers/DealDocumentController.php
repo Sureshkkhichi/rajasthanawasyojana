@@ -67,6 +67,7 @@ class DealDocumentController extends Controller
             FrontendSetting::setVal("project_{$pid}_allotment_footer_note", $allotment_footer_note);
         }
         $allotment_sign_off = FrontendSetting::getVal("project_{$pid}_allotment_sign_off", 'भवदीय,');
+        $allotment_footer_note_text = FrontendSetting::getVal("project_{$pid}_allotment_footer_note_text", 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।');
 
         $replacements = [
             '{PROJECT_NAME}' => $projectName,
@@ -102,6 +103,7 @@ class DealDocumentController extends Controller
             'allotment_table_title' => strtr($allotment_table_title, $replacements),
             'allotment_footer_note' => strtr($allotment_footer_note, $replacements),
             'allotment_sign_off' => strtr($allotment_sign_off, $replacements),
+            'allotment_footer_note_text' => strtr($allotment_footer_note_text, $replacements),
         ]);
     }
 
@@ -328,6 +330,7 @@ class DealDocumentController extends Controller
         $allotment_table_title = FrontendSetting::getVal("project_{$pid}_allotment_table_title", 'आवंटन विवरण');
         $allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा आगामी किस्त जमा करें ।");
         $allotment_sign_off = FrontendSetting::getVal("project_{$pid}_allotment_sign_off", 'भवदीय,');
+        $allotment_footer_note_text = FrontendSetting::getVal("project_{$pid}_allotment_footer_note_text", 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।');
 
         $replacements = [
             '{PROJECT_NAME}' => $projectName,
@@ -363,6 +366,7 @@ class DealDocumentController extends Controller
             'allotment_table_title' => strtr($allotment_table_title, $replacements),
             'allotment_footer_note' => strtr($allotment_footer_note, $replacements),
             'allotment_sign_off' => strtr($allotment_sign_off, $replacements),
+            'allotment_footer_note_text' => strtr($allotment_footer_note_text, $replacements),
         ]);
     }
 

@@ -19,6 +19,7 @@ class DocumentTemplate extends Component
     public $allotment_table_title = '';
     public $allotment_footer_note = '';
     public $allotment_sign_off = '';
+    public $allotment_footer_note_text = '';
 
     // Demand Letter Fields
     public $demand_subtitle = '';
@@ -71,6 +72,7 @@ class DocumentTemplate extends Component
         $this->allotment_table_title = FrontendSetting::getVal("project_{$pid}_allotment_table_title", 'आवंटन विवरण');
         $this->allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा आगामी किस्त जमा करें ।");
         $this->allotment_sign_off = FrontendSetting::getVal("project_{$pid}_allotment_sign_off", 'भवदीय,');
+        $this->allotment_footer_note_text = FrontendSetting::getVal("project_{$pid}_allotment_footer_note_text", 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।');
 
         // Demand Letter Settings
         $this->demand_subtitle = FrontendSetting::getVal("project_{$pid}_demand_subtitle", 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित');
@@ -99,6 +101,7 @@ class DocumentTemplate extends Component
             'allotment_table_title' => 'required|string',
             'allotment_footer_note' => 'required|string',
             'allotment_sign_off' => 'required|string',
+            'allotment_footer_note_text' => 'nullable|string',
             'demand_subtitle' => 'required|string',
             'demand_subject' => 'required|string',
             'demand_salutation' => 'required|string',
@@ -123,6 +126,7 @@ class DocumentTemplate extends Component
         FrontendSetting::setVal("project_{$pid}_allotment_table_title", $this->allotment_table_title);
         FrontendSetting::setVal("project_{$pid}_allotment_footer_note", $this->allotment_footer_note);
         FrontendSetting::setVal("project_{$pid}_allotment_sign_off", $this->allotment_sign_off);
+        FrontendSetting::setVal("project_{$pid}_allotment_footer_note_text", $this->allotment_footer_note_text);
 
         FrontendSetting::setVal("project_{$pid}_demand_subtitle", $this->demand_subtitle);
         FrontendSetting::setVal("project_{$pid}_demand_subject", $this->demand_subject);
@@ -164,6 +168,7 @@ class DocumentTemplate extends Component
         $this->allotment_subject = 'आवंटन पत्र';
         $this->allotment_body = "हमें यह सूचित करते हुए हर्ष हो रहा है कि मुख्यमंत्री जन आवास योजना के अंतर्गत हमारी आवासीय परियोजना \"{PROJECT_NAME}\" ({BLOCK_TOWER}) में आपको निम्न विवरणानुसार आवासीय इकाई ({UNIT_TYPE}) का आवंटन किया गया है।";
         $this->allotment_footer_note = "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा भुगतान सारणी के अनुसार आगामी किस्त जमा करें ।";
+        $this->allotment_footer_note_text = 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।';
 
         $this->demand_subtitle = 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित';
         $this->demand_subject = 'विषय: भूखण्ड संख्या {UNIT_NO} की बकाया राशि जमा कराने बाबत।';
