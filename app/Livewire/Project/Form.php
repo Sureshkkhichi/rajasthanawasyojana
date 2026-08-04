@@ -46,6 +46,11 @@ class Form extends Component
     public $infoImageFiles = [];
     public $infoImages = [];
     public int $infoUploadIteration = 0;
+
+    // Portfolio Section properties
+    public $portfolioImageFiles = [];
+    public $portfolioImages = [];
+    public int $portfolioUploadIteration = 0;
     public function rules(): array
     {
         return [
@@ -65,6 +70,30 @@ class Form extends Component
             'featured_image_file' => 'nullable|image|max:2048',
             'price' => 'required|numeric',
             'registration_status' => 'required|in:open,closed',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'portfolioImageFiles.*.image' => 'The uploaded file must be a valid image (JPG, PNG, WEBP).',
+            'portfolioImageFiles.*.max' => 'The selected image exceeds the 2 MB size limit. Please upload images under 2 MB.',
+            'infoImageFiles.*.image' => 'The uploaded file must be a valid image (JPG, PNG, WEBP).',
+            'infoImageFiles.*.max' => 'The selected image exceeds the 2 MB size limit. Please upload images under 2 MB.',
+            'sliderImages.*.image' => 'The uploaded file must be a valid image (JPG, PNG, WEBP).',
+            'sliderImages.*.max' => 'The selected slider image exceeds the 5 MB size limit.',
+            'featured_image_file.image' => 'Featured image must be a valid image file.',
+            'featured_image_file.max' => 'Featured image size must not exceed 2 MB.',
+        ];
+    }
+
+    public function validationAttributes(): array
+    {
+        return [
+            'portfolioImageFiles.*' => 'portfolio image',
+            'infoImageFiles.*' => 'information image',
+            'sliderImages.*' => 'slider image',
+            'featured_image_file' => 'featured image',
         ];
     }
     public function mount(?Project $project = null): void
@@ -95,6 +124,7 @@ class Form extends Component
         if ($this->projectId) {
             $this->loadSliders();
             $this->loadInfoImages();
+            $this->loadPortfolioImages();
         }
     }
     protected function loadSliders(): void
@@ -113,6 +143,18 @@ class Form extends Component
                 ->get();
         } else {
             $this->infoImages = [];
+        }
+    }
+
+    public function loadPortfolioImages(): void
+    {
+        if ($this->projectId) {
+            $this->portfolioImages = \App\Models\ProjectPortfolioImage::query()
+                ->where('project_id', $this->projectId)
+                ->orderBy('sort_order')
+                ->get();
+        } else {
+            $this->portfolioImages = [];
         }
     }
     public function updatedName(): void
@@ -317,6 +359,9 @@ class Form extends Component
 
         $this->validate([
             'infoImageFiles.*' => 'image|max:2048'
+        ], [
+            'infoImageFiles.*.image' => 'The uploaded file must be a valid image (JPG, PNG, WEBP).',
+            'infoImageFiles.*.max' => 'The selected image exceeds the 2 MB size limit. Please upload images under 2 MB.',
         ]);
 
         $project = Project::findOrFail($this->projectId);
@@ -371,6 +416,73 @@ class Form extends Component
         session()->flash('success', 'Sort order updated successfully.');
     }
 
+    public function updatedPortfolioImageFiles(): void
+    {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
+
+        if (!$this->projectId) {
+            $this->addError('portfolioImageFiles', 'Please save project first.');
+            return;
+        }
+
+        $this->validate([
+            'portfolioImageFiles.*' => 'image|max:2048'
+        ], [
+            'portfolioImageFiles.*.image' => 'The uploaded file must be a valid image (JPG, PNG, WEBP).',
+            'portfolioImageFiles.*.max' => 'The selected image exceeds the 2 MB size limit. Please upload images under 2 MB.',
+        ]);
+
+        $project = Project::findOrFail($this->projectId);
+        $uploadPath = public_path('uploads/' . $project->slug . '/portfolio');
+        if (!File::exists($uploadPath)) {
+            File::makeDirectory($uploadPath, 0755, true);
+        }
+
+        $lastOrder = \App\Models\ProjectPortfolioImage::where('project_id', $this->projectId)
+            ->max('sort_order') ?? 0;
+
+        foreach ($this->portfolioImageFiles as $file) {
+            if (!$file instanceof TemporaryUploadedFile) {
+                continue;
+            }
+
+            $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            File::copy($file->getRealPath(), $uploadPath . '/' . $fileName);
+
+            \App\Models\ProjectPortfolioImage::create([
+                'project_id' => $this->projectId,
+                'image_path' => 'uploads/' . $project->slug . '/portfolio/' . $fileName,
+                'sort_order' => ++$lastOrder,
+            ]);
+        }
+
+        $this->reset('portfolioImageFiles');
+        $this->portfolioUploadIteration++;
+        $this->loadPortfolioImages();
+        session()->flash('success', 'Portfolio images uploaded successfully.');
+    }
+
+    public function deletePortfolioImage(string $id): void
+    {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
+
+        $image = \App\Models\ProjectPortfolioImage::findOrFail($id);
+        if ($image->image_path && File::exists(public_path($image->image_path))) {
+            File::delete(public_path($image->image_path));
+        }
+        $image->delete();
+        $this->loadPortfolioImages();
+        session()->flash('success', 'Portfolio image deleted successfully.');
+    }
+
+    public function updatePortfolioImageSortOrder(string $id, int $order): void
+    {
+        abort_unless(auth()->user()->can('projects.edit'), 403);
+
+        \App\Models\ProjectPortfolioImage::where('id', $id)->update(['sort_order' => $order]);
+        $this->loadPortfolioImages();
+    }
+
     protected function resetForm(): void
     {
         $this->reset([
@@ -387,11 +499,14 @@ class Form extends Component
             'price',
             'infoImageFiles',
             'infoImages',
+            'portfolioImageFiles',
+            'portfolioImages',
         ]);
         $this->status = 'upcoming';
         $this->is_active = 'active';
         $this->sliders = [];
         $this->infoUploadIteration = 0;
+        $this->portfolioUploadIteration = 0;
         $this->activeTab = 'generalTab';
     }
     public function render()

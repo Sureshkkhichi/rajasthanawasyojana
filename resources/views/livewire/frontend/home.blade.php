@@ -26,6 +26,7 @@
             }
 
             @media (max-width: 786px) {
+
                 .announcement-bar-top,
                 .announcement-bar-bottom {
                     margin-top: 0 !important;
@@ -35,24 +36,29 @@
                     display: block !important;
                     overflow: hidden !important;
                 }
+
                 .announcement-bar-top {
-                    margin-top: 58px !important;
+                    margin-top: 52px !important;
                 }
+
                 .announcement-bar-top .container-fluid,
                 .announcement-bar-bottom .container-fluid {
                     padding: 0 !important;
                     margin: 0 !important;
                 }
+
                 .announcement-bar-top .row,
                 .announcement-bar-bottom .row {
                     margin: 0 !important;
                     padding: 0 !important;
                 }
+
                 .announcement-bar-top .col-12,
                 .announcement-bar-bottom .col-12 {
                     padding: 3px 6px !important;
                     margin: 0 !important;
                 }
+
                 .announcement-bar-text,
                 .announcement-bar-text marquee,
                 .announcement-bar-text span {
@@ -63,19 +69,22 @@
                     display: block !important;
                     height: auto !important;
                 }
+
                 .project-card .project-image-area img,
-                .project-card img {
+                .project-card img.card-img-top {
                     height: auto !important;
                     max-height: 260px !important;
                     object-fit: contain !important;
                 }
+
                 .info-image-block img {
                     width: 100% !important;
                     height: auto !important;
                     object-fit: contain !important;
                 }
+
                 .apply-gif {
-                    max-height: 42px !important;
+                    max-height: 67px !important;
                     width: auto !important;
                     margin: 0 auto !important;
                 }
@@ -101,7 +110,7 @@
             </div>
         </section>
     @else
-        <div style="padding-top: 72px;"></div>
+        <div style="padding-top: 52px;"></div>
     @endif
     {{-- Banner / Slider Section --}}
     <section>
@@ -144,7 +153,7 @@
             </div>
         </section>
     @endif
-    <section class="project-section py-2">
+    <section class="project-section py-2 px-5">
         <div class="container">
             {{-- Heading --}}
             <div class="row mb-3">
@@ -208,7 +217,7 @@
                             @if($project->registration_status === 'open')
                                 <a href="{{ route('booking', $project->id) }}" class="text-decoration-none">
                                     <div class="card-footer d-flex"
-                                        style="flex-direction: row;justify-content: space-between;align-items: center;padding: 0;margin: 0;">
+                                        style="flex-direction: row;justify-content: space-around;align-items: center;padding: 0;margin: 0;">
                                         <span class="float-end">
                                             <img src="{{ asset('dummy/AVEDAN-KAREN-GIFF.gif') }}" class="apply-gif" alt="Apply"
                                                 style="width: 50%; height: auto;">

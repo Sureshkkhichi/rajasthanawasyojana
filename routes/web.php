@@ -171,6 +171,9 @@ Route::get('/public/deals/{deal}/allotment-letter', [\App\Http\Controllers\DealD
 Route::get('/public/deals/{deal}/demand-letter', [\App\Http\Controllers\DealDocumentController::class, 'publicDemandLetter'])->name('public.demand-letter');
 Route::get('/public/deals/{deal}/invoice', [\App\Http\Controllers\DealDocumentController::class, 'publicInvoice'])->name('public.invoice');
 
+// Portfolio Gallery (Public)
+Route::get('/portfolio/{slug}', [\App\Http\Controllers\PortfolioController::class, 'show'])->name('portfolio.show');
+
 // PhonePe Payment Routes
 use App\Http\Controllers\PaymentController;
 Route::match(['get', 'post'], '/payment/phonepe/redirect', [PaymentController::class, 'redirect'])->name('phonepe.redirect');

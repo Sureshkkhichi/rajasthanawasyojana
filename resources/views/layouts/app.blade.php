@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="{{ config('constants.site_description') }}" name="description" />
     <meta content="{{ config('constants.site_author') }}" name="author" />
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
     @yield('styles')
     <script src="{{ asset('assets/js/layout.js') }}"></script>
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -30,12 +30,13 @@
                         <div class="navbar-brand-box horizontal-logo">
                             <a href="{{ route('dashboard') }}" class="logo logo-light">
                                 @php
-                                    $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
+                                $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
                                 @endphp
                                 @if($siteLogo)
-                                    <img src="{{ asset($siteLogo) }}" alt="{{ config('constants.site_name') }}" style="max-height: 40px; max-width: 100%; object-fit: contain;">
+                                <img src="{{ asset($siteLogo) }}" alt="{{ config('constants.site_name') }}"
+                                    style="max-height: 40px; max-width: 100%; object-fit: contain;">
                                 @else
-                                    {{ config('constants.site_name') }}
+                                {{ config('constants.site_name') }}
                                 @endif
                             </a>
                         </div>
@@ -81,12 +82,13 @@
             <div class="navbar-brand-box">
                 <a href="{{ route('dashboard') }}" class="logo logo-dark">
                     @php
-                        $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
+                    $siteLogo = \App\Models\FrontendSetting::getVal('site_logo');
                     @endphp
                     @if($siteLogo)
-                        <img src="{{ asset($siteLogo) }}" alt="{{ config('constants.site_name') }}" style="max-height: 40px; max-width: 100%; object-fit: contain;">
+                    <img src="{{ asset($siteLogo) }}" alt="{{ config('constants.site_name') }}"
+                        style="max-height: 40px; max-width: 100%; object-fit: contain;">
                     @else
-                        {{ config('constants.site_name') }}
+                    {{ config('constants.site_name') }}
                     @endif
                 </a>
                 <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
@@ -140,33 +142,33 @@
     @livewireScripts
     <script src="{{ asset('assets/js/app.js') }}"></script>
     <script>
-        function formatPanInput(el) {
-            let val = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-            let formatted = '';
-            for (let i = 0; i < val.length && i < 10; i++) {
-                let char = val[i];
-                if (i < 5) {
-                    if (/[A-Z]/.test(char)) formatted += char;
-                } else if (i < 9) {
-                    if (/[0-9]/.test(char)) formatted += char;
-                } else {
-                    if (/[A-Z]/.test(char)) formatted += char;
+    function formatPanInput(el) {
+        let val = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        let formatted = '';
+        for (let i = 0; i < val.length && i < 10; i++) {
+            let char = val[i];
+            if (i < 5) {
+                if (/[A-Z]/.test(char)) formatted += char;
+            } else if (i < 9) {
+                if (/[0-9]/.test(char)) formatted += char;
+            } else {
+                if (/[A-Z]/.test(char)) formatted += char;
+            }
+        }
+        el.value = formatted;
+    }
+
+    document.addEventListener('show.bs.dropdown', function(event) {
+        var openDropdowns = document.querySelectorAll('.dropdown-toggle.show');
+        openDropdowns.forEach(function(dropdownToggle) {
+            if (dropdownToggle !== event.target) {
+                var dropdownInstance = bootstrap.Dropdown.getInstance(dropdownToggle);
+                if (dropdownInstance) {
+                    dropdownInstance.hide();
                 }
             }
-            el.value = formatted;
-        }
-
-        document.addEventListener('show.bs.dropdown', function (event) {
-            var openDropdowns = document.querySelectorAll('.dropdown-toggle.show');
-            openDropdowns.forEach(function (dropdownToggle) {
-                if (dropdownToggle !== event.target) {
-                    var dropdownInstance = bootstrap.Dropdown.getInstance(dropdownToggle);
-                    if (dropdownInstance) {
-                        dropdownInstance.hide();
-                    }
-                }
-            });
         });
+    });
     </script>
 </body>
 

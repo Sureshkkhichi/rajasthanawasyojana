@@ -229,10 +229,12 @@
                     <table class="top-meta-table">
                         <tr>
                             <td width="60%">
-                                <strong>आवेदन पत्र संख्या :</strong> {{ 'RAJAWS-' . ($deal->created_at?->format('Y') ?: date('Y')) . '-' . substr($deal->id, 0, 8) }}
+                                <strong>आवेदन पत्र संख्या :</strong>
+                                {{ 'RAJAWS-' . ($deal->created_at?->format('Y') ?: date('Y')) . '-' . substr($deal->id, 0, 8) }}
                             </td>
                             <td width="40%" align="right">
-                                <strong>दिनांक :</strong> {{ $deal->booking_date ? \Carbon\Carbon::parse($deal->booking_date)->format('d/m/Y') : date('d/m/Y') }}
+                                <strong>दिनांक :</strong>
+                                {{ $deal->booking_date ? \Carbon\Carbon::parse($deal->booking_date)->format('d/m/Y') : date('d/m/Y') }}
                             </td>
                         </tr>
                     </table>
@@ -240,7 +242,9 @@
                     <!-- Header Section -->
                     <div class="header-section">
                         <h1 class="project-title">{{ strtoupper($project->name) }}</h1>
-                        <div class="subtitle-text">{!! nl2br(e($demand_subtitle ?? 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित')) !!}</div>
+                        <div class="subtitle-text">
+                            {!! nl2br(e($demand_subtitle ?? 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित')) !!}
+                        </div>
                         <div class="badge-title-box">
                             <span class="badge-title-text">मांग पत्र</span>
                         </div>
@@ -249,14 +253,18 @@
                     <!-- Salutation Block -->
                     <div class="salutation-block">
                         <div><strong>प्रति,</strong></div>
-                        <div style="font-size: 14.5px;"><strong>श्री / श्रीमती {{ strtoupper($deal->first_name . ' ' . $deal->last_name) }}</strong></div>
-                        <div><strong>पता :</strong> {{ $deal->address ?: '-' }}, {{ $deal->city ?: 'जयपुर' }}, {{ $deal->state?->name ?: 'राजस्थान' }} - {{ $deal->pincode ?: '302021' }}</div>
+                        <div style="font-size: 14.5px;"><strong>श्री / श्रीमती
+                                {{ strtoupper($deal->first_name . ' ' . $deal->last_name) }}</strong></div>
+                        <div><strong>पता :</strong> {{ $deal->address ?: '-' }}, {{ $deal->city ?: 'जयपुर' }},
+                            {{ $deal->state?->name ?: 'राजस्थान' }} - {{ $deal->pincode ?: '302021' }}
+                        </div>
                         <div><strong>मोबाईल :</strong> {{ $deal->phone }}</div>
                     </div>
 
                     <!-- Subject -->
                     <div class="subject-block">
-                        {!! nl2br(e($demand_subject ?? 'विषय: भूखण्ड संख्या ' . ($inventory->plot_no ?: $inventory->flat_no) . ' की बकाया राशि जमा कराने बाबत।')) !!}
+                        {!! nl2br(e($demand_subject ?? 'विषय: भूखण्ड संख्या ' . ($inventory->plot_no ?:
+    $inventory->flat_no) . ' की बकाया राशि जमा कराने बाबत।')) !!}
                     </div>
 
                     <div class="salutation-block" style="margin-bottom: 6px;">
@@ -265,7 +273,10 @@
 
                     <!-- Body Paragraph -->
                     <div class="body-paragraph">
-                        {!! nl2br(e($demand_body ?? "{$project->name} में आवेदन पत्र संख्या RAJAWS-" . ($deal->created_at?->format('Y') ?: date('Y')) . '-' . substr($deal->id, 0, 8) . " के द्वारा आपने भूखण्ड आवंटन किये जाने हेतु बुकिंग कराई थी, आपको आवंटित भूखण्ड एवं उसके विक्रय प्रतिफल के पेटे जमा कराई जाने वाली राशि का विवरण निम्न प्रकार है:-")) !!}
+                        {!! nl2br(e($demand_body ?? "{$project->name} में आवेदन पत्र संख्या RAJAWS-" .
+    ($deal->created_at?->format('Y') ?: date('Y')) . '-' . substr($deal->id, 0, 8) . " के द्वारा
+                        आपने भूखण्ड आवंटन किये जाने हेतु बुकिंग कराई थी, आपको आवंटित भूखण्ड एवं उसके विक्रय प्रतिफल के
+                        पेटे जमा कराई जाने वाली राशि का विवरण निम्न प्रकार है:-")) !!}
                     </div>
 
                     <!-- Data Table -->
@@ -301,14 +312,27 @@
 
                     <!-- Terms & Instructions -->
                     <div class="terms-block">
-                        {!! nl2br(e($demand_footer_para ?? "अतः आपसे अनुरोध है कि इस मांग पत्र के जारी होने की दिनांक से उक्तानुसार राशि जमा करावे अथवा लोन के लिए बैंक एवं फर्म द्वारा मांगे गए दस्तावेज, {$project->address} स्थित कार्यालय में स्वयं उपस्थित होकर जमा करावे। यदि किसी भी कारण से आप द्वारा उक्त राशि निर्धारित समयावधि में जमा नहीं कराई गयी तो बकाया राशि पर 18 प्रतिशत वार्षिक ब्याज की दर से ब्याज जमा कराना होगा。\n\nराशि के चेक / आरटीजीएस / एनईएफटी / आईएमपीएस / ऑनलाइन {$project->name} के नाम से देय होंगे, बैंक का विवरण निम्न प्रकार है:-")) !!}
+                        {!! nl2br(e($demand_footer_para ?? "अतः आपसे अनुरोध है कि इस मांग पत्र के जारी होने की दिनांक से
+                        उक्तानुसार राशि जमा करावे अथवा लोन के लिए बैंक एवं फर्म द्वारा मांगे गए दस्तावेज,
+                        {$project->address} स्थित कार्यालय में स्वयं उपस्थित होकर जमा करावे। यदि किसी भी कारण से आप
+                        द्वारा उक्त राशि निर्धारित समयावधि में जमा नहीं कराई गयी तो बकाया राशि पर 18 प्रतिशत वार्षिक
+                        ब्याज की दर से ब्याज जमा कराना होगा。\n\nराशि के चेक / आरटीजीएस / एनईएफटी / आईएमपीएस / ऑनलाइन
+                        {$project->name} के नाम से देय होंगे, बैंक का विवरण निम्न प्रकार है:-")) !!}
                     </div>
 
                     <!-- Bank Details Box -->
-                    <div style="margin-top: 4px; margin-bottom: 12px; padding: 8px 12px; background-color: #fdfaf5; border: 1px solid #7c4c2d; border-radius: 4px; font-size: 12.5px; line-height: 1.55; color: #2c1a0e;">
-                        <div><strong>Account Holder Name:</strong> {{ $demand_bank_account_holder ?? 'ACL INFRATECH PRIVATE LIMITED LOVE HOME JOYPUR COLLECTION AC' }}</div>
-                        <div><strong>Bank Name:</strong> {{ $demand_bank_name ?? 'STATE BANK OF INDIA' }} &nbsp;|&nbsp; <strong>Account Number:</strong> {{ $demand_bank_account_no ?? '43565607058' }}</div>
-                        <div><strong>IFSC Code:</strong> {{ $demand_bank_ifsc ?? 'SBIN0004080' }} &nbsp;|&nbsp; <strong>Bank Address:</strong> {{ $demand_bank_address ?? 'SME Branch Church Road, Jaipur' }}</div>
+                    <div
+                        style="margin-top: 4px; margin-bottom: 12px; padding: 8px 12px; background-color: #fdfaf5; border: 1px solid #7c4c2d; border-radius: 4px; font-size: 12.5px; line-height: 1.55; color: #2c1a0e;">
+                        <div><strong>Account Holder Name:</strong>
+                            {{ $demand_bank_account_holder ?? 'ACL INFRATECH PRIVATE LIMITED LOVE HOME JOYPUR COLLECTION AC' }}
+                        </div>
+                        <div><strong>Bank Name:</strong> {{ $demand_bank_name ?? 'STATE BANK OF INDIA' }} &nbsp;|&nbsp;
+                            <strong>Account Number:</strong> {{ $demand_bank_account_no ?? '43565607058' }}
+                        </div>
+                        <div><strong>IFSC Code:</strong> {{ $demand_bank_ifsc ?? 'SBIN0004080' }} &nbsp;|&nbsp;
+                            <strong>Bank Address:</strong>
+                            {{ $demand_bank_address ?? 'SME Branch Church Road, Jaipur' }}
+                        </div>
                     </div>
 
                     <div style="font-size: 13.5px; font-weight: 700; color: #2c1a0e; margin-bottom: 10px;">
@@ -323,13 +347,15 @@
                     <table class="footer-sign-table">
                         <tr>
                             <td width="60%" style="vertical-align: top;">
-                                @if(file_exists(public_path('rera.png')))
-                                    <img src="{{ asset('rera.png') }}" style="max-height: 85px; width: auto; display: block;" alt="RERA">
-                                @endif
+                                {{-- @if(file_exists(public_path('rera.png')))
+                                <img src="{{ asset('rera.png') }}"
+                                    style="max-height: 85px; width: auto; display: block;" alt="RERA">
+                                @endif --}}
                             </td>
-                            <td width="40%" align="center" style="font-size: 13.5px; color: #2c1a0e; vertical-align: top;">
+                            <td width="40%" align="center"
+                                style="font-size: 13.5px; color: #2c1a0e; vertical-align: top;">
                                 <strong>{{ $demand_sign_off ?? 'भवदीय,' }}</strong>
-                                <div style="height: 50px;"></div>
+                                <div style="height: 10px;"></div>
                                 <strong>{{ strtoupper($project->name) }}</strong>
                             </td>
                         </tr>
@@ -338,14 +364,15 @@
 
                 <!-- Bottom Registered Office Box -->
                 <div>
+                    <p style="font-size: 11.5px;color: #000;text-align: center;margin-top: 4px;">नोट - पटा एवं रजिस्ट्री
+                        शुल्क अतिरिक्त।</p>
                     <div class="footer-address-box">
-                        <div><strong>पंजीकृत कार्यालय :</strong> {{ $demand_registered_office ?? ($project->address ?: '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)') }}</div>
-                        <div><strong>मोबाईल :</strong> {{ $project_contact_phone }} &nbsp;|&nbsp; <strong>ईमेल :</strong> info@rajasthanawas.in &nbsp;|&nbsp; <strong>वेबसाइट :</strong> www.rajasthanawas.in</div>
+                        <div><strong>मोबाईल / हेल्पलाईन :</strong> {{ $project_contact_phone }} &nbsp;|&nbsp;
+                            <strong>ईमेल :</strong> support@janaawasyojana.com &nbsp;|&nbsp; <strong>वेबसाइट :</strong>
+                            www.janaawasyojana.com
+                        </div>
                     </div>
 
-                    <div class="footer-note">
-                        {!! nl2br(e($demand_footer_note ?? 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।')) !!}
-                    </div>
                     <div class="computer-generated">
                         * यह एक कंप्यूटर जनित पत्र है इसलिए किसी भी हस्ताक्षर की आवश्यकता नहीं है।
                     </div>

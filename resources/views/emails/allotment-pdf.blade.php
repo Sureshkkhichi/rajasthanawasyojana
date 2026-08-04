@@ -192,6 +192,13 @@
             }
         }
 
+        .computer-generated {
+            font-size: 10.5px;
+            color: #666;
+            text-align: center;
+            margin-top: 4px;
+        }
+
         @media print {
             body {
                 background: none !important;
@@ -310,14 +317,12 @@
                     <table class="footer-sign-table">
                         <tr>
                             <td width="60%" style="vertical-align: top;">
-                                @if(file_exists(public_path('rera.png')))
-                                    <img src="{{ asset('rera.png') }}" style="max-height: 85px; width: auto; display: block;" alt="RERA">
-                                @endif
+
                             </td>
                             <td width="40%" align="center"
                                 style="font-size: 13.5px; color: #2c1a0e; vertical-align: top;">
                                 <strong>{{ $allotment_sign_off ?? 'भवदीय,' }}</strong>
-                                <div style="height: 50px;"></div>
+                                <div style="height: 10px;"></div>
                                 <strong>{{ strtoupper($project->name) }}</strong>
                             </td>
                         </tr>
@@ -325,12 +330,19 @@
                 </div>
 
                 <!-- Bottom Registered Office Box -->
-                <div class="footer-address-box">
-                    <div><strong>पंजीकृत कार्यालय :</strong>
-                        {{ $allotment_registered_office ?? ($project->address ?: '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)') }}
+                <div>
+                    <p style="font-size: 11.5px;color: #000;text-align: center;margin-top: 4px;">नोट - पटा एवं रजिस्ट्री
+                        शुल्क अतिरिक्त।</p>
+                    <div class="footer-address-box">
+                        <div><strong>मोबाईल / हेल्पलाईन :</strong> {{ $project_contact_phone }} &nbsp;|&nbsp;
+                            <strong>ईमेल :</strong> support@janaawasyojana.com &nbsp;|&nbsp; <strong>वेबसाइट :</strong>
+                            www.janaawasyojana.com
+                        </div>
                     </div>
-                    <div><strong>मोबाईल :</strong> {{ $project_contact_phone }} &nbsp;|&nbsp; <strong>ईमेल :</strong>
-                        info@rajasthanawas.in &nbsp;|&nbsp; <strong>वेबसाइट :</strong> www.rajasthanawas.in</div>
+
+                    <div class="computer-generated">
+                        * यह एक कंप्यूटर जनित पत्र है इसलिए किसी भी हस्ताक्षर की आवश्यकता नहीं है।
+                    </div>
                 </div>
             </div>
         </div>

@@ -65,6 +65,14 @@
                                             Detail Page Setting
                                         </a>
                                     </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a href="javascript:void(0);"
+                                            class="nav-link {{ $activeTab === 'portfolioTab' ? 'active' : '' }}"
+                                            wire:click="$set('activeTab', 'portfolioTab')">
+                                            <i class="ri-gallery-line me-1"></i>
+                                            Portfolio
+                                        </a>
+                                    </li>
                                     @endif
                                 </ul>
                                 <div class="tab-content text-muted">
@@ -467,6 +475,116 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                    </div>
+                                    @endif
+
+                                    @if($projectId)
+                                    <div class="tab-pane fade {{ $activeTab === 'portfolioTab' ? 'show active' : '' }}">
+                                        <div class="d-flex align-items-center flex-wrap gap-3 mb-3">
+                                            <div class="flex-grow-1">
+                                                <h5 class="fs-16 fw-semibold text-dark">Portfolio Images</h5>
+                                                <p class="text-muted mb-0">Upload images to showcase in the project portfolio gallery.</p>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="text-muted fs-13">Shareable Link:</span>
+                                                <div class="input-group" style="width:340px; max-width:100%;">
+                                                    <input type="text" class="form-control form-control-sm bg-light border-2 fs-12"
+                                                        id="portfolioShareLink"
+                                                        value="{{ route('portfolio.show', ['slug' => $project->slug ?? '']) }}"
+                                                        readonly>
+                                                    <button class="btn btn-sm btn-primary border-0" type="button"
+                                                        onclick="copyPortfolioLink()"
+                                                        id="copyPortfolioBtn"
+                                                        title="Copy link to share with customers">
+                                                        <i class="ri-file-copy-line me-1"></i> Copy
+                                                    </button>
+                                                    <a href="{{ route('portfolio.show', ['slug' => $project->slug ?? '']) }}"
+                                                        target="_blank"
+                                                        class="btn btn-sm btn-outline-secondary"
+                                                        title="Open portfolio page">
+                                                        <i class="ri-external-link-line"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <script>
+                                            function copyPortfolioLink() {
+                                                const inp = document.getElementById('portfolioShareLink');
+                                                const btn = document.getElementById('copyPortfolioBtn');
+                                                navigator.clipboard.writeText(inp.value).then(() => {
+                                                    btn.innerHTML = '<i class="ri-check-line me-1"></i> Copied!';
+                                                    btn.classList.replace('btn-primary', 'btn-success');
+                                                    setTimeout(() => {
+                                                        btn.innerHTML = '<i class="ri-file-copy-line me-1"></i> Copy';
+                                                        btn.classList.replace('btn-success', 'btn-primary');
+                                                    }, 2500);
+                                                });
+                                            }
+                                        </script>
+
+                                        {{-- Upload Block --}}
+                                        <div class="card border shadow-none mt-3">
+                                            <div class="card-body">
+                                                <div class="row align-items-end">
+                                                    <div class="col-lg-8">
+                                                        <label class="form-label fw-semibold">Upload Portfolio Images</label>
+                                                        <input type="file" class="form-control"
+                                                            wire:model="portfolioImageFiles"
+                                                            wire:key="portfolio-upload-{{ $portfolioUploadIteration }}"
+                                                            multiple
+                                                            accept="image/*">
+                                                        <small class="text-muted">You can select multiple images. Supported formats: JPG, PNG, WEBP. Max size: 2MB per image.</small>
+                                                        @error('portfolioImageFiles.*')
+                                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="col-lg-4 text-start">
+                                                        <div wire:loading wire:target="portfolioImageFiles" class="text-primary mt-2">
+                                                            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                                            Uploading images...
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- Image Grid --}}
+                                        @if(count($portfolioImages) > 0)
+                                        <div class="row g-3 mt-2">
+                                            @foreach($portfolioImages as $img)
+                                            <div class="col-xl-2 col-lg-3 col-md-4 col-6" wire:key="portfolio-img-{{ $img->id }}">
+                                                <div class="card border shadow-sm h-100">
+                                                    <div class="position-relative">
+                                                        <img src="{{ asset($img->image_path) }}"
+                                                            class="card-img-top"
+                                                            style="height: 140px; object-fit: cover;">
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 p-1"
+                                                            wire:click="deletePortfolioImage('{{ $img->id }}')"
+                                                            wire:confirm="Delete this portfolio image?"
+                                                            style="line-height:1;width:24px;height:24px;">
+                                                            <i class="ri-delete-bin-line fs-12"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body p-2">
+                                                        <label class="form-label fw-semibold fs-12 mb-1">Sort Order</label>
+                                                        <input type="number"
+                                                            class="form-control form-control-sm text-center"
+                                                            value="{{ $img->sort_order }}"
+                                                            wire:change="updatePortfolioImageSortOrder('{{ $img->id }}', $event.target.value)"
+                                                            style="width: 70px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                        @else
+                                        <div class="text-center py-5 text-muted">
+                                            <i class="ri-gallery-line fs-1 d-block mb-2"></i>
+                                            No portfolio images uploaded yet. Use the upload field above to add images.
+                                        </div>
+                                        @endif
                                     </div>
                                     @endif
                                 </div>

@@ -24,132 +24,121 @@
     @livewireStyles
     @stack('styles')
     <style>
-    /* ─── DESKTOP HEADER (787px and above) ─── */
+        /* ─── DESKTOP HEADER (787px and above) ─── */
 
-    /* Desktop: announcement bars normal height */
-    .announcement-bar-top,
-    .announcement-bar-bottom {
-        min-height: 40px;
-    }
+        /* Desktop: announcement bars normal height */
+        .announcement-bar-top,
+        .announcement-bar-bottom {
+            min-height: 40px;
+        }
 
-    .custom-header {
-        background: #fffdf6 !important;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
-        z-index: 9999;
-        height: auto;
-    }
-
-    .header-logo img {
-        height: 72px;
-        width: auto;
-    }
-
-    .header-rera {
-        padding: 4px 14px;
-        white-space: nowrap;
-        display: inline-block;
-        color: #4a2100;
-        font-weight: 700;
-        font-size: 12px;
-        line-height: 1;
-    }
-
-    .header-contact {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 50px;
-    }
-
-    .header-contact a {
-        color: #4a2100;
-        font-size: calc(var(--vz-font-base) * 2) !important;
-        font-weight: 700;
-        text-decoration: none;
-        transition: .3s;
-        line-height: 1;
-    }
-
-    .header-contact a:hover {
-        color: #d62939;
-    }
-
-
-    /* ─── MOBILE HEADER (786px and below) ─── */
-    @media (max-width: 786px) {
-        .custom-header,
-        nav.custom-header,
-        .navbar.custom-header,
-        .navbar.fixed-top.custom-header {
+        .custom-header {
             background: #fffdf6 !important;
-            background-color: #fffdf6 !important;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .15) !important;
-            z-index: 9999 !important;
-            height: auto !important;
-            padding: 6px 0 !important;
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            width: 100% !important;
-            opacity: 1 !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, .08);
+            z-index: 9999;
+            height: auto;
         }
 
         .header-logo img {
-            height: 40px !important;
-            width: auto !important;
+            height: 72px;
+            width: auto;
         }
 
         .header-rera {
-            font-size: 10px !important;
-            padding: 2px 5px !important;
-            white-space: nowrap !important;
-            display: inline-block !important;
-            color: #4a2100 !important;
-            font-weight: 700 !important;
-            line-height: 1 !important;
+            padding: 4px 14px;
+            white-space: nowrap;
+            display: inline-block;
+            color: #4a2100;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 1;
         }
 
-        /* Mobile: left col — logo + rera side by side */
-        .col-mobile-left {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            gap: 6px !important;
-        }
-
-        /* Mobile: right col — phone numbers stacked vertically */
         .header-contact {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: flex-end !important;
-            justify-content: center !important;
-            gap: 1px !important;
-            margin-top: 0 !important;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 50px;
         }
 
         .header-contact a {
-            color: #4a2100 !important;
-            font-size: 14px !important;
-            font-weight: 800 !important;
-            line-height: 1.3 !important;
-            text-decoration: none !important;
+            color: #4a2100;
+            font-size: calc(var(--vz-font-base) * 2) !important;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .3s;
+            line-height: 1;
         }
-    }
 
-    .custom-header .container {
-        max-width: 1400px;
-    }
-
-    /* Mobile: push body content below the fixed header */
-    @media (max-width: 786px) {
-        body .layout-wrapper.landing {
-            padding-top: 62px !important;
+        .header-contact a:hover {
+            color: #d62939;
         }
-    }
+
+
+        /* ─── MOBILE HEADER (786px and below) ─── */
+        @media (max-width: 786px) {
+            .custom-header {
+                background: #fffdf6 !important;
+                background-color: #fffdf6 !important;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, .12) !important;
+                z-index: 9999 !important;
+                height: auto !important;
+                padding: 6px 0 !important;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                opacity: 1 !important;
+                backdrop-filter: none !important;
+            }
+
+            .header-logo img {
+                height: 40px !important;
+                width: auto !important;
+            }
+
+            .header-rera {
+                font-size: 10px !important;
+                padding: 2px 5px !important;
+                white-space: nowrap !important;
+                display: inline-block !important;
+                color: #4a2100 !important;
+                font-weight: 700 !important;
+                line-height: 1 !important;
+            }
+
+            /* Mobile: left col — logo + rera side by side */
+            .col-mobile-left {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 6px !important;
+            }
+
+            /* Mobile: right col — phone numbers stacked vertically */
+            .header-contact {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-end !important;
+                justify-content: center !important;
+                gap: 1px !important;
+                margin-top: 0 !important;
+                margin-right: 10px !important;
+            }
+
+            .header-contact a {
+                color: #4a2100 !important;
+                font-size: 14px !important;
+                font-weight: 800 !important;
+                line-height: 1.3 !important;
+                text-decoration: none !important;
+            }
+        }
+
+        .custom-header .container {
+            max-width: 1400px;
+        }
     </style>
 </head>
 
@@ -219,73 +208,73 @@
     </div>
 
     @php
-    $floatPhone = \App\Models\FrontendSetting::getVal('mobile_number_1', '9587044244');
-    $cleanPhone = preg_replace('/[^0-9]/', '', $floatPhone);
+        $floatPhone = \App\Models\FrontendSetting::getVal('mobile_number_1', '9587044244');
+        $cleanPhone = preg_replace('/[^0-9]/', '', $floatPhone);
     @endphp
     @if(!empty($cleanPhone))
-    <div class="floating-contact-buttons">
-        <a href="https://wa.me/91{{ $cleanPhone }}?text=Hello" target="_blank" class="floating-btn btn-whatsapp"
-            title="Chat on WhatsApp" aria-label="WhatsApp">
-            <i class="ri-whatsapp-fill"></i>
-        </a>
-        <a href="tel:+91{{ $cleanPhone }}" class="floating-btn btn-phone" title="Call Us" aria-label="Call">
-            <i class="ri-phone-fill"></i>
-        </a>
-    </div>
+        <div class="floating-contact-buttons">
+            <a href="https://wa.me/91{{ $cleanPhone }}?text=Hello" target="_blank" class="floating-btn btn-whatsapp"
+                title="Chat on WhatsApp" aria-label="WhatsApp">
+                <i class="ri-whatsapp-fill"></i>
+            </a>
+            <a href="tel:+91{{ $cleanPhone }}" class="floating-btn btn-phone" title="Call Us" aria-label="Call">
+                <i class="ri-phone-fill"></i>
+            </a>
+        </div>
     @endif
 
     <style>
-    .floating-contact-buttons {
-        position: fixed;
-        bottom: 80px;
-        right: 25px;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .floating-btn {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff !important;
-        font-size: 26px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        text-decoration: none !important;
-    }
-
-    .floating-btn:hover {
-        transform: scale(1.12);
-        color: #fff !important;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-    }
-
-    .btn-whatsapp {
-        background-color: #25D366;
-    }
-
-    .btn-phone {
-        background-color: #0d6efd;
-    }
-
-    @media (max-width: 576px) {
         .floating-contact-buttons {
-            bottom: 75px;
-            right: 15px;
-            gap: 10px;
+            position: fixed;
+            bottom: 80px;
+            right: 25px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .floating-btn {
-            width: 44px;
-            height: 44px;
-            font-size: 22px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff !important;
+            font-size: 26px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none !important;
         }
-    }
+
+        .floating-btn:hover {
+            transform: scale(1.12);
+            color: #fff !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+        }
+
+        .btn-phone {
+            background-color: #0d6efd;
+        }
+
+        @media (max-width: 786px) {
+            .floating-contact-buttons {
+                bottom: 75px;
+                right: 30px;
+                gap: 10px;
+            }
+
+            .floating-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
+        }
     </style>
     <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
@@ -303,21 +292,21 @@
     @stack('scripts')
     @livewireScripts
     <script>
-    function formatPanInput(el) {
-        let val = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-        let formatted = '';
-        for (let i = 0; i < val.length && i < 10; i++) {
-            let char = val[i];
-            if (i < 5) {
-                if (/[A-Z]/.test(char)) formatted += char;
-            } else if (i < 9) {
-                if (/[0-9]/.test(char)) formatted += char;
-            } else {
-                if (/[A-Z]/.test(char)) formatted += char;
+        function formatPanInput(el) {
+            let val = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            let formatted = '';
+            for (let i = 0; i < val.length && i < 10; i++) {
+                let char = val[i];
+                if (i < 5) {
+                    if (/[A-Z]/.test(char)) formatted += char;
+                } else if (i < 9) {
+                    if (/[0-9]/.test(char)) formatted += char;
+                } else {
+                    if (/[A-Z]/.test(char)) formatted += char;
+                }
             }
+            el.value = formatted;
         }
-        el.value = formatted;
-    }
     </script>
 </body>
 

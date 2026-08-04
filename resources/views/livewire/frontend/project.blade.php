@@ -1,57 +1,67 @@
 <div>
     @push('styles')
-    <style>
-        @media (max-width: 786px) {
-            /* Remove large top margin on slider section */
-            .pt-4 {
-                padding-top: 0 !important;
-            }
-            .pt-4 .text-center.mt-5 {
-                margin-top: 0 !important;
+        <style>
+            .mobile-hero {
+                padding-top: 40px;
             }
 
-            /* Aavedan band alert - smaller on mobile */
-            .alert.fs-20 {
-                font-size: 13px !important;
-                padding: 8px 14px !important;
-                border-radius: 20px !important;
-                margin-top: 8px !important;
-            }
+            @media (max-width: 786px) {
 
-            /* Apply GIF - bigger on mobile */
-            .apply-gif,
-            img.apply-gif {
-                width: 60% !important;
-                max-width: 200px !important;
-                height: auto !important;
-                display: block !important;
-                margin: 6px auto !important;
-            }
+                .mobile-hero {
+                    padding-top: 4px;
+                }
 
-            /* Info images - full width and proper fit */
-            .col-lg-12 img.img-fluid {
-                width: 100% !important;
-                height: auto !important;
-                object-fit: contain !important;
-                display: block !important;
-            }
+                /* Remove large top margin on slider section */
+                .pt-4 {
+                    padding-top: 0 !important;
+                }
 
-            /* Reduce gap between sections */
-            .row.mb-3 {
-                margin-bottom: 4px !important;
-            }
+                .pt-4 .text-center.mt-5 {
+                    margin-top: 0 !important;
+                }
 
-            /* Slider images full width */
-            .swiper.home-slider img {
-                width: 100% !important;
-                height: auto !important;
-                display: block !important;
+                /* Aavedan band alert - smaller on mobile */
+                .alert.fs-20 {
+                    font-size: 13px !important;
+                    padding: 8px 14px !important;
+                    border-radius: 20px !important;
+                    margin-top: 8px !important;
+                }
+
+                /* Apply GIF - bigger on mobile */
+                .apply-gif,
+                img.apply-gif {
+                    width: 60% !important;
+                    max-width: 125px !important;
+                    height: auto !important;
+                    display: block !important;
+                    margin: 6px auto !important;
+                }
+
+                /* Info images - full width and proper fit */
+                .col-lg-12 img.img-fluid {
+                    width: 100% !important;
+                    height: auto !important;
+                    object-fit: contain !important;
+                    display: block !important;
+                }
+
+                /* Reduce gap between sections */
+                .row.mb-3 {
+                    margin-bottom: 4px !important;
+                }
+
+                /* Slider images full width */
+                .swiper.home-slider img {
+                    width: 100% !important;
+                    height: auto !important;
+                    display: block !important;
+                }
             }
-        }
-    </style>
+        </style>
     @endpush
     <!-- start hero section -->
-    <div class="pt-4">
+    <div class="mobile-hero">
         <div class="row">
             <div class="col-lg-12">
                 <div class="text-center mt-5">

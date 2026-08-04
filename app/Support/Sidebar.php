@@ -33,19 +33,6 @@ class Sidebar
                         'icon' => 'ri-file-edit-line',
                         'permission' => 'pages.view',
                     ],
-                    [
-                        'title' => 'Projects',
-                        'route' => 'projects.index',
-                        'is_route' => true,
-                        'icon' => 'ri-folder-2-line',
-                        'permission' => 'projects.view',
-                    ],
-                    [
-                        'title' => 'Settings',
-                        'route' => 'settings.index',
-                        'is_route' => true,
-                        'icon' => 'ri-settings-4-line',
-                    ],
                 ],
             ],
             'project_management' => [
@@ -56,6 +43,15 @@ class Sidebar
                         'is_route' => true,
                         'icon' => 'ri-folder-2-line',
                         'permission' => 'project.type.view',
+                    ],
+                ],
+                'projects' => [
+                    [
+                        'title' => 'Projects',
+                        'route' => 'projects.index',
+                        'is_route' => true,
+                        'icon' => 'ri-building-line',
+                        'permission' => 'projects.view',
                     ],
                 ],
                 'inventory' => [
@@ -69,7 +65,7 @@ class Sidebar
                 ],
                 'document_templates' => [
                     [
-                        'title' => 'PDF Templates',
+                        'title' => 'PDF Customization',
                         'route' => 'projects.document-templates',
                         'is_route' => true,
                         'icon' => 'ri-file-code-line',
@@ -190,6 +186,17 @@ class Sidebar
                         'route' => 'activity-logs.index',
                         'is_route' => true,
                         'icon' => 'ri-history-line',
+                    ],
+                ],
+            ],
+
+            'settings' => [
+                'settings' => [
+                    [
+                        'title' => 'Settings',
+                        'route' => 'settings.index',
+                        'is_route' => true,
+                        'icon' => 'ri-settings-4-line',
                     ],
                 ],
             ],

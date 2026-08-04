@@ -28,10 +28,11 @@
             .proj-panel {
                 background: #f8f9fa;
                 border: 1px solid #e8e8e8;
-                border-radius: 12px;
+                border-radius: 0px;
                 box-shadow: none;
-                margin-bottom: 22px;
+                margin-bottom: 0px;
                 overflow: hidden;
+                border-bottom: transparent;
             }
 
             .proj-panel-top {
@@ -562,7 +563,7 @@
                                 </div>
                             </div>
                             <!-- PRICE CARD -->
-                            <div class="row mb-3">
+                            <div class="row mb-0">
                                 <div class="col-sm-12 form-group">
                                     @if(!empty($flat_size) && $this->total_value)
                                         <label>Total {{ $project->inventory_type === 'flat' ? 'Flat' : 'Plot' }} value</label>
@@ -590,7 +591,7 @@
                                 </div>
                             </div>
                             <!-- TERMS -->
-                            <div id="terms" class="mb-4">
+                            <div id="terms" class="mb-0">
                                 <div class="form-check">
                                     <input class="form-check-input @error('terms') is-invalid @enderror" type="checkbox"
                                         id="termsCheck" wire:model="terms">

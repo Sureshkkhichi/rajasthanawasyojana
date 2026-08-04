@@ -67,6 +67,7 @@
         .header-section {
             text-align: center;
             margin-bottom: 14px;
+            margin-top: 60px;
         }
 
         .project-title {
@@ -253,22 +254,16 @@
                         </div>
                     </div>
 
-                    <!-- Company & Customer Details (2-Column Box) -->
+                    <!-- Customer Details (2-Column Box) -->
                     <table class="info-box-table">
                         <tr>
-                            <!-- Left: Company Details -->
-                            <td width="48%">
-                                <div class="info-box-title">कंपनी का विवरण (Company)</div>
-                                <div><strong>संस्था का नाम:</strong> {{ $company_name }}</div>
-                                <div><strong>शहर:</strong> {{ $company_city }}</div>
-                                <div><strong>हेल्पलाइन नंबर:</strong> {{ $project_contact_phone }}</div>
-                            </td>
-                            <!-- Divider -->
-                            <td width="4%" style="border-left: 1px solid #7c4c2d; padding: 0;"></td>
-                            <!-- Right: Customer Details -->
-                            <td width="48%">
+                            <!-- Left: Customer Details -->
+                            <td>
                                 <div class="info-box-title">ग्राहक का विवरण (Invoice To)</div>
-                                <div><strong>ग्राहक का नाम:</strong> {{ strtoupper($deal->first_name . ' ' . $deal->last_name) }}</div>
+                                <div>
+                                    <strong>ग्राहक का नाम:</strong>
+                                    {{ strtoupper($deal->first_name . ' ' . $deal->last_name) }}
+                                </div>
                                 <div><strong>मोबाईल नंबर:</strong> {{ $deal->phone }}</div>
                                 <div><strong>शहर:</strong> {{ $customer_city }}</div>
                                 <div><strong>पंजीकृत परियोजना:</strong> {{ $customer_project }}</div>
@@ -290,8 +285,9 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <strong>आवेदन सह बुकिंग पंजीकरण शुल्क</strong><br>
-                                    <span style="font-size: 12px; color: #555;">प्रोजेक्ट: {{ $customer_project }} (Waiver Code: {{ $waiver_code }})</span>
+                                    <strong>सम्पत्ति का नाम</strong><br>
+                                    <span style="font-size: 12px; color: #555;">प्रोजेक्ट:
+                                        {{ $customer_project }}</span>
                                 </td>
                                 <td align="center">{{ $unit_type }}</td>
                                 <td align="center"><code>{{ $transaction_id }}</code></td>
@@ -327,14 +323,12 @@
                     <table class="footer-sign-table">
                         <tr>
                             <td width="60%" style="vertical-align: top;">
-                                @if(file_exists(public_path('rera.png')))
-                                    <img src="{{ asset('rera.png') }}" style="max-height: 85px; width: auto; display: block;" alt="RERA Seal">
-                                @endif
+
                             </td>
-                            <td width="40%" align="center" style="font-size: 13.5px; color: #2c1a0e; vertical-align: top;">
+                            <td width="40%" align="center"
+                                style="font-size: 13.5px; color: #2c1a0e; vertical-align: top;">
                                 <strong>{{ strtoupper($company_name) }}</strong>
                                 <div style="height: 35px;"></div>
-                                <strong>(डिजिटल हस्ताक्षर / डिजिटल सील)</strong><br>
                                 <span style="font-size: 12px; color: #555;">{{ strtoupper($company_city) }}</span>
                             </td>
                         </tr>
@@ -344,12 +338,14 @@
                 <!-- Bottom Registered Office Box -->
                 <div>
                     <div class="footer-address-box">
-                        <div><strong>पंजीकृत कार्यालय :</strong> {{ $deal->project?->address ?: '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)' }}</div>
-                        <div><strong>मोबाईल / हेल्पलाईन :</strong> {{ $project_contact_phone }} &nbsp;|&nbsp; <strong>ईमेल :</strong> info@rajasthanawas.in &nbsp;|&nbsp; <strong>वेबसाइट :</strong> www.rajasthanawas.in</div>
+                        <div><strong>मोबाईल / हेल्पलाईन :</strong> {{ $project_contact_phone }} &nbsp;|&nbsp;
+                            <strong>ईमेल :</strong> support@janaawasyojana.com &nbsp;|&nbsp; <strong>वेबसाइट :</strong>
+                            www.janaawasyojana.com
+                        </div>
                     </div>
 
                     <div class="computer-generated">
-                        * यह एक कंप्यूटर जनित रसीद है इसलिए किसी भी हस्ताक्षर की आवश्यकता नहीं है।
+                        * यह एक कंप्यूटर जनित पत्र है इसलिए किसी भी हस्ताक्षर की आवश्यकता नहीं है।
                     </div>
                 </div>
             </div>

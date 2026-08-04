@@ -1,6 +1,6 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="vertical" data-topbar="light" data-sidebar="dark"
-    data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-theme="default"
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="vertical" data-topbar="light"
+    data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-theme="default"
     data-theme-colors="default">
 
 <head>
@@ -10,7 +10,7 @@
     <meta content="{{ config('constants.site_description') }}" name="description" />
     <meta content="{{ config('constants.site_author') }}" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
     <!-- Layout config Js -->
     <script src="{{ asset('assets/js/layout.js') }}"></script>
     <!-- Bootstrap Css -->
@@ -44,8 +44,7 @@
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
                                 <a href="{{ route('login') }}" class="d-inline-block auth-logo">
-                                    <img src="{{ asset('assets/images/logo-light.png') }}" alt=""
-                                        height="20">
+                                    <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="20">
                                 </a>
                             </div>
                             <p class="mt-3 fs-15 fw-medium">{{ config('constants.site_name') }}</p>
