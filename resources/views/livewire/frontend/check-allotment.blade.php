@@ -90,7 +90,7 @@
                                                 <div class="row g-2">
                                                     <div class="col-6">
                                                         <span class="text-muted d-block fs-12">परियोजना (Project)</span>
-                                                        <strong class="text-dark">{{ $deal->project?->name ?: 'Rajasthan Awas Yojana' }}</strong>
+                                                        <strong class="text-dark">{{ $deal->project?->name ?: config('constants.site_name') }}</strong>
                                                     </div>
                                                     <div class="col-6">
                                                         <span class="text-muted d-block fs-12">बुकिंग तिथि (Booking Date)</span>

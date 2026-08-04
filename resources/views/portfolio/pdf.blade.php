@@ -98,7 +98,7 @@
     @endforelse
 
     <div class="footer">
-        {{ $project->name }} &bull; Rajasthan Awas Yojana
+        {{ $project->name }} &bull; {{ config('constants.site_name') }}
     </div>
 
 </body>

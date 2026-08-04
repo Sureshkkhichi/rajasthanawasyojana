@@ -604,7 +604,7 @@
                                     </label>
                                 </div>
                                 <div class="mt-3 text-dark">
-                                    By signing up, you (the client) provide opt-in consent to Rajasthan Awas Yogna for
+                                    By signing up, you (the client) provide opt-in consent to {{ config('constants.site_name') }} for
                                     receiving SMS, voice, email, and WhatsApp messages for authentication, promotional, RCS
                                     and service-related purposes.
                                 </div>
