@@ -230,7 +230,7 @@
                         <tr>
                             <td width="60%">
                                 <strong>आवेदन पत्र संख्या :</strong>
-                                {{ 'RAJAWS-' . ($deal->created_at?->format('Y') ?: date('Y')) . '-' . substr($deal->id, 0, 8) }}
+                                {{ $form_no ?? $deal->jana_number }}
                             </td>
                             <td width="40%" align="right">
                                 <strong>दिनांक :</strong>
@@ -273,11 +273,11 @@
 
                     <!-- Body Paragraph -->
                     <div class="body-paragraph">
-                        {!! nl2br(e($demand_body ?? "{$project->name} में आवेदन पत्र संख्या RAJAWS-" .
-    ($deal->created_at?->format('Y') ?: date('Y')) . '-' . substr($deal->id, 0, 8) . " के द्वारा
+                        {!! nl2br(e($demand_body ?? "{$project->name} में आवेदन पत्र संख्या " . ($form_no ?? $deal->jana_number) . " के द्वारा
                         आपने भूखण्ड आवंटन किये जाने हेतु बुकिंग कराई थी, आपको आवंटित भूखण्ड एवं उसके विक्रय प्रतिफल के
                         पेटे जमा कराई जाने वाली राशि का विवरण निम्न प्रकार है:-")) !!}
                     </div>
+
 
                     <!-- Data Table -->
                     <table class="data-table">

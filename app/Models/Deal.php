@@ -85,4 +85,22 @@ class Deal extends Model
         // 4. Fallback to project price
         return (float) ($this->project?->price ?: 0);
     }
+
+    public function getJanaNumberAttribute(): string
+    {
+        $year = $this->created_at ? $this->created_at->format('Y') : date('Y');
+        $rand5 = sprintf('%05d', (abs(crc32('JANA_' . $this->id)) % 90000) + 10000);
+
+        $seqNumber = static::where('created_at', '<', $this->created_at)
+            ->orWhere(function ($q) {
+                $q->where('created_at', '=', $this->created_at)
+                  ->where('id', '<=', $this->id);
+            })
+            ->count();
+
+        $seq = sprintf('%04d', max(1, $seqNumber));
+
+        return "JANA/{$year}/{$rand5}/{$seq}";
+    }
 }
+

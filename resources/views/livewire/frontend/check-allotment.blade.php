@@ -61,7 +61,7 @@
                             @foreach($deals as $deal)
                                 @php
                                     $inv = $deal->allottedInventory;
-                                    $formNo = 'AR/REG/' . ($deal->created_at?->format('Y') ?: date('Y')) . '/' . sprintf('%06d', $deal->id);
+                                    $formNo = $deal->jana_number;
                                 @endphp
                                 <div class="col-md-6">
                                     <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden" style="border-top: 4px solid #5c3017 !important;">

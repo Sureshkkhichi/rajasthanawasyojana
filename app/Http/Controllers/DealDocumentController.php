@@ -29,7 +29,7 @@ class DealDocumentController extends Controller
         $projectName = $deal->project?->name ?? 'Project';
 
         $allotted_date = $deal->allotted_at ? \Carbon\Carbon::parse($deal->allotted_at)->format('d/m/Y') : ($deal->booking_date ? \Carbon\Carbon::parse($deal->booking_date)->format('d/m/Y') : date('d/m/Y'));
-        $form_no = 'AR/REG/' . ($deal->created_at?->format('Y') ?: date('Y')) . '/' . sprintf('%06d', $deal->id);
+        $form_no = $deal->jana_number;
         $block_tower = $inventory->block ?: ($inventory->tower ?: '-');
         
         $rawFloor = trim($inventory->floor ?? '');
@@ -123,6 +123,7 @@ class DealDocumentController extends Controller
         $project_contact_phone = FrontendSetting::getVal('mobile_number_1', '7374044044');
         $pid = $deal->project_id;
         $projectName = $deal->project?->name ?? 'Project';
+        $form_no = $deal->jana_number;
 
         $demand_subtitle = FrontendSetting::getVal("project_{$pid}_demand_subtitle", 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित');
         $demand_subject = FrontendSetting::getVal("project_{$pid}_demand_subject", 'विषय: भूखण्ड संख्या {UNIT_NO} की बकाया राशि जमा कराने बाबत।');
@@ -148,7 +149,7 @@ class DealDocumentController extends Controller
             '{PROJECT_ADDRESS}' => $deal->project?->address ?? '',
             '{CUSTOMER_NAME}' => strtoupper($deal->first_name . ' ' . $deal->last_name),
             '{UNIT_NO}' => $inventory->plot_no ?: $inventory->flat_no,
-            '{FORM_NO}' => 'RAJAWS-' . ($deal->created_at?->format('Y') ?: date('Y')) . '-' . substr($deal->id, 0, 8),
+            '{FORM_NO}' => $form_no,
             '{BOOKING_DATE}' => $deal->booking_date ? \Carbon\Carbon::parse($deal->booking_date)->format('d-m-Y') : date('d-m-Y'),
             '{CONTACT_PHONE}' => $project_contact_phone,
         ];
@@ -165,6 +166,7 @@ class DealDocumentController extends Controller
             'project' => $deal->project,
             'deal' => $deal,
             'inventory' => $inventory,
+            'form_no' => $form_no,
             'totalAmount' => $totalAmount,
             'inst1DueDate' => $inst1DueDate,
             'inst2DueDate' => $inst2DueDate,
@@ -233,8 +235,7 @@ class DealDocumentController extends Controller
         $bookingDate = $deal->booking_date ? $deal->booking_date->format('d-m-Y') : date('d-m-Y');
         $numericId = preg_replace('/[^0-9]/', '', $deal->id);
         $shortId = substr($numericId, -4) ?: rand(1000, 9999);
-        $receiptYear = $deal->booking_date ? $deal->booking_date->format('Y') : date('Y');
-        $receiptNo = "RAJAWAS-{$receiptYear}-15471-{$shortId}";
+        $receiptNo = $deal->jana_number;
 
         $lead = \App\Models\Lead::where('pan_number', $deal->pan_number)
             ->orWhere('phone', $deal->phone)
@@ -300,7 +301,7 @@ class DealDocumentController extends Controller
         $projectName = $deal->project?->name ?? 'Project';
 
         $allotted_date = $deal->allotted_at ? \Carbon\Carbon::parse($deal->allotted_at)->format('d/m/Y') : ($deal->booking_date ? \Carbon\Carbon::parse($deal->booking_date)->format('d/m/Y') : date('d/m/Y'));
-        $form_no = 'AR/REG/' . ($deal->created_at?->format('Y') ?: date('Y')) . '/' . sprintf('%06d', $deal->id);
+        $form_no = $deal->jana_number;
         $block_tower = $inventory->block ?: ($inventory->tower ?: '-');
         
         $rawFloor = trim($inventory->floor ?? '');
@@ -382,8 +383,8 @@ class DealDocumentController extends Controller
         $bookingDate = $deal->booking_date ? $deal->booking_date->format('d-m-Y') : date('d-m-Y');
         $numericId = preg_replace('/[^0-9]/', '', $deal->id);
         $shortId = substr($numericId, -4) ?: rand(1000, 9999);
-        $receiptYear = $deal->booking_date ? $deal->booking_date->format('Y') : date('Y');
-        $receiptNo = "RAJAWAS-{$receiptYear}-15471-{$shortId}";
+        $receiptNo = $deal->jana_number;
+
 
         $lead = \App\Models\Lead::where('pan_number', $deal->pan_number)
             ->orWhere('phone', $deal->phone)
