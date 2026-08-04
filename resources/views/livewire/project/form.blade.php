@@ -485,9 +485,9 @@
                                                 <h5 class="fs-16 fw-semibold text-dark">Portfolio Images</h5>
                                                 <p class="text-muted mb-0">Upload images to showcase in the project portfolio gallery.</p>
                                             </div>
-                                            <div class="d-flex align-items-center gap-2">
+                                            <div class="d-flex align-items-center gap-2 flex-wrap">
                                                 <span class="text-muted fs-13">Shareable Link:</span>
-                                                <div class="input-group" style="width:340px; max-width:100%;">
+                                                <div class="input-group" style="width:320px; max-width:100%;">
                                                     <input type="text" class="form-control form-control-sm bg-light border-2 fs-12"
                                                         id="portfolioShareLink"
                                                         value="{{ route('portfolio.show', ['slug' => $project->slug ?? '']) }}"
@@ -505,6 +505,12 @@
                                                         <i class="ri-external-link-line"></i>
                                                     </a>
                                                 </div>
+                                                <a href="{{ route('portfolio.download-pdf', ['slug' => $project->slug ?? '']) }}"
+                                                    target="_blank"
+                                                    class="btn btn-sm btn-danger d-inline-flex align-items-center gap-1"
+                                                    title="Download portfolio images as PDF">
+                                                    <i class="ri-file-pdf-2-line fs-14"></i> Download PDF
+                                                </a>
                                             </div>
                                         </div>
                                         <hr>

@@ -173,6 +173,7 @@ Route::get('/public/deals/{deal}/invoice', [\App\Http\Controllers\DealDocumentCo
 
 // Portfolio Gallery (Public)
 Route::get('/portfolio/{slug}', [\App\Http\Controllers\PortfolioController::class, 'show'])->name('portfolio.show');
+Route::get('/portfolio/{slug}/download-pdf', [\App\Http\Controllers\PortfolioController::class, 'downloadPdf'])->name('portfolio.download-pdf');
 
 // PhonePe Payment Routes
 use App\Http\Controllers\PaymentController;

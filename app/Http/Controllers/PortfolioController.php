@@ -28,4 +28,29 @@ class PortfolioController extends Controller
 
         return view('portfolio.gallery', compact('project', 'images', 'imageDataJson'));
     }
+
+    public function downloadPdf(string $slug)
+    {
+        $project = Project::where('slug', $slug)->firstOrFail();
+
+        $images = ProjectPortfolioImage::where('project_id', $project->id)
+            ->orderBy('sort_order')
+            ->get();
+
+        $imagesData = [];
+        foreach ($images as $img) {
+            $path = public_path($img->image_path);
+            if (file_exists($path)) {
+                $type = pathinfo($path, PATHINFO_EXTENSION);
+                $data = file_get_contents($path);
+                $imagesData[] = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            }
+        }
+
+        $html = view('portfolio.pdf', compact('project', 'imagesData'))->render();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadHTML($html);
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->download("portfolio-{$project->slug}.pdf");
+    }
 }

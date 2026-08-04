@@ -472,7 +472,11 @@
                         @endif
                     </p>
                 </div>
-                <div class="col-lg-4 text-lg-end">
+                <div class="col-lg-4 text-lg-end d-flex align-items-center justify-content-lg-end gap-2">
+                    <a href="{{ route('portfolio.download-pdf', $project->slug) }}" target="_blank" class="share-btn text-decoration-none" style="border-color: rgba(192, 57, 43, 0.3); color: #c0392b; background: rgba(192, 57, 43, 0.05);">
+                        <i class="ri-file-pdf-2-line"></i>
+                        <span>Download PDF</span>
+                    </a>
                     <button class="share-btn" id="copyLinkBtn" onclick="copyLink()">
                         <i class="ri-link-m" id="copyIcon"></i>
                         <span id="copyText">Copy Link</span>
