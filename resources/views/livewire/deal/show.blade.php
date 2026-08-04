@@ -17,6 +17,10 @@
                                 target="_blank">
                                 <i class="ri-file-download-line align-middle me-1"></i> Download Deal
                             </a>
+                            <a href="{{ route('deals.invoice', $deal->id) }}" class="btn btn-soft-success btn-sm"
+                                target="_blank">
+                                <i class="ri-receipt-line align-middle me-1"></i> Generate Invoice
+                            </a>
                             @if(empty($deal->allotted_inventory_id))
                                 <a href="{{ route('deals.allot', $deal->id) }}" class="btn btn-success btn-sm">
                                     <i class="ri-add-box-line align-middle me-1"></i> Allot Unit
@@ -145,6 +149,10 @@
                                     <a class="btn btn-warning" href="{{ route('deals.demand-letter', $deal->id) }}"
                                         target="_blank">
                                         <i class="ri-printer-line align-middle me-1"></i> Demand Letter
+                                    </a>
+                                    <a class="btn btn-danger" href="{{ route('deals.invoice', $deal->id) }}"
+                                        target="_blank">
+                                        <i class="ri-receipt-line align-middle me-1"></i> Generate Invoice
                                     </a>
                                     <button class="btn btn-primary" wire:click="openEmailModal" wire:loading.attr="disabled"
                                         wire:target="openEmailModal, sendSms, cancelAllotment">
