@@ -67,7 +67,6 @@ class DealDocumentController extends Controller
             FrontendSetting::setVal("project_{$pid}_allotment_footer_note", $allotment_footer_note);
         }
         $allotment_sign_off = FrontendSetting::getVal("project_{$pid}_allotment_sign_off", 'भवदीय,');
-        $allotment_registered_office = FrontendSetting::getVal("project_{$pid}_allotment_registered_office", '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)');
 
         $replacements = [
             '{PROJECT_NAME}' => $projectName,
@@ -103,7 +102,6 @@ class DealDocumentController extends Controller
             'allotment_table_title' => strtr($allotment_table_title, $replacements),
             'allotment_footer_note' => strtr($allotment_footer_note, $replacements),
             'allotment_sign_off' => strtr($allotment_sign_off, $replacements),
-            'allotment_registered_office' => strtr($allotment_registered_office, $replacements),
         ]);
     }
 
@@ -141,7 +139,6 @@ class DealDocumentController extends Controller
         $demand_bank_ifsc = FrontendSetting::getVal("project_{$pid}_demand_bank_ifsc", 'SBIN0004080');
         $demand_bank_address = FrontendSetting::getVal("project_{$pid}_demand_bank_address", 'SME Branch Church Road, Jaipur');
         $demand_sign_off = FrontendSetting::getVal("project_{$pid}_demand_sign_off", 'भवदीय,');
-        $demand_registered_office = FrontendSetting::getVal("project_{$pid}_demand_registered_office", '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)');
         $demand_footer_note = FrontendSetting::getVal("project_{$pid}_demand_footer_note", 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।');
 
         $replacements = [
@@ -185,7 +182,6 @@ class DealDocumentController extends Controller
             'demand_bank_ifsc' => strtr($demand_bank_ifsc, $replacements),
             'demand_bank_address' => strtr($demand_bank_address, $replacements),
             'demand_sign_off' => strtr($demand_sign_off, $replacements),
-            'demand_registered_office' => strtr($demand_registered_office, $replacements),
             'demand_footer_note' => strtr($demand_footer_note, $replacements),
         ]);
     }
@@ -332,7 +328,6 @@ class DealDocumentController extends Controller
         $allotment_table_title = FrontendSetting::getVal("project_{$pid}_allotment_table_title", 'आवंटन विवरण');
         $allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा आगामी किस्त जमा करें ।");
         $allotment_sign_off = FrontendSetting::getVal("project_{$pid}_allotment_sign_off", 'भवदीय,');
-        $allotment_registered_office = FrontendSetting::getVal("project_{$pid}_allotment_registered_office", '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)');
 
         $replacements = [
             '{PROJECT_NAME}' => $projectName,
@@ -368,7 +363,6 @@ class DealDocumentController extends Controller
             'allotment_table_title' => strtr($allotment_table_title, $replacements),
             'allotment_footer_note' => strtr($allotment_footer_note, $replacements),
             'allotment_sign_off' => strtr($allotment_sign_off, $replacements),
-            'allotment_registered_office' => strtr($allotment_registered_office, $replacements),
         ]);
     }
 

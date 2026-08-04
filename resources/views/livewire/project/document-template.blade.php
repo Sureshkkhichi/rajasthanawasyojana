@@ -140,12 +140,6 @@
                                             @error('allotment_footer_note') <span class="text-danger fs-12">{{ $message }}</span> @enderror
                                         </div>
 
-                                        <div class="col-12">
-                                            <label class="form-label fw-semibold text-dark">Registered Office Address (पंजीकृत कार्यालय पता)</label>
-                                            <input type="text" class="form-control border-2 @error('allotment_registered_office') is-invalid @enderror" 
-                                                wire:model="allotment_registered_office" placeholder="e.g. 12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)">
-                                            @error('allotment_registered_office') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                        </div>
                                     </div>
                                 @elseif($activeTab === 'demandTab')
                                     <!-- Tab 2: Demand Letter -->
@@ -235,12 +229,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12">
-                                            <label class="form-label fw-semibold text-dark">Registered Office Address (पंजीकृत कार्यालय पता)</label>
-                                            <input type="text" class="form-control border-2 @error('demand_registered_office') is-invalid @enderror" 
-                                                wire:model="demand_registered_office" placeholder="e.g. 12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)">
-                                            @error('demand_registered_office') <span class="text-danger fs-12">{{ $message }}</span> @enderror
-                                        </div>
 
                                         <div class="col-12">
                                             <label class="form-label fw-semibold text-dark">Footer Note (फुटर टिप्पणी)</label>

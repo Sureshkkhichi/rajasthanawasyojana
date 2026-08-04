@@ -19,7 +19,6 @@ class DocumentTemplate extends Component
     public $allotment_table_title = '';
     public $allotment_footer_note = '';
     public $allotment_sign_off = '';
-    public $allotment_registered_office = '';
 
     // Demand Letter Fields
     public $demand_subtitle = '';
@@ -35,7 +34,6 @@ class DocumentTemplate extends Component
     public $demand_bank_ifsc = '';
     public $demand_bank_address = '';
     public $demand_sign_off = '';
-    public $demand_registered_office = '';
     public $demand_footer_note = '';
 
     public function mount()
@@ -73,7 +71,6 @@ class DocumentTemplate extends Component
         $this->allotment_table_title = FrontendSetting::getVal("project_{$pid}_allotment_table_title", 'आवंटन विवरण');
         $this->allotment_footer_note = FrontendSetting::getVal("project_{$pid}_allotment_footer_note", "यह आवंटन निम्न शर्तों के अधीन होगा कि आप पात्रता, दस्तावेज सत्यापन तथा भुगतान सारणी के अनुसार आवश्यक सभी भुगतान निर्धारित समय सीमा में पूर्ण करेंगे ।\nकृपया इस पत्र को सुरक्षित रखें तथा आगामी किस्त जमा करें ।");
         $this->allotment_sign_off = FrontendSetting::getVal("project_{$pid}_allotment_sign_off", 'भवदीय,');
-        $this->allotment_registered_office = FrontendSetting::getVal("project_{$pid}_allotment_registered_office", '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)');
 
         // Demand Letter Settings
         $this->demand_subtitle = FrontendSetting::getVal("project_{$pid}_demand_subtitle", 'जयपुर विकास प्राधिकरण द्वारा अनुमोदित');
@@ -89,7 +86,6 @@ class DocumentTemplate extends Component
         $this->demand_bank_ifsc = FrontendSetting::getVal("project_{$pid}_demand_bank_ifsc", 'SBIN0004080');
         $this->demand_bank_address = FrontendSetting::getVal("project_{$pid}_demand_bank_address", 'SME Branch Church Road, Jaipur');
         $this->demand_sign_off = FrontendSetting::getVal("project_{$pid}_demand_sign_off", 'भवदीय,');
-        $this->demand_registered_office = FrontendSetting::getVal("project_{$pid}_demand_registered_office", '12/456, विनायक पथ, मानसरोवर, जयपुर - 302020 (राज.)');
         $this->demand_footer_note = FrontendSetting::getVal("project_{$pid}_demand_footer_note", 'नोट - पट्टा एवं रजिस्ट्री शुल्क अतिरिक्त।');
     }
 
@@ -103,7 +99,6 @@ class DocumentTemplate extends Component
             'allotment_table_title' => 'required|string',
             'allotment_footer_note' => 'required|string',
             'allotment_sign_off' => 'required|string',
-            'allotment_registered_office' => 'nullable|string',
             'demand_subtitle' => 'required|string',
             'demand_subject' => 'required|string',
             'demand_salutation' => 'required|string',
@@ -117,7 +112,6 @@ class DocumentTemplate extends Component
             'demand_bank_ifsc' => 'nullable|string',
             'demand_bank_address' => 'nullable|string',
             'demand_sign_off' => 'required|string',
-            'demand_registered_office' => 'nullable|string',
             'demand_footer_note' => 'required|string',
         ]);
 
@@ -129,7 +123,6 @@ class DocumentTemplate extends Component
         FrontendSetting::setVal("project_{$pid}_allotment_table_title", $this->allotment_table_title);
         FrontendSetting::setVal("project_{$pid}_allotment_footer_note", $this->allotment_footer_note);
         FrontendSetting::setVal("project_{$pid}_allotment_sign_off", $this->allotment_sign_off);
-        FrontendSetting::setVal("project_{$pid}_allotment_registered_office", $this->allotment_registered_office);
 
         FrontendSetting::setVal("project_{$pid}_demand_subtitle", $this->demand_subtitle);
         FrontendSetting::setVal("project_{$pid}_demand_subject", $this->demand_subject);
@@ -144,7 +137,6 @@ class DocumentTemplate extends Component
         FrontendSetting::setVal("project_{$pid}_demand_bank_ifsc", $this->demand_bank_ifsc);
         FrontendSetting::setVal("project_{$pid}_demand_bank_address", $this->demand_bank_address);
         FrontendSetting::setVal("project_{$pid}_demand_sign_off", $this->demand_sign_off);
-        FrontendSetting::setVal("project_{$pid}_demand_registered_office", $this->demand_registered_office);
         FrontendSetting::setVal("project_{$pid}_demand_footer_note", $this->demand_footer_note);
 
         session()->flash('success', 'PDF Document template content updated successfully for the selected project.');
