@@ -4,8 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $project->name }} — Portfolio Gallery</title>
-    <meta name="description" content="Portfolio images of {{ $project->name }} project.">
+    <!-- Primary Meta Tags -->
+    <title>{{ $project->name }} — {{ config('constants.site_name') }} Portfolio</title>
+    <meta name="title" content="{{ $project->name }} — {{ config('constants.site_name') }} Portfolio">
+    <meta name="description" content="Explore project portfolio and image gallery of {{ $project->name }} ({{ $project->location ?: 'Jaipur' }}). View high-definition images under {{ config('constants.site_name') }}.">
+    <meta name="keywords" content="{{ $project->name }}, {{ config('constants.site_name') }}, Rajasthan Awas Yojana, Project Gallery, Portfolio">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#c0392b">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}">
+
+    <!-- Open Graph / Facebook / WhatsApp Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $project->name }} — {{ config('constants.site_name') }} Portfolio">
+    <meta property="og:description" content="Explore project portfolio & photo gallery of {{ $project->name }} ({{ count($images) }} images). {{ config('constants.site_name') }}.">
+    @if(count($images) > 0)
+        <meta property="og:image" content="{{ asset($images->first()->image_path) }}">
+        <meta property="og:image:secure_url" content="{{ asset($images->first()->image_path) }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+    @endif
+    <meta property="og:site_name" content="{{ config('constants.site_name') }}">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="{{ $project->name }} — {{ config('constants.site_name') }} Portfolio">
+    <meta name="twitter:description" content="Explore project portfolio & photo gallery of {{ $project->name }} ({{ count($images) }} images). {{ config('constants.site_name') }}.">
+    @if(count($images) > 0)
+        <meta name="twitter:image" content="{{ asset($images->first()->image_path) }}">
+    @endif
 
     <!-- Bootstrap 5 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
